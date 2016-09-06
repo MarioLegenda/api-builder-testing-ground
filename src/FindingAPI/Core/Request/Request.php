@@ -1,6 +1,6 @@
 <?php
 
-namespace FindingAPI;
+namespace FindingAPI\Core\Request;
 
 class Request
 {
@@ -20,6 +20,10 @@ class Request
      * @var string $responseData
      */
     private $responseData;
+    /**
+     * @var string $securityAppId
+     */
+    private $securityAppId;
     /**
      * @param string $method
      * @return Request
@@ -79,10 +83,30 @@ class Request
     }
     /**
      * @param mixed $responseData
+     * @return Request
      */
     public function setResponseData(string $responseData) : Request
     {
         $this->responseData = $responseData;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSecurityAppId()
+    {
+        return $this->securityAppId;
+    }
+
+    /**
+     * @param string $securityAppId
+     * @return Request
+     */
+    public function setSecurityAppId(string $securityAppId) : Request
+    {
+        $this->securityAppId = $securityAppId;
 
         return $this;
     }
