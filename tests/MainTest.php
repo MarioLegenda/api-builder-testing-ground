@@ -9,7 +9,7 @@ use FindingAPI\Core\RequestParameters;
 
 class TempTesting extends PHPUnit_Framework_TestCase
 {
-    public function testMain()
+    public function testRequest()
     {
         $request = new Request();
         $request
@@ -19,8 +19,15 @@ class TempTesting extends PHPUnit_Framework_TestCase
             ->setResponseDataFormat(RequestParameters::RESPONSE_DATA_FORMAT_XML)
             ->setSecurityAppId('Mariokrl-testing-PRD-ee6e68035-e73c8a53');
 
-        $finderSearch = FinderSearch::getInstance($request);
+        return $request;
+    }
+    /**
+     * @depends testRequest
+     */
+    public function testFinder(Request $request)
+    {
+        $finder = FinderSearch::getInstance($request);
 
-        $finderSearch->search(Definition::andOperator('baseball card'));
+        $finder->search(Definition::andOperator('baseball card'));
     }
 }

@@ -91,4 +91,11 @@ class Request
     {
         return $this->parameters->valid();
     }
+    /**
+     * @return RequestParameters
+     */
+    public function getParameters() : RequestParameters
+    {
+        return $this->parameters;
+    }
 }

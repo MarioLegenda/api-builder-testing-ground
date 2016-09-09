@@ -39,7 +39,8 @@ class FinderSearch
      */
     public function search(SearchDefinitionInterface $definition)
     {
-        
+        $definition->validateDefinition();
+
         return $this;
     }
 }
