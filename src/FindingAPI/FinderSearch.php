@@ -3,7 +3,7 @@
 namespace FindingAPI;
 
 use FindingAPI\Definition\SearchDefinitionInterface;
-use FindingAPI\Core\Request\Request;
+use FindingAPI\Core\Request;
 
 class FinderSearch
 {
@@ -39,6 +39,7 @@ class FinderSearch
      */
     public function search(SearchDefinitionInterface $definition)
     {
+        
         return $this;
     }
 }
