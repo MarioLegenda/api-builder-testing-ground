@@ -2,8 +2,11 @@
 
 namespace FindingAPI;
 
+use FindingAPI\Definition\DefinitionProcessor;
 use FindingAPI\Definition\SearchDefinitionInterface;
 use FindingAPI\Core\Request;
+use FindingAPI\Definition\Type\DefinitionTypeFactory;
+use FindingAPI\Definition\Type\UrlDefinitionType;
 
 class FinderSearch
 {
@@ -15,6 +18,10 @@ class FinderSearch
      * @var FinderSearch $instance
      */
     private static $instance;
+    /**
+     * @var array $definitions
+     */
+    private $definitions = array();
     /**
      * @param Request|null $configuration
      * @return FinderSearch
@@ -35,12 +42,24 @@ class FinderSearch
     }
     /**
      * @param SearchDefinitionInterface $definition
-     * @return $this
+     * @return FinderSearch
      */
-    public function search(SearchDefinitionInterface $definition)
+    public function search(SearchDefinitionInterface $definition) : FinderSearch
     {
         $definition->validateDefinition();
 
+        $this->definitions[] = $definition;
+
         return $this;
+    }
+
+    public function send()
+    {
+        $definitionType = (new DefinitionTypeFactory($this->request))
+            ->getDefinitionType()
+            ->addDefinitions($this->definitions)
+            ->process();
+
+        $this->request->sendRequest($definitionType);
     }
 }

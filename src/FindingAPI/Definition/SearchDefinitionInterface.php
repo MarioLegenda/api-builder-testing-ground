@@ -2,8 +2,16 @@
 
 namespace FindingAPI\Definition;
 
+use FindingAPI\Definition\Exception\DefinitionException;
+
 interface SearchDefinitionInterface
 {
-    public function getProcessedDefinition() : array;
+    /**
+     * @return string
+     */
+    public function getDefinition() : string;
+    /**
+     * @throws DefinitionException
+     */
     public function validateDefinition();
 }

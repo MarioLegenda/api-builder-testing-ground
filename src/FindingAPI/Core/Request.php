@@ -3,6 +3,8 @@
 namespace FindingAPI\Core;
 
 use FindingAPI\Core\Exception\RequestException;
+use FindingAPI\Definition\Type\DefinitionTypeInterface;
+use FindingAPI\Processor\ProcessorFactory;
 
 class Request
 {
@@ -40,7 +42,7 @@ class Request
             throw new RequestException('Unknown request method '.$method.'. Only GET and POST are allowed');
         }
 
-        $this->parameters->setParameter('method', $method);
+        $this->parameters->setParameter('method', strtolower($method));
 
         return $this;
     }
@@ -97,5 +99,10 @@ class Request
     public function getParameters() : RequestParameters
     {
         return $this->parameters;
+    }
+
+    public function sendRequest(DefinitionTypeInterface $definitionType)
+    {
+        $processed = ProcessorFactory::getProcessor($this)->process();
     }
 }

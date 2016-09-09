@@ -9,34 +9,39 @@ class AndDefinition implements SearchDefinitionInterface
     /**
      * @var array $definition;
      */
-    private $searchString;
+    private $definition;
     /**
-     * @var array $processedDefinition
+     * @var bool $isValidated
      */
-    private $processedDefinition;
+    private $isValidated = false;
     /**
      * AndDefinition constructor.
      * @param string $searchString
      */
     public function __construct(string $searchString)
     {
-        $this->searchString = $searchString;
+        $this->definition = $searchString;
     }
     /**
-     * @return array
+     * @return string
+     * @throws DefinitionException
      */
-    public function getProcessedDefinition() : array
+    public function getDefinition() : string
     {
-        $this->processedDefinition = preg_split('#\s#', $this->searchString);
+        if ($this->isValidated === false) {
+            throw new DefinitionException(get_class($this).' should be validated first with SearchDefinitionInterface::validateDefinition');
+        }
 
-        return $this->processedDefinition;
+        return $this->definition;
     }
     /**
      * @throws DefinitionException
      */
     public function validateDefinition()
     {
-        $result = preg_match_all('/[,\\-\\)\\(\\+]/', $this->searchString);
+        $this->isValidated = true;
+
+        $result = preg_match_all('/[,\\-\\)\\(\\+]/', $this->definition);
 
         if ($result !== 0) {
             throw new DefinitionException('\'and\' operator search can only contain spaces between words. Characters , - ( ) + are forbidden');
