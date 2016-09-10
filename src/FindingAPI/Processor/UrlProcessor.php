@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: marioskrlec
- * Date: 09/09/16
- * Time: 23:12
- */
 
 namespace FindingAPI\Processor;
 
-
 use FindingAPI\Core\Request;
+use FindingAPI\Definition\Type\DefinitionTypeInterface;
 
 class UrlProcessor implements ProcessorInterface
 {
@@ -18,18 +12,46 @@ class UrlProcessor implements ProcessorInterface
      */
     private $request;
     /**
+     * @var DefinitionTypeInterface $definitionType
+     */
+    private $definitionType;
+    /**
      * UrlProcessor constructor.
      * @param Request $request
+     * @param DefinitionTypeInterface $definitionType
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request, DefinitionTypeInterface $definitionType)
     {
         $this->request = $request;
+        $this->definitionType = $definitionType;
     }
     /**
      * @return string
      */
     public function process() : string
     {
-        
+        $processed = $this->definitionType->getProcessed();
+
+        $ebayUrl = $this->request->getParameters()->getParameter('ebay_url')->getValue();
+        $keywords = urlencode($processed);
+
+        $finalUrl = $ebayUrl.'?';
+
+        $parameters = $this->request->getParameters();
+
+        foreach ($parameters as $parameter) {
+            if ($parameter->getName() === 'method' or $parameter->getName() === 'ebay_url') {
+                continue;
+            }
+
+            $name = $parameter->getName();
+            $value = $parameter->getValue();
+
+            $finalUrl.=$name.'='.$value.'&';
+        }
+
+        $finalUrl.='keywords='.$keywords;
+
+        return $finalUrl;
     }
 }

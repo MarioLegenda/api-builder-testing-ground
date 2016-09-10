@@ -28,7 +28,7 @@ class UrlDefinitionType implements DefinitionTypeInterface
     {
         $finalDefinition = '';
         foreach ($this->definitions as $definition) {
-            $finalDefinition.=' '.$definition;
+            $finalDefinition.=$definition->getDefinition().' ';
         }
 
         $this->finalDefinition = rtrim($finalDefinition);

@@ -23,7 +23,7 @@ class DefinitionTypeFactory
      */
     public function getDefinitionType()
     {
-        if ($this->request->getParameters()->getParameter('method') === 'get') {
+        if ($this->request->getParameters()->getParameter('method')->getValue() === 'get') {
             return new UrlDefinitionType();
         }
     }

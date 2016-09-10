@@ -13,6 +13,7 @@ class TempTesting extends PHPUnit_Framework_TestCase
     {
         $request = new Request();
         $request
+            ->setEbayUrl('http://svcs.ebay.com/services/search/FindingService/v1')
             ->setServiceVersion('1.0.0')
             ->setMethod(RequestParameters::REQUEST_METHOD_GET)
             ->setOperationName('findItemsByKeywords')
@@ -29,5 +30,7 @@ class TempTesting extends PHPUnit_Framework_TestCase
         $finder = FinderSearch::getInstance($request);
 
         $finder->search(Definition::andOperator('baseball card'));
+
+        $finder->send();
     }
 }

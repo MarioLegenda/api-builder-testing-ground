@@ -5,7 +5,7 @@ namespace FindingAPI\Core;
 use FindingAPI\Core\Exception\DeprecatedException;
 use FindingAPI\Core\Exception\RequestException;
 
-class RequestParameters
+class RequestParameters implements \IteratorAggregate
 {
     /**
      * const string
@@ -24,36 +24,9 @@ class RequestParameters
      */
     const RESPONSE_DATA_FORMAT_JSON = 'json';
     /**
-     * @var array $parameters
+     * @var array|null $parameters
      */
-    private $parameters = array(
-        'method' => array (
-            'type' => 'required',
-            'value' => null,
-        ),
-        'ebay_url' => array(
-            'type' => 'required',
-            'value' => null,
-        ),
-        'OPERATION-NAME' => array(
-            'type' => 'required',
-            'value' => null,
-            'valid' => array('findItemsByKeywords'),
-        ),
-        'SERVICE-VERSION' => array(
-            'type' => 'required',
-            'value' => null,
-        ),
-        'SECURITY-APPNAME' => array(
-            'type' => 'required',
-            'value' => null,
-        ),
-        'RESPONSE-DATA-FORMAT' => array(
-            'type' => 'required',
-            'value' => null,
-            'valid' => array('xml', 'json'),
-        ),
-    );
+    private $parameters;
     /**
      * RequestParameters constructor.
      * @param array|null $parameters
@@ -62,6 +35,61 @@ class RequestParameters
     {
         if ($parameters !== null) {
             $this->parameters = $parameters;
+        }
+
+        $parameters = array(
+            array(
+                'name' => 'method',
+                'type' => 'required',
+                'value' => null,
+                'valid' => array(),
+                'deprecated' => false,
+                'synonyms' => array(),
+            ),
+            array(
+                'name' => 'ebay_url',
+                'type' => 'required',
+                'value' => null,
+                'valid' => array(),
+                'deprecated' => false,
+                'synonyms' => array(),
+            ),
+            array(
+                'name' => 'OPERATION-NAME',
+                'type' => 'required',
+                'value' => null,
+                'valid' => array('findItemsByKeywords'),
+                'deprecated' => false,
+                'synonyms' => array(),
+            ),
+            array(
+                'name' => 'SERVICE-VERSION',
+                'type' => 'required',
+                'value' => null,
+                'valid' => array(),
+                'deprecated' => false,
+                'synonyms' => array(),
+            ),
+            array(
+                'name' => 'SECURITY-APPNAME',
+                'type' => 'required',
+                'value' => null,
+                'valid' => array(),
+                'deprecated' => false,
+                'synonyms' => array(),
+            ),
+            array(
+                'name' => 'RESPONSE-DATA-FORMAT',
+                'type' => 'required',
+                'value' => null,
+                'valid' => array('xml', 'json'),
+                'deprecated' => false,
+                'synonyms' => array(),
+            ),
+        );
+
+        foreach ($parameters as $parameter) {
+            $this->parameters[] = new Parameter($parameter);
         }
     }
     /**
@@ -75,7 +103,7 @@ class RequestParameters
             throw new RequestException('Parameter '.$name.' does not exist and cannot be deprecated');
         }
 
-        $this->parameters[$name]['deprecated'] = true;
+        $this->getParameter($name)->setDeprecated();
 
         return $this;
     }
@@ -90,7 +118,7 @@ class RequestParameters
             throw new RequestException('Parameter '.$name.' does not exist and cannot be deprecated');
         }
 
-        unset($this->parameters[$name]['deprecated']);
+        $this->getParameter($name)->removeDeprecated();
 
         return $this;
     }
@@ -105,9 +133,7 @@ class RequestParameters
             throw new RequestException('Parameter '.$name.' does not exist and cannot be deprecated');
         }
 
-        $options = $this->getParameter($name);
-
-        return array_key_exists('deprecated', $options);
+        return $this->getParameter($name)->isDeprecated();
     }
     /**
      * @param string $name
@@ -123,10 +149,11 @@ class RequestParameters
         }
 
         if (!$this->isValidParameter($name, $value)) {
-            throw new RequestException('Invalid parameter given for '.$name.' with value '.$value.'. Valid parameters are '.implode(', ', $this->parameters[$name]['valid']));
+            throw new RequestException('Invalid parameter given for '.$name.' with value '.$value);
         }
 
-        $this->parameters[$name]['value'] = $value;
+        $this->getParameter($name)->setValue($value);
+        $this->getParameter($name)->setName($name);
 
         return $this;
     }
@@ -135,25 +162,34 @@ class RequestParameters
      * @param string $value
      * @param string $type
      * @param array $valids
+     * @param array $synonyms
      * @return RequestParameters
      * @throws RequestException
      */
-    public function addParameter(string $name, string $value, string $type, array $valids = array()) : RequestParameters
+    public function addParameter(string $name, string $value, string $type, array $valids = array(), $synonyms = array()) : RequestParameters
     {
         if ($this->hasParameter($name)) {
             throw new RequestException('Request parameter '.$name.' already exists. If you which to replace it, use RequestParameters::replaceParameter()');
         }
 
         $options = array(
+            'name' => $name,
             'type' => $type,
             'value' => $value,
+            'deprecated' => false,
+            'valid' => $valids,
+            'synonyms' => null,
         );
 
         if (!empty($valids)) {
             $options['valid'] = $valids;
         }
 
-        $this->parameters[$name] = $options;
+        if (!empty($synonyms)) {
+            $options['synonyms'] = $synonyms;
+        }
+
+        $this->parameters[] = new Parameter($options);
 
         return $this;
     }
@@ -162,6 +198,7 @@ class RequestParameters
      * @param string $value
      * @param string $type
      * @param array $valids
+     * @param array $synonyms
      * @return RequestParameters
      * @throws RequestException
      */
@@ -171,9 +208,14 @@ class RequestParameters
             throw new RequestException('Request parameter '.$name.' does not exist. If you which to add a parameter, use RequestParameters::addParameter()');
         }
 
-        unset($this->parameters[$name]);
+        $parameter = $this->getParameter($name);
 
-        $this->addParameter($name, $value, $type, $valids);
+        $parameter
+            ->setName($name)
+            ->addSynonym($name)
+            ->addValid($valids)
+            ->setValue($value)
+            ->setType($type);
 
         return $this;
     }
@@ -202,7 +244,15 @@ class RequestParameters
             return null;
         }
 
-        return $this->parameters[$name];
+        foreach ($this->parameters as $parameter) {
+            if ($parameter->hasSynonym($name)) {
+                return $parameter;
+            }
+
+            if ($parameter->getName() === $name) {
+                return $parameter;
+            }
+        }
     }
     /**
      * @param string $name
@@ -210,7 +260,17 @@ class RequestParameters
      */
     public function hasParameter(string $name) : bool
     {
-        return array_key_exists($name, $this->parameters);
+        foreach ($this->parameters as $parameter) {
+            if ($parameter->hasSynonym($name)) {
+                return true;
+            }
+
+            if ($parameter->getName() === $name) {
+                return true;
+            }
+        }
+
+        return false;
     }
     /**
      * @param string $name
@@ -225,14 +285,12 @@ class RequestParameters
 
         $parameter = $this->getParameter($name);
 
-        if (array_key_exists('deprecated', $parameter)) {
+        if ($parameter->isDeprecated()) {
             throw new DeprecatedException('Request parameter '.$name.' seems to be deprecated. If you which to ignore it, catch DeprecatedException');
         }
 
-        if (array_key_exists('valid', $parameter)) {
-            if (in_array($value, $parameter['valid']) === false) {
-                return false;
-            }
+        if (!$parameter->isValid($value)) {
+            throw new RequestException('Parameter '.$name.' exists but is not valid. This means that ebay supports exact list of values for this parameter. Valid values for this parameter are '.implode(', ', $parameter->getValid()));
         }
 
         return true;
@@ -251,5 +309,12 @@ class RequestParameters
         }
 
         return true;
+    }
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator() : \ArrayIterator
+    {
+        return new \ArrayIterator($this->parameters);
     }
 }
