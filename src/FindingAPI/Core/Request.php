@@ -18,9 +18,9 @@ class Request
      * Request constructor.
      * @param array|null $parameters
      */
-    public function __construct(array $parameters = null)
+    public function __construct(RequestParameters $parameters = null)
     {
-        $this->parameters = ($parameters !== null) ? new RequestParameters($parameters) : new RequestParameters();
+        $this->parameters = ($parameters !== null) ? $parameters : new RequestParameters();
     }
 
     /**

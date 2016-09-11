@@ -3,9 +3,9 @@
 require __DIR__.'/../vendor/autoload.php';
 
 use FindingAPI\FinderSearch;
-use FindingAPI\Definition\Definition;
 use FindingAPI\Core\Request;
 use FindingAPI\Core\RequestParameters;
+use FindingAPI\Definition\DefinitionFactory;
 
 class TempTesting extends PHPUnit_Framework_TestCase
 {
@@ -29,7 +29,10 @@ class TempTesting extends PHPUnit_Framework_TestCase
     {
         $finder = FinderSearch::getInstance($request);
 
-        $finder->search(Definition::andOperator('baseball card'));
+        $finder
+            ->search(DefinitionFactory::andOperator('baseball card'))
+            ->search(DefinitionFactory::exactSearchOperator('someshit'))
+            ->search(DefinitionFactory::orOperator('(some,shit)'));
 
         $finder->send();
     }

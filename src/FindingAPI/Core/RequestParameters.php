@@ -31,12 +31,8 @@ class RequestParameters implements \IteratorAggregate
      * RequestParameters constructor.
      * @param array|null $parameters
      */
-    public function __construct(array $parameters = null)
+    public function __construct()
     {
-        if ($parameters !== null) {
-            $this->parameters = $parameters;
-        }
-
         $parameters = array(
             array(
                 'name' => 'method',
