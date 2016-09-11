@@ -1,11 +1,38 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FindingAPI\Definition;
 
+use FindingAPI\Core\Options;
+
 class DefinitionFactory
 {
+    /**
+     * @var static DefinitionFactory $instance
+     */
+    private static $instance;
+    /**
+     * @var Options $options
+     */
+    private $options;
+
+    /**
+     * @param Options $options
+     */
+    public static function initiate(Options $options)
+    {
+        self::$instance = (self::$instance instanceof self) ? self::$instance : new self($options);
+    }
+    /**
+     * DefinitionFactory constructor.
+     * @param Options $options
+     */
+    private function __construct(Options $options)
+    {
+        $this->options = $options;
+    }
+
     /**
      * @param string $searchString
      * @return SearchDefinitionInterface
@@ -14,6 +41,7 @@ class DefinitionFactory
     {
         return new AndDefinition($searchString);
     }
+
     /**
      * @param string $searchString
      * @return SearchDefinitionInterface
@@ -22,12 +50,22 @@ class DefinitionFactory
     {
         return new ExactSequenceDefinition($searchString);
     }
+
     /**
      * @param string $searchString
      * @return SearchDefinitionInterface
      */
     public static function orOperator(string $searchString) : SearchDefinitionInterface
     {
-        return new OrOperator($searchString);
+        return new OrDefinition($searchString);
+    }
+
+    /**
+     * @param string $searchString
+     * @return SearchDefinitionInterface
+     */
+    public static function notOperator(string $searchString) : SearchDefinitionInterface
+    {
+        return new NotDefinition($searchString);
     }
 }

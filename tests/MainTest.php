@@ -6,6 +6,7 @@ use FindingAPI\FinderSearch;
 use FindingAPI\Core\Request;
 use FindingAPI\Core\RequestParameters;
 use FindingAPI\Definition\DefinitionFactory;
+use FindingAPI\Core\Options;
 
 class TempTesting extends PHPUnit_Framework_TestCase
 {
@@ -30,9 +31,11 @@ class TempTesting extends PHPUnit_Framework_TestCase
         $finder = FinderSearch::getInstance($request);
 
         $finder
-            ->search(DefinitionFactory::andOperator('baseball card'))
-            ->search(DefinitionFactory::exactSearchOperator('someshit'))
-            ->search(DefinitionFactory::orOperator('(some,shit)'));
+            ->addOption(Options::SMART_GUESS_SYSTEM)
+            ->addSearch(DefinitionFactory::andOperator('baseball card'))
+            ->addSearch(DefinitionFactory::exactSearchOperator('someshit'))
+            ->addSearch(DefinitionFactory::orOperator('(some,shit)'))
+            ->addSearch(DefinitionFactory::notOperator('baseball -card'));
 
         $finder->send();
     }

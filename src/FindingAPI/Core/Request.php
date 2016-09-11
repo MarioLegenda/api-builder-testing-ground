@@ -123,14 +123,12 @@ class Request
     }
 
     /**
-     * @param DefinitionTypeInterface $definitionType
+     * @param string $definitionType
      */
-    public function sendRequest(DefinitionTypeInterface $definitionType)
+    public function sendRequest(string $request)
     {
-        $processed = ProcessorFactory::getProcessor($this, $definitionType)->process();
-
         $client = new Client();
 
-        $response = $client->request($this->getParameters()->getParameter('method')->getValue(), $processed);
+        //$response = $client->request($this->getParameters()->getParameter('method')->getValue(), $request);
     }
 }

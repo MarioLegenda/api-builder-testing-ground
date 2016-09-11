@@ -14,13 +14,13 @@ class ExactSequenceDefinition extends AbstractDefinition
         $this->isValidated = true;
 
         $tempResult = preg_replace('/\s+/', '', $this->definition);
-        $result = preg_match_all('/[\\-\\)\\(\\+]/', $tempResult, $matches);
+        $result = preg_match_all('/[\\-\\)\\(\\+]/', $tempResult);
 
-        if ($result === false) {
+        if ($result !== 0) {
             throw new DefinitionException('\'exact sequence\' operator search can only contain a comma (,) between words. Characters - ( ) + and spaces are forbidden');
         }
 
-        $result = strpos(',', $this->definition);
+        $result = strpos($this->definition, ',');
 
         if ($result === false) {
             throw new DefinitionException('\'exact sequence\' operator search can only contain a comma (,) between words. Characters - ( ) + and spaces are forbidden');
