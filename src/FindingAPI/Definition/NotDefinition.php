@@ -20,7 +20,7 @@ class NotDefinition extends AbstractDefinition
         }
 
         // TO BE IMPLEMENTED
-        //$result = preg_match('#\w+\s+\\-\w+#', $this->definition);
+        //$result = preg_match('#[a-zA-a0-9]+\s+[a-zA-Z0-9]+#', $this->definition);
 
         if ($result !== 0) {
             throw new DefinitionException('\'not\' has to have one search word followed by another with a dash in front of it separated by a spaces');

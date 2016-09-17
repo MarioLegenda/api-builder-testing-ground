@@ -68,4 +68,12 @@ class DefinitionFactory
     {
         return new NotDefinition($searchString);
     }
+    /**
+     * @param string $searchString
+     * @return SearchDefinitionInterface
+     */
+    public static function groupNotOperator(string $searchString) : SearchDefinitionInterface
+    {
+        return new GroupNotDefinition($searchString);
+    }
 }
