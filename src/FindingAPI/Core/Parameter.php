@@ -2,6 +2,8 @@
 
 namespace FindingAPI\Core;
 
+use FindingAPI\Core\Exception\RequestException;
+
 class Parameter
 {
     /**
@@ -28,13 +30,18 @@ class Parameter
      * @var array $synonyms
      */
     private $synonyms;
+    /**
+     * @var array $possible
+     */
+    private $possible;
 
     /**
      * Parameter constructor.
      * @param array $parameter
      */
-    public function __construct(array $parameter)
+    public function __construct(array $parameter, array $possible)
     {
+        $this->setPossible($possible);
         $this->setName($parameter['name']);
         $this->setType($parameter['type']);
         $this->setValue($parameter['value']);
@@ -55,7 +62,7 @@ class Parameter
      * @param string $name
      * @return Parameter
      */
-    public function setName($name) : Parameter
+    public function setName(string $name) : Parameter
     {
         $this->name = $name;
 
@@ -74,7 +81,7 @@ class Parameter
      * @param string $type
      * @return Parameter
      */
-    public function setType($type) : Parameter
+    public function setType(string $type) : Parameter
     {
         $this->type = $type;
 
@@ -86,6 +93,19 @@ class Parameter
      */
     public function getValue() : string
     {
+        $possible = $this->getPossible('type');
+        $type = $this->getType();
+
+        if (in_array($type, $possible) === false) {
+            throw new RequestException('Value has to be '.$type.'. Possible types are'.implode(', ', $possible));
+        }
+
+        if ($type === 'required') {
+            if (empty($this->value)) {
+                throw new RequestException('Value for parameter '.$this->getName().' cannot be a value when empty() return true');
+            }
+        }
+
         return $this->value;
     }
 
@@ -209,5 +229,28 @@ class Parameter
     public function hasSynonym($synonym) : bool
     {
         return in_array($synonym, $this->synonyms);
+    }
+
+    /**
+     * @return array
+     */
+    public function getPossible(string $type) : array
+    {
+        if (!array_key_exists($type, $this->possible)) {
+            throw new RequestException('Possibility type '.$type.' not found');
+        }
+
+        return $this->possible[$type];
+    }
+
+    /**
+     * @param array $possible
+     * @return Parameter
+     */
+    public function setPossible(array $possible) : Parameter
+    {
+        $this->possible = $possible;
+
+        return $this;
     }
 }

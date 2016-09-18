@@ -1,4 +1,6 @@
 finding:
+    possible:
+        type: [required, optional]
     parameters:
       - { name: method, value: get, type: required, valid: {}, deprecated: false, synonyms: {}}
       - { name: ebay_url, value: http://svcs.ebay.com/services/search/FindingService/v1, type: required, valid: {}, deprecated: false, synonyms: {}}

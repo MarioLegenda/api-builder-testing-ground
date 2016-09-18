@@ -26,8 +26,8 @@ class Request
     public function __construct()
     {
         if (self::$configLoaded === false) {
-            $config = Yaml::parse(file_get_contents(__DIR__.'/config.yml'))['finding']['parameters'];
-            $this->parameters = new RequestParameters($config);
+            $config = Yaml::parse(file_get_contents(__DIR__.'/config.yml'))['finding'];
+            $this->parameters = new RequestParameters($config['parameters'], $config['possible']);
         }
     }
 
