@@ -72,8 +72,8 @@ class DefinitionFactory
      * @param string $searchString
      * @return SearchDefinitionInterface
      */
-    public static function groupNotOperator(string $searchString) : SearchDefinitionInterface
+    public static function customDefinition(string $searchString) : SearchDefinitionInterface
     {
-        return new GroupNotDefinition($searchString);
+        return new CustomDefinition($searchString);
     }
 }

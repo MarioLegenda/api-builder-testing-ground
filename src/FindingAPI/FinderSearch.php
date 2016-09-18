@@ -18,7 +18,6 @@ class FinderSearch
      * @var Request $configuration
      */
     private $request;
-
     /**
      * @var Options $options
      */
@@ -31,6 +30,10 @@ class FinderSearch
      * @var array $definitions
      */
     private $definitions = array();
+    /**
+     * @var string $processed
+     */
+    private $processed;
 
     /**
      * @param Request|null $configuration
@@ -97,8 +100,18 @@ class FinderSearch
 
         return $this;
     }
-
-    public function send()
+    /**
+     * @return string
+     */
+    public function getProcessed()
+    {
+        return $this->processed;
+    }
+    /**
+     * @return FinderSearch
+     * @throws Core\Exception\FindingApiException
+     */
+    public function send() : FinderSearch
     {
         $definitionType = (new DefinitionTypeFactory($this->request))
             ->getDefinitionType()
@@ -107,6 +120,10 @@ class FinderSearch
 
         $processed = ProcessorFactory::getProcessor($this->request, $definitionType)->process();
 
+        $this->processed = $processed;
+
         $this->request->sendRequest($processed);
+
+        return $this;
     }
 }

@@ -29,8 +29,11 @@ class TempTesting extends PHPUnit_Framework_TestCase
             ->addSearch(DefinitionFactory::andOperator('baseball card'))
             ->addSearch(DefinitionFactory::exactSearchOperator('someshit'))
             ->addSearch(DefinitionFactory::orOperator('(some,shit)'))
-            ->addSearch(DefinitionFactory::notOperator('baseball -card'));
+            ->addSearch(DefinitionFactory::notOperator('baseball -card'))
+            ->addSearch(DefinitionFactory::customDefinition('some words'));
 
-        $finder->send();
+        $processed = $finder->send()->getProcessed();
+
+        var_dump($processed);
     }
 }

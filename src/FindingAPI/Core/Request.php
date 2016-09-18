@@ -3,8 +3,6 @@
 namespace FindingAPI\Core;
 
 use FindingAPI\Core\Exception\RequestException;
-use FindingAPI\Definition\Type\DefinitionTypeInterface;
-use FindingAPI\Processor\ProcessorFactory;
 use GuzzleHttp\Client;
 use Symfony\Component\Yaml\Yaml;
 
@@ -63,7 +61,7 @@ class Request
     public function setMethod(string $method) : Request
     {
         if (RequestParameters::REQUEST_METHOD_GET !== $method and RequestParameters::REQUEST_METHOD_POST !== $method) {
-            throw new RequestException('Unknown request method ' . $method . '. Only GET and POST are allowed');
+            throw new RequestException('Unknown request method '.$method.'. Only GET and POST are allowed');
         }
 
         $this->parameters->setParameter('method', strtolower($method));
@@ -94,7 +92,7 @@ class Request
         $format = strtolower($format);
 
         if (RequestParameters::RESPONSE_DATA_FORMAT_XML !== $format and RequestParameters::RESPONSE_DATA_FORMAT_JSON !== $format) {
-            throw new RequestException('Response format can only be ' . implode(', ', $allowedFormat));
+            throw new RequestException('Response format can only be '.implode(', ', $allowedFormat));
         }
 
         $this->parameters->setParameter('RESPONSE-DATA-FORMAT', $format);
@@ -139,6 +137,6 @@ class Request
 
         $response = $client->request($this->getParameters()->getParameter('method')->getValue(), $request);
 
-        var_dump((string) $response->getBody());
+        //var_dump((string) $response->getBody());
     }
 }

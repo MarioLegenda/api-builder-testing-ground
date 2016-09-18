@@ -41,13 +41,15 @@ class Parameter
      */
     public function __construct(array $parameter, array $possible)
     {
-        $this->setPossible($possible);
-        $this->setName($parameter['name']);
-        $this->setType($parameter['type']);
-        $this->setValue($parameter['value']);
+        $this
+            ->setPossible($possible)
+            ->setName($parameter['name'])
+            ->setType($parameter['type'])
+            ->setValue($parameter['value'])
+            ->setValid($parameter['valid'])
+            ->setSynonyms($parameter['synonyms']);
+
         ($parameter['deprecated'] === true) ? $this->setDeprecated() : $this->removeDeprecated();
-        $this->setValid($parameter['valid']);
-        $this->setSynonyms($parameter['synonyms']);
     }
 
     /**
