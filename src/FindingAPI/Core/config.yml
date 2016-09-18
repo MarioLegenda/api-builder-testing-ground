@@ -1,0 +1,8 @@
+finding:
+    parameters:
+      - { name: method, value: get, type: required, valid: {}, deprecated: false, synonyms: {}}
+      - { name: ebay_url, value: http://svcs.ebay.com/services/search/FindingService/v1, type: required, valid: {}, deprecated: false, synonyms: {}}
+      - { name: OPERATION-NAME, value: null, type: required, valid: [findItemsByKeywords, findItemsByCategory], deprecated: false, synonyms: {}}
+      - { name: SERVICE-VERSION, value: 1.0.0, type: required, valid: {}, deprecated: false, synonyms: {}}
+      - { name: SECURITY-APPNAME, value: Mariokrl-testing-PRD-ee6e68035-e73c8a53, type: required, valid: {}, deprecated: false, synonyms: {}}
+      - { name: RESPONSE-DATA-FORMAT, value: xml, type: required, valid: [xml, json], deprecated: false, synonyms: {}}

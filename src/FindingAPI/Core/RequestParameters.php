@@ -31,61 +31,14 @@ class RequestParameters implements \IteratorAggregate
      * RequestParameters constructor.
      * @param array|null $parameters
      */
-    public function __construct()
+    public function __construct(array $parameters = null)
     {
-        $parameters = array(
-            array(
-                'name' => 'method',
-                'type' => 'required',
-                'value' => null,
-                'valid' => array(),
-                'deprecated' => false,
-                'synonyms' => array(),
-            ),
-            array(
-                'name' => 'ebay_url',
-                'type' => 'required',
-                'value' => null,
-                'valid' => array(),
-                'deprecated' => false,
-                'synonyms' => array(),
-            ),
-            array(
-                'name' => 'OPERATION-NAME',
-                'type' => 'required',
-                'value' => null,
-                'valid' => array('findItemsByKeywords'),
-                'deprecated' => false,
-                'synonyms' => array(),
-            ),
-            array(
-                'name' => 'SERVICE-VERSION',
-                'type' => 'required',
-                'value' => null,
-                'valid' => array(),
-                'deprecated' => false,
-                'synonyms' => array(),
-            ),
-            array(
-                'name' => 'SECURITY-APPNAME',
-                'type' => 'required',
-                'value' => null,
-                'valid' => array(),
-                'deprecated' => false,
-                'synonyms' => array(),
-            ),
-            array(
-                'name' => 'RESPONSE-DATA-FORMAT',
-                'type' => 'required',
-                'value' => null,
-                'valid' => array('xml', 'json'),
-                'deprecated' => false,
-                'synonyms' => array(),
-            ),
-        );
+        if (!empty($parameters)) {
+            foreach ($parameters as $parameter) {
+                $this->parameters[] = new Parameter($parameter);
+            }
 
-        foreach ($parameters as $parameter) {
-            $this->parameters[] = new Parameter($parameter);
+            return;
         }
     }
     /**

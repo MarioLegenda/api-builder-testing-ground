@@ -4,6 +4,7 @@ namespace FindingAPI\Processor;
 
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\Type\DefinitionTypeInterface;
+use FindingAPI\Definition\Type\UrlDefinitionType;
 
 class ProcessorFactory
 {
@@ -13,9 +14,7 @@ class ProcessorFactory
      */
     public static function getProcessor(Request $request, DefinitionTypeInterface $definitionType)
     {
-        $method = $request->getParameters()->getParameter('method')->getValue();
-
-        if ($method === 'get') {
+        if ($definitionType instanceof UrlDefinitionType) {
             return new UrlProcessor($request, $definitionType);
         }
     }

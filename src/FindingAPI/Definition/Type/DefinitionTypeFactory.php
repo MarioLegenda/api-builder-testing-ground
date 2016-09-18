@@ -2,6 +2,7 @@
 
 namespace FindingAPI\Definition\Type;
 
+use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\Request;
 
 class DefinitionTypeFactory
@@ -23,8 +24,12 @@ class DefinitionTypeFactory
      */
     public function getDefinitionType()
     {
-        if ($this->request->getParameters()->getParameter('method')->getValue() === 'get') {
+        $method = $this->request->getParameters()->getParameter('method')->getValue();
+
+        if (strtolower($method) === 'get') {
             return new UrlDefinitionType();
         }
+
+        throw new FindingApiException('TEMPORARY EXCEPTION. DefinitionTypeFactory::getDefinitionType() should return UrlDefinitionType');
     }
 }

@@ -6,6 +6,7 @@ use FindingAPI\Core\Exception\RequestException;
 use FindingAPI\Definition\Type\DefinitionTypeInterface;
 use FindingAPI\Processor\ProcessorFactory;
 use GuzzleHttp\Client;
+use Symfony\Component\Yaml\Yaml;
 
 class Request
 {
@@ -13,14 +14,21 @@ class Request
      * @var RequestParameters $parameters
      */
     private $parameters;
+    /**
+     * @var bool $configLoaded
+     */
+    private static $configLoaded = false;
 
     /**
      * Request constructor.
      * @param array|null $parameters
      */
-    public function __construct(RequestParameters $parameters = null)
+    public function __construct()
     {
-        $this->parameters = ($parameters !== null) ? $parameters : new RequestParameters();
+        if (self::$configLoaded === false) {
+            $config = Yaml::parse(file_get_contents(__DIR__.'/config.yml'))['finding']['parameters'];
+            $this->parameters = new RequestParameters($config);
+        }
     }
 
     /**
@@ -129,6 +137,8 @@ class Request
     {
         $client = new Client();
 
-        //$response = $client->request($this->getParameters()->getParameter('method')->getValue(), $request);
+        $response = $client->request($this->getParameters()->getParameter('method')->getValue(), $request);
+
+        var_dump((string) $response->getBody());
     }
 }
