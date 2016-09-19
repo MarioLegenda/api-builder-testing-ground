@@ -89,12 +89,7 @@ class ItemFilterValidator
             $this->{$method}($value);
         }
     }
-    /**
-     * @param string $name
-     * @param array $values
-     * @return bool
-     * @throws ItemFilterException
-     */
+
     private function authorizedSellerOnly(array $values) : bool
     {
         $exceptionMessage = 'AuthorizedSeller only can accept only true or false boolean values and can be an array with one value';
@@ -109,6 +104,15 @@ class ItemFilterValidator
         $exceptionMessage = 'Argument has to be an array with one value. Also, AvailableTo has to be a valid ISO 3166 country name. Please, refer to https://www.iso.org/obp/ui/#search';
 
         $this->authorize->authorizeCountryCode($values, $exceptionMessage);
+
+        return true;
+    }
+
+    private function bestOfferOnly(array $values) : bool
+    {
+        $exceptionMessage = 'BestOfferOnly only can accept only true or false boolean values and can be an array with one value';
+
+        $this->authorize->authorizeBoolean($values, $exceptionMessage);
 
         return true;
     }
