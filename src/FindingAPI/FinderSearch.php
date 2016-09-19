@@ -2,6 +2,8 @@
 
 namespace FindingAPI;
 
+use FindingAPI\Core\Exception\FindingApiException;
+use FindingAPI\Core\ItemFilterValidator;
 use FindingAPI\Core\Options;
 use FindingAPI\Definition\DefinitionFactory;
 use FindingAPI\Definition\DefinitionValidator;
@@ -30,6 +32,10 @@ class FinderSearch
      * @var array $definitions
      */
     private $definitions = array();
+    /**
+     * @var array $itemFilters
+     */
+    private $itemFilters = array();
     /**
      * @var string $processed
      */
@@ -89,7 +95,21 @@ class FinderSearch
 
         return $this;
     }
+    /**
+     * @param $itemFilter
+     * @param $value
+     * @return FinderSearch
+     */
+    public function addItemFilter(string $itemFilter, array $value) : FinderSearch
+    {
+        if (array_key_exists($itemFilter, $this->itemFilters)) {
+            throw new FindingApiException('Item filter '.$itemFilter.' has already been added');
+        }
 
+        $this->itemFilters[$itemFilter] = $value;
+
+        return $this;
+    }
     /**
      * @param int $option
      * @return FinderSearch
@@ -113,6 +133,8 @@ class FinderSearch
      */
     public function send() : FinderSearch
     {
+        (new ItemFilterValidator($this->itemFilters))->validate();
+
         $definitionType = (new DefinitionTypeFactory($this->request))
             ->getDefinitionType()
             ->addDefinitions($this->definitions)

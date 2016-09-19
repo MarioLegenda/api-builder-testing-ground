@@ -6,6 +6,7 @@ use FindingAPI\FinderSearch;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\DefinitionFactory;
 use FindingAPI\Core\Options;
+use FindingAPI\Core\ItemFilter;
 
 class TempTesting extends PHPUnit_Framework_TestCase
 {
@@ -27,10 +28,7 @@ class TempTesting extends PHPUnit_Framework_TestCase
         $finder
             ->addOption(Options::SMART_GUESS_SYSTEM)
             ->addSearch(DefinitionFactory::andOperator('baseball card'))
-            ->addSearch(DefinitionFactory::exactSearchOperator('someshit'))
-            ->addSearch(DefinitionFactory::orOperator('(some,shit)'))
-            ->addSearch(DefinitionFactory::notOperator('baseball -card'))
-            ->addSearch(DefinitionFactory::customDefinition('some words'));
+            ->addItemFilter(ItemFilter::AUTHORIZED_SELLER_ONLY, array(true));
 
         $processed = $finder->send()->getProcessed();
 
