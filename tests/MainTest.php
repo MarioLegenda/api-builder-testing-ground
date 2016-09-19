@@ -28,7 +28,8 @@ class TempTesting extends PHPUnit_Framework_TestCase
         $finder
             ->addOption(Options::SMART_GUESS_SYSTEM)
             ->addSearch(DefinitionFactory::andOperator('baseball card'))
-            ->addItemFilter(ItemFilter::AUTHORIZED_SELLER_ONLY, array(true));
+            ->addItemFilter(ItemFilter::AUTHORIZED_SELLER_ONLY, array(true))
+            ->addItemFilter(ItemFilter::AVAILABLE_TO, array('AF'));
 
         $processed = $finder->send()->getProcessed();
 
