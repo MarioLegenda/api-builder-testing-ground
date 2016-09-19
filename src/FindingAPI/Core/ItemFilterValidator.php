@@ -116,4 +116,13 @@ class ItemFilterValidator
 
         return true;
     }
+
+    private function charityOnly(array $values) : bool
+    {
+        $exceptionMessage = 'BestOfferOnly only can accept only true or false boolean values and can be an array with one value';
+
+        $this->authorize->authorizeBoolean($values, $exceptionMessage);
+
+        return true;
+    }
 }

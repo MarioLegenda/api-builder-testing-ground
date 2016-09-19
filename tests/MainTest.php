@@ -30,7 +30,8 @@ class TempTesting extends PHPUnit_Framework_TestCase
             ->addSearch(DefinitionFactory::andOperator('baseball card'))
             ->addItemFilter(ItemFilter::AUTHORIZED_SELLER_ONLY, array(true))
             ->addItemFilter(ItemFilter::AVAILABLE_TO, array('AF'))
-            ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true));
+            ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
+            ->addItemFilter(ItemFilter::CHARITY_ONLY, array(true));
 
         $processed = $finder->send()->getProcessed();
 
