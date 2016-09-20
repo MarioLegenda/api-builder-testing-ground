@@ -3,7 +3,7 @@
 namespace FindingAPI;
 
 use FindingAPI\Core\Exception\FindingApiException;
-use FindingAPI\Core\ItemFilterValidator;
+use FindingAPI\Core\ItemFilter\ItemFilterValidator;
 use FindingAPI\Core\Options;
 use FindingAPI\Definition\DefinitionFactory;
 use FindingAPI\Definition\DefinitionValidator;

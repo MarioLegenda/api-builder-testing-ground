@@ -32,8 +32,10 @@ class TempTesting extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::AVAILABLE_TO, array('AF'))
             ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
             ->addItemFilter(ItemFilter::CHARITY_ONLY, array(true))
-            ->addItemFilter(ItemFilter::CONDITION, array(1000))
-            ->addItemFilter(ItemFilter::CURRENCY, array('AUD'));
+            ->addItemFilter(ItemFilter::CONDITION, array('New', 1000))
+            ->addItemFilter(ItemFilter::CURRENCY, array(ItemFilter\Currency::AUSTRALIAN))
+            ->addItemFilter(ItemFilter::END_TIME_FROM, array(new \DateTime('1.1.2019')))
+            ->addItemFilter(ItemFilter::END_TIME_TO, array(new \DateTime('1.1.2019')));
 
         $processed = $finder->send()->getProcessed();
 

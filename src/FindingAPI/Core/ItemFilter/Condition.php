@@ -4,34 +4,31 @@ namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Exception\ItemFilterException;
 use StrongType\ArrayType;
+use FindingAPI\Core\ItemFilter\FilterInterface;
 
-class Condition extends AbstractConstraint implements ConstraintInterface
+class Condition extends AbstractConstraint implements FilterInterface
 {
-    private $allowedValues;
-    /**
-     * @param string $key
-     * @param string $value
-     */
-    public function __construct($key, $value)
+    public function validateFilter(array $filter) : bool
     {
-        parent::__construct($key, $value);
+        if (!$this->genericValidation($filter)) {
+            return false;
+        }
 
-        $this->allowedValues = new ArrayType(array(
+        $allowedValues = new ArrayType(array(
             'text-values' => array('New', 'Used', 'Unspecified'),
             'id-values' => array(1000, 1500, 1750, 2000, 2500, 3000, 4000, 5000, 6000, 7000),
         ));
-    }
-    /**
-     * @throws ItemFilterException
-     */
-    public function checkConstraint()
-    {
-        $uniqueValues = array_unique($this->value);
 
-        foreach ($uniqueValues as $val) {
-            if (!$this->allowedValues->inArray($val, 'text-values') and !$this->allowedValues->inArray($val, 'id-values')) {
-                throw new ItemFilterException('Invalid value supplied for condition item filter');
+        $uniques = array_unique($filter);
+
+        foreach ($uniques as $val) {
+            if (!$allowedValues->inArray($val, 'text-values') and !$allowedValues->inArray($val, 'id-values')) {
+                $this->exceptionMessages['Invalid argument for item filter '.$this->name.'. Please, refer to http://developer.ebay.com/devzone/finding/callref/types/ItemFilterType.html'];
+
+                return false;
             }
         }
+
+        return true;
     }
 }

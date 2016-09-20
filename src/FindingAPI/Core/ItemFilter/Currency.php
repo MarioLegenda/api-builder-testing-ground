@@ -2,10 +2,9 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\Exception\ItemFilterException;
 use StrongType\ArrayType;
 
-class Currency extends AbstractConstraint implements ConstraintInterface
+class Currency extends AbstractConstraint implements FilterInterface
 {
     const AUSTRALIAN = 'aud';
     const CANADIAN = 'cad';
@@ -21,20 +20,17 @@ class Currency extends AbstractConstraint implements ConstraintInterface
     const SWEDISH = 'sek';
     const TAIWAN = 'twd';
     const USA = 'usd';
-
     /**
-     * @var ArrayType $allowedCurrencies
+     * @param array $filter
+     * @return bool
      */
-    private $allowedCurrencies;
-    /**
-     * @param string $key
-     * @param string $value
-     */
-    public function __construct($key, $value)
+    public function validateFilter(array $filter) : bool
     {
-        parent::__construct($key, $value);
+        if (!$this->genericValidation($filter, 1)) {
+            return false;
+        }
 
-        $this->allowedCurrencies = new ArrayType(array(
+        $allowedCurrencies = new ArrayType(array(
             'aud',
             'cad',
             'chf',
@@ -51,16 +47,15 @@ class Currency extends AbstractConstraint implements ConstraintInterface
             'twd',
             'usd',
         ));
-    }
-    /**
-     * @throws ItemFilterException
-     */
-    public function checkConstraint()
-    {
-        $curreny = strtolower($this->value);
 
-        if (!$this->allowedCurrencies->inArray($curreny)) {
-            throw new ItemFilterException('Invalid currency supplied. Allowed currencies are '.implode(',', $this->allowedCurrencies));
+        $currency = strtolower($filter[0]);
+
+        if (!$allowedCurrencies->inArray($currency)) {
+            $this->exceptionMessages[] = 'Invalid Currency item filter value supplied. Allowed currencies are '.implode(',', $allowedCurrencies);
+
+            return false;
         }
+
+        return true;
     }
 }
