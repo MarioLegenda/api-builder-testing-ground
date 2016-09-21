@@ -39,7 +39,8 @@ class TempTesting extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::END_TIME_TO, array(new \DateTime('1.1.2019')))
             ->addItemFilter(ItemFilter::EXCLUDE_AUTO_PAY, array(true))
             ->addItemFilter(ItemFilter::EXCLUDE_CATEGORY, array(123, 435))
-            ->addItemFilter(ItemFilter::EXCLUDE_SELLER, array('Budala', 'Idiot'));
+            ->addItemFilter(ItemFilter::EXCLUDE_SELLER, array('Budala', 'Idiot'))
+            ->addItemFilter(ItemFilter::EXPEDITED_SHIPPING_TYPE, array('Expedited'));
 
         $processed = $finder->send()->getProcessed();
 
