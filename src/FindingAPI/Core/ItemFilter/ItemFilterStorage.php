@@ -81,6 +81,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\FreeShippingOnly',
                 'value' => null,
             ),
+            'GetItFastOnly' => array(
+                'object' => __NAMESPACE__.'\\GetItFastOnly',
+                'value' => null,
+            ),
         );
     }
     /**
