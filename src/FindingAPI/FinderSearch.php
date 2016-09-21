@@ -3,6 +3,7 @@
 namespace FindingAPI;
 
 use FindingAPI\Core\Exception\FindingApiException;
+use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 use FindingAPI\Core\ItemFilter\ItemFilterValidator;
 use FindingAPI\Core\Options;
 use FindingAPI\Definition\DefinitionFactory;
@@ -37,6 +38,10 @@ class FinderSearch
      */
     private $itemFilters = array();
     /**
+     * @var ItemFilterStorage
+     */
+    private $itemFilterStorage;
+    /**
      * @var string $processed
      */
     private $processed;
@@ -52,6 +57,8 @@ class FinderSearch
         }
 
         self::$instance = new FinderSearch($request);
+
+        self::$instance->itemFilterStorage = new ItemFilterStorage();
 
         self::$instance->options = new Options();
 
@@ -100,15 +107,22 @@ class FinderSearch
      * @param $value
      * @return FinderSearch
      */
-    public function addItemFilter(string $itemFilter, array $value) : FinderSearch
+    public function addItemFilter(string $itemFilterName, array $value) : FinderSearch
     {
-        if (array_key_exists($itemFilter, $this->itemFilters)) {
-            throw new FindingApiException('Item filter '.$itemFilter.' has already been added');
+        if (!$this->itemFilterStorage->hasItemFilter($itemFilterName)) {
+            throw new FindingApiException('Item filter '.$itemFilterName.' does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
         }
 
-        $this->itemFilters[$itemFilter] = $value;
+        $this->itemFilterStorage->updateItemFilterValue($itemFilterName, $value);
 
         return $this;
+    }
+    /**
+     * @return ItemFilterStorage
+     */
+    public function getItemFilterStorage() : ItemFilterStorage
+    {
+        return $this->itemFilterStorage;
     }
     /**
      * @param int $option
@@ -133,7 +147,7 @@ class FinderSearch
      */
     public function send() : FinderSearch
     {
-        (new ItemFilterValidator($this->itemFilters))->validate();
+        (new ItemFilterValidator($this->itemFilterStorage))->validate();
 
         $definitionType = (new DefinitionTypeFactory($this->request))
             ->getDefinitionType()

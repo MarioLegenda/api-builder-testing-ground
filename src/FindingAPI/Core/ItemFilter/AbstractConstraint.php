@@ -43,7 +43,7 @@ abstract class AbstractConstraint
         }
 
         if ($count !== null) {
-            if (count($value) !== $count) {
+            if (count($value) < $count) {
                 $this->exceptionMessages[] = $this->name.' can receive an array argument with only one value';
 
                 return false;

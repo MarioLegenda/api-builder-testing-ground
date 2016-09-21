@@ -14,9 +14,9 @@ class ItemFilterValidator
     private $itemFilters;
     /**
      * ItemFilterProcessor constructor.
-     * @param array $itemFilters
+     * @param ItemFilterStorage $itemFilters
      */
-    public function __construct(array $itemFilters)
+    public function __construct(ItemFilterStorage $itemFilters)
     {
         $this->itemFilters = $itemFilters;
     }
@@ -27,10 +27,24 @@ class ItemFilterValidator
     public function validate()
     {
         foreach ($this->itemFilters as $name => $value) {
-            $className = __NAMESPACE__.'\\'.$name;
-            $itemFilter = new $className($name);
+            $itemFilterData = $this->itemFilters->getItemFilter($name);
 
-            if (!$itemFilter->validateFilter($value)) {
+            $className = $itemFilterData['object'];
+            $itemFilterValue = $itemFilterData['value'];
+
+            if (is_string($className)) {
+                $itemFilter = new $className($name);
+            }
+
+            if ($className instanceof AbstractConstraint and $className instanceof FilterInterface) {
+                $itemFilter = $className;
+            }
+
+            if (!isset($itemFilter)) {
+                throw new \RuntimeException('$itemFilter variable is not set. Debug: Class name: '.$className.'; Values: '.implode(', ', $value).' in ItemFilterValidator::validate()');
+            }
+
+            if (!$itemFilter->validateFilter($itemFilterValue)) {
                 throw new ItemFilterException((string) $itemFilter);
             }
         }

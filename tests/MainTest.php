@@ -35,7 +35,9 @@ class TempTesting extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::CONDITION, array('New', 1000))
             ->addItemFilter(ItemFilter::CURRENCY, array(ItemFilter\Currency::AUSTRALIAN))
             ->addItemFilter(ItemFilter::END_TIME_FROM, array(new \DateTime('1.1.2019')))
-            ->addItemFilter(ItemFilter::END_TIME_TO, array(new \DateTime('1.1.2019')));
+            ->addItemFilter(ItemFilter::END_TIME_TO, array(new \DateTime('1.1.2019')))
+            ->addItemFilter(ItemFilter::EXCLUDE_AUTO_PAY, array(true))
+            ->addItemFilter(ItemFilter::EXCLUDE_CATEGORY, array(123, 435));
 
         $processed = $finder->send()->getProcessed();
 
