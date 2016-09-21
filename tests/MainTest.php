@@ -6,7 +6,8 @@ use FindingAPI\FinderSearch;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\DefinitionFactory;
 use FindingAPI\Core\Options;
-use FindingAPI\Core\ItemFilter;
+use FindingAPI\Core\ItemFilter\ItemFilter;
+use FindingAPI\Core\ItemFilter\Currency;
 
 class TempTesting extends PHPUnit_Framework_TestCase
 {
@@ -33,7 +34,7 @@ class TempTesting extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
             ->addItemFilter(ItemFilter::CHARITY_ONLY, array(true))
             ->addItemFilter(ItemFilter::CONDITION, array('New', 1000))
-            ->addItemFilter(ItemFilter::CURRENCY, array(ItemFilter\Currency::AUSTRALIAN))
+            ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN))
             ->addItemFilter(ItemFilter::END_TIME_FROM, array(new \DateTime('1.1.2019')))
             ->addItemFilter(ItemFilter::END_TIME_TO, array(new \DateTime('1.1.2019')))
             ->addItemFilter(ItemFilter::EXCLUDE_AUTO_PAY, array(true))
