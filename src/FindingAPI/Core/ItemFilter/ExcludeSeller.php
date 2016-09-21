@@ -4,31 +4,33 @@ namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Exception\ItemFilterException;
 use FindingAPI\Core\ItemFilter;
-use StrongType\ArrayType;
 
-class ExcludeSeller extends AbstractConstraint implements ConstraintInterface
+class ExcludeSeller extends AbstractConstraint implements FilterInterface
 {
     /**
-     * @var ArrayType $itemFilters
-     */
-    private $itemFilters;
-    /**
-     * @param ArrayType $itemFilters
-     */
-    public function __construct($key, $value)
-    {
-        parent::__construct($key, $value);
-
-        $this->itemFilters = new ArrayType($value);
-    }
-
-    /**
      * @throws ItemFilterException
+     * @return bool
      */
-    public function checkConstraint()
+    public function validateFilter(array $filter) : bool
     {
-        if ($this->itemFilters->keyExists(ItemFilter::SELLER) and $this->itemFilters->keyExists(ItemFilter::TOP_RATED_SELLER_ONLY)) {
-            throw new ItemFilterException('Item filter ExcludeSeller cannot be used together with Seller or TopRatedSellerOnly');
+        if (!$this->genericValidation($filter, 1)) {
+            return false;
         }
+
+        if (count($filter) > 100) {
+            $this->exceptionMessages[] = 'ExcludeSeller item filter can accept up to 100 seller names';
+
+            return false;
+        }
+
+        foreach ($filter as $value) {
+            if (!is_string($value)) {
+                $this->exceptionMessages[] = 'ExcludeSeller accepts an array of seller names as a string';
+
+                return false;
+            }
+        }
+
+        return true;
     }
 }

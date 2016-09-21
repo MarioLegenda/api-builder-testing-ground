@@ -20,7 +20,6 @@ class ItemFilterValidator
     {
         $this->itemFilters = $itemFilters;
     }
-
     /**
      * @void
      */
