@@ -2,13 +2,33 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use StrongType\ArrayType;
-use Ebay\Finding\Constructor\Type\Url\ItemFilterType;
-use Ebay\Finding\Exception\ConstraintException;
-use StrongType\Exceptions\CriticalTypeException;
+use FindingAPI\Core\Exception\ItemFilterException;
 
-class GlobalId extends AbstractConstraint implements ConstraintInterface
+class GlobalId
 {
+    const EBAY_AT = 'ebay-at';
+    const EBAY_AU = 'ebay-au';
+    const EBAY_CH = 'ebay-ch';
+    const EBAY_DE = 'ebay-de';
+    const EBAY_ENCA = 'ebay-enca';
+    const EBAY_ES = 'ebay-es';
+    const EBAY_FR = 'ebay-fr';
+    const EBAY_FRBE = 'ebay-frbe';
+    const EBAY_FRCA = 'ebay-frca';
+    const EBAY_GB = 'ebay-gb';
+    const EBAY_HK = 'ebay-hk';
+    const EBAY_IE = 'ebay-ie';
+    const EBAY_IN = 'ebay-in';
+    const EBAY_IT = 'ebay-it';
+    const EBAY_MOTOR = 'ebay-motor';
+    const EBAY_MY = 'ebay-my';
+    const EBAY_NL = 'ebay-nl';
+    const EBAY_NLBE = 'ebay-nlbe';
+    const EBAY_PH = 'ebay-ph';
+    const EBAY_PL = 'ebay-pl';
+    const EBAY_SG = 'ebay-sg';
+    const EBAY_US = 'ebay-us';
+
     /**
      * @var array $globalIds
      */
@@ -169,23 +189,70 @@ class GlobalId extends AbstractConstraint implements ConstraintInterface
         ),
     );
     /**
-     * @param ArrayType $itemFilters
+     * @var GlobalId $instance
      */
-    public function __construct($key, $value)
+    private static $instance;
+    /**
+     * @return GlobalId
+     */
+    public function instance()
     {
-        parent::__construct($key, $value);
+        self::$instance = (self::$instance instanceof self) ? self::$instance : new self();
 
-        $this->globalIds = new ArrayType($this->globalIds);
+        return self::$instance;
     }
     /**
-     * @throws ConstraintException
+     * @param string $id
+     * @return mixed|null
      */
-    public function checkConstraint()
+    public function getId(string $id)
     {
-        $loweredId = strtolower($this->value);
-
-        if (!$this->globalIds->keyExists($loweredId)) {
-            throw new ConstraintException('There is no global id '.$this->value.'in ListedIn item filter');
+        if (!$this->hasId($id)) {
+            return null;
         }
+
+        return $this->globalIds[$id];
+    }
+    /**
+     * @param string $id
+     * @return mixed
+     */
+    public function hasId(string $id)
+    {
+        return array_key_exists($id, $this->globalIds);
+    }
+    /**
+     * @param string $name
+     * @param array $values
+     * @return GlobalId
+     * @throws ItemFilterException
+     */
+    public function addId(string $name, array $values) : GlobalId
+    {
+        if ($this->hasId($name)) {
+            throw new ItemFilterException('Global id '.$name.' already exists');
+        }
+
+        if (!array_key_exists('global-id', $values) and !empty($values['global-id'])) {
+            throw new ItemFilterException('Global id '.$name.' value array has to have at least a global-id key and corresponding value');
+        }
+
+        $this->globalIds[$name] = $values;
+
+        return $this;
+    }
+    /**
+     * @param string $id
+     * @return bool
+     */
+    public function removeId(string $id) : bool
+    {
+        if (!$this->hasId($id)) {
+            return false;
+        }
+
+        unset($this->globalIds[$id]);
+
+        return true;
     }
 }
