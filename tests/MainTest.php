@@ -41,7 +41,8 @@ class TempTesting extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::EXCLUDE_CATEGORY, array(123, 435))
             ->addItemFilter(ItemFilter::EXCLUDE_SELLER, array('Budala', 'Idiot'))
             ->addItemFilter(ItemFilter::EXPEDITED_SHIPPING_TYPE, array('Expedited'))
-            ->addItemFilter(ItemFilter::FEATURED_ONLY, array(true));
+            ->addItemFilter(ItemFilter::FEATURED_ONLY, array(true))
+            ->addItemFilter(ItemFilter::FEEDBACK_SCORE_MAX, array(9));
 
         $processed = $finder->send()->getProcessed();
 
