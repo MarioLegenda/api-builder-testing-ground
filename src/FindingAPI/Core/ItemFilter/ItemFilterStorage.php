@@ -73,6 +73,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\FeedbackScoreMax',
                 'value' => null,
             ),
+            'FeedbackScoreMin' => array(
+                'object' => __NAMESPACE__.'\\FeedbackScoreMin',
+                'value' => null,
+            ),
         );
     }
     /**

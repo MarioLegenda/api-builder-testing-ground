@@ -33,10 +33,6 @@ class FinderSearch
      */
     private $definitions = array();
     /**
-     * @var array $itemFilters
-     */
-    private $itemFilters = array();
-    /**
      * @var ItemFilterStorage
      */
     private $itemFilterStorage;
