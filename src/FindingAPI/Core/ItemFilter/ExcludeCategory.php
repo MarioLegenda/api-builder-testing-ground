@@ -2,8 +2,6 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\Exception\ItemFilterException;
-
 class ExcludeCategory extends AbstractConstraint implements FilterInterface
 {
     /**
@@ -13,6 +11,12 @@ class ExcludeCategory extends AbstractConstraint implements FilterInterface
     public function validateFilter(array $filter) : bool
     {
         if (!$this->genericValidation($filter, 1)) {
+            return false;
+        }
+
+        if (count($filter) > 25) {
+            $this->exceptionMessages[] = 'ExcludeCategory item filter can accept up to 25 category ids';
+
             return false;
         }
 

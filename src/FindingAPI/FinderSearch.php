@@ -12,7 +12,6 @@ use FindingAPI\Definition\Exception\DefinitionException;
 use FindingAPI\Definition\SearchDefinitionInterface;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\Type\DefinitionTypeFactory;
-use FindingAPI\Definition\Type\UrlDefinitionType;
 use FindingAPI\Processor\ProcessorFactory;
 
 class FinderSearch
