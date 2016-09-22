@@ -25,7 +25,9 @@ class ItemFilterValidator
      */
     public function validate()
     {
-        foreach ($this->itemFilters as $name => $value) {
+        $addedItemFilters = $this->itemFilters->filterAddedFilter();
+
+        foreach ($addedItemFilters as $name => $value) {
             $itemFilterData = $this->itemFilters->getItemFilter($name);
 
             $className = $itemFilterData['object'];

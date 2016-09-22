@@ -93,6 +93,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\ListedIn',
                 'value' => null,
             ),
+            'ListingType' => array(
+                'object' => __NAMESPACE__.'\\ListingType',
+                'value' => null,
+            ),
         );
     }
     /**
@@ -176,6 +180,16 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
         }
 
         $this->itemFilters[$name]['value'] = $value;
+    }
+
+    /**
+     * @return array
+     */
+    public function filterAddedFilter() : array
+    {
+        return array_filter($this->itemFilters, function ($value) {
+            return $value['value'] !== null;
+        });
     }
     /**
      * @return int

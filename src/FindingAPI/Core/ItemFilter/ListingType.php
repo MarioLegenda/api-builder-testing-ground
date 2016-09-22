@@ -2,31 +2,27 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\Exception\ItemFilterException;
-use StrongType\ArrayType;
-
-class ListingType extends AbstractConstraint implements ConstraintInterface
+class ListingType extends AbstractConstraint implements FilterInterface
 {
     /**
-     * @var array $itemFilters
+     * @param array $filter
+     * @return bool
      */
-    private $itemFilters = array('Auction', 'AuctionWithBIN', 'Classified', 'FixedPrice', 'All');
-    /**
-     * @param ArrayType $itemFilters
-     */
-    public function __construct($key, $value)
+    public function validateFilter(array $filter) : bool
     {
-        parent::__construct($key, $value);
-    }
-    /**
-     * @throws ItemFilterException
-     */
-    public function checkConstraint()
-    {
-        $itemFilters = new ArrayType($this->itemFilters);
-
-        if (!$itemFilters->inArray($this->value)) {
-            throw new ItemFilterException('Item filter '.$this->key.' cannot contain a value '.$this->value.'. Allowed values are '.$itemFilters->implode(', '));
+        if (!$this->genericValidation($filter, 1)) {
+            return false;
         }
+
+        $filter = $filter[0];
+        $validFilters = array('All', 'AuctionWithBIN', 'Classified', 'FixedPrice', 'StoreInventory');
+
+        if (in_array($filter, $validFilters) === false) {
+            $this->exceptionMessages[] = $this->name.' accepts only '.implode(', ', $validFilters).' values';
+
+            return false;
+        }
+
+        return true;
     }
 }
