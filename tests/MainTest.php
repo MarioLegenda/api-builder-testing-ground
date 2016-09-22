@@ -50,7 +50,8 @@ class TempTesting extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::HIDE_DUPLICATE_ITEMS, array(true))
             ->addItemFilter(ItemFilter::LISTED_IN, array(GlobalId::EBAY_AT))
             ->addItemFilter(ItemFilter::LISTING_TYPE, array('All', 'AuctionWithBIN'))
-            ->addItemFilter(ItemFilter::LOCAL_PICKUP_ONLY, array(true));
+            ->addItemFilter(ItemFilter::LOCAL_PICKUP_ONLY, array(true))
+            ->addItemFilter(ItemFilter::LOCAL_SEARCH_ONLY, array(true));
 
         $processed = $finder->send()->getProcessed();
 
