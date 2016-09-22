@@ -195,7 +195,7 @@ class GlobalId
     /**
      * @return GlobalId
      */
-    public function instance()
+    public static function instance()
     {
         self::$instance = (self::$instance instanceof self) ? self::$instance : new self();
 

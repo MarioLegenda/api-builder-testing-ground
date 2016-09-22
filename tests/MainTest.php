@@ -8,6 +8,7 @@ use FindingAPI\Definition\DefinitionFactory;
 use FindingAPI\Core\Options;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\ItemFilter\Currency;
+use FindingAPI\Core\ItemFilter\GlobalId;
 
 class TempTesting extends PHPUnit_Framework_TestCase
 {
@@ -46,7 +47,8 @@ class TempTesting extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::FEEDBACK_SCORE_MIN, array(9))
             ->addItemFilter(ItemFilter::FREE_SHIPPING_ONLY, array(true))
             ->addItemFilter(ItemFilter::GET_IT_FAST_ONLY, array(true))
-            ->addItemFilter(ItemFilter::HIDE_DUPLICATE_ITEMS, array(true));
+            ->addItemFilter(ItemFilter::HIDE_DUPLICATE_ITEMS, array(true))
+            ->addItemFilter(ItemFilter::LISTED_IN, array(GlobalId::EBAY_AT));
 
         $processed = $finder->send()->getProcessed();
 

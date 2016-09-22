@@ -89,6 +89,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\HideDuplicateItems',
                 'value' => null,
             ),
+            'ListedIn' => array(
+                'object' => __NAMESPACE__.'\\ListedIn',
+                'value' => null,
+            ),
         );
     }
     /**
