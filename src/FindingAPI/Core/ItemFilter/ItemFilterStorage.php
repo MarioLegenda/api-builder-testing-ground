@@ -97,6 +97,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\ListingType',
                 'value' => null,
             ),
+            'LocalPickupOnly' => array(
+                'object' => __NAMESPACE__.'\\LocalPickupOnly',
+                'value' => null,
+            ),
         );
     }
     /**
