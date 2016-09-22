@@ -28,6 +28,10 @@ class RequestParameters implements \IteratorAggregate
      */
     private $parameters;
     /**
+     * @var bool $isDeadlocked
+     */
+    private $isDeadlocked = false;
+    /**
      * RequestParameters constructor.
      * @param array|null $parameters
      */
@@ -44,6 +48,7 @@ class RequestParameters implements \IteratorAggregate
      */
     public function markDeprecated(string $name) : RequestParameters
     {
+
         if (!$this->hasParameter($name)) {
             throw new RequestException('Parameter '.$name.' does not exist and cannot be deprecated');
         }
@@ -89,6 +94,10 @@ class RequestParameters implements \IteratorAggregate
      */
     public function setParameter(string $name, string $value) : RequestParameters
     {
+        if ($this->isLocked()) {
+            throw new RequestException('RequestParameters object is locked. Unclock it with RequestParameters::unlock()');
+        }
+
         if (!$this->hasParameter($name)) {
             throw new RequestException('Unknown request parameter '.$name.'. If you which to add a new parameter, use Request::__construct(array $parameters) and add the new parameters there. The new parameter will be appended on the existing ones');
         }
@@ -113,6 +122,10 @@ class RequestParameters implements \IteratorAggregate
      */
     public function addParameter(string $name, string $value, string $type, array $valids = array(), $synonyms = array()) : RequestParameters
     {
+        if ($this->isLocked()) {
+            throw new RequestException('RequestParameters object is locked. Unclock it with RequestParameters::unlock()');
+        }
+
         if ($this->hasParameter($name)) {
             throw new RequestException('Request parameter '.$name.' already exists. If you which to replace it, use RequestParameters::replaceParameter()');
         }
@@ -149,6 +162,10 @@ class RequestParameters implements \IteratorAggregate
      */
     public function replaceParameter(string $name, string $value, string $type, $valids = array()) : RequestParameters
     {
+        if ($this->isLocked()) {
+            throw new RequestException('RequestParameters object is locked. Unclock it with RequestParameters::unlock()');
+        }
+
         if (!$this->hasParameter($name)) {
             throw new RequestException('Request parameter '.$name.' does not exist. If you which to add a parameter, use RequestParameters::addParameter()');
         }
@@ -171,6 +188,10 @@ class RequestParameters implements \IteratorAggregate
      */
     public function removeParameter(string $name) : bool
     {
+        if ($this->isLocked()) {
+            throw new RequestException('RequestParameters object is locked. Unclock it with RequestParameters::unlock()');
+        }
+
         if (!$this->hasParameter($name)) {
             throw new RequestException('Request parameter '.$name.' does not exist');
         }
@@ -239,6 +260,28 @@ class RequestParameters implements \IteratorAggregate
         }
 
         return true;
+    }
+    /**
+     * @void
+     */
+    public function lock()
+    {
+        $this->isDeadlocked = true;
+    }
+
+    /**
+     * @void
+     */
+    public function unlock()
+    {
+        $this->isDeadlocked = false;
+    }
+    /**
+     * @return bool
+     */
+    public function isLocked() : bool
+    {
+        return $this->isDeadlocked;
     }
     /**
      * @return bool

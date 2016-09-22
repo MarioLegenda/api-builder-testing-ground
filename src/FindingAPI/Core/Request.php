@@ -2,6 +2,7 @@
 
 namespace FindingAPI\Core;
 
+use FindingAPI\Core\Cache\CacheProxy;
 use FindingAPI\Core\Exception\RequestException;
 use GuzzleHttp\Client;
 use Symfony\Component\Yaml\Yaml;
@@ -15,18 +16,23 @@ class Request
     /**
      * @var bool $configLoaded
      */
-    private static $configLoaded = false;
-
+    private static $configSaved = array();
     /**
      * Request constructor.
      * @param array|null $parameters
      */
     public function __construct()
     {
-        if (self::$configLoaded === false) {
-            $config = Yaml::parse(file_get_contents(__DIR__.'/config.yml'))['finding'];
+        if (CacheProxy::instance()->has('config.yml')) {
+            $config = CacheProxy::instance()->get('config.yml');
             $this->parameters = new RequestParameters($config['parameters'], $config['possible']);
+
+            return;
         }
+
+        $config = Yaml::parse(file_get_contents(__DIR__.'/config.yml'))['finding'];
+        CacheProxy::instance()->put('config.yml', $config);
+        $this->parameters = new RequestParameters($config['parameters'], $config['possible']);
     }
 
     /**
@@ -123,7 +129,7 @@ class Request
     /**
      * @return RequestParameters
      */
-    public function getParameters() : RequestParameters
+    public function getRequestParameters() : RequestParameters
     {
         return $this->parameters;
     }
@@ -135,7 +141,7 @@ class Request
     {
         $client = new Client();
 
-        $response = $client->request($this->getParameters()->getParameter('method')->getValue(), $request);
+        $response = $client->request($this->getRequestParameters()->getParameter('method')->getValue(), $request);
 
         //var_dump((string) $response->getBody());
     }
