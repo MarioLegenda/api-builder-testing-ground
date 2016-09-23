@@ -117,10 +117,11 @@ class RequestParameters implements \IteratorAggregate
      * @param string $type
      * @param array $valids
      * @param array $synonyms
+     * @param array $possible
      * @return RequestParameters
      * @throws RequestException
      */
-    public function addParameter(string $name, string $value, string $type, array $valids = array(), $synonyms = array()) : RequestParameters
+    public function addParameter(string $name, string $value, string $type, array $valids = array(), $synonyms = array(), array $possible = array()) : RequestParameters
     {
         if ($this->isLocked()) {
             throw new RequestException('RequestParameters object is locked. Unclock it with RequestParameters::unlock()');
@@ -139,7 +140,17 @@ class RequestParameters implements \IteratorAggregate
             'synonyms' => null,
         );
 
+        if (!empty($possible) and array_key_exists('type', $possible)) {
+            if (in_array($type, $possible['type']) === false) {
+                throw new RequestException('If provided, $possible argument array has to contain the value of $type');
+            }
+        }
+
         if (!empty($valids)) {
+            if (empty($possible)) {
+                throw new RequestException('If a parameter has to be valid, then then you have to provide an array of possible values that could be validated to');
+            }
+
             $options['valid'] = $valids;
         }
 

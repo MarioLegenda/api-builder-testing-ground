@@ -16,8 +16,10 @@ class RequestTest extends PHPUnit_Framework_TestCase
 
         $config = Yaml::parse(file_get_contents(__DIR__.'/../src/FindingAPI/Core/config.yml'))['finding'];
 
-        $parameters = $config['parameters'];
+        $requestParametes->setParameter('method', 'post');
 
-        $method = $requestParametes->getParameter('method')->getValue();
+        $this->assertEquals('post', $requestParametes->getParameter('method')->getValue());
+        
+        
     }
 }

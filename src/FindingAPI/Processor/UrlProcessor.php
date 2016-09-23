@@ -32,12 +32,12 @@ class UrlProcessor implements ProcessorInterface
     {
         $processed = $this->definitionType->getProcessed();
 
-        $ebayUrl = $this->request->getParameters()->getParameter('ebay_url')->getValue();
+        $parameters = $this->request->getRequestParameters();
+
+        $ebayUrl = $parameters->getParameter('ebay_url')->getValue();
         $keywords = urlencode($processed);
 
         $finalUrl = $ebayUrl.'?';
-
-        $parameters = $this->request->getParameters();
 
         foreach ($parameters as $parameter) {
             if ($parameter->getName() === 'method' or $parameter->getName() === 'ebay_url') {
