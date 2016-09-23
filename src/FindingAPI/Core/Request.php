@@ -25,14 +25,14 @@ class Request
     {
         if (CacheProxy::instance()->has('config.yml')) {
             $config = CacheProxy::instance()->get('config.yml');
-            $this->parameters = new RequestParameters($config['parameters'], $config['possible']);
+            $this->parameters = new RequestParameters($config['parameters']);
 
             return;
         }
 
         $config = Yaml::parse(file_get_contents(__DIR__.'/config.yml'))['finding'];
         CacheProxy::instance()->put('config.yml', $config);
-        $this->parameters = new RequestParameters($config['parameters'], $config['possible']);
+        $this->parameters = new RequestParameters($config['parameters']);
     }
 
     /**

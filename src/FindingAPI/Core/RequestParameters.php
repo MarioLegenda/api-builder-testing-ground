@@ -35,10 +35,10 @@ class RequestParameters implements \IteratorAggregate
      * RequestParameters constructor.
      * @param array|null $parameters
      */
-    public function __construct(array $parameters, array $possible)
+    public function __construct(array $parameters)
     {
         foreach ($parameters as $parameter) {
-            $this->parameters[] = new Parameter($parameter, $possible);
+            $this->parameters[] = new Parameter($parameter);
         }
     }
     /**
@@ -48,7 +48,6 @@ class RequestParameters implements \IteratorAggregate
      */
     public function markDeprecated(string $name) : RequestParameters
     {
-
         if (!$this->hasParameter($name)) {
             throw new RequestException('Parameter '.$name.' does not exist and cannot be deprecated');
         }
@@ -102,10 +101,6 @@ class RequestParameters implements \IteratorAggregate
             throw new RequestException('Unknown request parameter '.$name.'. If you which to add a new parameter, use Request::__construct(array $parameters) and add the new parameters there. The new parameter will be appended on the existing ones');
         }
 
-        if (!$this->isValidParameter($name, $value)) {
-            throw new RequestException('Invalid parameter given for '.$name.' with value '.$value);
-        }
-
         $this->getParameter($name)->setValue($value);
         $this->getParameter($name)->setName($name);
 
@@ -121,44 +116,19 @@ class RequestParameters implements \IteratorAggregate
      * @return RequestParameters
      * @throws RequestException
      */
-    public function addParameter(string $name, string $value, string $type, array $valids = array(), $synonyms = array(), array $possible = array()) : RequestParameters
+    public function addParameter(Parameter $parameter) : RequestParameters
     {
         if ($this->isLocked()) {
             throw new RequestException('RequestParameters object is locked. Unclock it with RequestParameters::unlock()');
         }
 
-        if ($this->hasParameter($name)) {
-            throw new RequestException('Request parameter '.$name.' already exists. If you which to replace it, use RequestParameters::replaceParameter()');
+        if ($this->hasParameter($parameter->getName())) {
+            throw new RequestException($parameter->getName().' already exists');
         }
 
-        $options = array(
-            'name' => $name,
-            'type' => $type,
-            'value' => $value,
-            'deprecated' => false,
-            'valid' => $valids,
-            'synonyms' => null,
-        );
+        $parameter->validateParameter();
 
-        if (!empty($possible) and array_key_exists('type', $possible)) {
-            if (in_array($type, $possible['type']) === false) {
-                throw new RequestException('If provided, $possible argument array has to contain the value of $type');
-            }
-        }
-
-        if (!empty($valids)) {
-            if (empty($possible)) {
-                throw new RequestException('If a parameter has to be valid, then then you have to provide an array of possible values that could be validated to');
-            }
-
-            $options['valid'] = $valids;
-        }
-
-        if (!empty($synonyms)) {
-            $options['synonyms'] = $synonyms;
-        }
-
-        $this->parameters[] = new Parameter($options);
+        $this->parameters[] = $parameter;
 
         return $this;
     }
@@ -171,24 +141,17 @@ class RequestParameters implements \IteratorAggregate
      * @return RequestParameters
      * @throws RequestException
      */
-    public function replaceParameter(string $name, string $value, string $type, $valids = array()) : RequestParameters
+    public function replaceParameter(Parameter $parameter) : RequestParameters
     {
         if ($this->isLocked()) {
             throw new RequestException('RequestParameters object is locked. Unclock it with RequestParameters::unlock()');
         }
 
-        if (!$this->hasParameter($name)) {
-            throw new RequestException('Request parameter '.$name.' does not exist. If you which to add a parameter, use RequestParameters::addParameter()');
+        if (!$this->hasParameter($parameter->getName())) {
+            throw new RequestException('Request parameter '.$parameter->getName().' does not exist. If you which to add a parameter, use RequestParameters::addParameter()');
         }
 
-        $parameter = $this->getParameter($name);
-
-        $parameter
-            ->setName($name)
-            ->addSynonym($name)
-            ->addValid($valids)
-            ->setValue($value)
-            ->setType($type);
+        $this->removeParameter($parameter)->addParameter($parameter);
 
         return $this;
     }
@@ -197,28 +160,34 @@ class RequestParameters implements \IteratorAggregate
      * @return bool
      * @throws RequestException
      */
-    public function removeParameter(string $name) : bool
+    public function removeParameter(Parameter $parameterToDelete) : RequestParameters
     {
         if ($this->isLocked()) {
             throw new RequestException('RequestParameters object is locked. Unclock it with RequestParameters::unlock()');
         }
 
-        if (!$this->hasParameter($name)) {
-            throw new RequestException('Request parameter '.$name.' does not exist');
+        if (!$this->hasParameter($parameterToDelete->getName())) {
+            throw new RequestException('Request parameter '.$parameterToDelete->getName().' does not exist');
         }
 
-        unset($this->parameters[$name]);
+        foreach ($this->parameters as $key => $parameter) {
+            if ($parameter->getName() === $parameterToDelete->getName()) {
+                unset($this->parameters[$key]);
 
-        return true;
+                return $this;
+            }
+        }
+
+        return $this;
     }
     /**
      * @param string $name
      * @return mixed
      */
-    public function getParameter(string $name)
+    public function getParameter(string $name) : Parameter
     {
         if (!$this->hasParameter($name)) {
-            return null;
+            throw new RequestException('Unknown parameter '.$name);
         }
 
         foreach ($this->parameters as $parameter) {
@@ -297,17 +266,11 @@ class RequestParameters implements \IteratorAggregate
     /**
      * @return bool
      */
-    public function valid() : bool
+    public function valid()
     {
         foreach ($this->parameters as $parameter) {
-            if (array_key_exists('required', $parameter)) {
-                if ($parameter['value'] === null) {
-                    return false;
-                }
-            }
+            $parameter->validateParameter();
         }
-
-        return true;
     }
     /**
      * @return \ArrayIterator

@@ -10,7 +10,7 @@ use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\ItemFilter\Currency;
 use FindingAPI\Core\ItemFilter\GlobalId;
 
-class TempTesting extends PHPUnit_Framework_TestCase
+class MainTest extends PHPUnit_Framework_TestCase
 {
     public function testRequest()
     {
@@ -55,6 +55,6 @@ class TempTesting extends PHPUnit_Framework_TestCase
 
         $processed = $finder->send()->getProcessed();
 
-        var_dump($processed);
+        //var_dump($processed);
     }
 }

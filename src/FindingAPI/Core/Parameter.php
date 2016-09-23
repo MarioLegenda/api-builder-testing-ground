@@ -9,47 +9,44 @@ class Parameter
     /**
      * @var string $name
      */
-    private $name;
+    private $name = null;
     /**
      * @var string $type
      */
-    private $type;
+    private $type = null;
     /**
      * @var string $value
      */
-    private $value;
+    private $value = null;
     /**
      * @var bool $deprecated
      */
-    private $deprecated;
+    private $deprecated = false;
     /**
      * @var array $valid
      */
-    private $valid;
+    private $valid = array();
     /**
      * @var array $synonyms
      */
-    private $synonyms;
-    /**
-     * @var array $possible
-     */
-    private $possible;
+    private $synonyms = array();
 
     /**
      * Parameter constructor.
      * @param array $parameter
      */
-    public function __construct(array $parameter, array $possible)
+    public function __construct(array $parameter = null)
     {
-        $this
-            ->setPossible($possible)
-            ->setName($parameter['name'])
-            ->setType($parameter['type'])
-            ->setValue($parameter['value'])
-            ->setValid($parameter['valid'])
-            ->setSynonyms($parameter['synonyms']);
+        if (!empty($parameter)) {
+            $this
+                ->setName($parameter['name'])
+                ->setType($parameter['type'])
+                ->setValid($parameter['valid'])
+                ->setValue($parameter['value'])
+                ->setSynonyms($parameter['synonyms']);
 
-        ($parameter['deprecated'] === true) ? $this->setDeprecated() : $this->removeDeprecated();
+            ($parameter['deprecated'] === true) ? $this->setDeprecated() : $this->removeDeprecated();
+        }
     }
 
     /**
@@ -59,13 +56,17 @@ class Parameter
     {
         return $this->name;
     }
-
     /**
      * @param string $name
      * @return Parameter
+     * @throws RequestException
      */
     public function setName(string $name) : Parameter
     {
+        if (empty($name)) {
+            throw new RequestException('$name parameter cannot be an empty string. Given name: '.$name);
+        }
+
         $this->name = $name;
 
         return $this;
@@ -85,6 +86,12 @@ class Parameter
      */
     public function setType(string $type) : Parameter
     {
+        $allowedTypes = array('required', 'optional');
+
+        if (in_array($type, $allowedTypes) === false) {
+            throw new RequestException('Invalid $type. Allowed types are '.implode(', ', $allowedTypes).' for Parameter '.$this->getName());
+        }
+
         $this->type = $type;
 
         return $this;
@@ -93,21 +100,8 @@ class Parameter
     /**
      * @return string
      */
-    public function getValue() : string
+    public function getValue()
     {
-        $possible = $this->getPossible('type');
-        $type = $this->getType();
-
-        if (in_array($type, $possible) === false) {
-            throw new RequestException('Value has to be '.$type.'. Possible types are'.implode(', ', $possible));
-        }
-
-        if ($type === 'required') {
-            if (empty($this->value)) {
-                throw new RequestException('Value for parameter '.$this->getName().' cannot be a value when empty() return true');
-            }
-        }
-
         return $this->value;
     }
 
@@ -232,27 +226,26 @@ class Parameter
     {
         return in_array($synonym, $this->synonyms);
     }
-
     /**
-     * @return array
+     * @return bool
+     * @throws RequestException
      */
-    public function getPossible(string $type) : array
+    public function validateParameter()
     {
-        if (!array_key_exists($type, $this->possible)) {
-            throw new RequestException('Possibility type '.$type.' not found');
+        $type = $this->getType();
+        $value = $this->getValue();
+
+        if ($type === 'required') {
+            if (empty($value)) {
+                throw new RequestException('If $type is \'required\', then $value should not be empty for Parameter '.$this->getName());
+            }
         }
 
-        return $this->possible[$type];
-    }
-
-    /**
-     * @param array $possible
-     * @return Parameter
-     */
-    public function setPossible(array $possible) : Parameter
-    {
-        $this->possible = $possible;
-
-        return $this;
+        $valids = $this->getValid();
+        if (!empty($valids)) {
+            if (in_array($value, $valids) === false) {
+                throw new RequestException('If $valid is provided for '.$this->getName().', then $value should be one of '.implode(', ', $valids));
+            }
+        }
     }
 }
