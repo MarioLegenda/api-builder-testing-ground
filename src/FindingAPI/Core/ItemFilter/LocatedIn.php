@@ -19,7 +19,15 @@ class LocatedIn extends AbstractConstraint implements FilterInterface
 
             return false;
         }
-        
-        
+
+        foreach ($filter as $code) {
+            if (!ISO3166CountryCode::instance()->hasId($code)) {
+                $this->exceptionMessages[] = 'Unknown ISO31566 country code '.$code.'. Please, refere to https://www.iso.org/obp/ui/#search';
+
+                return false;
+            }
+        }
+
+        return true;
     }
 }

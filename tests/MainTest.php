@@ -51,7 +51,8 @@ class MainTest extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::LISTED_IN, array(GlobalId::EBAY_AT))
             ->addItemFilter(ItemFilter::LISTING_TYPE, array('All', 'AuctionWithBIN'))
             ->addItemFilter(ItemFilter::LOCAL_PICKUP_ONLY, array(true))
-            ->addItemFilter(ItemFilter::LOCAL_SEARCH_ONLY, array(true));
+            ->addItemFilter(ItemFilter::LOCAL_SEARCH_ONLY, array(true))
+            ->addItemFilter(ItemFilter::LOCATED_IN, array('dz', 'ai'));
 
         $processed = $finder->send()->getProcessed();
 
