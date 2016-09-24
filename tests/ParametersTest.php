@@ -3,10 +3,7 @@
 require __DIR__.'/../vendor/autoload.php';
 
 use FindingAPI\Core\Request;
-use FindingAPI\Core\RequestParameters;
-use Symfony\Component\Yaml\Yaml;
 use FindingAPI\Core\Parameter;
-use FindingAPI\Core\Exception\RequestException;
 
 class ParametersTest extends PHPUnit_Framework_TestCase
 {

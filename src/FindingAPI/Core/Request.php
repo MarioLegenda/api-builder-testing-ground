@@ -14,10 +14,6 @@ class Request
      */
     private $parameters;
     /**
-     * @var bool $configLoaded
-     */
-    private static $configSaved = array();
-    /**
      * Request constructor.
      * @param array|null $parameters
      */
