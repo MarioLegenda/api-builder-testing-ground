@@ -121,6 +121,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\MaxDistance',
                 'value' => null,
             ),
+            'MaxHandlingTime' => array(
+                'object' => __NAMESPACE__.'\\MaxHandlingTime',
+                'value' => null,
+            ),
         );
     }
     /**

@@ -54,7 +54,8 @@ class MainTest extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::LOCAL_SEARCH_ONLY, array(true))
             ->addItemFilter(ItemFilter::LOCATED_IN, array('dz', 'ai'))
             ->addItemFilter(ItemFilter::LOTS_ONLY, array(true))
-            ->addItemFilter(ItemFilter::MAX_BIDS, array(1));
+            ->addItemFilter(ItemFilter::MAX_BIDS, array(1))
+            ->addItemFilter(ItemFilter::MAX_HANDLING_TIME, array(1));
             //->addItemFilter(ItemFilter::MAX_DISTANCE, array(1));
 
         $processed = $finder->send()->getProcessed();
