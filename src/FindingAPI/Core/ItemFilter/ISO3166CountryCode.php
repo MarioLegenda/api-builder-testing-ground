@@ -2,6 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
+use FindingAPI\Core\Cache\CacheProxy;
 use FindingAPI\Core\Exception\ItemFilterException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -22,7 +23,7 @@ class ISO3166CountryCode
     {
         self::$instance = (self::$instance instanceof self) ? self::$instance : new self();
 
-        self::$instance->countryCodes = Yaml::parse(file_get_contents(__DIR__.'/country_codes.yml'))['iso-codes'];
+        self::$instance->createCodes();
 
         return self::$instance;
     }
@@ -30,13 +31,19 @@ class ISO3166CountryCode
      * @param string $id
      * @return mixed|null
      */
-    public function getId(string $id)
+    public function getId(string $id, string $type)
     {
         if (!$this->hasId($id)) {
             return null;
         }
 
-        return $this->countryCodes[$id];
+        foreach ($this->countryCodes as $codes) {
+            if ($codes[$type] === strtoupper($id)) {
+                return $codes[$type];
+            }
+        }
+
+        return null;
     }
     /**
      * @param string $id
@@ -46,7 +53,7 @@ class ISO3166CountryCode
     {
         $filtered = array_filter($this->countryCodes, function ($codes) use ($id) {
             foreach ($codes as $code) {
-                if ($code === $id) {
+                if ($code === strtoupper($id)) {
                     return true;
                 }
             }
@@ -80,7 +87,7 @@ class ISO3166CountryCode
      * @param string $id
      * @return bool
      */
-    public function removeId(string $id) : bool
+    public function removeId(string $id, string $type) : bool
     {
         if (!$this->hasId($id)) {
             return false;
@@ -89,5 +96,21 @@ class ISO3166CountryCode
         unset($this->countryCodes[$id]);
 
         return true;
+    }
+
+    private function createCodes()
+    {
+        if (!empty($this->countryCodes)) {
+            return;
+        }
+
+
+        if (CacheProxy::instance()->has('country_codes.yml')) {
+            $this->countryCodes = CacheProxy::instance()->get('country_codes.yml');
+
+            return;
+        }
+
+        $this->countryCodes = Yaml::parse(file_get_contents(__DIR__.'/country_codes.yml'))['iso-codes'];
     }
 }
