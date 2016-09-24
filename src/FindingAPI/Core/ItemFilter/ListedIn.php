@@ -2,6 +2,8 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
+use FindingAPI\Core\GlobalId;
+
 class ListedIn extends AbstractConstraint implements FilterInterface
 {
     /**

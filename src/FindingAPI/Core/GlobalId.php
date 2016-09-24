@@ -1,6 +1,6 @@
 <?php
 
-namespace FindingAPI\Core\ItemFilter;
+namespace FindingAPI\Core;
 
 use FindingAPI\Core\Exception\ItemFilterException;
 

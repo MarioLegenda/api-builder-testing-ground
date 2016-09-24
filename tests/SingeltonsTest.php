@@ -2,9 +2,9 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use FindingAPI\Core\ItemFilter\GlobalId;
+use FindingAPI\Core\GlobalId;
 use Symfony\Component\Yaml\Yaml;
-use FindingAPI\Core\ItemFilter\ISO3166CountryCode;
+use FindingAPI\Core\ISO3166CountryCode;
 
 class SingeltonsTest extends PHPUnit_Framework_TestCase
 {
