@@ -40,14 +40,17 @@ class UrlProcessor implements ProcessorInterface
         $finalUrl = $ebayUrl.'?';
 
         foreach ($parameters as $parameter) {
+            $name = $parameter->getName();
+
             if ($parameter->getName() === 'method' or $parameter->getName() === 'ebay_url') {
                 continue;
             }
 
-            $name = $parameter->getName();
             $value = $parameter->getValue();
 
-            $finalUrl.=$name.'='.$value.'&';
+            if (!empty($value)) {
+                $finalUrl.=$name.'='.$value.'&';
+            }
         }
 
         $finalUrl.='keywords='.$keywords;

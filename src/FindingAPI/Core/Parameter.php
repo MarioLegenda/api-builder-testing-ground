@@ -239,13 +239,31 @@ class Parameter
             if (empty($value)) {
                 throw new RequestException('If $type is \'required\', then $value should not be empty for Parameter '.$this->getName());
             }
-        }
 
-        $valids = $this->getValid();
-        if (!empty($valids)) {
-            if (in_array($value, $valids) === false) {
-                throw new RequestException('If $valid is provided for '.$this->getName().', then $value should be one of '.implode(', ', $valids));
+            $valids = $this->getValid();
+            if (!empty($valids)) {
+                if (!$this->validateValids($value, $valids)) {
+                    throw new RequestException('If $valid is provided for '.$this->getName().', then $value should be one of '.implode(', ', $valids).', '.$value.' given');
+                }
             }
         }
+
+        if (!empty($valid)) {
+            $valids = $this->getValid();
+            if (!empty($valids)) {
+                if (!$this->validateValids($value, $valids)) {
+                    throw new RequestException('If $valid is provided for '.$this->getName().', then $value should be one of '.implode(', ', $valids).', '.$value.' given');
+                }
+            }
+        }
+    }
+
+    private function validateValids(string $value, array $valids)
+    {
+        if (in_array($value, $valids) === false) {
+            return false;
+        }
+
+        return true;
     }
 }

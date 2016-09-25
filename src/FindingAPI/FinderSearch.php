@@ -33,10 +33,6 @@ class FinderSearch
      */
     private $definitions = array();
     /**
-     * @var ItemFilterStorage
-     */
-    private $itemFilterStorage;
-    /**
      * @var string $processed
      */
     private $processed;
@@ -53,12 +49,6 @@ class FinderSearch
 
         self::$instance = new FinderSearch($request);
 
-        self::$instance->itemFilterStorage = new ItemFilterStorage();
-
-        self::$instance->options = new Options();
-
-        DefinitionFactory::initiate(self::$instance->options);
-
         return self::$instance;
     }
 
@@ -72,64 +62,6 @@ class FinderSearch
     }
 
     /**
-     * @param SearchDefinitionInterface $definition
-     * @return FinderSearch
-     */
-    public function addSearch(SearchDefinitionInterface $definition) : FinderSearch
-    {
-        try {
-            $definition->validateDefinition();
-        } catch (DefinitionException $e) {
-            if ($this->options->hasOption(Options::SMART_GUESS_SYSTEM)) {
-                $definitionMethod = (new DefinitionValidator())->findDefinition($definition->getDefinition());
-
-                if ($definitionMethod === false) {
-                    throw new DefinitionException($e->getMessage());
-                }
-
-                $definition = DefinitionFactory::$definitionMethod($definition->getDefinition());
-
-                $definition->validateDefinition();
-            }
-        }
-
-        $this->definitions[] = $definition;
-
-        return $this;
-    }
-    /**
-     * @param $itemFilter
-     * @param $value
-     * @return FinderSearch
-     */
-    public function addItemFilter(string $itemFilterName, array $value) : FinderSearch
-    {
-        if (!$this->itemFilterStorage->hasItemFilter($itemFilterName)) {
-            throw new FindingApiException('Item filter '.$itemFilterName.' does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
-        }
-
-        $this->itemFilterStorage->updateItemFilterValue($itemFilterName, $value);
-
-        return $this;
-    }
-    /**
-     * @return ItemFilterStorage
-     */
-    public function getItemFilterStorage() : ItemFilterStorage
-    {
-        return $this->itemFilterStorage;
-    }
-    /**
-     * @param int $option
-     * @return FinderSearch
-     */
-    public function addOption(int $option) : FinderSearch
-    {
-        $this->options->addOption($option);
-
-        return $this;
-    }
-    /**
      * @return string
      */
     public function getProcessed()
@@ -142,11 +74,11 @@ class FinderSearch
      */
     public function send() : FinderSearch
     {
-        (new ItemFilterValidator($this->itemFilterStorage))->validate();
+        (new ItemFilterValidator($this->request->getItemFilterStorage()))->validate();
 
         $definitionType = (new DefinitionTypeFactory($this->request))
             ->getDefinitionType()
-            ->addDefinitions($this->definitions)
+            ->addDefinitions($this->request->getDefinitions())
             ->process();
 
         $processed = ProcessorFactory::getProcessor($this->request, $definitionType)->process();

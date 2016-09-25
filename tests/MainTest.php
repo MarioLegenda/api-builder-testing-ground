@@ -9,6 +9,7 @@ use FindingAPI\Core\Options;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\ItemFilter\Currency;
 use FindingAPI\Core\GlobalId;
+use FindingAPI\Core\ItemFilter\SortOrder;
 
 class MainTest extends PHPUnit_Framework_TestCase
 {
@@ -16,18 +17,9 @@ class MainTest extends PHPUnit_Framework_TestCase
     {
         $request = new Request();
 
-        $request->setOperationName('findItemsByKeywords');
-
-        return $request;
-    }
-    /**
-     * @depends testRequest
-     */
-    public function testFinder(Request $request)
-    {
-        $finder = FinderSearch::getInstance($request);
-
-        $finder
+        $request
+            ->setOperationName('findItemsByKeywords')
+            ->setSortOrder(SortOrder::START_TIME_NEWEST)
             ->addOption(Options::SMART_GUESS_SYSTEM)
             ->addSearch(DefinitionFactory::andOperator('baseball card'))
             ->addItemFilter(ItemFilter::AUTHORIZED_SELLER_ONLY, array(true))
@@ -58,8 +50,17 @@ class MainTest extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::MAX_HANDLING_TIME, array(1));
             //->addItemFilter(ItemFilter::MAX_DISTANCE, array(1));
 
+        return $request;
+    }
+    /**
+     * @depends testRequest
+     */
+    public function testFinder(Request $request)
+    {
+        $finder = FinderSearch::getInstance($request);
+
         $processed = $finder->send()->getProcessed();
 
-        //var_dump($processed);
+        var_dump($processed);
     }
 }

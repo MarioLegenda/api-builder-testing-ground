@@ -6,9 +6,27 @@ use FindingAPI\Core\Cache\CacheProxy;
 use FindingAPI\Core\Exception\RequestException;
 use GuzzleHttp\Client;
 use Symfony\Component\Yaml\Yaml;
+use FindingAPI\Definition\SearchDefinitionInterface;
+use FindingAPI\Definition\Exception\DefinitionException;
+use FindingAPI\Definition\DefinitionValidator;
+use FindingAPI\Definition\DefinitionFactory;
+use FindingAPI\Core\Exception\FindingApiException;
+use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 
 class Request
 {
+    /**
+     * @var ItemFilterStorage
+     */
+    private $itemFilterStorage;
+    /**
+     * @var Options $options
+     */
+    private $options;
+    /**
+     * @var array $definitions
+     */
+    private $definitions = array();
     /**
      * @var RequestParameters $parameters
      */
@@ -22,13 +40,18 @@ class Request
         if (CacheProxy::instance()->has('config.yml')) {
             $config = CacheProxy::instance()->get('config.yml');
             $this->parameters = new RequestParameters($config['parameters']);
-
-            return;
+        } else {
+            $config = Yaml::parse(file_get_contents(__DIR__.'/config.yml'))['finding'];
+            CacheProxy::instance()->put('config.yml', $config);
+            $this->parameters = new RequestParameters($config['parameters']);
         }
 
-        $config = Yaml::parse(file_get_contents(__DIR__.'/config.yml'))['finding'];
-        CacheProxy::instance()->put('config.yml', $config);
-        $this->parameters = new RequestParameters($config['parameters']);
+
+        $this->itemFilterStorage = new ItemFilterStorage();
+
+        $this->options = new Options();
+
+        DefinitionFactory::initiate($this->options);
     }
 
     /**
@@ -80,6 +103,28 @@ class Request
     {
         $this->parameters->setParameter('buyerPostalCode', $buyerPostalCode);
 
+        if (!$this->itemFilterStorage->hasItemFilter('BuyerPostalCode')) {
+            throw new FindingApiException('Item filter BuyerPostalCode does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
+        }
+
+        $this->itemFilterStorage->updateItemFilterValue('BuyerPostalCode', array($buyerPostalCode));
+
+        return $this;
+    }
+    /**
+     * @param string $sortOrder
+     * @return Request
+     */
+    public function setSortOrder(string $sortOrder) : Request
+    {
+        $this->parameters->setParameter('sortOrder', $sortOrder);
+
+        if (!$this->itemFilterStorage->hasItemFilter('SortOrder')) {
+            throw new FindingApiException('Item filter SortOrder does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
+        }
+
+        $this->itemFilterStorage->updateItemFilterValue('SortOrder', array($sortOrder));
+
         return $this;
     }
 
@@ -126,6 +171,69 @@ class Request
         return $this;
     }
 
+
+    /**
+     * @param SearchDefinitionInterface $definition
+     * @return Request
+     */
+    public function addSearch(SearchDefinitionInterface $definition) : Request
+    {
+        try {
+            $definition->validateDefinition();
+        } catch (DefinitionException $e) {
+            if ($this->options->hasOption(Options::SMART_GUESS_SYSTEM)) {
+                $definitionMethod = (new DefinitionValidator())->findDefinition($definition->getDefinition());
+
+                if ($definitionMethod === false) {
+                    throw new DefinitionException($e->getMessage());
+                }
+
+                $definition = DefinitionFactory::$definitionMethod($definition->getDefinition());
+
+                $definition->validateDefinition();
+            }
+        }
+
+        $this->definitions[] = $definition;
+
+        return $this;
+    }
+
+    /**
+     * @param $itemFilter
+     * @param $value
+     * @return Request
+     */
+    public function addItemFilter(string $itemFilterName, array $value) : Request
+    {
+        if (!$this->itemFilterStorage->hasItemFilter($itemFilterName)) {
+            throw new FindingApiException('Item filter '.$itemFilterName.' does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
+        }
+
+        $this->itemFilterStorage->updateItemFilterValue($itemFilterName, $value);
+
+        return $this;
+    }
+
+    /**
+     * @param int $option
+     * @return Request
+     */
+    public function addOption(int $option) : Request
+    {
+        $this->options->addOption($option);
+
+        return $this;
+    }
+
+    /**
+     * @return ItemFilterStorage
+     */
+    public function getItemFilterStorage() : ItemFilterStorage
+    {
+        return $this->itemFilterStorage;
+    }
+
     /**
      * @return bool
      */
@@ -140,6 +248,14 @@ class Request
     public function getRequestParameters() : RequestParameters
     {
         return $this->parameters;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDefinitions()
+    {
+        return $this->definitions;
     }
 
     /**
