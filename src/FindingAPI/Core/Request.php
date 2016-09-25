@@ -129,6 +129,27 @@ class Request
     }
 
     /**
+     * @param int $pagination
+     * @param string $paginationType
+     * @return Request
+     * @throws Exception\ItemFilterException
+     * @throws FindingApiException
+     * @throws RequestException
+     */
+    public function setPaginationInput(int $pagination, string $paginationType) : Request
+    {
+        $this->parameters->setParameter('paginationInput', $pagination);
+
+        if (!$this->itemFilterStorage->hasItemFilter('PaginationInput')) {
+            throw new FindingApiException('Item filter PaginationInput does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
+        }
+
+        $this->itemFilterStorage->updateItemFilterValue('PaginationInput', array($paginationType));
+
+        return $this;
+    }
+
+    /**
      * @param string $operationName
      * @return Request
      * @throws RequestException

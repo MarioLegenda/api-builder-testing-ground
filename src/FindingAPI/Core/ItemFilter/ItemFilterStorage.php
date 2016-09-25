@@ -133,6 +133,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\BuyerPostalCode',
                 'value' => null,
             ),
+            'PaginationInput' => array(
+                'object' => __NAMESPACE__.'\\PaginationInput',
+                'value' => null,
+            ),
 /*            'MaxPrice' => array(
                 'object' => __NAMESPACE__.'\\MaxPrice',
                 'value' => null,
