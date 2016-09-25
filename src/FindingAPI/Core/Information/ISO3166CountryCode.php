@@ -1,6 +1,6 @@
 <?php
 
-namespace FindingAPI\Core;
+namespace FindingAPI\Core\Information;
 
 use FindingAPI\Core\Cache\CacheProxy;
 use FindingAPI\Core\Exception\ItemFilterException;
@@ -111,6 +111,6 @@ class ISO3166CountryCode
             return;
         }
 
-        $this->countryCodes = Yaml::parse(file_get_contents(__DIR__.'/ItemFilter/country_codes.yml'))['iso-codes'];
+        $this->countryCodes = Yaml::parse(file_get_contents(__DIR__.'/../ItemFilter/country_codes.yml'))['iso-codes'];
     }
 }

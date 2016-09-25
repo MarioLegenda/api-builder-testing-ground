@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\GlobalId;
+use FindingAPI\Core\Information\GlobalId;
 
 class ListedIn extends AbstractConstraint implements FilterInterface
 {

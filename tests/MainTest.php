@@ -7,8 +7,8 @@ use FindingAPI\Core\Request;
 use FindingAPI\Definition\DefinitionFactory;
 use FindingAPI\Core\Options;
 use FindingAPI\Core\ItemFilter\ItemFilter;
-use FindingAPI\Core\ItemFilter\Currency;
-use FindingAPI\Core\GlobalId;
+use FindingAPI\Core\Information\Currency;
+use FindingAPI\Core\Information\GlobalId;
 use FindingAPI\Core\ItemFilter\SortOrder;
 
 class MainTest extends PHPUnit_Framework_TestCase

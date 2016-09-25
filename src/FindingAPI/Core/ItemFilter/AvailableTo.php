@@ -2,8 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use Symfony\Component\Yaml\Yaml;
-use FindingAPI\Core\ISO3166CountryCode;
+use FindingAPI\Core\Information\ISO3166CountryCode;
 
 class AvailableTo extends AbstractConstraint implements FilterInterface
 {

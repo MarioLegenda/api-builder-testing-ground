@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\ISO3166CountryCode;
+use FindingAPI\Core\Information\ISO3166CountryCode;
 
 class LocatedIn extends AbstractConstraint implements FilterInterface
 {
