@@ -7,3 +7,4 @@ finding:
       - { name: SECURITY-APPNAME, value: Mariokrl-testing-PRD-ee6e68035-e73c8a53, type: required, valid: {}, deprecated: false, synonyms: {}}
       - { name: RESPONSE-DATA-FORMAT, value: xml, type: optional, valid: [xml, json], deprecated: false, synonyms: {}}
       - { name: GLOBAL-ID, value: EBAY-US, type: optional, valid: [EBAY-US, EBAY-ENCA, EBAY-GB, EBAY-AU, EBAY-AT, EBAY-FRBE, EBAY-FR, EBAY-DE, EBAY-MOTOR, EBAY-IT, EBAY-NLBE, EBAY-NL, EBAY-ES, EBAY-CH, EBAY-HK, EBAY-IN, EBAY-IE, EBAY-MY, EBAY-FRCA, EBAY-PH, EBAY-PL, EBAY-SG], deprecated: false, synonyms: {}}
+      - { name: buyerPostalCode, value: null, type: optional, valid: {}, deprecated: false, synonyms: {}}

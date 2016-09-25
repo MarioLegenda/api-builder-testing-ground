@@ -72,6 +72,18 @@ class Request
     }
 
     /**
+     * @param string $buyerPostalCode
+     * @return Request
+     * @throws RequestException
+     */
+    public function setBuyerPostalCode(string $buyerPostalCode) : Request
+    {
+        $this->parameters->setParameter('buyerPostalCode', $buyerPostalCode);
+
+        return $this;
+    }
+
+    /**
      * @param string $operationName
      * @return Request
      * @throws RequestException
