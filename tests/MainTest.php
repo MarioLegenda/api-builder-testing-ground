@@ -9,7 +9,7 @@ use FindingAPI\Core\Options;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Information\Currency;
 use FindingAPI\Core\Information\GlobalId;
-use FindingAPI\Core\ItemFilter\SortOrder;
+use FindingAPI\Core\Information\SortOrder;
 
 class MainTest extends PHPUnit_Framework_TestCase
 {
