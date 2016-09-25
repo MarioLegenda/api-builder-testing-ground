@@ -32,6 +32,10 @@ class RequestParameters implements \IteratorAggregate
      */
     private $isDeadlocked = false;
     /**
+     * @var array $excluded
+     */
+    private $excluded = array();
+    /**
      * RequestParameters constructor.
      * @param array|null $parameters
      */
@@ -273,10 +277,28 @@ class RequestParameters implements \IteratorAggregate
         }
     }
     /**
+     * @param array $toExclude
+     */
+    public function excludeFromLoop(array $toExclude)
+    {
+        $this->excluded = $toExclude;
+    }
+    /**
      * @return \ArrayIterator
      */
     public function getIterator() : \ArrayIterator
     {
+        $parameters = array();
+        if (!empty($this->excluded)) {
+            foreach ($this->parameters as $parameter) {
+                if (in_array($parameter->getName(), $this->excluded) === false) {
+                    $parameters[] = $parameter;
+                }
+            }
+
+            return new \ArrayIterator($parameters);
+        }
+
         return new \ArrayIterator($this->parameters);
     }
 }
