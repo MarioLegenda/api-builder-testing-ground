@@ -170,7 +170,7 @@ class SingeltonsTest extends PHPUnit_Framework_TestCase
         foreach ($globalIds as $key => $values) {
             $this->assertTrue(GlobalId::instance()->hasId($key));
 
-            $id = GlobalId::instance()->getId($key)['global-id'];
+            $id = GlobalId::instance()->getId($key);
             $this->assertEquals($id, strtoupper($key), $id.' and '.$key.' are not equal');
         }
     }

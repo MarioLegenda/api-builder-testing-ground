@@ -39,6 +39,7 @@ class GlobalId
             'teritory' => 'AT',
             'site-name' => 'Ebay Austria',
             'ebay-site-id' => 16,
+            'removed' => false,
         ),
         'ebay-au' => array(
             'global-id' => 'EBAY-AU',
@@ -46,6 +47,7 @@ class GlobalId
             'teritory' => 'AU',
             'site-name' => 'Ebay Australia',
             'ebay-site-id' => 15,
+            'removed' => false,
         ),
         'ebay-ch' => array(
             'global-id' => 'EBAY-CH',
@@ -53,6 +55,7 @@ class GlobalId
             'teritory' => 'CH',
             'site-name' => 'eBay Switzerland',
             'ebay-site-id' => 193,
+            'removed' => false,
         ),
         'ebay-de' => array(
             'global-id' => 'EBAY-DE',
@@ -60,6 +63,7 @@ class GlobalId
             'teritory' => 'DE',
             'site-name' => 'eBay Germany',
             'ebay-site-id' => 77,
+            'removed' => false,
         ),
         'ebay-enca' => array(
             'global-id' => 'EBAY-ENCA',
@@ -67,6 +71,7 @@ class GlobalId
             'teritory' => 'CA',
             'site-name' => 'eBay Canada (English)',
             'ebay-site-id' => 2,
+            'removed' => false,
         ),
         'ebay-es' => array(
             'global-id' => 'EBAY-ES',
@@ -74,6 +79,7 @@ class GlobalId
             'teritory' => 'ES',
             'site-name' => 'eBay Spain',
             'ebay-site-id' => 186,
+            'removed' => false,
         ),
         'ebay-fr' => array(
             'global-id' => 'EBAY-FR',
@@ -81,6 +87,7 @@ class GlobalId
             'teritory' => 'FR',
             'site-name' => 'eBay France',
             'ebay-site-id' => 71,
+            'removed' => false,
         ),
         'ebay-frbe' => array(
             'global-id' => 'EBAY-FRBE',
@@ -88,6 +95,7 @@ class GlobalId
             'teritory' => 'BE',
             'site-name' => 'eBay Belgium (French)',
             'ebay-site-id' => 23,
+            'removed' => false,
         ),
         'ebay-frca' => array(
             'global-id' => 'EBAY-FRCA',
@@ -95,6 +103,7 @@ class GlobalId
             'teritory' => 'CA',
             'site-name' => 'eBay Canada (French)',
             'ebay-site-id' => 210,
+            'removed' => false,
         ),
         'ebay-gb' => array(
             'global-id' => 'EBAY-GB',
@@ -102,6 +111,7 @@ class GlobalId
             'teritory' => 'GB',
             'site-name' => 'eBay UK',
             'ebay-site-id' => 3,
+            'removed' => false,
         ),
         'ebay-hk' => array(
             'global-id' => 'EBAY-HK',
@@ -109,6 +119,7 @@ class GlobalId
             'teritory' => 'HK',
             'site-name' => 'eBay Hong Kong',
             'ebay-site-id' => 201,
+            'removed' => false,
         ),
         'ebay-ie' => array(
             'global-id' => 'EBAY-IE',
@@ -116,6 +127,7 @@ class GlobalId
             'teritory' => 'IE',
             'site-name' => 'eBay Ireland',
             'ebay-site-id' => 205,
+            'removed' => false,
         ),
         'ebay-in' => array(
             'global-id' => 'EBAY-IN',
@@ -123,6 +135,7 @@ class GlobalId
             'teritory' => 'IN',
             'site-name' => 'eBay India',
             'ebay-site-id' => 203,
+            'removed' => false,
         ),
         'ebay-it' => array(
             'global-id' => 'EBAY-IT',
@@ -130,6 +143,7 @@ class GlobalId
             'teritory' => 'IT',
             'site-name' => 'eBay Italy',
             'ebay-site-id' => 101,
+            'removed' => false,
         ),
         'ebay-motor' => array(
             'global-id' => 'EBAY-MOTOR',
@@ -137,6 +151,7 @@ class GlobalId
             'teritory' => 'US',
             'site-name' => 'eBay Motors',
             'ebay-site-id' => 100,
+            'removed' => false,
         ),
         'ebay-my' => array(
             'global-id' => 'EBAY-MY',
@@ -144,6 +159,7 @@ class GlobalId
             'teritory' => 'MY',
             'site-name' => 'eBay Malaysia',
             'ebay-site-id' => 207,
+            'removed' => false,
         ),
         'ebay-nl' => array(
             'global-id' => 'EBAY-NL',
@@ -151,6 +167,7 @@ class GlobalId
             'teritory' => 'NL',
             'site-name' => 'eBay Netherlands',
             'ebay-site-id' => 146,
+            'removed' => false,
         ),
         'ebay-nlbe' => array(
             'global-id' => 'EBAY-NLBE',
@@ -158,6 +175,7 @@ class GlobalId
             'teritory' => 'BE',
             'site-name' => 'eBay Belgium (Dutch)',
             'ebay-site-id' => 123,
+            'removed' => false,
         ),
         'ebay-ph' => array(
             'global-id' => 'EBAY-PH',
@@ -165,6 +183,7 @@ class GlobalId
             'teritory' => 'PH',
             'site-name' => 'eBay Philippines',
             'ebay-site-id' => 212,
+            'removed' => false,
         ),
         'ebay-pl' => array(
             'global-id' => 'EBAY-PL',
@@ -172,6 +191,7 @@ class GlobalId
             'teritory' => 'PL',
             'site-name' => 'eBay Poland',
             'ebay-site-id' => 212,
+            'removed' => false,
         ),
         'ebay-sg' => array(
             'global-id' => 'EBAY-SG',
@@ -179,6 +199,7 @@ class GlobalId
             'teritory' => 'SG',
             'site-name' => 'eBay Singapore',
             'ebay-site-id' => 216,
+            'removed' => false,
         ),
         'ebay-us' => array(
             'global-id' => 'EBAY-US',
@@ -186,6 +207,7 @@ class GlobalId
             'teritory' => 'US',
             'site-name' => 'eBay United States',
             'ebay-site-id' => 0,
+            'removed' => false,
         ),
     );
     /**
@@ -211,15 +233,19 @@ class GlobalId
             return null;
         }
 
-        return $this->globalIds[$id];
+        return $this->globalIds[$id]['global-id'];
     }
     /**
      * @param string $id
      * @return mixed
      */
-    public function hasId(string $id)
+    public function hasId(string $id) : bool
     {
-        return array_key_exists($id, $this->globalIds);
+        if (!array_key_exists($id, $this->globalIds) or $this->isRemoved($id)) {
+            return false;
+        }
+
+        return true;
     }
     /**
      * @param string $name
@@ -229,6 +255,10 @@ class GlobalId
      */
     public function addId(string $name, array $values) : GlobalId
     {
+        if (!array_key_exists('global-id', $values) and !empty($values['global-id'])) {
+            throw new ItemFilterException('GlobalId values has to be an array with \'global-id\' key and a non empty \'global-id\' value');
+        }
+
         if ($this->hasId($name)) {
             throw new ItemFilterException('Global id '.$name.' already exists');
         }
@@ -251,8 +281,20 @@ class GlobalId
             return false;
         }
 
-        unset($this->globalIds[$id]);
+        $this->globalIds[$id]['removed'] = true;
 
         return true;
+    }
+    /**
+     * @param string $id
+     * @return bool
+     */
+    public function isRemoved(string $id) : bool
+    {
+        if (!array_key_exists($id, $this->globalIds)) {
+            return false;
+        }
+
+        return $this->globalIds[$id]['removed'];
     }
 }
