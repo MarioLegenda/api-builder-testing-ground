@@ -186,7 +186,7 @@ class SingeltonsTest extends PHPUnit_Framework_TestCase
 
     public function testCountryCode()
     {
-        $countryCodes = Yaml::parse(file_get_contents(__DIR__.'/../src/FindingAPI/Core/ItemFilter/country_codes.yml'))['iso-codes'];
+        $countryCodes = Yaml::parse(file_get_contents(__DIR__.'/../src/FindingAPI/Core/Information/country_codes.yml'))['iso-codes'];
 
         foreach ($countryCodes as $codes) {
             $this->assertTrue(ISO3166CountryCode::instance()->hasId($codes['alpha2']), 'Invalid code '.$codes['alpha2']);
