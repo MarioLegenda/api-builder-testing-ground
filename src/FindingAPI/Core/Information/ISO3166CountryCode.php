@@ -53,7 +53,7 @@ class ISO3166CountryCode
     {
         $filtered = array_filter($this->countryCodes, function ($codes) use ($id) {
             foreach ($codes as $code) {
-                if ($code === strtoupper($id)) {
+                if ($code === strtoupper($id) and $codes['removed'] === false) {
                     return true;
                 }
             }
@@ -71,6 +71,10 @@ class ISO3166CountryCode
      */
     public function addId(string $name, array $values) : GlobalId
     {
+        if (!array_key_exists('alpha2', $values)) {
+            throw new ItemFilterException('ISO 3166 country code has to contain at least a two character string that represents a country');
+        }
+
         if ($this->hasId($name)) {
             throw new ItemFilterException('Country code'.$name.' already exists');
         }
@@ -93,7 +97,7 @@ class ISO3166CountryCode
             return false;
         }
 
-        unset($this->countryCodes[$id]);
+        $this->countryCodes[$id]['removed'] = false;
 
         return true;
     }
@@ -112,5 +116,9 @@ class ISO3166CountryCode
         }
 
         $this->countryCodes = Yaml::parse(file_get_contents(__DIR__.'/../ItemFilter/country_codes.yml'))['iso-codes'];
+
+        foreach ($this->countryCodes as $key => $codes) {
+            $this->countryCodes[$key]['removed'] = false;
+        }
     }
 }

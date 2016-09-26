@@ -172,6 +172,15 @@ class SingeltonsTest extends PHPUnit_Framework_TestCase
 
             $id = GlobalId::instance()->getId($key);
             $this->assertEquals($id, strtoupper($key), $id.' and '.$key.' are not equal');
+
+            GlobalId::instance()->removeId($key);
+
+            $this->assertFalse(GlobalId::instance()->hasId($key), 'GlobalId::hasId() for key '.$key.' should return false');
+
+            GlobalId::instance()->addId($key, $values);
+
+            $id = GlobalId::instance()->getId($key);
+            $this->assertEquals($id, strtoupper($key), $id.' and '.$key.' are not equal after removal');
         }
     }
 

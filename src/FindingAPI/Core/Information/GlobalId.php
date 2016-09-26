@@ -268,6 +268,7 @@ class GlobalId
         }
 
         $this->globalIds[$name] = $values;
+        $this->globalIds[$name]['removed'] = false;
 
         return $this;
     }
