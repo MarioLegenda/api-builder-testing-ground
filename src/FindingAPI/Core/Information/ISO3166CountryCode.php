@@ -31,15 +31,17 @@ class ISO3166CountryCode
      * @param string $id
      * @return mixed|null
      */
-    public function getId(string $id, string $type)
+    public function getId(string $code) : array
     {
-        if (!$this->hasId($id)) {
+        if (!$this->hasId($code)) {
             return null;
         }
 
         foreach ($this->countryCodes as $codes) {
-            if ($codes[$type] === strtoupper($id)) {
-                return $codes[$type];
+            foreach ($codes as $key => $c) {
+                if ($c === strtoupper($code)) {
+                    return $codes;
+                }
             }
         }
 
@@ -49,12 +51,19 @@ class ISO3166CountryCode
      * @param string $id
      * @return bool
      */
-    public function hasId(string $id) : bool
+    public function hasId(string $id, bool $returnRemoved = false)
     {
-        $filtered = array_filter($this->countryCodes, function ($codes) use ($id) {
+        $filtered = array_filter($this->countryCodes, function ($codes) use ($id, $returnRemoved) {
             foreach ($codes as $code) {
-                if ($code === strtoupper($id) and $codes['removed'] === false) {
-                    return true;
+                if ((string) $code === strtoupper($id)) {
+                    if ($returnRemoved) {
+                        if ($codes['removed'] === true) {
+                            return true;
+                        }
+                    }
+                    if ($codes['removed'] === false) {
+                        return true;
+                    }
                 }
             }
 
@@ -69,21 +78,31 @@ class ISO3166CountryCode
      * @return GlobalId
      * @throws ItemFilterException
      */
-    public function addId(string $name, array $values) : GlobalId
+    public function addId(array $values) : ISO3166CountryCode
     {
         if (!array_key_exists('alpha2', $values)) {
-            throw new ItemFilterException('ISO 3166 country code has to contain at least a two character string that represents a country');
+            throw new ItemFilterException('ISO 3166 country code has to contain at least a two character string that represents a country called \'alpha2\'. Please, refer to https://www.iso.org/obp/ui/#search');
         }
 
-        if ($this->hasId($name)) {
-            throw new ItemFilterException('Country code'.$name.' already exists');
+        if ($this->hasId($values['alpha2'])) {
+            throw new ItemFilterException('Country code'.$values['alpha2'].' already exists');
         }
 
         if (!array_key_exists('global-id', $values) and !empty($values['global-id'])) {
-            throw new ItemFilterException('Country code '.$name.' value array has to have at least a global-id key and corresponding value');
+            throw new ItemFilterException('Country code '.$values['alpha2'].' value array has to have at least a global-id key and corresponding value');
         }
 
-        $this->countryCodes[$name] = $values;
+        if ($this->hasId($values['alpha2'], true)) {
+            $index = $this->getIndex($values['alpha2']);
+
+            if ($index !== -1) {
+                $values['removed'] = false;
+                $this->countryCodes[$index] = $values;
+            }
+        } else {
+            $values['removed'] = false;
+            $this->countryCodes[] = $values;
+        }
 
         return $this;
     }
@@ -91,15 +110,21 @@ class ISO3166CountryCode
      * @param string $id
      * @return bool
      */
-    public function removeId(string $id, string $type) : bool
+    public function removeId(string $id) : bool
     {
         if (!$this->hasId($id)) {
             return false;
         }
+        
+        $index = $this->getIndex($id);
+        
+        if ($index !== -1) {
+            $this->countryCodes[$index]['removed'] = true;
+            
+            return true;
+        }
 
-        $this->countryCodes[$id]['removed'] = false;
-
-        return true;
+        return false;
     }
 
     private function createCodes()
@@ -120,5 +145,18 @@ class ISO3166CountryCode
         foreach ($this->countryCodes as $key => $codes) {
             $this->countryCodes[$key]['removed'] = false;
         }
+    }
+    
+    private function getIndex(string $code) : int 
+    {
+        foreach ($this->countryCodes as $index => $codes) {
+            foreach ($codes as $key => $c) {
+                if ($c === strtoupper($code)) {
+                    return $index;
+                }
+            }
+        }
+        
+        return -1;
     }
 }

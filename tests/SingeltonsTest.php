@@ -189,10 +189,47 @@ class SingeltonsTest extends PHPUnit_Framework_TestCase
         $countryCodes = Yaml::parse(file_get_contents(__DIR__.'/../src/FindingAPI/Core/Information/country_codes.yml'))['iso-codes'];
 
         foreach ($countryCodes as $codes) {
-            $this->assertTrue(ISO3166CountryCode::instance()->hasId($codes['alpha2']), 'Invalid code '.$codes['alpha2']);
+            foreach ($codes as $key => $codeInLoop) {
+                $this->assertTrue(ISO3166CountryCode::instance()->hasId($codeInLoop), 'Failed asserting that '.$codeInLoop.' is valid');
+            }
 
-            $code = ISO3166CountryCode::instance()->getId($codes['alpha2'], 'alpha2');
-            $this->assertEquals($code, $codes['alpha2'], $code.' and '.$codes['alpha2'].' are not equal');
+            $countryName = $codes['name'];
+            $alpha2 = $codes['alpha2'];
+            $alpha3 = $codes['alpha3'];
+            $number = $codes['number'];
+
+            $code = ISO3166CountryCode::instance()->getId($countryName);
+            $this->assertEquals($code['name'], $countryName, $countryName.' and '.$code['name'].' are not equal');
+
+            $code = ISO3166CountryCode::instance()->getId($alpha2);
+            $this->assertEquals($code['alpha2'], $alpha2, $alpha2.' and '.$code['alpha2'].' are not equal');
+
+            $code = ISO3166CountryCode::instance()->getId($alpha3);
+            $this->assertEquals($code['alpha3'], $alpha3, $alpha3.' and '.$code['alpha3'].' are not equal');
+
+            $code = ISO3166CountryCode::instance()->getId($countryName);
+            $this->assertEquals($code['number'], $number, $number.' and '.$code['number'].' are not equal');
         }
+
+        ISO3166CountryCode::instance()->addId(array(
+            'name' => 'Mile',
+            'alpha2' => 'HGOS',
+        ));
+
+        $this->assertTrue(ISO3166CountryCode::instance()->hasId('HGOS'), 'Failed asserting that HGOS exists as a country code');
+
+        $this->assertTrue(ISO3166CountryCode::instance()->removeId('HGOS'), 'Failed asserting that HGOS has been deleted');
+
+        $this->assertFalse(ISO3166CountryCode::instance()->hasId('HGOS'), 'Failed asserting that HGOS does not exist as a country code');
+
+        $this->assertTrue(ISO3166CountryCode::instance()->hasId('HGOS', true), 'Failed asserting that HGOS exists but has be removed as a country code');
+
+        ISO3166CountryCode::instance()->addId(array(
+            'name' => 'Mile',
+            'alpha2' => 'HGOS',
+        ));
+
+        $this->assertTrue(ISO3166CountryCode::instance()->hasId('HGOS'), 'Failed asserting that HGOS exists as a country code after deleting and adding again');
+
     }
 }
