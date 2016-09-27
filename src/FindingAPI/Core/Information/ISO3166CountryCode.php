@@ -31,9 +31,9 @@ class ISO3166CountryCode
      * @param string $id
      * @return mixed|null
      */
-    public function getId(string $code) : array
+    public function get(string $code) : array
     {
-        if (!$this->hasId($code)) {
+        if (!$this->has($code)) {
             return null;
         }
 
@@ -51,7 +51,7 @@ class ISO3166CountryCode
      * @param string $id
      * @return bool
      */
-    public function hasId(string $id, bool $returnRemoved = false)
+    public function has(string $id, bool $returnRemoved = false)
     {
         $filtered = array_filter($this->countryCodes, function ($codes) use ($id, $returnRemoved) {
             foreach ($codes as $code) {
@@ -78,13 +78,13 @@ class ISO3166CountryCode
      * @return GlobalId
      * @throws ItemFilterException
      */
-    public function addId(array $values) : ISO3166CountryCode
+    public function add(array $values) : ISO3166CountryCode
     {
         if (!array_key_exists('alpha2', $values)) {
             throw new ItemFilterException('ISO 3166 country code has to contain at least a two character string that represents a country called \'alpha2\'. Please, refer to https://www.iso.org/obp/ui/#search');
         }
 
-        if ($this->hasId($values['alpha2'])) {
+        if ($this->has($values['alpha2'])) {
             throw new ItemFilterException('Country code'.$values['alpha2'].' already exists');
         }
 
@@ -92,7 +92,7 @@ class ISO3166CountryCode
             throw new ItemFilterException('Country code '.$values['alpha2'].' value array has to have at least a global-id key and corresponding value');
         }
 
-        if ($this->hasId($values['alpha2'], true)) {
+        if ($this->has($values['alpha2'], true)) {
             $index = $this->getIndex($values['alpha2']);
 
             if ($index !== -1) {
@@ -110,9 +110,9 @@ class ISO3166CountryCode
      * @param string $id
      * @return bool
      */
-    public function removeId(string $id) : bool
+    public function remove(string $id) : bool
     {
-        if (!$this->hasId($id)) {
+        if (!$this->has($id)) {
             return false;
         }
         

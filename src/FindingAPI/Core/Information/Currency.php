@@ -57,7 +57,7 @@ class Currency
      * @param string $id
      * @return mixed
      */
-    public function hasId(string $currency) : bool
+    public function has(string $currency) : bool
     {
         return in_array($currency, $this->currencies) !== false;
     }
@@ -67,9 +67,9 @@ class Currency
      * @return GlobalId
      * @throws ItemFilterException
      */
-    public function addId(string $currency)
+    public function add(string $currency)
     {
-        if (!$this->hasId($currency)) {
+        if (!$this->has($currency)) {
             return null;
         }
 

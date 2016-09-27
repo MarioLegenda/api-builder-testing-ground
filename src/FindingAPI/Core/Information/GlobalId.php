@@ -227,9 +227,9 @@ class GlobalId
      * @param string $id
      * @return mixed|null
      */
-    public function getId(string $id)
+    public function get(string $id)
     {
-        if (!$this->hasId($id)) {
+        if (!$this->has($id)) {
             return null;
         }
 
@@ -239,7 +239,7 @@ class GlobalId
      * @param string $id
      * @return mixed
      */
-    public function hasId(string $id) : bool
+    public function has(string $id) : bool
     {
         if (!array_key_exists($id, $this->globalIds) or $this->isRemoved($id)) {
             return false;
@@ -253,13 +253,13 @@ class GlobalId
      * @return GlobalId
      * @throws ItemFilterException
      */
-    public function addId(string $name, array $values) : GlobalId
+    public function add(string $name, array $values) : GlobalId
     {
         if (!array_key_exists('global-id', $values) and !empty($values['global-id'])) {
             throw new ItemFilterException('GlobalId values has to be an array with \'global-id\' key and a non empty \'global-id\' value');
         }
 
-        if ($this->hasId($name)) {
+        if ($this->has($name)) {
             throw new ItemFilterException('Global id '.$name.' already exists');
         }
 
@@ -276,9 +276,9 @@ class GlobalId
      * @param string $id
      * @return bool
      */
-    public function removeId(string $id) : bool
+    public function remove(string $id) : bool
     {
-        if (!$this->hasId($id)) {
+        if (!$this->has($id)) {
             return false;
         }
 
