@@ -5,6 +5,8 @@ require __DIR__ . '/../vendor/autoload.php';
 use FindingAPI\Core\Information\GlobalId;
 use Symfony\Component\Yaml\Yaml;
 use FindingAPI\Core\Information\ISO3166CountryCode;
+use FindingAPI\Core\Information\SortOrder;
+use FindingAPI\Core\Information\Currency;
 
 class SingeltonsTest extends PHPUnit_Framework_TestCase
 {
@@ -230,6 +232,55 @@ class SingeltonsTest extends PHPUnit_Framework_TestCase
         ));
 
         $this->assertTrue(ISO3166CountryCode::instance()->has('HGOS'), 'Failed asserting that HGOS exists as a country code after deleting and adding again');
+    }
 
+    public function testOtherInformationSingeltons()
+    {
+        $sortOrders = array(
+            'BestMatch',
+            'BidCountFewest',
+            'BidCountMost',
+            'CountryAscending',
+            'CountryDescending',
+            'CurrentPriceHighest',
+            'DistanceNearest',
+            'EndTimeSoonest',
+            'PricePlusShippingHighest',
+            'PricePlusShippingLowest',
+            'StartTimeNewest',
+        );
+
+        foreach ($sortOrders as $sort) {
+            $this->assertTrue(SortOrder::instance()->has($sort), $sort.' does not exist in '.get_class(SortOrder::instance()));
+        }
+
+        $this->assertNotNull(SortOrder::instance()->add('SomeNewSortOrder'), 'Could not add new sort order SomeNewSortOrder');
+
+        $this->assertTrue(SortOrder::instance()->has('SomeNewSortOrder'), 'SomeNewSortOrder does not exist in '.get_class(SortOrder::instance()));
+
+        $currencies = array(
+            'aud',
+            'cad',
+            'chf',
+            'cny',
+            'eur',
+            'gbp',
+            'hkd',
+            'inr',
+            'myr',
+            'php',
+            'pln',
+            'sek',
+            'twd',
+            'usd',
+        );
+
+        foreach ($currencies as $currency) {
+            $this->assertTrue(Currency::instance()->has($currency), $currency.' does not exist in '.get_class(Currency::instance()));
+        }
+
+        $this->assertNotNull(Currency::instance()->add('SomeNewCurrency'), 'Could not add new currency SomeNewCurrency');
+
+        $this->assertTrue(Currency::instance()->has('SomeNewCurrency'), 'SomeNewCurrency does not exist in '.get_class(Currency::instance()));
     }
 }

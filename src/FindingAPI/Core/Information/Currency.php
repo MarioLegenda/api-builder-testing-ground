@@ -59,6 +59,11 @@ class Currency
      */
     public function has(string $currency) : bool
     {
+        if ($currency === 'SomeNewCurrency') {
+            //var_dump(self::$instance->currencies);
+            //die("kreten");
+        }
+
         return in_array($currency, $this->currencies) !== false;
     }
     /**
@@ -69,12 +74,19 @@ class Currency
      */
     public function add(string $currency)
     {
-        if (!$this->has($currency)) {
+        if ($this->has($currency)) {
             return null;
         }
 
         $this->currencies[] = $currency;
 
-        return $this;
+        return self::$instance;
+    }
+    /**
+     * @return array
+     */
+    public function getAll()
+    {
+        return $this->currencies;
     }
 }

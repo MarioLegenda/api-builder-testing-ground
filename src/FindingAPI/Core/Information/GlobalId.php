@@ -298,4 +298,11 @@ class GlobalId
 
         return $this->globalIds[$id]['removed'];
     }
+    /**
+     * @return array
+     */
+    public function getAll()
+    {
+        return $this->globalIds;
+    }
 }

@@ -126,6 +126,13 @@ class ISO3166CountryCode
 
         return false;
     }
+    /**
+     * @return array
+     */
+    public function getAll() 
+    {
+        return $this->countryCodes;
+    }
 
     private function createCodes()
     {
