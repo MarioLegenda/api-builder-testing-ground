@@ -2,6 +2,8 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
+use FindingAPI\Core\Helper;
+
 class MaxPrice extends AbstractConstraint implements FilterInterface
 {
     /**
@@ -16,10 +18,14 @@ class MaxPrice extends AbstractConstraint implements FilterInterface
 
         $filter = $filter[0];
 
-        $dotSplitted = explode('.', $filter);
+        if (!is_float($filter)) {
+            $this->exceptionMessages[] = $this->name.' has to be an decimal greater than or equal to 0.0';
 
-        if (count($dotSplitted) === 1) {
-            $this->exceptionMessages[] = $this->name.' should receive a decimal number with one decimal after .';
+            return $this;
+        }
+
+        if (Helper::compareFloatNumbers($filter, 0.0, '<')) {
+            $this->exceptionMessages[] = $this->name.' has to be an decimal greater than or equal to 0.0';
 
             return false;
         }
