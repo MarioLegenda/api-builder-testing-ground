@@ -157,6 +157,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\MinQuantity',
                 'value' => null,
             ),
+            'ModTimeFrom' => array(
+                'object' => __NAMESPACE__.'\\ModTimeFrom',
+                'value' => null,
+            ),
         );
     }
     /**
