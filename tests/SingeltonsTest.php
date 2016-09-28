@@ -7,6 +7,7 @@ use Symfony\Component\Yaml\Yaml;
 use FindingAPI\Core\Information\ISO3166CountryCode;
 use FindingAPI\Core\Information\SortOrder;
 use FindingAPI\Core\Information\Currency;
+use FindingAPI\Core\Information\PaymentMethod;
 
 class SingeltonsTest extends PHPUnit_Framework_TestCase
 {
@@ -282,5 +283,20 @@ class SingeltonsTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull(Currency::instance()->add('SomeNewCurrency'), 'Could not add new currency SomeNewCurrency');
 
         $this->assertTrue(Currency::instance()->has('SomeNewCurrency'), 'SomeNewCurrency does not exist in '.get_class(Currency::instance()));
+
+        $paymentMethods = array(
+            'PayPal',
+            'PaisaPal',
+            'PaisaPayEMI',
+        );
+
+
+        foreach ($paymentMethods as $method) {
+            $this->assertTrue(PaymentMethod::instance()->has($method), $method.' does not exist in '.get_class(PaymentMethod::instance()));
+        }
+
+        $this->assertNotNull(PaymentMethod::instance()->add('Visa'), 'Could not add new payment method Visa');
+
+        $this->assertTrue(PaymentMethod::instance()->has('Visa'), 'Visa does not exist in '.get_class(PaymentMethod::instance()));
     }
 }

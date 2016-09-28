@@ -58,7 +58,6 @@ class SortOrder
      * @param string $name
      * @param array $values
      * @return GlobalId
-     * @throws ItemFilterException
      */
     public function add(string $sort)
     {
