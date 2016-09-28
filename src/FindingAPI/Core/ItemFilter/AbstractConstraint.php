@@ -39,7 +39,9 @@ abstract class AbstractConstraint
     protected function genericValidation(array $value, $count = null) : bool
     {
         if (empty($value)) {
-            $this->exceptionMessages['Argument for item filter '.$this->name.' cannot be empty.'];
+            $this->exceptionMessages[] = 'Argument for item filter '.$this->name.' cannot be empty.';
+
+            return false;
         }
 
         if ($count !== null) {

@@ -173,6 +173,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\ReturnsAcceptedOnly',
                 'value' => null,
             ),
+            'Seller' => array(
+                'object' => __NAMESPACE__.'\\Seller',
+                'value' => null,
+            ),
         );
     }
     /**
