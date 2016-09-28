@@ -51,7 +51,8 @@ class MainTest extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::MAX_HANDLING_TIME, array(1))
             ->addItemFilter(ItemFilter::MAX_DISTANCE, array(6))
             ->addItemFilter(ItemFilter::MAX_PRICE, array(6.9))
-            ->addItemFilter(ItemFilter::MAX_QUANTITY, array(1));
+            ->addItemFilter(ItemFilter::MAX_QUANTITY, array(1))
+            ->addItemFilter(ItemFilter::MIN_BIDS, array(0));
 
         return $request;
     }

@@ -145,6 +145,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\MaxQuantity',
                 'value' => null,
             ),
+            'MinBids' => array(
+                'object' => __NAMESPACE__.'\\MinBids',
+                'value' => null,
+            ),
         );
     }
     /**
