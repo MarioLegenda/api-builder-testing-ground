@@ -153,6 +153,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\MinPrice',
                 'value' => null,
             ),
+            'MinQuantity' => array(
+                'object' => __NAMESPACE__.'\\MinQuantity',
+                'value' => null,
+            ),
         );
     }
     /**
