@@ -4,7 +4,7 @@ namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Helper;
 
-class MaxPrice extends AbstractConstraint implements FilterInterface
+class MinPrice extends AbstractConstraint implements FilterInterface
 {
     /**
      * @param array $filter
