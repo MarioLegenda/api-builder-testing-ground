@@ -37,7 +37,7 @@ class ItemFilter
     const MIN_PRICE = 'MinPrice';
     const MIN_QUANTITY = 'MinQuantity';
     const MOD_TIME_FROM = 'ModTimeFrom';
-    const OUTLET_SELLER_ONLY = ' OutletSellerOnly';
+    const OUTLET_SELLER_ONLY = 'OutletSellerOnly';
     const PAYMENT_METHOD = 'PaymentMethod';
     const RETURNS_ACCEPTED_ONLY = 'ReturnsAcceptedOnly';
     const SELLER = 'Seller';

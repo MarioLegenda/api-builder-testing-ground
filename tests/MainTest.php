@@ -55,7 +55,8 @@ class MainTest extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::MIN_BIDS, array(0))
             ->addItemFilter(ItemFilter::MIN_PRICE, array(0.1))
             ->addItemFilter(ItemFilter::MIN_QUANTITY, array(1))
-            ->addItemFilter(ItemFilter::MOD_TIME_FROM, array(new DateTime('1.1.2019')));
+            ->addItemFilter(ItemFilter::MOD_TIME_FROM, array(new DateTime('1.1.2019')))
+            ->addItemFilter(ItemFilter::OUTLET_SELLER_ONLY, array(false));
 
         return $request;
     }
