@@ -165,6 +165,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\OutletSellerOnly',
                 'value' => null,
             ),
+            'PaymentMethod' => array(
+                'object' => __NAMESPACE__.'\\PaymentMethod',
+                'value' => null,
+            ),
         );
     }
     /**
