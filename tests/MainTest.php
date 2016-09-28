@@ -57,7 +57,8 @@ class MainTest extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::MIN_QUANTITY, array(1))
             ->addItemFilter(ItemFilter::MOD_TIME_FROM, array(new DateTime('1.1.2019')))
             ->addItemFilter(ItemFilter::OUTLET_SELLER_ONLY, array(false))
-            ->addItemFilter(ItemFilter::PAYMENT_METHOD, array('PayPal'));
+            ->addItemFilter(ItemFilter::PAYMENT_METHOD, array('PayPal'))
+            ->addItemFilter(ItemFilter::RETURNS_ACCEPTED_ONLY, array(false));
 
         return $request;
     }
