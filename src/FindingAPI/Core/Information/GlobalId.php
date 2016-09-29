@@ -241,7 +241,8 @@ class GlobalId
      */
     public function has(string $id) : bool
     {
-        if (!array_key_exists($id, $this->globalIds) or $this->isRemoved($id)) {
+        $lowered = strtolower($id);
+        if (!array_key_exists($lowered, $this->globalIds) or $this->isRemoved($lowered)) {
             return false;
         }
 

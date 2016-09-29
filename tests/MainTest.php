@@ -59,7 +59,8 @@ class MainTest extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::OUTLET_SELLER_ONLY, array(false))
             ->addItemFilter(ItemFilter::PAYMENT_METHOD, array('PayPal'))
             ->addItemFilter(ItemFilter::RETURNS_ACCEPTED_ONLY, array(false))
-            ->addItemFilter(ItemFilter::SELLER, array('Seller1'));
+            ->addItemFilter(ItemFilter::SELLER, array('Seller1'))
+            ->addItemFilter(ItemFilter::SELLER_BUSINESS_TYPE, array('Business', 'Ebay-at'));
 
         return $request;
     }
