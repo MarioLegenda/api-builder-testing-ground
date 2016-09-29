@@ -64,7 +64,8 @@ class MainTest extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::SOLD_ITEMS_ONLY, array(true))
             ->addItemFilter(ItemFilter::START_TIME_FROM, array(new DateTime('1.9.2018')))
             ->addItemFilter(ItemFilter::START_TIME_TO, array(new DateTime('1.9.2019')))
-            ->addItemFilter(ItemFilter::TOP_RATED_SELLER_ONLY, array(true));
+            ->addItemFilter(ItemFilter::TOP_RATED_SELLER_ONLY, array(true))
+            ->addItemFilter(ItemFilter::WORLD_OF_GOOD_ONLY, array(false));
 
         return $request;
     }
