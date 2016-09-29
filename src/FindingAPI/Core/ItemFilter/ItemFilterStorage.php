@@ -193,6 +193,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\StartTimeTo',
                 'value' => null,
             ),
+            'TopRatedSellerOnly' => array(
+                'object' => __NAMESPACE__.'\\TopRatedSellerOnly',
+                'value' => null,
+            ),
         );
     }
     /**
