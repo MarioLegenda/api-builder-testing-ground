@@ -233,7 +233,7 @@ class GlobalId
             return null;
         }
 
-        return $this->globalIds[$id]['global-id'];
+        return $this->globalIds[strtolower($id)]['global-id'];
     }
     /**
      * @param string $id
@@ -268,6 +268,7 @@ class GlobalId
             throw new ItemFilterException('Global id '.$name.' value array has to have at least a global-id key and corresponding value');
         }
 
+        $name = strtolower($name);
         $this->globalIds[$name] = $values;
         $this->globalIds[$name]['removed'] = false;
 
@@ -283,7 +284,7 @@ class GlobalId
             return false;
         }
 
-        $this->globalIds[$id]['removed'] = true;
+        $this->globalIds[strtolower($id)]['removed'] = true;
 
         return true;
     }
@@ -297,7 +298,7 @@ class GlobalId
             return false;
         }
 
-        return $this->globalIds[$id]['removed'];
+        return $this->globalIds[strtolower($id)]['removed'];
     }
     /**
      * @return array

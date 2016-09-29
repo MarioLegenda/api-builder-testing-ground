@@ -21,7 +21,7 @@ class SingeltonsTest extends PHPUnit_Framework_TestCase
                 'site-name' => 'Ebay Austria',
                 'ebay-site-id' => 16,
             ),
-            'ebay-au' => array(
+            'ebAy-au' => array(
                 'global-id' => 'EBAY-AU',
                 'language' => 'en-AU',
                 'teritory' => 'AU',
@@ -35,7 +35,7 @@ class SingeltonsTest extends PHPUnit_Framework_TestCase
                 'site-name' => 'eBay Switzerland',
                 'ebay-site-id' => 193,
             ),
-            'ebay-de' => array(
+            'ebay-dE' => array(
                 'global-id' => 'EBAY-DE',
                 'language' => 'de-DE',
                 'teritory' => 'DE',
@@ -98,7 +98,7 @@ class SingeltonsTest extends PHPUnit_Framework_TestCase
                 'site-name' => 'eBay Ireland',
                 'ebay-site-id' => 205,
             ),
-            'ebay-in' => array(
+            'ebay-iN' => array(
                 'global-id' => 'EBAY-IN',
                 'language' => 'en-IN',
                 'teritory' => 'IN',
