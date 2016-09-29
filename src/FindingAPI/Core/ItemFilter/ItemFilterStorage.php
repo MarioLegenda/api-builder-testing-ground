@@ -189,6 +189,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
                 'object' => __NAMESPACE__.'\\StartTimeFrom',
                 'value' => null,
             ),
+            'StartTimeTo' => array(
+                'object' => __NAMESPACE__.'\\StartTimeTo',
+                'value' => null,
+            ),
         );
     }
     /**
