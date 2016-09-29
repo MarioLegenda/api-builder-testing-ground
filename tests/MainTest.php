@@ -62,7 +62,7 @@ class MainTest extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::SELLER, array('Seller1'))
             ->addItemFilter(ItemFilter::SELLER_BUSINESS_TYPE, array('Business', 'Ebay-at'))
             ->addItemFilter(ItemFilter::SOLD_ITEMS_ONLY, array(true))
-            ->addItemFilter(ItemFilter::START_TIME_FROM, array(true));
+            ->addItemFilter(ItemFilter::START_TIME_FROM, array(new DateTime('1.9.2018')));
 
         return $request;
     }
