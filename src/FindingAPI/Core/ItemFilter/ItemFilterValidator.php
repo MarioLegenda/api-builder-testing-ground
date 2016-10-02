@@ -44,11 +44,11 @@ class ItemFilterValidator
             }
 
             if (is_callable($validator)) {
-                $valid = $validator->__invoke($name);
+                $valid = $validator->__invoke($name, $itemFilterValue);
 
                 if ($valid !== true) {
                     if (!is_string($valid)) {
-                        throw new ItemFilterException('If you add a callable validator to a filter, validator must return either a boolean or a string that will be the exception message if validation has failed');
+                        throw new ItemFilterException('If you add a callable validator to a filter, validator must return either true (if valid) or a string that will be the exception message if validation has failed');
                     }
 
                     throw new ItemFilterException($valid);

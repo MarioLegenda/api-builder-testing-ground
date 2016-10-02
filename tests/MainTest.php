@@ -37,7 +37,9 @@ class MainTest extends PHPUnit_Framework_TestCase
             ->setPaginationInput(20, 'pageNumber')
             ->addOption(Options::SMART_GUESS_SYSTEM)
             ->addSearch(DefinitionFactory::andOperator('baseball card'))
-            ->addItemFilter(ItemFilter::AUTHORIZED_SELLER_ONLY, array(true))
+            ->addItemFilter(ItemFilter::AUTHORIZED_SELLER_ONLY, array(true), function ($name, $value) {
+                return true;
+            })
             ->addItemFilter(ItemFilter::AVAILABLE_TO, array('AF'))
             ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
             ->addItemFilter(ItemFilter::CHARITY_ONLY, array(true))

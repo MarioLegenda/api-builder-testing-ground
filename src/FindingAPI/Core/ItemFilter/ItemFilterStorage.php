@@ -258,10 +258,10 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
      * @param $anonymousClass
      * @return bool
      */
-    public function updateItemFilter(string $name, $anonymousClass) : bool
+    public function updateItemFilterValidator(string $name, $validator) : bool
     {
         if ($this->hasItemFilter($name)) {
-            $this->itemFilters[$name]['object'] = $anonymousClass;
+            $this->itemFilters[$name]['object'] = $validator;
 
             return true;
         }
