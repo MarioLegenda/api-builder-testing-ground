@@ -35,19 +35,29 @@ class ItemFilterValidator
 
             if (is_string($validator)) {
                 $itemFilter = new $validator($name);
+
+                if ($itemFilter->validateFilter($itemFilterValue) !== true) {
+                    throw new ItemFilterException((string) $itemFilter);
+                }
+
+                continue;
             }
 
             if (is_callable($validator)) {
-                $validator->__invoke($name);
+                $valid = $validator->__invoke($name);
+
+                if ($valid !== true) {
+                    if (!is_string($valid)) {
+                        throw new ItemFilterException('If you add a callable validator to a filter, validator must return either a boolean or a string that will be the exception message if validation has failed');
+                    }
+
+                    throw new ItemFilterException($valid);
+                }
+
+                continue;
             }
 
-            if (!isset($itemFilter)) {
-                throw new \RuntimeException('$itemFilter variable is not set. Debug: Validator type: '.gettype($validator).'; Values: '.implode(', ', $value).' in ItemFilterValidator::validate()');
-            }
-
-            if (!$itemFilter->validateFilter($itemFilterValue)) {
-                throw new ItemFilterException((string) $itemFilter);
-            }
+            throw new \RuntimeException('Unable to validate item filter '.$name.'. If you added a new filter or change an existing one, check you closure validator');
         }
     }
 }

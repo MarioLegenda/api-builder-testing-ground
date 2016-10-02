@@ -245,7 +245,7 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
      */
     public function removeItemFilter(string $name) : bool
     {
-        if ($this->hasItemFilter($name)) {
+        if (!$this->hasItemFilter($name)) {
             return false;
         }
 

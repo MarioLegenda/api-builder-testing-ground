@@ -19,6 +19,18 @@ class MainTest extends PHPUnit_Framework_TestCase
     {
         $request = new Request();
 
+        $itemFilterStorage = $request->getItemFilterStorage();
+
+        $itemFilterStorage->addItemFilter('NewItemFilter', function ($name) {
+            return true;
+        });
+
+        $this->assertTrue($itemFilterStorage->hasItemFilter('NewItemFilter'));
+
+        $itemFilterStorage->removeItemFilter('NewItemFilter');
+
+        $this->assertFalse($itemFilterStorage->hasItemFilter('NewItemFilter'));
+
         $request
             ->setOperationName('findItemsByKeywords')
             ->setSortOrder(SortOrder::START_TIME_NEWEST)
