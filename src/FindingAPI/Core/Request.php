@@ -12,6 +12,7 @@ use FindingAPI\Definition\DefinitionValidator;
 use FindingAPI\Definition\DefinitionFactory;
 use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
+use FindingAPI\Core\Exception\ItemFilterException;
 
 class Request
 {
@@ -228,7 +229,7 @@ class Request
     public function addItemFilter(string $itemFilterName, array $value, $validator = null) : Request
     {
         if (!$this->itemFilterStorage->hasItemFilter($itemFilterName)) {
-            throw new FindingApiException('Item filter '.$itemFilterName.' does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
+            throw new ItemFilterException('Item filter '.$itemFilterName.' does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
         }
 
         $this->itemFilterStorage->updateItemFilterValue($itemFilterName, $value);
