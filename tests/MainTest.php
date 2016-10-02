@@ -35,8 +35,8 @@ class MainTest extends PHPUnit_Framework_TestCase
             ->setOperationName('findItemsByKeywords')
             ->setSortOrder(SortOrder::START_TIME_NEWEST)
             ->setPaginationInput(20, 'pageNumber')
-            ->addOption(Options::SMART_GUESS_SYSTEM)
-            ->addSearch(DefinitionFactory::andOperator('baseball card'))
+            //->addOption(Options::SMART_GUESS_SYSTEM)
+            ->addSearch(DefinitionFactory::customDefinition('harry potter'))
             ->addItemFilter(ItemFilter::AUTHORIZED_SELLER_ONLY, array(true), function ($name, $value) {
                 return true;
             })

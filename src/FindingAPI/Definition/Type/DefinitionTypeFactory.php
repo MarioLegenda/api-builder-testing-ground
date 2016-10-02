@@ -20,16 +20,14 @@ class DefinitionTypeFactory
         $this->request = $request;
     }
     /**
-     * @return UrlDefinitionType
+     * @return GetDefinitionType
      */
     public function getDefinitionType()
     {
         $method = $this->request->getRequestParameters()->getParameter('method')->getValue();
 
-        if (strtolower($method) === 'get') {
-            return new UrlDefinitionType();
-        }
+        $class = 'FindingAPI\Definition\Type\\'.ucfirst(strtolower($method)).'DefinitionType';
 
-        throw new FindingApiException('TEMPORARY EXCEPTION. DefinitionTypeFactory::getDefinitionType() should return UrlDefinitionType');
+        return new $class();
     }
 }

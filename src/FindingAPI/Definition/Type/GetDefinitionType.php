@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Definition\Type;
 
-class UrlDefinitionType implements DefinitionTypeInterface
+class GetDefinitionType implements DefinitionTypeInterface
 {
     /**
      * @var array $definitions

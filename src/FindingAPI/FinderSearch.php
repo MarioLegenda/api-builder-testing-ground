@@ -21,17 +21,9 @@ class FinderSearch
      */
     private $request;
     /**
-     * @var Options $options
-     */
-    private $options;
-    /**
      * @var static FinderSearch $instance
      */
     private static $instance;
-    /**
-     * @var array $definitions
-     */
-    private $definitions = array();
     /**
      * @var string $processed
      */
@@ -76,7 +68,9 @@ class FinderSearch
     {
         (new ItemFilterValidator($this->request->getItemFilterStorage()))->validate();
 
-        $definitionType = (new DefinitionTypeFactory($this->request))
+        $definitionTypeFactory = new DefinitionTypeFactory($this->request);
+
+        $definitionType = $definitionTypeFactory
             ->getDefinitionType()
             ->addDefinitions($this->request->getDefinitions())
             ->process();
