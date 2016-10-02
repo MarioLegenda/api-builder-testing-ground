@@ -30,19 +30,19 @@ class ItemFilterValidator
         foreach ($addedItemFilters as $name => $value) {
             $itemFilterData = $this->itemFilters->getItemFilter($name);
 
-            $className = $itemFilterData['object'];
+            $validator = $itemFilterData['object'];
             $itemFilterValue = $itemFilterData['value'];
 
-            if (is_string($className)) {
-                $itemFilter = new $className($name);
+            if (is_string($validator)) {
+                $itemFilter = new $validator($name);
             }
 
-            if ($className instanceof AbstractConstraint and $className instanceof FilterInterface) {
-                $itemFilter = $className;
+            if (is_callable($validator)) {
+                $validator->__invoke($name);
             }
 
             if (!isset($itemFilter)) {
-                throw new \RuntimeException('$itemFilter variable is not set. Debug: Class name: '.$className.'; Values: '.implode(', ', $value).' in ItemFilterValidator::validate()');
+                throw new \RuntimeException('$itemFilter variable is not set. Debug: Validator type: '.gettype($validator).'; Values: '.implode(', ', $value).' in ItemFilterValidator::validate()');
             }
 
             if (!$itemFilter->validateFilter($itemFilterValue)) {

@@ -230,17 +230,13 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
      * @return string
      * @throws ItemFilterException
      */
-    public function addItemFilter(string $name, $anonymousClass)
+    public function addItemFilter(string $name, \Closure $closure)
     {
-        if (!$anonymousClass instanceof FilterInterface and !$anonymousClass instanceof AbstractConstraint) {
-            throw new ItemFilterException('When adding new item filter, anonymous class has to extend FindingAPI\Core\ItemFilter\AbstractConstraint and implement FindingAPI\Core\ItemFilter\FilterInterface');
-        }
-
         if ($this->hasItemFilter($name)) {
             throw new ItemFilterException('Item filter '.$name.' already exists. If you whish to update an item filter, use ItemFilterStorage::updateItemFilter()');
         }
 
-        $this->itemFilters[$name]['object'] = $anonymousClass;
+        $this->itemFilters[$name]['object'] = $closure;
         $this->itemFilters[$name]['value'] = null;
     }
     /**

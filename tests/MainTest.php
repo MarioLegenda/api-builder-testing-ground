@@ -10,6 +10,8 @@ use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Information\Currency;
 use FindingAPI\Core\Information\GlobalId;
 use FindingAPI\Core\Information\SortOrder;
+use FindingAPI\Core\ItemFilter\AbstractConstraint;
+use FindingAPI\Core\ItemFilter\FilterInterface;
 
 class MainTest extends PHPUnit_Framework_TestCase
 {
