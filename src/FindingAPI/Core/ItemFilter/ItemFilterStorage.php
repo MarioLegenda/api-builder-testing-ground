@@ -230,13 +230,13 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
      * @return string
      * @throws ItemFilterException
      */
-    public function addItemFilter(string $name, \Closure $closure)
+    public function addItemFilter(string $name, $validator)
     {
         if ($this->hasItemFilter($name)) {
             throw new ItemFilterException('Item filter '.$name.' already exists. If you whish to update an item filter, use ItemFilterStorage::updateItemFilter()');
         }
 
-        $this->itemFilters[$name]['object'] = $closure;
+        $this->itemFilters[$name]['object'] = $validator;
         $this->itemFilters[$name]['value'] = null;
     }
     /**
