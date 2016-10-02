@@ -5,7 +5,7 @@ namespace FindingAPI\Processor;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\Type\DefinitionTypeInterface;
 
-class UrlProcessor implements ProcessorInterface
+class GetProcessor implements ProcessorInterface
 {
     /**
      * @var Request $request
