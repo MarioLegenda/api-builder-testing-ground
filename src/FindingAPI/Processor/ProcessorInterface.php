@@ -7,5 +7,9 @@ interface ProcessorInterface
     /**
      * @return string
      */
-    public function process() : string;
+    public function process() : ProcessorInterface;
+    /**
+     * @return string
+     */
+    public function getProcessed() : string;
 }

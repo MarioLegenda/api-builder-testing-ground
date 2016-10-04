@@ -1,6 +1,8 @@
 <?php
 
-namespace FindingAPI\Definition\Type;
+namespace FindingAPI\Processor;
+
+use FindingAPI\Processor\Factory\DefinitionTypeInterface;
 
 class GetDefinitionType implements DefinitionTypeInterface
 {

@@ -1,9 +1,8 @@
 <?php
 
-namespace FindingAPI\Processor;
+namespace FindingAPI\Processor\Factory;
 
 use FindingAPI\Core\Request;
-use FindingAPI\Definition\Type\DefinitionTypeInterface;
 
 class ProcessorFactory
 {

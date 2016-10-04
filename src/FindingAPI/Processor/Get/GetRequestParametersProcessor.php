@@ -1,42 +1,41 @@
 <?php
 
-namespace FindingAPI\Processor;
+namespace FindingAPI\Processor\Get;
 
+use FindingAPI\Processor\AbstractProcessor;
+use FindingAPI\Processor\ProcessorInterface;
+use FindingAPI\Processor\Factory\DefinitionTypeInterface;
 use FindingAPI\Core\Request;
-use FindingAPI\Definition\Type\DefinitionTypeInterface;
 
-class GetProcessor implements ProcessorInterface
+class GetRequestParametersProcessor extends AbstractProcessor implements ProcessorInterface
 {
+    /**
+     * @var string $processed
+     */
+    private $processed;
     /**
      * @var Request $request
      */
     private $request;
     /**
-     * @var DefinitionTypeInterface $definitionType
-     */
-    private $definitionType;
-    /**
      * UrlProcessor constructor.
      * @param Request $request
-     * @param DefinitionTypeInterface $definitionType
      */
-    public function __construct(Request $request, DefinitionTypeInterface $definitionType)
+    public function __construct(Request $request)
     {
-        $this->request = $request;
-        $this->definitionType = $definitionType;
+        parent::__construct($request);
     }
+
     /**
      * @return string
+     * @throws \FindingAPI\Core\Exception\RequestException
      */
     public function process() : string
     {
-        $processed = $this->definitionType->getProcessed();
-
         $parameters = $this->request->getRequestParameters();
         $parameters->excludeFromLoop(array('method', 'ebay_url'));
 
         $ebayUrl = $parameters->getParameter('ebay_url')->getValue();
-        $keywords = urlencode($processed);
 
         $finalUrl = $ebayUrl.'?';
 
@@ -50,8 +49,13 @@ class GetProcessor implements ProcessorInterface
             }
         }
 
-        $finalUrl.='keywords='.$keywords;
-
-        return $finalUrl;
+        $this->processed = $finalUrl;
+    }
+    /**
+     * @return string
+     */
+    public function getProcessed() : string
+    {
+        return $this->processed;
     }
 }

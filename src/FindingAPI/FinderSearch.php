@@ -67,15 +67,8 @@ class FinderSearch
     public function send() : FinderSearch
     {
         (new ItemFilterValidator($this->request->getItemFilterStorage()))->validate();
-
-        $definitionTypeFactory = new DefinitionTypeFactory($this->request);
-
-        $definitionType = $definitionTypeFactory
-            ->getDefinitionType()
-            ->addDefinitions($this->request->getDefinitions())
-            ->process();
-
-        $processed = ProcessorFactory::getProcessor($this->request, $definitionType)->process();
+        
+        
 
         $this->processed = $processed;
 

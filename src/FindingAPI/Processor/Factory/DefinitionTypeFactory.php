@@ -1,8 +1,7 @@
 <?php
 
-namespace FindingAPI\Definition\Type;
+namespace FindingAPI\Processor\Factory;
 
-use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\Request;
 
 class DefinitionTypeFactory
@@ -20,7 +19,7 @@ class DefinitionTypeFactory
         $this->request = $request;
     }
     /**
-     * @return GetDefinitionType
+     * @return FindingAPI\Processor\GetDefinitionType
      */
     public function getDefinitionType()
     {
