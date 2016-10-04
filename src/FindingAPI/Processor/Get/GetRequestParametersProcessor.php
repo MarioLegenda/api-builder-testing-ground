@@ -14,23 +14,10 @@ class GetRequestParametersProcessor extends AbstractProcessor implements Process
      */
     private $processed;
     /**
-     * @var Request $request
-     */
-    private $request;
-    /**
-     * UrlProcessor constructor.
-     * @param Request $request
-     */
-    public function __construct(Request $request)
-    {
-        parent::__construct($request);
-    }
-
-    /**
      * @return string
      * @throws \FindingAPI\Core\Exception\RequestException
      */
-    public function process() : string
+    public function process() : ProcessorInterface
     {
         $parameters = $this->request->getRequestParameters();
         $parameters->excludeFromLoop(array('method', 'ebay_url'));
@@ -50,6 +37,8 @@ class GetRequestParametersProcessor extends AbstractProcessor implements Process
         }
 
         $this->processed = $finalUrl;
+
+        return $this;
     }
     /**
      * @return string

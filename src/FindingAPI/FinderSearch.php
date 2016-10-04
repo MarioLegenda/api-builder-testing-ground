@@ -2,17 +2,10 @@
 
 namespace FindingAPI;
 
-use FindingAPI\Core\Exception\FindingApiException;
-use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 use FindingAPI\Core\ItemFilter\ItemFilterValidator;
-use FindingAPI\Core\Options;
-use FindingAPI\Definition\DefinitionFactory;
-use FindingAPI\Definition\DefinitionValidator;
-use FindingAPI\Definition\Exception\DefinitionException;
-use FindingAPI\Definition\SearchDefinitionInterface;
 use FindingAPI\Core\Request;
-use FindingAPI\Definition\Type\DefinitionTypeFactory;
-use FindingAPI\Processor\ProcessorFactory;
+use FindingAPI\Processor\Factory\ProcessorFactory;
+use FindingAPI\Processor\RequestProducer;
 
 class FinderSearch
 {
@@ -67,12 +60,12 @@ class FinderSearch
     public function send() : FinderSearch
     {
         (new ItemFilterValidator($this->request->getItemFilterStorage()))->validate();
-        
-        
 
-        $this->processed = $processed;
+        $processors = (new ProcessorFactory($this->request))->createProcessors();
 
-        $this->request->sendRequest($processed);
+        $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
+
+        $this->request->sendRequest($this->processed);
 
         return $this;
     }

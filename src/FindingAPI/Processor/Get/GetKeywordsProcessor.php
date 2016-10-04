@@ -14,19 +14,19 @@ class GetKeywordsProcessor extends AbstractProcessor implements ProcessorInterfa
      */
     private $processed;
     /**
-     * @var DefinitionTypeInterface
+     * @var array
      */
-    private $definitionType;
+    private $definitions;
     /**
      * GetKeywordsProcessor constructor.
      * @param Request $request
-     * @param DefinitionTypeInterface $definitionType
+     * @param array $definitions
      */
-    public function __construct(Request $request, DefinitionTypeInterface $definitionType)
+    public function __construct(Request $request, array $definitions)
     {
         parent::__construct($request);
 
-        $this->definitionType = $definitionType;
+        $this->definitions = $definitions;
     }
 
     /**
@@ -34,9 +34,14 @@ class GetKeywordsProcessor extends AbstractProcessor implements ProcessorInterfa
      */
     public function process() : ProcessorInterface
     {
-        $processed = $this->definitionType->getProcessed();
+        $finalDefinition = '';
+        foreach ($this->definitions as $definition) {
+            $finalDefinition.=$definition->getDefinition().' ';
+        }
 
-        $keywords = urlencode($processed);
+        $finalDefinition = rtrim($finalDefinition);
+
+        $keywords = urlencode($finalDefinition);
 
         $processed = '';
 

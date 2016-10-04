@@ -28,12 +28,7 @@ class GetDefinitionType implements DefinitionTypeInterface
      */
     public function process() : DefinitionTypeInterface
     {
-        $finalDefinition = '';
-        foreach ($this->definitions as $definition) {
-            $finalDefinition.=$definition->getDefinition().' ';
-        }
 
-        $this->finalDefinition = rtrim($finalDefinition);
 
         return $this;
     }
