@@ -12,7 +12,7 @@ class GetKeywordsProcessor extends AbstractProcessor implements ProcessorInterfa
     /**
      * @var string $processed
      */
-    private $processed;
+    private $processed = '';
     /**
      * @var array
      */

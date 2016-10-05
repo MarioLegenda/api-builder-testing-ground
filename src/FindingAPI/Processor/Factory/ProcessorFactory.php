@@ -32,14 +32,15 @@ class ProcessorFactory
         $processors = array();
         $mainNamespace = 'FindingAPI\Processor\Get\\';
 
-        $requestParametersProcessor = $mainNamespace.ucfirst($method).'RequestParametersProcessor';
-        $keywordsProcessor = $mainNamespace.ucfirst($method).'KeywordsProcessor';
+        $requestParametersProcessorClass = $mainNamespace.ucfirst($method).'RequestParametersProcessor';
+        $keywordsProcessorClass = $mainNamespace.ucfirst($method).'KeywordsProcessor';
+        $itemFiltersProcessorClass = $mainNamespace.ucfirst($method).'ItemFiltersProcessor';
 
-        $processors['request-parameters-processor'] = new $requestParametersProcessor($this->request);
-        $processors['keywords-processor'] = new $keywordsProcessor($this->request, $definitions);
+        $processors['request-parameters-processor'] = new $requestParametersProcessorClass($this->request);
+        $processors['keywords-processor'] = new $keywordsProcessorClass($this->request, $definitions);
 
         if (!empty($itemFilters)) {
-            // TODO: put item filter processor in $processors
+            $processors['item-filters-processor'] = new $itemFiltersProcessorClass($this->request, $itemFilters);
         }
 
         return $processors;

@@ -12,7 +12,7 @@ class GetRequestParametersProcessor extends AbstractProcessor implements Process
     /**
      * @var string $processed
      */
-    private $processed;
+    private $processed = '';
     /**
      * @return string
      * @throws \FindingAPI\Core\Exception\RequestException
