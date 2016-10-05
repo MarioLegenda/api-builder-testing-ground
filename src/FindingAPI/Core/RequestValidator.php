@@ -1,34 +1,43 @@
 <?php
 
-namespace FindingAPI\Core\ItemFilter;
+namespace FindingAPI\Core;
 
+use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\Exception\ItemFilterException;
+use FindingAPI\Core\Request;
 use Symfony\Component\Yaml\Yaml;
 use StrongType\ArrayType;
 
-class ItemFilterValidator
+class RequestValidator
 {
     /**
      * @var array $itemFilters
      */
-    private $itemFilters;
+    private $request;
     /**
      * ItemFilterProcessor constructor.
-     * @param ItemFilterStorage $itemFilters
+     * @param Request $itemFilters
      */
-    public function __construct(ItemFilterStorage $itemFilters)
+    public function __construct(Request $request)
     {
-        $this->itemFilters = $itemFilters;
+        $this->request = $request;
     }
     /**
      * @void
      */
     public function validate()
     {
-        $addedItemFilters = $this->itemFilters->filterAddedFilter();
+        $itemFilters = $this->request->getItemFilterStorage();
+        $definitions = $this->request->getDefinitions();
+
+        if (empty($definitions)) {
+            throw new FindingApiException('You have\'t specified any search words');
+        }
+
+        $addedItemFilters = $itemFilters->filterAddedFilter();
 
         foreach ($addedItemFilters as $name => $value) {
-            $itemFilterData = $this->itemFilters->getItemFilter($name);
+            $itemFilterData = $itemFilters->getItemFilter($name);
 
             $validator = $itemFilterData['object'];
             $itemFilterValue = $itemFilterData['value'];

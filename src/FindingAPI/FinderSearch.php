@@ -2,7 +2,7 @@
 
 namespace FindingAPI;
 
-use FindingAPI\Core\ItemFilter\ItemFilterValidator;
+use FindingAPI\Core\RequestValidator;
 use FindingAPI\Core\Request;
 use FindingAPI\Processor\Factory\ProcessorFactory;
 use FindingAPI\Processor\RequestProducer;
@@ -59,7 +59,7 @@ class FinderSearch
      */
     public function send() : FinderSearch
     {
-        (new ItemFilterValidator($this->request->getItemFilterStorage()))->validate();
+        (new RequestValidator($this->request))->validate();
 
         $processors = (new ProcessorFactory($this->request))->createProcessors();
 
