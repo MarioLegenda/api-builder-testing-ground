@@ -37,10 +37,10 @@ class MainTest extends PHPUnit_Framework_TestCase
             ->setPaginationInput(20, 'pageNumber')
             //->addOption(Options::SMART_GUESS_SYSTEM)
             ->addSearch(DefinitionFactory::customDefinition('harry potter'))
-            ->addItemFilter(ItemFilter::AUTHORIZED_SELLER_ONLY, array(true));
-//            ->addItemFilter(ItemFilter::AVAILABLE_TO, array('AF'))
-//            ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
-//            ->addItemFilter(ItemFilter::CHARITY_ONLY, array(true))
+            ->addItemFilter(ItemFilter::AUTHORIZED_SELLER_ONLY, array(true))
+            ->addItemFilter(ItemFilter::AVAILABLE_TO, array('AF'))
+            ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
+            ->addItemFilter(ItemFilter::CHARITY_ONLY, array(true));
 //            ->addItemFilter(ItemFilter::CONDITION, array('New', 1000))
 //            ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN))
 //            ->addItemFilter(ItemFilter::END_TIME_FROM, array(new \DateTime('1.1.2019')))

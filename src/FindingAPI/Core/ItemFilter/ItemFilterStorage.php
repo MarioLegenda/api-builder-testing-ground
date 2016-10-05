@@ -295,8 +295,9 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
 
         if (!$this->itemFilters[$name]['object'] instanceof FilterInterface) {
             $itemFilterClass = $this->itemFilters[$name]['object'];
+            $itemFilterValue = $this->itemFilters[$name]['value'];
 
-            $this->itemFilters[$name]['object'] = new $itemFilterClass($name);
+            $this->itemFilters[$name]['object'] = new $itemFilterClass($name, $itemFilterValue);
 
             return $this->itemFilters[$name]['object'];
         }
@@ -305,13 +306,22 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
     }
 
     /**
+     * @param mixed $toExclude
      * @return array
      */
-    public function filterAddedFilter() : array
+    public function filterAddedFilter($toExclude = array()) : array
     {
-        return array_filter($this->itemFilters, function ($value) {
-            return $value['value'] !== null;
-        });
+        $filtered = array();
+
+        foreach ($this->itemFilters as $name => $itemFilter) {
+            if (in_array($name, $toExclude) === false) {
+                if ($itemFilter['value'] !== null) {
+                    $filtered[$name] = $itemFilter;
+                }
+            }
+        }
+
+        return $filtered;
     }
     /**
      * @return int
@@ -325,6 +335,6 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
      */
     public function getIterator() : \ArrayIterator
     {
-        return new \ArrayIterator($this->itemFilters);
+        return new \ArrayIterator();
     }
 }

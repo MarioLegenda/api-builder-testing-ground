@@ -34,7 +34,7 @@ class RequestValidator
             throw new FindingApiException('You have\'t specified any search words');
         }
 
-        $addedItemFilters = $itemFilters->filterAddedFilter();
+        $addedItemFilters = $itemFilters->filterAddedFilter(array('SortOrder', 'PaginationInput'));
 
         foreach ($addedItemFilters as $name => $value) {
             $itemFilterData = $itemFilters->getItemFilter($name);
