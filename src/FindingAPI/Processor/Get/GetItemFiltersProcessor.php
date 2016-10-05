@@ -1,18 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: marioskrlec
- * Date: 05/10/16
- * Time: 16:38
- */
 
 namespace FindingAPI\Processor\Get;
-
 
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 use FindingAPI\Processor\AbstractProcessor;
 use FindingAPI\Processor\ProcessorInterface;
 use FindingAPI\Core\Request;
+use FindingAPI\Processor\UrlifyInterface;
 
 class GetItemFiltersProcessor extends AbstractProcessor implements ProcessorInterface
 {
@@ -38,6 +32,20 @@ class GetItemFiltersProcessor extends AbstractProcessor implements ProcessorInte
      */
     public function process() : ProcessorInterface
     {
+        $finalProduct = '';
+        $count = 0;
+        foreach ($this->itemFilterStorage as $name => $itemFilterItems) {
+            $itemFilter = $this->itemFilterStorage->getItemFilterInstance($name);
+
+            if ($itemFilter instanceof UrlifyInterface) {
+                $finalProduct.=$itemFilter->urlify($count);
+            }
+
+            $count++;
+        }
+
+        $this->processed = rtrim($finalProduct, '&');
+
         return $this;
     }
     /**

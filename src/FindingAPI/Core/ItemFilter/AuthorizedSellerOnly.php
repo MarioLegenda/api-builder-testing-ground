@@ -2,8 +2,11 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class AuthorizedSellerOnly extends AbstractConstraint implements FilterInterface
+use FindingAPI\Processor\UrlifyInterface;
+
+class AuthorizedSellerOnly extends AbstractConstraint implements FilterInterface, UrlifyInterface
 {
+    private $filter;
     /**
      * @param array $filter
      * @return bool
@@ -14,6 +17,20 @@ class AuthorizedSellerOnly extends AbstractConstraint implements FilterInterface
             return false;
         }
 
-        return parent::checkBoolean($filter[0]);
+        if (parent::checkBoolean($filter[0]) === false) {
+            return false;
+        }
+
+        $this->filter = $filter;
+
+        return true;
+    }
+    /**
+     * @param int $counter
+     * @return string
+     */
+    public function urlify(int $counter) : string
+    {
+        return 'itemFilter('.$counter.').name='.$this->name.'&itemFilter('.$counter.').value='.$this->filter[0].'&';
     }
 }

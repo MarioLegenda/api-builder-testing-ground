@@ -283,6 +283,28 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
     }
 
     /**
+     * @param string $name
+     * @return FilterInterface
+     * @throws ItemFilterException
+     */
+    public function getItemFilterInstance(string $name) : FilterInterface
+    {
+        if (!$this->hasItemFilter($name)) {
+            throw new ItemFilterException('Item filter '.$name.' does not exist');
+        }
+
+        if (!$this->itemFilters[$name]['object'] instanceof FilterInterface) {
+            $itemFilterClass = $this->itemFilters[$name]['object'];
+
+            $this->itemFilters[$name]['object'] = new $itemFilterClass($name);
+
+            return $this->itemFilters[$name]['object'];
+        }
+
+        return $this->itemFilters[$name]['object'];
+    }
+
+    /**
      * @return array
      */
     public function filterAddedFilter() : array

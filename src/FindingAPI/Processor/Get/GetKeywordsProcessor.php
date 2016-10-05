@@ -45,7 +45,7 @@ class GetKeywordsProcessor extends AbstractProcessor implements ProcessorInterfa
 
         $processed = '';
 
-        $processed.='keywords='.$keywords;
+        $processed.='keywords='.$keywords.'&';
 
         $this->processed = $processed;
 
