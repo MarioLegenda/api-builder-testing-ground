@@ -10,6 +10,7 @@ use FindingAPI\Definition\DefinitionFactory;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Information\Currency;
 use FindingAPI\Core\Information\SortOrder;
+use FindingAPI\Core\Information\GlobalId;
 
 class MainTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,41 +66,41 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN))
             ->addItemFilter(ItemFilter::END_TIME_FROM, array(new \DateTime('1.1.2019')))
             ->addItemFilter(ItemFilter::END_TIME_TO, array(new \DateTime('1.1.2019')));
-//            ->addItemFilter(ItemFilter::EXCLUDE_AUTO_PAY, array(true))
-//            ->addItemFilter(ItemFilter::EXCLUDE_CATEGORY, array(123, 435));
-//            ->addItemFilter(ItemFilter::EXCLUDE_SELLER, array('Budala', 'Idiot'))
-//            ->addItemFilter(ItemFilter::EXPEDITED_SHIPPING_TYPE, array('Expedited'))
-//            ->addItemFilter(ItemFilter::FEATURED_ONLY, array(true))
-//            ->addItemFilter(ItemFilter::FEEDBACK_SCORE_MAX, array(9))
-//            ->addItemFilter(ItemFilter::FEEDBACK_SCORE_MIN, array(9))
-//            ->addItemFilter(ItemFilter::FREE_SHIPPING_ONLY, array(true))
-//            ->addItemFilter(ItemFilter::GET_IT_FAST_ONLY, array(true))
-//            ->addItemFilter(ItemFilter::HIDE_DUPLICATE_ITEMS, array(true))
-//            ->addItemFilter(ItemFilter::LISTED_IN, array(GlobalId::EBAY_AT))
-//            ->addItemFilter(ItemFilter::LISTING_TYPE, array('All', 'AuctionWithBIN'))
-//            ->addItemFilter(ItemFilter::LOCAL_PICKUP_ONLY, array(true))
-//            ->addItemFilter(ItemFilter::LOCAL_SEARCH_ONLY, array(true))
-//            ->addItemFilter(ItemFilter::LOCATED_IN, array('dz', 'ai'))
-//            ->addItemFilter(ItemFilter::LOTS_ONLY, array(true))
-//            ->addItemFilter(ItemFilter::MAX_BIDS, array(1))
-//            ->addItemFilter(ItemFilter::MAX_HANDLING_TIME, array(1))
-//            ->addItemFilter(ItemFilter::MAX_DISTANCE, array(6))
-//            ->addItemFilter(ItemFilter::MAX_PRICE, array(0.0, Currency::AUSTRALIAN))
-//            ->addItemFilter(ItemFilter::MAX_QUANTITY, array(1))
-//            ->addItemFilter(ItemFilter::MIN_BIDS, array(0))
-//            ->addItemFilter(ItemFilter::MIN_PRICE, array(0.1, Currency::AUSTRALIAN))
-//            ->addItemFilter(ItemFilter::MIN_QUANTITY, array(1))
-//            ->addItemFilter(ItemFilter::MOD_TIME_FROM, array(new DateTime('1.1.2019')))
-//            ->addItemFilter(ItemFilter::OUTLET_SELLER_ONLY, array(false))
-//            ->addItemFilter(ItemFilter::PAYMENT_METHOD, array('PayPal'))
-//            ->addItemFilter(ItemFilter::RETURNS_ACCEPTED_ONLY, array(false))
-//            ->addItemFilter(ItemFilter::SELLER, array('Seller1'))
-//            ->addItemFilter(ItemFilter::SELLER_BUSINESS_TYPE, array('Business', 'Ebay-at'))
-//            ->addItemFilter(ItemFilter::SOLD_ITEMS_ONLY, array(true))
-//            ->addItemFilter(ItemFilter::START_TIME_FROM, array(new DateTime('1.9.2018')))
-//            ->addItemFilter(ItemFilter::START_TIME_TO, array(new DateTime('1.9.2019')))
-//            ->addItemFilter(ItemFilter::TOP_RATED_SELLER_ONLY, array(true))
-//            ->addItemFilter(ItemFilter::WORLD_OF_GOOD_ONLY, array(false));
+/*            ->addItemFilter(ItemFilter::EXCLUDE_AUTO_PAY, array(true))
+            ->addItemFilter(ItemFilter::EXCLUDE_CATEGORY, array(123, 435))
+            ->addItemFilter(ItemFilter::EXCLUDE_SELLER, array('Budala', 'Idiot'))
+            ->addItemFilter(ItemFilter::EXPEDITED_SHIPPING_TYPE, array('Expedited'))
+            ->addItemFilter(ItemFilter::FEATURED_ONLY, array(true))
+            ->addItemFilter(ItemFilter::FEEDBACK_SCORE_MAX, array(9))
+            ->addItemFilter(ItemFilter::FEEDBACK_SCORE_MIN, array(9))
+            ->addItemFilter(ItemFilter::FREE_SHIPPING_ONLY, array(true))
+            ->addItemFilter(ItemFilter::GET_IT_FAST_ONLY, array(true))
+            ->addItemFilter(ItemFilter::HIDE_DUPLICATE_ITEMS, array(true))
+            ->addItemFilter(ItemFilter::LISTED_IN, array(GlobalId::EBAY_AT))
+            ->addItemFilter(ItemFilter::LISTING_TYPE, array('All', 'AuctionWithBIN'))
+            ->addItemFilter(ItemFilter::LOCAL_PICKUP_ONLY, array(true))
+            ->addItemFilter(ItemFilter::LOCAL_SEARCH_ONLY, array(true))
+            ->addItemFilter(ItemFilter::LOCATED_IN, array('dz', 'ai'))
+            ->addItemFilter(ItemFilter::LOTS_ONLY, array(true))
+            ->addItemFilter(ItemFilter::MAX_BIDS, array(1))
+            ->addItemFilter(ItemFilter::MAX_HANDLING_TIME, array(1))
+            ->addItemFilter(ItemFilter::MAX_DISTANCE, array(6))
+            ->addItemFilter(ItemFilter::MAX_PRICE, array(0.0, Currency::AUSTRALIAN))
+            ->addItemFilter(ItemFilter::MAX_QUANTITY, array(1))
+            ->addItemFilter(ItemFilter::MIN_BIDS, array(0))
+            ->addItemFilter(ItemFilter::MIN_PRICE, array(0.1, Currency::AUSTRALIAN))
+            ->addItemFilter(ItemFilter::MIN_QUANTITY, array(1))
+            ->addItemFilter(ItemFilter::MOD_TIME_FROM, array(new \DateTime('1.1.2019')))
+            ->addItemFilter(ItemFilter::OUTLET_SELLER_ONLY, array(false))
+            ->addItemFilter(ItemFilter::PAYMENT_METHOD, array('PayPal'))
+            ->addItemFilter(ItemFilter::RETURNS_ACCEPTED_ONLY, array(false))
+            ->addItemFilter(ItemFilter::SELLER, array('Seller1'))
+            ->addItemFilter(ItemFilter::SELLER_BUSINESS_TYPE, array('Business', 'Ebay-at'))
+            ->addItemFilter(ItemFilter::SOLD_ITEMS_ONLY, array(true))
+            ->addItemFilter(ItemFilter::START_TIME_FROM, array(new \DateTime('1.9.2018')))
+            ->addItemFilter(ItemFilter::START_TIME_TO, array(new \DateTime('1.9.2019')))
+            ->addItemFilter(ItemFilter::TOP_RATED_SELLER_ONLY, array(true))
+            ->addItemFilter(ItemFilter::WORLD_OF_GOOD_ONLY, array(false));*/
 
         return $request;
     }
@@ -113,5 +114,6 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $processed = $finder->send()->getProcessed();
 
         var_dump($processed);
+        die();
     }
 }

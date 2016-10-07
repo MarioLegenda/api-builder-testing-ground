@@ -3,11 +3,9 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Helper;
-use FindingAPI\Processor\UrlifyInterface;
 
 class MinPrice extends AbstractConstraint implements FilterInterface
 {
-    private $filter;
     /**
      * @param array $filter
      * @return bool
@@ -32,22 +30,6 @@ class MinPrice extends AbstractConstraint implements FilterInterface
             return false;
         }
 
-        $this->filter = $filter;
-
         return true;
-    }
-    /**
-     * @param int $counter
-     * @return string
-     */
-    public function urlify(int $counter) : string
-    {
-        $product = 'itemFilter.name('.$counter.')='.$this->name.'&itemFilter.value='.$this->filter[0].'&';
-
-        if (array_key_exists(1, $this->filter)) {
-            $product.='&paramName=Currency&paramValue='.$this->filter[1].'&';
-        }
-
-        return $product;
     }
 }

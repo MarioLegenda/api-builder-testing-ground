@@ -10,10 +10,6 @@ class ListingType extends AbstractConstraint implements FilterInterface
      */
     public function validateFilter(array $filter) : bool
     {
-        if (!$this->genericValidation($filter, 1)) {
-            return false;
-        }
-
         $filter = $filter[0];
         $validFilters = array('All', 'AuctionWithBIN', 'Classified', 'FixedPrice', 'StoreInventory');
 

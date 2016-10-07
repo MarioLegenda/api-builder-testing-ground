@@ -293,7 +293,6 @@ class Request
 
         $response = $client->request($this->getRequestParameters()->getParameter('method')->getValue(), $request);
 
-        //var_dump((string) $response->getBody());
-        //die();
+        var_dump((string) $response->getBody());
     }
 }

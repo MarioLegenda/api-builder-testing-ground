@@ -145,7 +145,7 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
         'LocatedIn' => array(
             'object' => __NAMESPACE__.'\\LocatedIn',
             'value' => null,
-            'multiple_values' => false,
+            'multiple_values' => true,
             'date_time' => false,
         ),
         'LotsOnly' => array(
@@ -224,7 +224,7 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
             'object' => __NAMESPACE__.'\\ModTimeFrom',
             'value' => null,
             'multiple_values' => false,
-            'date_time' => false,
+            'date_time' => true,
         ),
         'OutletSellerOnly' => array(
             'object' => __NAMESPACE__.'\\OutletSellerOnly',
@@ -253,7 +253,7 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
         'SellerBusinessType' => array(
             'object' => __NAMESPACE__.'\\SellerBusinessType',
             'value' => null,
-            'multiple_values' => false,
+            'multiple_values' => true,
             'date_time' => false,
         ),
         'SoldItemsOnly' => array(
@@ -266,13 +266,13 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
             'object' => __NAMESPACE__.'\\StartTimeFrom',
             'value' => null,
             'multiple_values' => false,
-            'date_time' => false,
+            'date_time' => true,
         ),
         'StartTimeTo' => array(
             'object' => __NAMESPACE__.'\\StartTimeTo',
             'value' => null,
             'multiple_values' => false,
-            'date_time' => false,
+            'date_time' => true,
         ),
         'TopRatedSellerOnly' => array(
             'object' => __NAMESPACE__.'\\TopRatedSellerOnly',

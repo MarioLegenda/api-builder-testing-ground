@@ -262,20 +262,20 @@ class SingeltonsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(SortOrder::instance()->has('SomeNewSortOrder'), 'SomeNewSortOrder does not exist in '.get_class(SortOrder::instance()));
 
         $currencies = array(
-            'aud',
-            'cad',
-            'chf',
-            'cny',
-            'eur',
-            'gbp',
-            'hkd',
-            'inr',
-            'myr',
-            'php',
-            'pln',
-            'sek',
-            'twd',
-            'usd',
+            'AUD',
+            'CAD',
+            'CHR',
+            'CNY',
+            'EUR',
+            'GBP',
+            'HKD',
+            'INR',
+            'MYR',
+            'PHP',
+            'PLN',
+            'SEK',
+            'TWD',
+            'USD',
         );
 
         foreach ($currencies as $currency) {

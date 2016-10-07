@@ -55,6 +55,8 @@ class SellerBusinessType extends AbstractConstraint implements FilterInterface
             return false;
         }
 
+        $this->filter = array($filters[0]);
+
         return true;
 
     }

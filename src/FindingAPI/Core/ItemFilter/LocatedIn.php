@@ -12,10 +12,6 @@ class LocatedIn extends AbstractConstraint implements FilterInterface
      */
     public function validateFilter(array $filter) : bool
     {
-        if (!$this->genericValidation($filter, 1)) {
-            return false;
-        }
-
         if (count($filter) > 25) {
             $this->exceptionMessages[] = $this->name.' can specify up to 25 countries. '.count($filter).' given';
 

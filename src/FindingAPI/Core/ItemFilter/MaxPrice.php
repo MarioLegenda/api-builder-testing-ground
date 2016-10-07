@@ -8,10 +8,6 @@ use FindingAPI\Processor\UrlifyInterface;
 class MaxPrice extends AbstractConstraint implements FilterInterface
 {
     /**
-     * @var array $filter
-     */
-    private $filter;
-    /**
      * @param array $filter
      * @return bool
      */
@@ -35,22 +31,6 @@ class MaxPrice extends AbstractConstraint implements FilterInterface
             return false;
         }
 
-        $this->filter = $filter;
-
         return true;
-    }
-    /**
-     * @param int $counter
-     * @return string
-     */
-    public function urlify(int $counter) : string
-    {
-        $product = 'itemFilter.name('.$counter.')='.$this->name.'&itemFilter.value('.$counter.')='.$this->filter[0].'&';
-
-        if (array_key_exists(1, $this->filter)) {
-            $product.='&paramName=Currency&paramValue='.$this->filter[1].'&';
-        }
-
-        return $product;
     }
 }

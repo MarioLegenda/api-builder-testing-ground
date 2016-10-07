@@ -57,7 +57,9 @@ abstract class AbstractConstraint implements UrlifyInterface
         $dateTime = $this->configuration['date_time'];
 
         if ($multipleValues === false and $dateTime === false) {
-            return 'itemFilter('.$counter.').name='.$this->name.'&itemFilter('.$counter.').value='.$this->filter[0].'&';
+            $filterValue = $this->refactorFilterValue($this->filter);
+
+            return 'itemFilter('.$counter.').name='.$this->name.'&itemFilter('.$counter.').value='.$filterValue[0].'&';
         }
 
         if ($multipleValues === true and $dateTime === false) {
@@ -65,7 +67,9 @@ abstract class AbstractConstraint implements UrlifyInterface
 
             $internalCounter = 0;
             foreach ($this->filter as $filter) {
-                $toBeAppended.='&itemFilter('.$counter.').value('.$internalCounter.')='.$filter;
+                $filterValue = $this->refactorFilterValue((is_array($filter)) ? $filter : array($filter));
+
+                $toBeAppended.='&itemFilter('.$counter.').value('.$internalCounter.')='.$filterValue[0];
 
                 $internalCounter++;
             }
@@ -74,7 +78,10 @@ abstract class AbstractConstraint implements UrlifyInterface
         }
 
         if ($multipleValues === false and $dateTime === true) {
-            return 'itemFilter('.$counter.').name='.$this->name.'&itemFilter('.$counter.').value='.$this->filter[0]->format('Y-m-d H:m:s').'&';
+            $this->filter[0]->setTimezone(new \DateTimeZone('UTC'));
+            $this->filter[0]->add(new \DateInterval('P0DT1H1M4S'));
+
+            return 'itemFilter('.$counter.').name='.$this->name.'&itemFilter('.$counter.').value='.$this->filter[0]->format('c').'&';
         }
 
         if ($multipleValues === true and $dateTime === true) {
@@ -82,9 +89,16 @@ abstract class AbstractConstraint implements UrlifyInterface
 
             $internalCounter = 0;
             foreach ($this->filter as $filter) {
-                $filterValue = ($filter instanceof \DateTime) ? $filter->format('Y-m-d H:m:s') : $filter;
+                $filterValue = '';
+                if ($filter instanceof \DateTime) {
+                    $filter->add(new \DateInterval('P0DT0H1M4S'));
 
-                $toBeAppended.='&itemFilter('.$counter.').value('.$internalCounter.')='.$filterValue;
+                    $filterValue = array($filter->format('c'));
+                } else {
+                    $filterValue = $this->refactorFilterValue($filter);
+                }
+
+                $toBeAppended.='&itemFilter('.$counter.').value('.$internalCounter.')='.$filterValue[0];
 
                 $internalCounter++;
             }
@@ -102,7 +116,7 @@ abstract class AbstractConstraint implements UrlifyInterface
         }
 
         if ($count !== null) {
-            if (count($value) < $count) {
+            if (count($value) > $count) {
                 $this->exceptionMessages[] = $this->name.' can receive an array argument with only '.$count.' value(s)';
 
                 return false;
@@ -123,5 +137,17 @@ abstract class AbstractConstraint implements UrlifyInterface
         }
 
         return true;
+    }
+
+    private function refactorFilterValue(array $filters)
+    {
+        if (count($filters) === 1) {
+            $filter = $filters[0];
+            if (is_bool($filters[0])) {
+                return ($filter === true) ? array('true') : array('false');
+            }
+        }
+
+        return $filters;
     }
 }
