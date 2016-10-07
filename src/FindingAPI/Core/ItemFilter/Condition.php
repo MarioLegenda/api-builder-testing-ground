@@ -2,12 +2,15 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\Exception\ItemFilterException;
 use StrongType\ArrayType;
-use FindingAPI\Core\ItemFilter\FilterInterface;
 
 class Condition extends AbstractConstraint implements FilterInterface
 {
+    protected $filter;
+    /**
+     * @param array $filter
+     * @return bool
+     */
     public function validateFilter(array $filter) : bool
     {
         if (!$this->genericValidation($filter)) {
@@ -29,6 +32,26 @@ class Condition extends AbstractConstraint implements FilterInterface
             }
         }
 
+        $this->filter = $uniques;
+
         return true;
+    }
+
+    /**
+     * @param int $counter
+     * @return string
+     */
+    public function urlify(int $counter) : string
+    {
+        $toBeAppended = 'itemFilter('.$counter.').name='.$this->name;//'&itemFilter('.$counter.').value='.$this->filter[0].'&';
+
+        $internalCounter = 0;
+        foreach ($this->filter as $filter) {
+            $toBeAppended.='&itemFilter('.$counter.').value('.$internalCounter.')='.$filter;
+
+            $internalCounter++;
+        }
+
+        return $toBeAppended.'&';
     }
 }
