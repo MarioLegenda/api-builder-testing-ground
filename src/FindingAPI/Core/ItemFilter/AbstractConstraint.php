@@ -18,17 +18,23 @@ abstract class AbstractConstraint implements UrlifyInterface
      */
     protected $filter;
     /**
+     * @var array $configuration
+     */
+    protected $configuration;
+    /**
      * @var array $exceptionMessages
      */
     protected $exceptionMessages = array();
     /**
      * @oaran string $name
      * @param array $filter
+     * @param array $configuration
      */
-    public function __construct(string $name, array $filter)
+    public function __construct(string $name, array $filter, array $configuration)
     {
         $this->name = $name;
         $this->filter = $filter;
+        $this->configuration = $configuration;
     }
     /**
      * @return string
@@ -47,7 +53,22 @@ abstract class AbstractConstraint implements UrlifyInterface
      */
     public function urlify(int $counter) : string
     {
-        return 'itemFilter('.$counter.').name='.$this->name.'&itemFilter('.$counter.').value='.$this->filter[0].'&';
+        if ($this->configuration['multiple_values'] === false) {
+            return 'itemFilter('.$counter.').name='.$this->name.'&itemFilter('.$counter.').value='.$this->filter[0].'&';
+        }
+
+        if ($this->configuration['multiple_values'] === true) {
+            $toBeAppended = 'itemFilter('.$counter.').name='.$this->name;
+
+            $internalCounter = 0;
+            foreach ($this->filter as $filter) {
+                $toBeAppended.='&itemFilter('.$counter.').value('.$internalCounter.')='.$filter;
+
+                $internalCounter++;
+            }
+
+            return $toBeAppended.'&';
+        }
     }
 
     protected function genericValidation(array $value, $count = null) : bool

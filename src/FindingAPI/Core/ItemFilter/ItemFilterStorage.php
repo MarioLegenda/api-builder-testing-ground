@@ -391,7 +391,12 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
             $itemFilterClass = $this->itemFilters[$name]['object'];
             $itemFilterValue = $this->itemFilters[$name]['value'];
 
-            $this->itemFilters[$name]['object'] = new $itemFilterClass($name, $itemFilterValue);
+            $configuration = array(
+                'multiple_values' => $this->itemFilters[$name]['multiple_values'],
+                'date_time' => $this->itemFilters[$name]['date_time'],
+            );
+
+            $this->itemFilters[$name]['object'] = new $itemFilterClass($name, $itemFilterValue, $configuration);
 
             return $this->itemFilters[$name]['object'];
         }

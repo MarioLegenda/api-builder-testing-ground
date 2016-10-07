@@ -4,9 +4,6 @@ namespace FindingAPI\Core;
 
 use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\Exception\ItemFilterException;
-use FindingAPI\Core\Request;
-use Symfony\Component\Yaml\Yaml;
-use StrongType\ArrayType;
 
 class RequestValidator
 {
