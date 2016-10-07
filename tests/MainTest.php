@@ -1,35 +1,55 @@
 <?php
 
+namespace Test;
+
 require __DIR__.'/../vendor/autoload.php';
 
 use FindingAPI\FinderSearch;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\DefinitionFactory;
-use FindingAPI\Core\Options;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Information\Currency;
-use FindingAPI\Core\Information\GlobalId;
 use FindingAPI\Core\Information\SortOrder;
-use FindingAPI\Core\ItemFilter\AbstractConstraint;
-use FindingAPI\Core\ItemFilter\FilterInterface;
 
-class MainTest extends PHPUnit_Framework_TestCase
+class MainTest extends \PHPUnit_Framework_TestCase
 {
-    public function testRequest()
+    public function testItemFilters()
     {
         $request = new Request();
 
         $itemFilterStorage = $request->getItemFilterStorage();
 
-        $itemFilterStorage->addItemFilter('NewItemFilter', function ($name) {
-            return true;
-        });
+        // single value item filter
+        $itemFilterStorage->addItemFilter(array(
+            'SingleValueItemFilter' => array(
+                'object' => 'Test\ItemFilter\SingleValueItemFilter',
+                'value' => null,
+                'multiple_values' => false,
+                'date_time' => false,
+            ),
+        ));
 
-        $this->assertTrue($itemFilterStorage->hasItemFilter('NewItemFilter'));
+        $this->assertTrue($itemFilterStorage->hasItemFilter('SingleValueItemFilter'));
 
-        $itemFilterStorage->removeItemFilter('NewItemFilter');
+        $itemFilterStorage->removeItemFilter('SingleValueItemFilter');
 
-        $this->assertFalse($itemFilterStorage->hasItemFilter('NewItemFilter'));
+        $this->assertFalse($itemFilterStorage->hasItemFilter('SingleValueItemFilter'));
+
+        // multiple value item filter
+
+        $itemFilterStorage->addItemFilter(array(
+            'MultipleValueItemFilter' => array(
+                'object' => 'Test\ItemFilter\MultipleValueItemFilter',
+                'value' => null,
+                'multiple_values' => true,
+                'date_time' => false,
+            ),
+        ));
+    }
+
+    public function testRequest()
+    {
+        $request = new Request();
 
         $request
             ->setOperationName('findItemsByKeywords')

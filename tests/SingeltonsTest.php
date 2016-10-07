@@ -1,5 +1,7 @@
 <?php
 
+namespace Test;
+
 require __DIR__ . '/../vendor/autoload.php';
 
 use FindingAPI\Core\Information\GlobalId;
@@ -9,7 +11,7 @@ use FindingAPI\Core\Information\SortOrder;
 use FindingAPI\Core\Information\Currency;
 use FindingAPI\Core\Information\PaymentMethod;
 
-class SingeltonsTest extends PHPUnit_Framework_TestCase
+class SingeltonsTest extends \PHPUnit_Framework_TestCase
 {
     public function testGlobalId()
     {

@@ -1,11 +1,14 @@
 <?php
 
+namespace Test;
+
 require __DIR__.'/../vendor/autoload.php';
 
 use FindingAPI\Core\Request;
 use FindingAPI\Core\Parameter;
+use FindingAPI\Core\Exception\RequestException;
 
-class ParametersTest extends PHPUnit_Framework_TestCase
+class ParametersTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException FindingAPI\Core\Exception\RequestException
