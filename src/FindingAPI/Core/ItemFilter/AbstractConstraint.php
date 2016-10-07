@@ -53,16 +53,38 @@ abstract class AbstractConstraint implements UrlifyInterface
      */
     public function urlify(int $counter) : string
     {
-        if ($this->configuration['multiple_values'] === false) {
+        $multipleValues = $this->configuration['multiple_values'];
+        $dateTime = $this->configuration['date_time'];
+
+        if ($multipleValues === false and $dateTime === false) {
             return 'itemFilter('.$counter.').name='.$this->name.'&itemFilter('.$counter.').value='.$this->filter[0].'&';
         }
 
-        if ($this->configuration['multiple_values'] === true) {
+        if ($multipleValues === true and $dateTime === false) {
             $toBeAppended = 'itemFilter('.$counter.').name='.$this->name;
 
             $internalCounter = 0;
             foreach ($this->filter as $filter) {
                 $toBeAppended.='&itemFilter('.$counter.').value('.$internalCounter.')='.$filter;
+
+                $internalCounter++;
+            }
+
+            return $toBeAppended.'&';
+        }
+
+        if ($multipleValues === false and $dateTime === true) {
+            return 'itemFilter('.$counter.').name='.$this->name.'&itemFilter('.$counter.').value='.$this->filter[0]->format('Y-m-d H:m:s').'&';
+        }
+
+        if ($multipleValues === true and $dateTime === true) {
+            $toBeAppended = 'itemFilter('.$counter.').name='.$this->name;
+
+            $internalCounter = 0;
+            foreach ($this->filter as $filter) {
+                $filterValue = ($filter instanceof \DateTime) ? $filter->format('Y-m-d H:m:s') : $filter;
+
+                $toBeAppended.='&itemFilter('.$counter.').value('.$internalCounter.')='.$filterValue;
 
                 $internalCounter++;
             }

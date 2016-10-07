@@ -50,13 +50,13 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
             'object' => __NAMESPACE__.'\\EndTimeFrom',
             'value' => null,
             'multiple_values' => false,
-            'date_time' => false,
+            'date_time' => true,
         ),
         'EndTimeTo' => array(
             'object' => __NAMESPACE__.'\\EndTimeTo',
             'value' => null,
             'multiple_values' => false,
-            'date_time' => false,
+            'date_time' => true,
         ),
         'ExcludeAutoPay' => array(
             'object' => __NAMESPACE__.'\\ExcludeAutoPay',
