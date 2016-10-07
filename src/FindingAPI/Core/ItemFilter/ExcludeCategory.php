@@ -30,4 +30,22 @@ class ExcludeCategory extends AbstractConstraint implements FilterInterface
 
         return true;
     }
+
+    /**
+     * @param int $counter
+     * @return string
+     */
+    public function urlify(int $counter) : string
+    {
+        $toBeAppended = 'itemFilter('.$counter.').name='.$this->name;
+
+        $internalCounter = 0;
+        foreach ($this->filter as $filter) {
+            $toBeAppended.='&itemFilter('.$counter.').value('.$internalCounter.')='.$filter;
+
+            $internalCounter++;
+        }
+
+        return $toBeAppended.'&';
+    }
 }

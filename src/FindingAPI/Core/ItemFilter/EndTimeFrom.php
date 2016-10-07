@@ -36,4 +36,13 @@ class EndTimeFrom extends AbstractConstraint implements FilterInterface
 
         return true;
     }
+
+    /**
+     * @param int $counter
+     * @return string
+     */
+    public function urlify(int $counter) : string
+    {
+        return 'itemFilter('.$counter.').name='.$this->name.'&itemFilter('.$counter.').value='.$this->filter[0]->format('Y-m-d H:m:s').'&';
+    }
 }

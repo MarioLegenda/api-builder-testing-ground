@@ -41,12 +41,12 @@ class MainTest extends PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::AVAILABLE_TO, array('AF'))
             ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
             ->addItemFilter(ItemFilter::CHARITY_ONLY, array(true))
-            ->addItemFilter(ItemFilter::CONDITION, array('New', 1000, 1500, 1750));
-//            ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN))
-//            ->addItemFilter(ItemFilter::END_TIME_FROM, array(new \DateTime('1.1.2019')))
-//            ->addItemFilter(ItemFilter::END_TIME_TO, array(new \DateTime('1.1.2019')))
-//            ->addItemFilter(ItemFilter::EXCLUDE_AUTO_PAY, array(true))
-//            ->addItemFilter(ItemFilter::EXCLUDE_CATEGORY, array(123, 435))
+            ->addItemFilter(ItemFilter::CONDITION, array('New', 1000, 1500, 1750))
+            ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN))
+            ->addItemFilter(ItemFilter::END_TIME_FROM, array(new \DateTime('1.1.2019')))
+            ->addItemFilter(ItemFilter::END_TIME_TO, array(new \DateTime('1.1.2019')))
+            ->addItemFilter(ItemFilter::EXCLUDE_AUTO_PAY, array(true))
+            ->addItemFilter(ItemFilter::EXCLUDE_CATEGORY, array(123, 435));
 //            ->addItemFilter(ItemFilter::EXCLUDE_SELLER, array('Budala', 'Idiot'))
 //            ->addItemFilter(ItemFilter::EXPEDITED_SHIPPING_TYPE, array('Expedited'))
 //            ->addItemFilter(ItemFilter::FEATURED_ONLY, array(true))

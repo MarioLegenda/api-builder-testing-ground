@@ -43,7 +43,7 @@ class Condition extends AbstractConstraint implements FilterInterface
      */
     public function urlify(int $counter) : string
     {
-        $toBeAppended = 'itemFilter('.$counter.').name='.$this->name;//'&itemFilter('.$counter.').value='.$this->filter[0].'&';
+        $toBeAppended = 'itemFilter('.$counter.').name='.$this->name;
 
         $internalCounter = 0;
         foreach ($this->filter as $filter) {
