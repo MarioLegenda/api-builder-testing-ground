@@ -20,186 +20,232 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
             'AuthorizedSellerOnly' => array (
                 'object' => __NAMESPACE__.'\\AuthorizedSellerOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'AvailableTo' => array(
                 'object' => __NAMESPACE__.'\\AvailableTo',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'BestOfferOnly' => array(
                 'object' => __NAMESPACE__.'\\BestOfferOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'CharityOnly' => array(
                 'object' => __NAMESPACE__.'\\CharityOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'Condition' => array(
                 'object' => __NAMESPACE__.'\\Condition',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'Currency' => array(
                 'object' => __NAMESPACE__.'\\Currency',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'EndTimeFrom' => array(
                 'object' => __NAMESPACE__.'\\EndTimeFrom',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'EndTimeTo' => array(
                 'object' => __NAMESPACE__.'\\EndTimeTo',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'ExcludeAutoPay' => array(
                 'object' => __NAMESPACE__.'\\ExcludeAutoPay',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'ExcludeCategory' => array(
                 'object' => __NAMESPACE__.'\\ExcludeCategory',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'ExcludeSeller' => array(
                 'object' => __NAMESPACE__.'\\ExcludeSeller',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'ExpeditedShippingType' => array(
                 'object' => __NAMESPACE__.'\\ExpeditedShippingType',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'FeaturedOnly' => array(
                 'object' => __NAMESPACE__.'\\FeaturedOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'FeedbackScoreMax' => array(
                 'object' => __NAMESPACE__.'\\FeedbackScoreMax',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'FeedbackScoreMin' => array(
                 'object' => __NAMESPACE__.'\\FeedbackScoreMin',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'FreeShippingOnly' => array(
                 'object' => __NAMESPACE__.'\\FreeShippingOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'GetItFastOnly' => array(
                 'object' => __NAMESPACE__.'\\GetItFastOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'HideDuplicateItems' => array(
                 'object' => __NAMESPACE__.'\\HideDuplicateItems',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'ListedIn' => array(
                 'object' => __NAMESPACE__.'\\ListedIn',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'ListingType' => array(
                 'object' => __NAMESPACE__.'\\ListingType',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'LocalPickupOnly' => array(
                 'object' => __NAMESPACE__.'\\LocalPickupOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'LocalSearchOnly' => array(
                 'object' => __NAMESPACE__.'\\LocalSearchOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'LocatedIn' => array(
                 'object' => __NAMESPACE__.'\\LocatedIn',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'LotsOnly' => array(
                 'object' => __NAMESPACE__.'\\LotsOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'MaxBids' => array(
                 'object' => __NAMESPACE__.'\\MaxBids',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'MaxDistance' => array(
                 'object' => __NAMESPACE__.'\\MaxDistance',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'MaxHandlingTime' => array(
                 'object' => __NAMESPACE__.'\\MaxHandlingTime',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'SortOrder' => array(
                 'object' => __NAMESPACE__.'\\SortOrder',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'BuyerPostalCode' => array(
                 'object' => __NAMESPACE__.'\\BuyerPostalCode',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'PaginationInput' => array(
                 'object' => __NAMESPACE__.'\\PaginationInput',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'MaxPrice' => array(
                 'object' => __NAMESPACE__.'\\MaxPrice',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'MaxQuantity' => array(
                 'object' => __NAMESPACE__.'\\MaxQuantity',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'MinBids' => array(
                 'object' => __NAMESPACE__.'\\MinBids',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'MinPrice' => array(
                 'object' => __NAMESPACE__.'\\MinPrice',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'MinQuantity' => array(
                 'object' => __NAMESPACE__.'\\MinQuantity',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'ModTimeFrom' => array(
                 'object' => __NAMESPACE__.'\\ModTimeFrom',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'OutletSellerOnly' => array(
                 'object' => __NAMESPACE__.'\\OutletSellerOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'PaymentMethod' => array(
                 'object' => __NAMESPACE__.'\\PaymentMethod',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'ReturnsAcceptedOnly' => array(
                 'object' => __NAMESPACE__.'\\ReturnsAcceptedOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'Seller' => array(
                 'object' => __NAMESPACE__.'\\Seller',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'SellerBusinessType' => array(
                 'object' => __NAMESPACE__.'\\SellerBusinessType',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'SoldItemsOnly' => array(
                 'object' => __NAMESPACE__.'\\SoldItemsOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'StartTimeFrom' => array(
                 'object' => __NAMESPACE__.'\\StartTimeFrom',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'StartTimeTo' => array(
                 'object' => __NAMESPACE__.'\\StartTimeTo',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'TopRatedSellerOnly' => array(
                 'object' => __NAMESPACE__.'\\TopRatedSellerOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
             'WorldOfGoodOnly' => array(
                 'object' => __NAMESPACE__.'\\WorldOfGoodOnly',
                 'value' => null,
+                'mulitple_values' => false,
             ),
         );
     }
