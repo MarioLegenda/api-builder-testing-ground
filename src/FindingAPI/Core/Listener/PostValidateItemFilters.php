@@ -22,5 +22,16 @@ class PostValidateItemFilters
                 throw new ItemFilterException('If provided, FeedbackScoreMax has to larger or equal than FeedbackScoreMin');
             }
         }
+
+        if ($itemFilterStorage->hasItemFilter('MaxBids') and $itemFilterStorage->hasItemFilter('MinBids')) {
+            $maxBids = $itemFilterStorage->getItemFilter('MaxBids');
+            $minBids = $itemFilterStorage->getItemFilter('MinBids');
+
+            if ($maxBids['value'] < $minBids['value']) {
+                throw new ItemFilterException('If provided, MaxBids has to larger or equal than MinBids');
+            }
+        }
+
+
     }
 }
