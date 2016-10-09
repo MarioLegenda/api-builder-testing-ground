@@ -3,6 +3,7 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Exception\FindingApiException;
+use FindingAPI\Core\Helper;
 use FindingAPI\Processor\UrlifyInterface;
 use StrongType\Boolean;
 use StrongType\Exceptions\CriticalTypeException;
@@ -78,10 +79,9 @@ abstract class AbstractConstraint implements UrlifyInterface
         }
 
         if ($multipleValues === false and $dateTime === true) {
-            $this->filter[0]->setTimezone(new \DateTimeZone('UTC'));
-            $this->filter[0]->add(new \DateInterval('P0DT1H1M4S'));
+            $dateTime = $this->filter[0];
 
-            return 'itemFilter('.$counter.').name='.$this->name.'&itemFilter('.$counter.').value='.$this->filter[0]->format('c').'&';
+            return 'itemFilter('.$counter.').name='.$this->name.'&itemFilter('.$counter.').value='.Helper::convertToGMT($dateTime).'&';
         }
 
         if ($multipleValues === true and $dateTime === true) {
@@ -91,9 +91,7 @@ abstract class AbstractConstraint implements UrlifyInterface
             foreach ($this->filter as $filter) {
                 $filterValue = '';
                 if ($filter instanceof \DateTime) {
-                    $filter->add(new \DateInterval('P0DT0H1M4S'));
-
-                    $filterValue = array($filter->format('c'));
+                    $filterValue = Helper::convertToGMT($filter);
                 } else {
                     $filterValue = $this->refactorFilterValue($filter);
                 }

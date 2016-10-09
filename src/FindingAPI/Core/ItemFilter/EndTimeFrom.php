@@ -25,9 +25,6 @@ class EndTimeFrom extends AbstractConstraint implements FilterInterface
 
         $currentDateTime = new \DateTime();
 
-        $filter->setTimezone(new \DateTimeZone('UTC'));
-        $currentDateTime->setTimezone(new \DateTimeZone('UTC'));
-
         if ($filter->getTimestamp() <= $currentDateTime->getTimestamp()) {
             $this->exceptionMessages[] = 'You have to specify a date in the future for '.$this->name.' item filter';
 

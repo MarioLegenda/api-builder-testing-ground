@@ -64,7 +64,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::CHARITY_ONLY, array(true))
             ->addItemFilter(ItemFilter::CONDITION, array('New', 1000, 1500, 1750))
             ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN))
-            ->addItemFilter(ItemFilter::END_TIME_FROM, array(new \DateTime('1.1.2019')))
+            ->addItemFilter(ItemFilter::END_TIME_FROM, array(new \DateTime('1.1.2018 21:23:38')))
             ->addItemFilter(ItemFilter::END_TIME_TO, array(new \DateTime('1.1.2019')));
 /*            ->addItemFilter(ItemFilter::EXCLUDE_AUTO_PAY, array(true))
             ->addItemFilter(ItemFilter::EXCLUDE_CATEGORY, array(123, 435))
