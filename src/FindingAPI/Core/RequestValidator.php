@@ -13,6 +13,10 @@ class RequestValidator
      */
     private $request;
     /**
+     * @var array $finalValidators
+     */
+    private $preItemFilterValidators = array();
+    /**
      * ItemFilterProcessor constructor.
      * @param Request $itemFilters
      */
@@ -34,8 +38,6 @@ class RequestValidator
 
         $addedItemFilters = $itemFilterStorage->filterAddedFilter(array('SortOrder', 'PaginationInput'));
 
-        $this->validateExcludeSellerAndOthers($itemFilterStorage);
-
         foreach ($addedItemFilters as $name => $value) {
             $itemFilterData = $itemFilterStorage->getItemFilter($name);
 
@@ -45,17 +47,6 @@ class RequestValidator
             if ($itemFilter->validateFilter($itemFilterValue) !== true) {
                 throw new ItemFilterException((string) $itemFilter);
             }
-        }
-    }
-
-    private function validateExcludeSellerAndOthers(ItemFilterStorage $itemFilterStorage)
-    {
-        // Validate that only one of ExcludeSeller, Seller and TopRatedSellerOnly exists
-
-        $foundFilters = $itemFilterStorage->getItemFiltersInBulk(array('ExcludeSeller', 'Seller', 'TopRatedSellerOnly'), true);
-
-        if (count($foundFilters) > 1) {
-            throw new ItemFilterException('The ExcludeSeller item filter cannot be used together with either the Seller or TopRatedSellerOnly item filters or vice versa');
         }
     }
 }

@@ -2,10 +2,14 @@
 
 namespace FindingAPI;
 
+use FindingAPI\Core\Event\ItemFilterEvent;
+use FindingAPI\Core\Listener\PostValidateItemFilters;
+use FindingAPI\Core\Listener\PreValidateItemFilters;
 use FindingAPI\Core\RequestValidator;
 use FindingAPI\Core\Request;
 use FindingAPI\Processor\Factory\ProcessorFactory;
 use FindingAPI\Processor\RequestProducer;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class FinderSearch
 {
@@ -13,6 +17,10 @@ class FinderSearch
      * @var Request $configuration
      */
     private $request;
+    /**
+     * @var EventDispatcher
+     */
+    private $eventDispatcher;
     /**
      * @var static FinderSearch $instance
      */
@@ -44,6 +52,11 @@ class FinderSearch
     private function __construct(Request $request)
     {
         $this->request = $request;
+
+        $this->eventDispatcher = new EventDispatcher();
+
+        $this->eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
+        $this->eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
     }
 
     /**
@@ -54,12 +67,28 @@ class FinderSearch
         return $this->processed;
     }
     /**
+     * @param string $eventName
+     * @param $callable
+     * @param string $method
+     * @return FinderSearch
+     */
+    public function addEventListener(string $eventName, $callable, string $method) : FinderSearch
+    {
+        $this->eventDispatcher->addListener($eventName, array($callable, $method));
+
+        return $this;
+    }
+    /**
      * @return FinderSearch
      * @throws Core\Exception\FindingApiException
      */
     public function send() : FinderSearch
     {
+        $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+
         (new RequestValidator($this->request))->validate();
+
+        $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
 
         $processors = (new ProcessorFactory($this->request))->createProcessors();
 
