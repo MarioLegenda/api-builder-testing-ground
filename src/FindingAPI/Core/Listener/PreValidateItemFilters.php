@@ -39,5 +39,17 @@ class PreValidateItemFilters
                 }
             }
         }
+
+        if ($itemFilterStorage->hasItemFilter('MaxDistance')) {
+            $maxDistance = $itemFilterStorage->getItemFilter('MaxDistance');
+
+            if ($maxDistance['value'] !== null) {
+                $buyerPostalCode = $itemFilterStorage->getItemFilter('BuyerPostalCode');
+
+                if ($buyerPostalCode['value'] === null) {
+                    throw new ItemFilterException('MaxDistance item filter has to be used together with buyerPostalCode');
+                }
+            }
+        }
     }
 }
