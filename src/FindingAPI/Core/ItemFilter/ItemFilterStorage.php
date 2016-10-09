@@ -311,6 +311,47 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
 
         return $this->itemFilters[$name];
     }
+
+    /**
+     * @param array $itemFilters
+     * @param bool $includeEmpty
+     * @return array
+     */
+    public function getItemFiltersInBulk(array $itemFilters, $includeEmpty = true) : array
+    {
+        $found = array();
+        foreach ($itemFilters as $itemFilter) {
+            if ($this->hasItemFilter($itemFilter)) {
+                $foundFilter = $this->getItemFilter($itemFilter);
+
+                if ($includeEmpty === false) {
+                    $found[] = $foundFilter;
+
+                    continue;
+                }
+
+                if ($foundFilter['value'] !== null) {
+                    $found[] = $foundFilter;
+                }
+            }
+        }
+
+        return $found;
+    }
+
+    /**
+     * @param string $itemFilterName
+     * @return bool
+     */
+    public function isItemFilterInRequest(string $itemFilterName) : bool
+    {
+        $itemFilter = $this->getItemFilter($itemFilterName);
+        if ($itemFilter !== null) {
+            return $itemFilter['value'] !== null;
+        }
+
+        return false;
+    }
     /**
      * @param string $name
      * @return bool
@@ -458,6 +499,5 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
         if (!empty(array_diff($allowedKeys, $configKeys))) {
             throw new ItemFilterException($exceptionMessage.' for item filter '.$itemFilterName[0]);
         }
-
     }
 }
