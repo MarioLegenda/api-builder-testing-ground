@@ -32,6 +32,13 @@ class PostValidateItemFilters
             }
         }
 
+        if ($itemFilterStorage->hasItemFilter('MaxQuantity') and $itemFilterStorage->hasItemFilter('MinQuantity')) {
+            $maxQuantity = $itemFilterStorage->getItemFilter('MaxQuantity');
+            $minQuantity = $itemFilterStorage->getItemFilter('MinQuantity');
 
+            if ($maxQuantity['value'] < $minQuantity['value']) {
+                throw new ItemFilterException('If provided, MaxQuantity has to larger or equal than MinQuantity');
+            }
+        }
     }
 }
