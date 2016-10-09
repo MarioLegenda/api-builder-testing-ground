@@ -20,5 +20,11 @@ class PreValidateItemFilters
         if (count($foundFilters) > 1) {
             throw new ItemFilterException('The ExcludeSeller item filter cannot be used together with either the Seller or TopRatedSellerOnly item filters or vice versa');
         }
+        
+        $foundFilters = $itemFilterStorage->getItemFiltersInBulk(array('AvailableTo', 'LocatedIn'), true);
+        
+        if (count($foundFilters) > 1) {
+            throw new ItemFilterException('AvailableTo item filter cannot be used together with LocatedIn item filter and vice versa');
+        }
     }
 }
