@@ -68,11 +68,11 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::END_TIME_TO, array(new \DateTime('1.1.2019')))
 //            ->addItemFilter(ItemFilter::EXCLUDE_AUTO_PAY, array(true))
 //            ->addItemFilter(ItemFilter::EXCLUDE_CATEGORY, array(123, 435))
-            ->addItemFilter(ItemFilter::EXCLUDE_SELLER, array('Budala', 'Idiot'));
+//            ->addItemFilter(ItemFilter::EXCLUDE_SELLER, array('Budala', 'Idiot'));
 //            ->addItemFilter(ItemFilter::EXPEDITED_SHIPPING_TYPE, array('Expedited'))
 //            ->addItemFilter(ItemFilter::FEATURED_ONLY, array(true))
-//            ->addItemFilter(ItemFilter::FEEDBACK_SCORE_MAX, array(9))
-//            ->addItemFilter(ItemFilter::FEEDBACK_SCORE_MIN, array(9))
+            ->addItemFilter(ItemFilter::FEEDBACK_SCORE_MAX, array(9))
+            ->addItemFilter(ItemFilter::FEEDBACK_SCORE_MIN, array(9))
 //            ->addItemFilter(ItemFilter::FREE_SHIPPING_ONLY, array(true))
 //            ->addItemFilter(ItemFilter::GET_IT_FAST_ONLY, array(true))
 //            ->addItemFilter(ItemFilter::HIDE_DUPLICATE_ITEMS, array(true))
@@ -99,7 +99,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
 //            ->addItemFilter(ItemFilter::SOLD_ITEMS_ONLY, array(true))
 //            ->addItemFilter(ItemFilter::START_TIME_FROM, array(new \DateTime('1.9.2018')))
 //            ->addItemFilter(ItemFilter::START_TIME_TO, array(new \DateTime('1.9.2019')))
-//            ->addItemFilter(ItemFilter::TOP_RATED_SELLER_ONLY, array(true))
+            ->addItemFilter(ItemFilter::TOP_RATED_SELLER_ONLY, array(true));
 //            ->addItemFilter(ItemFilter::WORLD_OF_GOOD_ONLY, array(false));
 
         return $request;
