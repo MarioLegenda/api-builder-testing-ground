@@ -13,10 +13,6 @@ class RequestValidator
      */
     private $request;
     /**
-     * @var array $finalValidators
-     */
-    private $preItemFilterValidators = array();
-    /**
      * ItemFilterProcessor constructor.
      * @param Request $itemFilters
      */

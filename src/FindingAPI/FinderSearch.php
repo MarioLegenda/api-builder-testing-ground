@@ -3,6 +3,7 @@
 namespace FindingAPI;
 
 use FindingAPI\Core\Event\ItemFilterEvent;
+use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\Listener\PostValidateItemFilters;
 use FindingAPI\Core\Listener\PreValidateItemFilters;
 use FindingAPI\Core\RequestValidator;
@@ -22,14 +23,20 @@ class FinderSearch
      */
     private $eventDispatcher;
     /**
-     * @var static FinderSearch $instance
-     */
-    private static $instance;
-    /**
      * @var string $processed
      */
     private $processed;
-
+    /**
+     * @var array $validation
+     */
+    private $validation = array(
+        'individual-item-filters' => true,
+        'global-item-filters' => true,
+    );
+    /**
+     * @var static FinderSearch $instance
+     */
+    private static $instance;
     /**
      * @param Request|null $configuration
      * @return FinderSearch
@@ -44,7 +51,6 @@ class FinderSearch
 
         return self::$instance;
     }
-
     /**
      * FinderSearch constructor.
      * @param Request $configuration
@@ -58,7 +64,22 @@ class FinderSearch
         $this->eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
         $this->eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
     }
+    /**
+     * @param string $validationType
+     * @param bool $rule
+     * @return FinderSearch
+     * @throws FindingApiException
+     */
+    public function setValidationRule(string $validationType, bool $rule) : FinderSearch
+    {
+        if (!array_key_exists($validationType, $this->validation)) {
+            throw new FindingApiException('Unknown validation rule '.$validationType);
+        }
 
+        $this->validation[$validationType] = $rule;
+
+        return $this;
+    }
     /**
      * @return string
      */
@@ -72,11 +93,20 @@ class FinderSearch
      */
     public function send() : FinderSearch
     {
-        //$this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        $individualItemFilterValidation = $this->validation['individual-item-filters'];
+        $globalItemFilterValidation = $this->validation['global-item-filters'];
 
-        (new RequestValidator($this->request))->validate();
+        if ($globalItemFilterValidation === true) {
+            $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        }
 
-        //$this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        if ($individualItemFilterValidation === true) {
+            (new RequestValidator($this->request))->validate();
+        }
+
+        if ($globalItemFilterValidation === true) {
+            $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        }
 
         $processors = (new ProcessorFactory($this->request))->createProcessors();
 
