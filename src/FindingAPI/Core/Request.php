@@ -54,7 +54,22 @@ class Request
 
         DefinitionFactory::initiate($this->options);
     }
-
+    /**
+     * @return Request
+     */
+    public function specialFeature() : Request
+    {
+        return $this;
+    }
+    /**
+     * @param int $buyerPostalCode
+     * @throws FindingApiException
+     * @return Request
+     */
+    public function findLocalItems(int $buyerPostalCode) : Request
+    {
+        $this->setBuyerPostalCode($buyerPostalCode)->setSortOrder('Distance');
+    }
     /**
      * @param string $url
      * @return Request
