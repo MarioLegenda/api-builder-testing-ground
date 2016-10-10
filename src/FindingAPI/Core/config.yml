@@ -9,6 +9,5 @@ finding:
       - { name: GLOBAL-ID, value: EBAY-US, type: optional, valid: [EBAY-US, EBAY-ENCA, EBAY-GB, EBAY-AU, EBAY-AT, EBAY-FRBE, EBAY-FR, EBAY-DE, EBAY-MOTOR, EBAY-IT, EBAY-NLBE, EBAY-NL, EBAY-ES, EBAY-CH, EBAY-HK, EBAY-IN, EBAY-IE, EBAY-MY, EBAY-FRCA, EBAY-PH, EBAY-PL, EBAY-SG], deprecated: false, synonyms: {}}
       - { name: buyerPostalCode, value: null, type: optional, valid: {}, deprecated: false, synonyms: {}}
       - { name: sortOrder, value: null, type: optional, valid: [BestMatch, BidCountFewest, BidCountMost, CountryAscending, CountryDescending, CurrentPriceHighest, DistanceNearest, EndTimeSoonest, PricePlusShippingHighest, PricePlusShippingLowest, StartTimeNewest], deprecated: false, synonyms: {}}
-      - { name: outputSelector, value: null, type: optional, valid: [SellerInfo, StoreInfo, AspectHistogram, CategoryHistogram], deprecated: false, synonyms: {}}
       - { name: paginationInput, value: null, type: optional, valid: {}, deprecated: false, synonyms: {}}
       - { name: paginationOutput, value: null, type: optional, valid: {}, deprecated: false, synonyms: {}}

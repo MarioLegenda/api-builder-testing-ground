@@ -286,6 +286,12 @@ class ItemFilterStorage implements \Countable, \IteratorAggregate
             'multiple_values' => false,
             'date_time' => false,
         ),
+        'OutputSelector' => array(
+            'object' => __NAMESPACE__.'\\OutputSelector',
+            'value' => null,
+            'multiple_values' => false,
+            'date_time' => false,
+        )
     );
 
     /**

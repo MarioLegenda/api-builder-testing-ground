@@ -83,7 +83,6 @@ class Request
 
         return $this;
     }
-
     /**
      * @param string $serviceVersion
      * @return Request
@@ -95,7 +94,6 @@ class Request
 
         return $this;
     }
-
     /**
      * @param string $method
      * @return Request
@@ -111,7 +109,6 @@ class Request
 
         return $this;
     }
-
     /**
      * @param string $buyerPostalCode
      * @return Request
@@ -145,7 +142,6 @@ class Request
 
         return $this;
     }
-
     /**
      * @param int $pagination
      * @param string $paginationType
@@ -166,7 +162,6 @@ class Request
 
         return $this;
     }
-
     /**
      * @param string $operationName
      * @return Request
@@ -178,7 +173,6 @@ class Request
 
         return $this;
     }
-
     /**
      * @param string $format
      * @return Request
@@ -197,7 +191,6 @@ class Request
 
         return $this;
     }
-
     /**
      * @param string $securityId
      * @return Request
@@ -209,8 +202,21 @@ class Request
 
         return $this;
     }
+    /**
+     * @param array $outputSelector
+     * @return Request
+     * @throws ItemFilterException
+     */
+    public function setOutputSelector(array $outputSelector) : Request
+    {
+        if (!$this->itemFilterStorage->hasItemFilter('OutputSelector')) {
+            throw new ItemFilterException('Item filter OutputSelector does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
+        }
 
+        $this->itemFilterStorage->updateItemFilterValue('OutputSelector', $outputSelector);
 
+        return $this;
+    }
     /**
      * @param SearchDefinitionInterface $definition
      * @return Request
@@ -237,13 +243,12 @@ class Request
 
         return $this;
     }
-
     /**
      * @param $itemFilter
      * @param $value
      * @return Request
      */
-    public function addItemFilter(string $itemFilterName, array $value, $validator = null) : Request
+    public function addItemFilter(string $itemFilterName, array $value) : Request
     {
         if (!$this->itemFilterStorage->hasItemFilter($itemFilterName)) {
             throw new ItemFilterException('Item filter '.$itemFilterName.' does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
@@ -251,13 +256,8 @@ class Request
 
         $this->itemFilterStorage->updateItemFilterValue($itemFilterName, $value);
 
-        if ($validator !== null) {
-            $this->itemFilterStorage->updateItemFilterValidator($itemFilterName, $validator);
-        }
-
         return $this;
     }
-
     /**
      * @param int $option
      * @return Request
@@ -268,7 +268,6 @@ class Request
 
         return $this;
     }
-
     /**
      * @return ItemFilterStorage
      */
@@ -276,7 +275,6 @@ class Request
     {
         return $this->itemFilterStorage;
     }
-
     /**
      * @return bool
      */
@@ -284,7 +282,6 @@ class Request
     {
         return $this->parameters->valid();
     }
-
     /**
      * @return RequestParameters
      */
@@ -292,7 +289,6 @@ class Request
     {
         return $this->parameters;
     }
-
     /**
      * @return array
      */
@@ -300,7 +296,6 @@ class Request
     {
         return $this->definitions;
     }
-
     /**
      * @param string $definitionType
      */

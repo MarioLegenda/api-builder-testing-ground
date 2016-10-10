@@ -4,9 +4,9 @@ namespace FindingAPI\Core\Information;
 
 class PaymentMethod
 {
-    const PAY_PAL = 'BestMatch';
-    const PAISA_PAL = 'BidCountFewest';
-    const PAISA_PAY_EMI = 'BidCountMost';
+    const PAY_PAL = 'PayPal';
+    const PAISA_PAL = 'PaisaPal';
+    const PAISA_PAY_EMI = 'PaisaPayEmi';
     /**
      * @var array $sortOrders
      */

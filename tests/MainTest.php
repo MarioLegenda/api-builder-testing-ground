@@ -59,6 +59,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
 //            ->setBuyerPostalCode(31000)
             ->setSortOrder(SortOrder::START_TIME_NEWEST)
             ->setPaginationInput(20, 'pageNumber')
+            ->setOutputSelector(array('SellerInfo', 'StoreInfo'))
             //->addOption(Options::SMART_GUESS_SYSTEM)
             ->addSearch(DefinitionFactory::customDefinition('harry potter'))
             ->addItemFilter(ItemFilter::AUTHORIZED_SELLER_ONLY, array(true))
