@@ -2,21 +2,19 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Processor\UrlifyInterface;
-
-class AuthorizedSellerOnly extends AbstractConstraint implements FilterInterface
+class AuthorizedSellerOnly extends AbstractFilter implements FilterInterface
 {
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filter) : bool
+    public function validateFilter() : bool
     {
-        if (!$this->genericValidation($filter, 1)) {
+        if (!$this->genericValidation($this->filter, 1)) {
             return false;
         }
 
-        if (parent::checkBoolean($filter[0]) === false) {
+        if (parent::checkBoolean($this->filter[0]) === false) {
             return false;
         }
 

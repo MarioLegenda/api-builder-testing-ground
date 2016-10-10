@@ -2,21 +2,21 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class ExcludeCategory extends AbstractConstraint implements FilterInterface
+class ExcludeCategory extends AbstractFilter implements FilterInterface
 {
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filter) : bool
+    public function validateFilter() : bool
     {
-        if (count($filter) > 25) {
+        if (count($this->filter) > 25) {
             $this->exceptionMessages[] = 'ExcludeCategory item filter can accept up to 25 category ids';
 
             return false;
         }
 
-        foreach ($filter as $value) {
+        foreach ($this->filter as $value) {
             if (!is_numeric($value)) {
                 $this->exceptionMessages['Value '.$value.' has to be a valid category number or a numeric string'];
 

@@ -2,13 +2,12 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\Helper;
 use FindingAPI\Processor\UrlifyInterface;
 use StrongType\Boolean;
 use StrongType\Exceptions\CriticalTypeException;
 
-abstract class AbstractConstraint implements UrlifyInterface
+abstract class AbstractFilter implements UrlifyInterface
 {
     /**
      * @var string $name

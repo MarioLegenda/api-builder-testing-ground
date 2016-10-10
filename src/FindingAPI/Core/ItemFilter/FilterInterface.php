@@ -7,5 +7,5 @@ interface FilterInterface
     /**
      * @return bool
      */
-    public function validateFilter(array $filter) : bool;
+    public function validateFilter() : bool;
 }

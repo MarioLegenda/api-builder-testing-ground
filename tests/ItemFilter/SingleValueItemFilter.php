@@ -2,22 +2,22 @@
 
 namespace Test\ItemFilter;
 
-use FindingAPI\Core\ItemFilter\AbstractConstraint;
+use FindingAPI\Core\ItemFilter\AbstractFilter;
 use FindingAPI\Core\ItemFilter\FilterInterface;
 
-class SingleValueItemFilter extends AbstractConstraint implements FilterInterface
+class SingleValueItemFilter extends AbstractFilter implements FilterInterface
 {
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filter) : bool
+    public function validateFilter() : bool
     {
-        if (!$this->genericValidation($filter, 1)) {
+        if (!$this->genericValidation($this->filter, 1)) {
             return false;
         }
 
-        if (parent::checkBoolean($filter[0]) === false) {
+        if (parent::checkBoolean($this->filter[0]) === false) {
             return false;
         }
 

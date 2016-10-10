@@ -2,13 +2,13 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class BuyerPostalCode extends AbstractConstraint implements FilterInterface
+class BuyerPostalCode extends AbstractFilter implements FilterInterface
 {
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filter) : bool
+    public function validateFilter() : bool
     {
         return true;
     }

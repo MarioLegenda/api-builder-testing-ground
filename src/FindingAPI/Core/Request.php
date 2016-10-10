@@ -69,6 +69,8 @@ class Request
     public function findLocalItems(int $buyerPostalCode) : Request
     {
         $this->setBuyerPostalCode($buyerPostalCode)->setSortOrder('Distance');
+
+        return $this;
     }
     /**
      * @param string $url

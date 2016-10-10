@@ -4,15 +4,15 @@ namespace FindingAPI\Core\ItemFilter;
 
 use StrongType\ArrayType;
 
-class Currency extends AbstractConstraint implements FilterInterface
+class Currency extends AbstractFilter implements FilterInterface
 {
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filter) : bool
+    public function validateFilter() : bool
     {
-        if (!$this->genericValidation($filter, 1)) {
+        if (!$this->genericValidation($this->filter, 1)) {
             return false;
         }
 
@@ -34,7 +34,7 @@ class Currency extends AbstractConstraint implements FilterInterface
             'usd',
         ));
 
-        $currency = strtolower($filter[0]);
+        $currency = strtolower($this->filter[0]);
 
         if (!$allowedCurrencies->inArray($currency)) {
             $this->exceptionMessages[] = 'Invalid Currency item filter value supplied. Allowed currencies are '.implode(',', $allowedCurrencies);

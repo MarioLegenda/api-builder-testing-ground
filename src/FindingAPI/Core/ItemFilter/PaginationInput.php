@@ -2,21 +2,21 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class PaginationInput extends AbstractConstraint implements FilterInterface
+class PaginationInput extends AbstractFilter implements FilterInterface
 {
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filter) : bool
+    public function validateFilter() : bool
     {
-        if (!$this->genericValidation($filter, 1)) {
+        if (!$this->genericValidation($this->filter, 1)) {
             return false;
         }
 
         $validValues = array('entriesPerPage', 'pageNumber');
 
-        $filter = $filter[0];
+        $filter = $this->filter[0];
 
         if (in_array($filter, $validValues) === false) {
             $this->exceptionMessages[] = 'PaginationInput can be only '.implode(', ', $validValues);

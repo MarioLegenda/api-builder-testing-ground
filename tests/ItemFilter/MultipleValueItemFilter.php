@@ -2,21 +2,20 @@
 
 namespace Test\ItemFilter;
 
-
-use FindingAPI\Core\ItemFilter\AbstractConstraint;
+use FindingAPI\Core\ItemFilter\AbstractFilter;
 use FindingAPI\Core\ItemFilter\FilterInterface;
 use StrongType\ArrayType;
 
-class MultipleValueItemFilter extends AbstractConstraint implements FilterInterface
+class MultipleValueItemFilter extends AbstractFilter implements FilterInterface
 {
     protected $filter;
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filter) : bool
+    public function validateFilter() : bool
     {
-        if (!$this->genericValidation($filter)) {
+        if (!$this->genericValidation($this->filter)) {
             return false;
         }
 
@@ -25,7 +24,7 @@ class MultipleValueItemFilter extends AbstractConstraint implements FilterInterf
             'id-values' => array(1000, 1500, 1750, 2000, 2500, 3000, 4000, 5000, 6000, 7000),
         ));
 
-        $uniques = array_unique($filter);
+        $uniques = array_unique($this->filter);
 
         foreach ($uniques as $val) {
             if (!$allowedValues->inArray($val, 'text-values') and !$allowedValues->inArray($val, 'id-values')) {

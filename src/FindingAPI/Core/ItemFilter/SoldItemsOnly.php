@@ -2,18 +2,18 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class SoldItemsOnly extends AbstractConstraint implements FilterInterface
+class SoldItemsOnly extends AbstractFilter implements FilterInterface
 {
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filter) : bool
+    public function validateFilter() : bool
     {
-        if (!$this->genericValidation($filter, 1)) {
+        if (!$this->genericValidation($this->filter, 1)) {
             return false;
         }
 
-        return parent::checkBoolean($filter[0]);
+        return parent::checkBoolean($this->filter[0]);
     }
 }

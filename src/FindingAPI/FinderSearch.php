@@ -72,11 +72,11 @@ class FinderSearch
      */
     public function send() : FinderSearch
     {
-        $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        //$this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
 
         (new RequestValidator($this->request))->validate();
 
-        $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        //$this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
 
         $processors = (new ProcessorFactory($this->request))->createProcessors();
 

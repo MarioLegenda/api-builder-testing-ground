@@ -2,19 +2,19 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class StartTimeTo extends AbstractConstraint implements FilterInterface
+class StartTimeTo extends AbstractFilter implements FilterInterface
 {
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filter) : bool
+    public function validateFilter() : bool
     {
-        if (!$this->genericValidation($filter, 1)) {
+        if (!$this->genericValidation($this->filter, 1)) {
             return false;
         }
 
-        $filter = $filter[0];
+        $filter = $this->filter[0];
 
         if (!$filter instanceof \DateTime) {
             $this->exceptionMessages[] = 'Invalid value supplied for '.$this->name.' Value has to be a DateTime instance in the future';

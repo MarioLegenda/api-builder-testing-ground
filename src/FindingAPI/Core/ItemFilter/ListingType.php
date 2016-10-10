@@ -2,15 +2,15 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class ListingType extends AbstractConstraint implements FilterInterface
+class ListingType extends AbstractFilter implements FilterInterface
 {
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filter) : bool
+    public function validateFilter() : bool
     {
-        $filter = $filter[0];
+        $filter = $this->filter[0];
         $validFilters = array('All', 'AuctionWithBIN', 'Classified', 'FixedPrice', 'StoreInventory');
 
         if (in_array($filter, $validFilters) === false) {

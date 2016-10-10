@@ -1,27 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: marioskrlec
- * Date: 28/09/16
- * Time: 17:58
- */
 
 namespace FindingAPI\Core\ItemFilter;
 
-
-class ModTimeFrom extends AbstractConstraint implements FilterInterface
+class ModTimeFrom extends AbstractFilter implements FilterInterface
 {
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filter) : bool
+    public function validateFilter() : bool
     {
-        if (!$this->genericValidation($filter, 1)) {
+        if (!$this->genericValidation($this->filter, 1)) {
             return false;
         }
 
-        $filter = $filter[0];
+        $filter = $this->filter[0];
 
         if (!$filter instanceof \DateTime) {
             $this->exceptionMessages[] = 'Invalid value supplied for '.$this->name.' Value has to be a DateTime instance in the future';

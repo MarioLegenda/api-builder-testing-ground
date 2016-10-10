@@ -4,16 +4,16 @@ namespace FindingAPI\Core\ItemFilter;
 
 use StrongType\ArrayType;
 
-class Condition extends AbstractConstraint implements FilterInterface
+class Condition extends AbstractFilter implements FilterInterface
 {
     protected $filter;
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filter) : bool
+    public function validateFilter() : bool
     {
-        if (!$this->genericValidation($filter)) {
+        if (!$this->genericValidation($this->filter)) {
             return false;
         }
 
@@ -22,7 +22,7 @@ class Condition extends AbstractConstraint implements FilterInterface
             'id-values' => array(1000, 1500, 1750, 2000, 2500, 3000, 4000, 5000, 6000, 7000),
         ));
 
-        $uniques = array_unique($filter);
+        $uniques = array_unique($this->filter);
 
         foreach ($uniques as $val) {
             if (!$allowedValues->inArray($val, 'text-values') and !$allowedValues->inArray($val, 'id-values')) {

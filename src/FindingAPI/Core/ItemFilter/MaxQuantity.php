@@ -2,19 +2,19 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class MaxQuantity extends AbstractConstraint implements FilterInterface
+class MaxQuantity extends AbstractFilter implements FilterInterface
 {
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filter) : bool
+    public function validateFilter() : bool
     {
-        if (!$this->genericValidation($filter, 1)) {
+        if (!$this->genericValidation($this->filter, 1)) {
             return false;
         }
 
-        $filter = $filter[0];
+        $filter = $this->filter[0];
 
         if ($filter < 1) {
             $this->exceptionMessages[] = $this->name.' has to be an integer greater than or equal to 1';

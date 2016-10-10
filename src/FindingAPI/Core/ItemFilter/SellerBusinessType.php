@@ -4,15 +4,15 @@ namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Information\GlobalId;
 
-class SellerBusinessType extends AbstractConstraint implements FilterInterface
+class SellerBusinessType extends AbstractFilter implements FilterInterface
 {
     /**
      * @param array $filter
      * @return bool
      */
-    public function validateFilter(array $filters) : bool
+    public function validateFilter() : bool
     {
-        if (!$this->genericValidation($filters, 2)) {
+        if (!$this->genericValidation($this->filter, 2)) {
             return false;
         }
 
@@ -30,8 +30,8 @@ class SellerBusinessType extends AbstractConstraint implements FilterInterface
             'EBAY-GB',
         );
 
-        $filter = $filters[0];
-        $siteId = $filters[1];
+        $filter = $this->filter[0];
+        $siteId = $this->filter[1];
 
         if (!GlobalId::instance()->has($siteId)) {
             $this->exceptionMessages[] = $this->name.' item filter can be used only on '.implode(', ', $validSites).' ebay sites. '.$siteId.' given';
@@ -55,7 +55,7 @@ class SellerBusinessType extends AbstractConstraint implements FilterInterface
             return false;
         }
 
-        $this->filter = array($filters[0]);
+        $this->filter = array($this->filter[0]);
 
         return true;
 
