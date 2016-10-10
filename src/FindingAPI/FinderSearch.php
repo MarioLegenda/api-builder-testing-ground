@@ -67,18 +67,6 @@ class FinderSearch
         return $this->processed;
     }
     /**
-     * @param string $eventName
-     * @param $callable
-     * @param string $method
-     * @return FinderSearch
-     */
-    public function addEventListener(string $eventName, $callable, string $method) : FinderSearch
-    {
-        $this->eventDispatcher->addListener($eventName, array($callable, $method));
-
-        return $this;
-    }
-    /**
      * @return FinderSearch
      * @throws Core\Exception\FindingApiException
      */
