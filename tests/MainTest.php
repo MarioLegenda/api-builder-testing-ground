@@ -5,9 +5,10 @@ namespace Test;
 require __DIR__.'/../vendor/autoload.php';
 
 use FindingAPI\Core\Information\OperationName;
-use FindingAPI\FinderSearch;
+use FindingAPI\Core\Response;
+use FindingAPI\Finding;
 use FindingAPI\Core\Request;
-use FindingAPI\Definition\DefinitionFactory;
+use FindingAPI\Definition\Definition;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Information\Currency;
 use FindingAPI\Core\Information\SortOrder;
@@ -61,7 +62,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->setPaginationInput(20, 'pageNumber')
             ->setOutputSelector(array('SellerInfo', 'StoreInfo'))
             //->addOption(Options::SMART_GUESS_SYSTEM)
-            ->addSearch(DefinitionFactory::customDefinition('harry potter'))
+            ->addSearch(Definition::customDefinition('harry potter'))
             ->addItemFilter(ItemFilter::AUTHORIZED_SELLER_ONLY, array(true))
             ->addItemFilter(ItemFilter::AVAILABLE_TO, array('AF'))
             ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
@@ -113,14 +114,22 @@ class MainTest extends \PHPUnit_Framework_TestCase
      */
     public function testFinder(Request $request)
     {
-        $finder = FinderSearch::getInstance($request);
+        $finder = Finding::getInstance($request);
 
         $finder->setValidationRule('global-item-filters', false);
         $finder->setValidationRule('individual-item-filters', false);
 
         $processed = $finder->send()->getProcessed();
 
-        var_dump($processed);
-        die();
+        $response = $finder->getResponse();
+
+        return $response;
+    }
+    /**
+     * @depends testFinder
+     */
+    public function testResponse(Response $response)
+    {
+
     }
 }

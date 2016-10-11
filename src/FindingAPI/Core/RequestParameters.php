@@ -10,11 +10,11 @@ class RequestParameters implements \IteratorAggregate
     /**
      * const string
      */
-    const REQUEST_METHOD_POST = 'POST';
+    const REQUEST_METHOD_POST = 'post';
     /**
      * const string
      */
-    const REQUEST_METHOD_GET = 'GET';
+    const REQUEST_METHOD_GET = 'get';
     /**
      * const string
      */

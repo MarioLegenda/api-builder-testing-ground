@@ -9,10 +9,12 @@ use Symfony\Component\Yaml\Yaml;
 use FindingAPI\Definition\SearchDefinitionInterface;
 use FindingAPI\Definition\Exception\DefinitionException;
 use FindingAPI\Definition\DefinitionValidator;
-use FindingAPI\Definition\DefinitionFactory;
+use FindingAPI\Definition\Definition;
 use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 use FindingAPI\Core\Exception\ItemFilterException;
+
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 class Request
 {
@@ -52,7 +54,7 @@ class Request
 
         $this->options = new Options();
 
-        DefinitionFactory::initiate($this->options);
+        Definition::initiate($this->options);
     }
     /**
      * @return Request
@@ -101,7 +103,7 @@ class Request
      */
     public function setMethod(string $method) : Request
     {
-        if (RequestParameters::REQUEST_METHOD_GET !== $method and RequestParameters::REQUEST_METHOD_POST !== $method) {
+        if (RequestParameters::REQUEST_METHOD_GET !== strtolower($method) and RequestParameters::REQUEST_METHOD_POST !== strtolower($method)) {
             throw new RequestException('Unknown request method '.$method.'. Only GET and POST are allowed');
         }
 
@@ -233,7 +235,7 @@ class Request
                     throw new DefinitionException($e->getMessage());
                 }
 
-                $definition = DefinitionFactory::$definitionMethod($definition->getDefinition());
+                $definition = Definition::$definitionMethod($definition->getDefinition());
 
                 $definition->validateDefinition();
             }
@@ -299,12 +301,13 @@ class Request
     /**
      * @param string $definitionType
      */
-    public function sendRequest(string $request)
+    public function sendRequest(string $request) : GuzzleResponse
     {
         $client = new Client();
 
-        $response = $client->request($this->getRequestParameters()->getParameter('method')->getValue(), $request);
+        return $client->request($this->getRequestParameters()->getParameter('method')->getValue(), $request);
 
-        var_dump((string) $response->getBody());
+        //var_dump(get_class($response));
+        //var_dump((string) $response->getBody());
     }
 }

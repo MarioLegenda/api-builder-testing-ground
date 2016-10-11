@@ -6,7 +6,7 @@ namespace FindingAPI\Definition;
 
 use FindingAPI\Core\Options;
 
-class DefinitionFactory
+class Definition
 {
     /**
      * @var static DefinitionFactory $instance

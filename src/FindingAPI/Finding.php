@@ -8,16 +8,23 @@ use FindingAPI\Core\Listener\PostValidateItemFilters;
 use FindingAPI\Core\Listener\PreValidateItemFilters;
 use FindingAPI\Core\RequestValidator;
 use FindingAPI\Core\Request;
+use FindingAPI\Core\Response;
+use FindingAPI\Core\ResponseParser\ResponseParser;
 use FindingAPI\Processor\Factory\ProcessorFactory;
 use FindingAPI\Processor\RequestProducer;
+
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class FinderSearch
+class Finding
 {
     /**
      * @var Request $configuration
      */
     private $request;
+    /**
+     * @var Response $response
+     */
+    private $response;
     /**
      * @var EventDispatcher
      */
@@ -39,15 +46,15 @@ class FinderSearch
     private static $instance;
     /**
      * @param Request|null $configuration
-     * @return FinderSearch
+     * @return $this
      */
-    public static function getInstance(Request $request) : FinderSearch
+    public static function getInstance(Request $request) : Finding
     {
         if (self::$instance instanceof self) {
             return self::$instance;
         }
 
-        self::$instance = new FinderSearch($request);
+        self::$instance = new Finding($request);
 
         return self::$instance;
     }
@@ -67,10 +74,10 @@ class FinderSearch
     /**
      * @param string $validationType
      * @param bool $rule
-     * @return FinderSearch
+     * @return $this
      * @throws FindingApiException
      */
-    public function setValidationRule(string $validationType, bool $rule) : FinderSearch
+    public function setValidationRule(string $validationType, bool $rule) : Finding
     {
         if (!array_key_exists($validationType, $this->validation)) {
             throw new FindingApiException('Unknown validation rule '.$validationType);
@@ -88,10 +95,10 @@ class FinderSearch
         return $this->processed;
     }
     /**
-     * @return FinderSearch
+     * @return $this
      * @throws Core\Exception\FindingApiException
      */
-    public function send() : FinderSearch
+    public function send() : Finding
     {
         $individualItemFilterValidation = $this->validation['individual-item-filters'];
         $globalItemFilterValidation = $this->validation['global-item-filters'];
@@ -112,8 +119,21 @@ class FinderSearch
 
         $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
 
-        $this->request->sendRequest($this->processed);
+        $guzzleResponse = $this->request->sendRequest($this->processed);
+
+        $xmlToParse = (string) $guzzleResponse->getBody();
+
+        $responseParser = new ResponseParser($xmlToParse, $guzzleResponse);
+
+        $this->response = $responseParser->parse()->createResponse()->getResponse();
 
         return $this;
+    }
+    /**
+     * @return Response
+     */
+    public function getResponse() : Response
+    {
+        return $this->response;
     }
 }
