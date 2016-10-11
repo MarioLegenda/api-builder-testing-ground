@@ -3,6 +3,7 @@
 namespace FindingAPI\Core\ResponseParser;
 
 use FindingAPI\Core\Response;
+use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 class ResponseParser
@@ -15,6 +16,12 @@ class ResponseParser
      * @var \SimpleXMLElement
      */
     private $simpleXml;
+    /**
+     * @var array $responseItems
+     */
+    private $responseItems = array(
+        'rootItem' => null,
+    );
     /**
      * ResponseParser constructor.
      * @param string $xmlString
@@ -30,6 +37,14 @@ class ResponseParser
      */
     public function parse() : ResponseParser
     {
+        $name = $this->simpleXml->getName();
+        $docNamespace = $this->simpleXml->getDocNamespaces();
+
+        $rootItem = new RootItem($name);
+        $rootItem->setNamespace($docNamespace[array_keys($docNamespace)[0]]);
+
+        $this->responseItems['rootItem'] = $rootItem;
+
         return $this;
     }
     /**
@@ -44,6 +59,6 @@ class ResponseParser
      */
     public function getResponse() : Response
     {
-        return new Response($this->guzzleResponse);
+        return new Response($this->guzzleResponse, $this->responseItems);
     }
 }

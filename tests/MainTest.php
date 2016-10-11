@@ -130,6 +130,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
      */
     public function testResponse(Response $response)
     {
-
+        $this->assertInternalType('string', $response->getRoot()->getName());
+        $this->assertEquals('http://www.ebay.com/marketplace/search/v1/services', $response->getRoot()->getNamespace());
     }
 }

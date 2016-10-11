@@ -2,10 +2,16 @@
 
 namespace FindingAPI\Core;
 
+use FindingAPI\Core\ResponseParser\ResponseItem\ResponseItemInterface;
+use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 class Response
 {
+    /**
+     * @var array $responseItems
+     */
+    private $responseItems;
     /**
      * @var GuzzleResponse
      */
@@ -13,10 +19,12 @@ class Response
     /**
      * Response constructor.
      * @param GuzzleResponse $guzzleResponse
+     * @param array $responseItems
      */
-    public function __construct(GuzzleResponse $guzzleResponse)
+    public function __construct(GuzzleResponse $guzzleResponse, array $responseItems)
     {
         $this->guzzleResponse = $guzzleResponse;
+        $this->responseItems = $responseItems;
     }
     /**
      * @return GuzzleResponse
@@ -26,10 +34,10 @@ class Response
         return $this->guzzleResponse;
     }
     /**
-     * @return string
+     * @return RootItem
      */
-    public function getResponseType() : string
+    public function getRoot() : RootItem
     {
-
+        return $this->responseItems['rootItem'];
     }
 }
