@@ -3,6 +3,8 @@
 namespace FindingAPI\Core\ResponseParser;
 
 use FindingAPI\Core\Response;
+use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect;
 use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
@@ -21,6 +23,7 @@ class ResponseParser
      */
     private $responseItems = array(
         'rootItem' => null,
+        'aspectHistogram' => null,
     );
     /**
      * ResponseParser constructor.
@@ -45,6 +48,24 @@ class ResponseParser
         $rootItem->setAck((string) $this->simpleXml->ack);
         $rootItem->setTimestamp((string) $this->simpleXml->timestamp);
         $rootItem->setVersion((string) $this->simpleXml->version);
+
+        if (isset($this->simpleXml->aspectHistogramContainer)) {
+            $aspectItems = $this->simpleXml->aspectHistogramContainer->getChildren();
+
+            $aspectHistogramContainer = new AspectHistogramContainer($this->simpleXml->aspectHistogramContainer->getName());
+
+            foreach ($aspectItems as $aspectItem) {
+                $aspect = new Aspect(
+                    $aspectItem['name'],
+                    $aspectItem->valueHistogram['valueName'],
+                    $aspectItem->valueHistogram->count
+                );
+
+                $aspectHistogramContainer->addAspect($aspect);
+            }
+
+            $this->responseItems['aspectHistogram'] = $aspectHistogramContainer;
+        }
 
         $this->responseItems['rootItem'] = $rootItem;
 

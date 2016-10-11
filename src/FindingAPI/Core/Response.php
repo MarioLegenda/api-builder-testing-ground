@@ -2,6 +2,7 @@
 
 namespace FindingAPI\Core;
 
+use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\ResponseItemInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
@@ -39,5 +40,13 @@ class Response
     public function getRoot() : RootItem
     {
         return $this->responseItems['rootItem'];
+    }
+
+    /**
+     * @return null|AspectHistogramContainer
+     */
+    public function getAspectFilters()
+    {
+        return $this->responseItems['aspectHistogram'];
     }
 }
