@@ -5,6 +5,18 @@ namespace FindingAPI\Core\ResponseParser\ResponseItem;
 class RootItem implements ResponseItemInterface
 {
     /**
+     * @var string $timestamp
+     */
+    private $timestamp;
+    /**
+     * @var string $ack
+     */
+    private $ack;
+    /**
+     * @var string $version
+     */
+    private $version;
+    /**
      * @var string $itemName
      */
     private $itemName;
@@ -43,5 +55,56 @@ class RootItem implements ResponseItemInterface
     public function getName() : string
     {
         return $this->itemName;
+    }
+    /**
+     * @param string $version
+     * @return RootItem
+     */
+    public function setVersion(string $version) : RootItem
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getVersion() : string
+    {
+        return $this->version;
+    }
+    /**
+     * @param string $ack
+     * @return RootItem
+     */
+    public function setAck(string $ack) : RootItem
+    {
+        $this->ack = $ack;
+
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getAck() : string
+    {
+        return $this->ack;
+    }
+    /**
+     * @param string $timestamp
+     * @return RootItem
+     */
+    public function setTimestamp(string $timestamp) : RootItem
+    {
+        $this->timestamp = $timestamp;
+
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getTimestamp() : string
+    {
+        return $this->timestamp;
     }
 }

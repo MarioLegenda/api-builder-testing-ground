@@ -42,6 +42,9 @@ class ResponseParser
 
         $rootItem = new RootItem($name);
         $rootItem->setNamespace($docNamespace[array_keys($docNamespace)[0]]);
+        $rootItem->setAck((string) $this->simpleXml->ack);
+        $rootItem->setTimestamp((string) $this->simpleXml->timestamp);
+        $rootItem->setVersion((string) $this->simpleXml->version);
 
         $this->responseItems['rootItem'] = $rootItem;
 

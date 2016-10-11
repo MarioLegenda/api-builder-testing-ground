@@ -130,7 +130,10 @@ class MainTest extends \PHPUnit_Framework_TestCase
      */
     public function testResponse(Response $response)
     {
-        $this->assertInternalType('string', $response->getRoot()->getName());
-        $this->assertEquals('http://www.ebay.com/marketplace/search/v1/services', $response->getRoot()->getNamespace());
+        $this->assertInternalType('string', $response->getRoot()->getName(), 'RootItem name should be ebay method name, for instance findItemByKeywordsResponse');
+        $this->assertEquals('http://www.ebay.com/marketplace/search/v1/services', $response->getRoot()->getNamespace(), 'Invalid ebay api url, not a string');
+        $this->assertInternalType('string', $response->getRoot()->getAck(), 'Invalid ack. Ack should be something like Success');
+        $this->assertInternalType('string', $response->getRoot()->getTimestamp(), 'Invalid timestamp. Not a string');
+        $this->assertInternalType('string', $response->getRoot()->getVersion(), 'Invalid version. Not a string');
     }
 }
