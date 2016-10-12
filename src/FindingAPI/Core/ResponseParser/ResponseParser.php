@@ -40,35 +40,8 @@ class ResponseParser
      */
     public function parse() : ResponseParser
     {
-        $name = $this->simpleXml->getName();
-        $docNamespace = $this->simpleXml->getDocNamespaces();
-
-        $rootItem = new RootItem($name);
-        $rootItem->setNamespace($docNamespace[array_keys($docNamespace)[0]]);
-        $rootItem->setAck((string) $this->simpleXml->ack);
-        $rootItem->setTimestamp((string) $this->simpleXml->timestamp);
-        $rootItem->setVersion((string) $this->simpleXml->version);
-        $rootItem->setSearchResultsCount((string) $this->simpleXml->searchResult['count']);
-
-        if (isset($this->simpleXml->aspectHistogramContainer)) {
-            $aspectItems = $this->simpleXml->aspectHistogramContainer->getChildren();
-
-            $aspectHistogramContainer = new AspectHistogramContainer($this->simpleXml->aspectHistogramContainer->getName());
-
-            foreach ($aspectItems as $aspectItem) {
-                $aspect = new Aspect(
-                    $aspectItem['name'],
-                    $aspectItem->valueHistogram['valueName'],
-                    $aspectItem->valueHistogram->count
-                );
-
-                $aspectHistogramContainer->addAspect($aspect);
-            }
-
-            $this->responseItems['aspectHistogram'] = $aspectHistogramContainer;
-        }
-
-        $this->responseItems['rootItem'] = $rootItem;
+        $this->createRootItem($this->simpleXml);
+        $this->createAspectHistogramContainer($this->simpleXml);
 
         return $this;
     }
@@ -85,5 +58,42 @@ class ResponseParser
     public function getResponse() : Response
     {
         return new Response($this->guzzleResponse, $this->responseItems);
+    }
+
+    private function createRootItem(\SimpleXMLElement $simpleXml)
+    {
+        $name = $simpleXml->getName();
+        $docNamespace = $simpleXml->getDocNamespaces();
+
+        $rootItem = new RootItem($name);
+        $rootItem
+            ->setNamespace($docNamespace[array_keys($docNamespace)[0]])
+            ->setAck((string) $this->simpleXml->ack)
+            ->setTimestamp((string) $this->simpleXml->timestamp)
+            ->setVersion((string) $this->simpleXml->version)
+            ->setSearchResultsCount((string) $this->simpleXml->searchResult['count']);
+
+        $this->responseItems['rootItem'] = $rootItem;
+    }
+
+    private function createAspectHistogramContainer(\SimpleXMLElement $simpleXml)
+    {
+        if (isset($simpleXml->aspectHistogramContainer)) {
+            $aspectItems = $simpleXml->aspectHistogramContainer->getChildren();
+
+            $aspectHistogramContainer = new AspectHistogramContainer($simpleXml->aspectHistogramContainer->getName());
+
+            foreach ($aspectItems as $aspectItem) {
+                $aspect = new Aspect(
+                    $aspectItem['name'],
+                    $aspectItem->valueHistogram['valueName'],
+                    $aspectItem->valueHistogram->count
+                );
+
+                $aspectHistogramContainer->addAspect($aspect);
+            }
+
+            $this->responseItems['aspectHistogram'] = $aspectHistogramContainer;
+        }
     }
 }
