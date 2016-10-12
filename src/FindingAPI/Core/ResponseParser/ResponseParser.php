@@ -5,6 +5,8 @@ namespace FindingAPI\Core\ResponseParser;
 use FindingAPI\Core\Response;
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\PrimaryCategory;
 use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
@@ -105,7 +107,19 @@ class ResponseParser
         $items = $simpleXml->searchResult->children();
 
         foreach ($items as $item) {
-            
+            $productItem = new Item($item->getName());
+
+            $productItem->setTitle((string) $item->{'title'});
+            $productItem->setGlobalId((string) $item->globalId);
+            $productItem->setItemId((string) $item->itemId);
+
+            $primaryCategory = new PrimaryCategory(
+                $simpleXml->primaryCategory->getName(),
+                (string) $simpleXml->primaryCategory->categoryId,
+                (string) $simpleXml->primaryCategory->categoryName
+            );
+
+            $productItem->setPrimaryCategory($primaryCategory);
         }
     }
 }

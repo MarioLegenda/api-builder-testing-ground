@@ -8,6 +8,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
 class Item extends AbstractItemIterator
 {
     /**
+     * @var PrimaryCategory $primaryCategory
+     */
+    private $primaryCategory;
+    /**
      * @var string $globalId
      */
     private $globalId;
@@ -69,5 +73,29 @@ class Item extends AbstractItemIterator
     public function getGlobalId() : string
     {
         return $this->globalId;
+    }
+    /**
+     * @param PrimaryCategory $primaryCategory
+     * @return $item
+     */
+    public function setPrimaryCategory(PrimaryCategory $primaryCategory) : Item
+    {
+        $this->primaryCategory = $primaryCategory;
+
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getPrimaryCategoryId() : string
+    {
+        return $this->primaryCategory->getCategoryId();
+    }
+    /**
+     * @return string
+     */
+    public function getPrimaryCategoryName() : string
+    {
+        return $this->primaryCategory->getCategoryName();
     }
 }
