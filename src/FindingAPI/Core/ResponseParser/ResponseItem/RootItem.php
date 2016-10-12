@@ -39,6 +39,12 @@ class RootItem extends AbstractItem implements ResponseItemInterface
      */
     public function getNamespace() : string
     {
+        if ($this->itemNamespace === null) {
+            $docNamespace = $this->simpleXml->getDocNamespaces();
+
+            $this->setNamespace($docNamespace[array_keys($docNamespace)[0]]);
+        }
+
         return $this->itemNamespace;
     }
     /**
@@ -56,6 +62,10 @@ class RootItem extends AbstractItem implements ResponseItemInterface
      */
     public function getVersion() : string
     {
+        if ($this->version === null) {
+            $this->setVersion((string) $this->simpleXml->version);
+        }
+
         return $this->version;
     }
     /**
@@ -73,6 +83,10 @@ class RootItem extends AbstractItem implements ResponseItemInterface
      */
     public function getAck() : string
     {
+        if ($this->ack === null) {
+            $this->setAck((string) $this->simpleXml->ack);
+        }
+
         return $this->ack;
     }
     /**
@@ -90,6 +104,10 @@ class RootItem extends AbstractItem implements ResponseItemInterface
      */
     public function getTimestamp() : string
     {
+        if ($this->timestamp === null) {
+            $this->setTimestamp((string) $this->simpleXml->timestamp);
+        }
+
         return $this->timestamp;
     }
     /**

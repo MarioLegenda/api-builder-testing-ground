@@ -5,16 +5,21 @@ namespace FindingAPI\Core\ResponseParser\ResponseItem;
 abstract class AbstractItem
 {
     /**
+     * @var $simpleXml
+     */
+    protected $simpleXml;
+    /**
      * @var string $itemName
      */
     protected $itemName;
     /**
      * RootItem constructor.
-     * @param string $name
+     * @param \SimpleXmlElement $simpleXML
      */
-    public function __construct(string $name)
+    public function __construct(\SimpleXMLElement $simpleXML)
     {
-        $this->itemName = $name;
+        $this->itemName = $simpleXML->getName();
+        $this->simpleXml = $simpleXML;
     }
     /**
      * @return string

@@ -9,7 +9,6 @@ use FindingAPI\Core\Listener\PreValidateItemFilters;
 use FindingAPI\Core\RequestValidator;
 use FindingAPI\Core\Request;
 use FindingAPI\Core\Response;
-use FindingAPI\Core\ResponseParser\ResponseParser;
 use FindingAPI\Processor\Factory\ProcessorFactory;
 use FindingAPI\Processor\RequestProducer;
 
@@ -123,9 +122,7 @@ class Finding
 
         $xmlToParse = (string) $guzzleResponse->getBody();
 
-        $responseParser = new ResponseParser($xmlToParse, $guzzleResponse);
-
-        $this->response = $responseParser->parse()->createResponse()->getResponse();
+        $this->response = new Response(simplexml_load_string($xmlToParse), $guzzleResponse);
 
         return $this;
     }
