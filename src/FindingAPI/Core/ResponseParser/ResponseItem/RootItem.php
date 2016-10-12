@@ -5,6 +5,10 @@ namespace FindingAPI\Core\ResponseParser\ResponseItem;
 class RootItem extends AbstractItem implements ResponseItemInterface
 {
     /**
+     * @var string $searchResultsCount
+     */
+    private $searchResultsCount;
+    /**
      * @var string $timestamp
      */
     private $timestamp;
@@ -87,5 +91,22 @@ class RootItem extends AbstractItem implements ResponseItemInterface
     public function getTimestamp() : string
     {
         return $this->timestamp;
+    }
+    /**
+     * @param string $count
+     * @return RootItem
+     */
+    public function setSearchResultsCount(string $count) : RootItem
+    {
+        $this->searchResultsCount = $count;
+
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getSearchResultsCount() : string
+    {
+        return $this->searchResultsCount;
     }
 }

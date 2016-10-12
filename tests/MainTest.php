@@ -135,5 +135,6 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $response->getRoot()->getAck(), 'Invalid ack. Ack should be something like Success');
         $this->assertInternalType('string', $response->getRoot()->getTimestamp(), 'Invalid timestamp. Not a string');
         $this->assertInternalType('string', $response->getRoot()->getVersion(), 'Invalid version. Not a string');
+        $this->assertInternalType('string', $response->getRoot()->getSearchResultsCount(), 'Invalid search results count. Not a string');
     }
 }

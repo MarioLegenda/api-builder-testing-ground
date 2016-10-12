@@ -48,6 +48,7 @@ class ResponseParser
         $rootItem->setAck((string) $this->simpleXml->ack);
         $rootItem->setTimestamp((string) $this->simpleXml->timestamp);
         $rootItem->setVersion((string) $this->simpleXml->version);
+        $rootItem->setSearchResultsCount((string) $this->simpleXml->searchResult['count']);
 
         if (isset($this->simpleXml->aspectHistogramContainer)) {
             $aspectItems = $this->simpleXml->aspectHistogramContainer->getChildren();
