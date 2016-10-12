@@ -42,6 +42,7 @@ class ResponseParser
     {
         $this->createRootItem($this->simpleXml);
         $this->createAspectHistogramContainer($this->simpleXml);
+        $this->createItemsContainer($this->simpleXml);
 
         return $this;
     }
@@ -90,10 +91,21 @@ class ResponseParser
                     $aspectItem->valueHistogram->count
                 );
 
-                $aspectHistogramContainer->addAspect($aspect);
+                $aspectHistogramContainer->addItem($aspect);
             }
 
             $this->responseItems['aspectHistogram'] = $aspectHistogramContainer;
+        }
+    }
+    /**
+     * @param \SimpleXMLElement $simpleXml
+     */
+    private function createItemsContainer(\SimpleXMLElement $simpleXml)
+    {
+        $items = $simpleXml->searchResult->children();
+
+        foreach ($items as $item) {
+            
         }
     }
 }

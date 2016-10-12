@@ -56,13 +56,18 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         $request
             ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
+            ->setMethod('get')
+            ->setResponseDataFormat('xml')
+            ->setSecurityAppId('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
+            ->addSearch(Definition::customDefinition('harry potter'));
+ //           ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
             //->specialFeature()->findLocalItems(31000)
 //            ->setBuyerPostalCode(31000)
-            ->setSortOrder(SortOrder::START_TIME_NEWEST)
-            ->setPaginationInput(20, 'pageNumber')
-            ->setOutputSelector(array('SellerInfo', 'StoreInfo'))
+//            ->setSortOrder(SortOrder::START_TIME_NEWEST)
+//            ->setPaginationInput(20, 'pageNumber')
+//            ->setOutputSelector(array('SellerInfo', 'StoreInfo'))
             //->addOption(Options::SMART_GUESS_SYSTEM)
-            ->addSearch(Definition::customDefinition('harry potter'))
+/*            ->addSearch(Definition::customDefinition('harry potter'))
             ->addItemFilter(ItemFilter::AUTHORIZED_SELLER_ONLY, array(true))
             ->addItemFilter(ItemFilter::AVAILABLE_TO, array('AF'))
             ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
@@ -105,7 +110,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::START_TIME_FROM, array(new \DateTime('1.9.2018')))
             ->addItemFilter(ItemFilter::START_TIME_TO, array(new \DateTime('1.9.2019')))
             ->addItemFilter(ItemFilter::TOP_RATED_SELLER_ONLY, array(true))
-            ->addItemFilter(ItemFilter::WORLD_OF_GOOD_ONLY, array(false));
+            ->addItemFilter(ItemFilter::WORLD_OF_GOOD_ONLY, array(false));*/
 
         return $request;
     }

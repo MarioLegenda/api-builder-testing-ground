@@ -2,64 +2,12 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem;
 
-use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect;
-
-class AspectHistogramContainer extends AbstractItem implements \Iterator
+class AspectHistogramContainer extends AbstractItemIterator
 {
     /**
      * @var array $aspects
      */
     private $aspects = array();
-    /**
-     * @var int $position
-     */
-    private $position = 0;
-    /**
-     * @param ResponseItemInterface $aspect
-     */
-    public function addAspect(ResponseItemInterface $aspect)
-    {
-        $this->aspects[] = $aspect;
-    }
-    /**
-     * @return \Iterator
-     */
-    public function rewind() : \Iterator
-    {
-        $this->position = 0;
-
-        return $this;
-    }
-    /**
-     * @return Aspect
-     */
-    public function current() : Aspect
-    {
-        return $this->aspects[$this->position];
-    }
-    /**
-     * @return int
-     */
-    public function key() : int
-    {
-        return $this->position;
-    }
-    /**
-     * @return \Iterator
-     */
-    public function next() : \Iterator
-    {
-        ++$this->position;
-
-        return $this;
-    }
-    /**
-     * @return bool
-     */
-    public function valid() : bool
-    {
-        return isset($this->aspects[$this->position]);
-    }
     /**
      * @param string $aspectName
      * @return array
