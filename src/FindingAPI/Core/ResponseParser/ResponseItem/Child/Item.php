@@ -8,6 +8,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
 class Item extends AbstractItemIterator
 {
     /**
+     * @var string $galleryUrl
+     */
+    private $galleryUrl;
+    /**
      * @var PrimaryCategory $primaryCategory
      */
     private $primaryCategory;
@@ -36,7 +40,7 @@ class Item extends AbstractItemIterator
     /**
      * @return string
      */
-    public function getItemId() : string
+    public function getItemId()
     {
         if ($this->itemId === null) {
             $this->setItemId((string) $this->simpleXml->itemId);
@@ -109,5 +113,26 @@ class Item extends AbstractItemIterator
     public function getPrimaryCategoryName() : string
     {
         return $this->primaryCategory->getCategoryName();
+    }
+    /**
+     * @param string $galleryUrl
+     * @return Item
+     */
+    public function setGalleryUrl(string $galleryUrl) : Item
+    {
+        $this->galleryUrl = $galleryUrl;
+
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getGalleryUrl() : string
+    {
+        if ($this->galleryUrl === null) {
+            $this->setGalleryUrl((string) $this->simpleXml->galleryURL);
+        }
+
+        return $this->galleryUrl;
     }
 }

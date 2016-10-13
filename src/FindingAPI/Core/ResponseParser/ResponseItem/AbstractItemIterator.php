@@ -46,18 +46,6 @@ class AbstractItemIterator extends AbstractItem implements \Iterator, \Countable
         return $this->iterated[$position];
     }
     /**
-     * @param string $name
-     * @return mixed|null
-     */
-    public function getItemByName(string $name)
-    {
-        if (!$this->hasItem($name)) {
-            return null;
-        }
-
-        return $this->iterated[$name];
-    }
-    /**
      * @param $key
      * @return bool
      */

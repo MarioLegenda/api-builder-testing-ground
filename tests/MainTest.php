@@ -6,6 +6,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Response;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 use FindingAPI\Finding;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\Definition;
@@ -146,6 +147,22 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $searchResults = $response->getSearchResults();
 
         $item = $searchResults->getItemById('360778402701');
+        $this->validateItem($item);
+
+        $item = $searchResults->getItemByName('Harry Potter Complete Book Series Special Edition Boxed Set by J.K. Rowling NEW!');
+        $this->validateItem($item);
+    }
+
+    private function validateItem(Item $item)
+    {
+
+        if ($item->getGalleryUrl() !== null) {
+            $this->assertInternalType('string', $item->getGalleryUrl(), 'Item::getGalleryUrl() should return a string');
+        }
+
+        $this->assertInternalType('string', $item->getItemId(), 'Item::getItemId() should return a string');
+        $this->assertInternalType('string', $item->getGlobalId(), 'Item::getGlobalId() should return a string');
+        $this->assertInternalType('string', $item->getTitle(), 'Item::getTitle() should return a title');
 
         $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item', $item, 'Invalid Item');
 
