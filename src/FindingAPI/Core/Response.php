@@ -20,6 +20,7 @@ class Response
     private $responseItems = array(
         'rootItem' => null,
         'aspectHistogram' => null,
+        'searchResult' => null,
     );
     /**
      * @var GuzzleResponse
@@ -47,18 +48,6 @@ class Response
      */
     public function getRoot() : RootItem
     {
-        return $this->createRootItem();
-    }
-    /**
-     * @return null|AspectHistogramContainer
-     */
-    public function getAspectFilters()
-    {
-        return $this->responseItems['aspectHistogram'];
-    }
-
-    private function createRootItem() : RootItem
-    {
         if ($this->responseItems['rootItem'] instanceof RootItem) {
             return $this->responseItems['rootItem'];
         }
@@ -66,5 +55,35 @@ class Response
         $this->responseItems['rootItem'] = new RootItem($this->simpleXmlBase);
 
         return $this->responseItems['rootItem'];
+    }
+    /**
+     * @return null|AspectHistogramContainer
+     */
+    public function getAspectFilters()
+    {
+        if ($this->responseItems['aspectHistogram'] instanceof RootItem) {
+            return $this->responseItems['aspectHistogram'];
+        }
+
+        $this->responseItems['aspectHistogram'] = new AspectHistogramContainer($this->simpleXmlBase->aspectHistogramContainer);
+
+        return $this->responseItems['aspectHistogram'];
+    }
+    /**
+     * @return SearchResultsContainer
+     */
+    public function getSearchResults() : SearchResultsContainer
+    {
+        if ($this->responseItems['searchResult'] instanceof RootItem) {
+            return $this->responseItems['searchResult'];
+        }
+
+        $this->responseItems['searchResult'] = new SearchResultsContainer($this->simpleXmlBase->searchResult);
+
+        return $this->responseItems['searchResult'];
+    }
+
+    private function createRootItem() : RootItem
+    {
     }
 }

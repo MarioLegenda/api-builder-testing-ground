@@ -5,17 +5,13 @@ namespace FindingAPI\Core\ResponseParser\ResponseItem;
 class AspectHistogramContainer extends AbstractItemIterator
 {
     /**
-     * @var array $aspects
-     */
-    private $aspects = array();
-    /**
      * @param string $aspectName
      * @return array
      */
     public function getAspectByName(string $aspectName) : array
     {
         $aspects = array();
-        foreach ($this->aspects as $aspect) {
+        foreach ($this->iterated as $aspect) {
             if ($aspect->getName() === $aspectName) {
                 $this->aspects[] = $aspect;
             }

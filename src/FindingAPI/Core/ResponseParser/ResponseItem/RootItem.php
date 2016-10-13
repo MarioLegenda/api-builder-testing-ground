@@ -121,10 +121,14 @@ class RootItem extends AbstractItem implements ResponseItemInterface
         return $this;
     }
     /**
-     * @return string
+     * @return int
      */
-    public function getSearchResultsCount() : string
+    public function getSearchResultsCount() : int
     {
+        if ($this->searchResultsCount === null) {
+            $this->searchResultsCount = (int) $this->simpleXml->searchResult['count'];
+        }
+
         return $this->searchResultsCount;
     }
 }

@@ -140,6 +140,16 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $response->getRoot()->getAck(), 'Invalid ack. Ack should be something like Success');
         $this->assertInternalType('string', $response->getRoot()->getTimestamp(), 'Invalid timestamp. Not a string');
         $this->assertInternalType('string', $response->getRoot()->getVersion(), 'Invalid version. Not a string');
-        //$this->assertInternalType('string', $response->getRoot()->getSearchResultsCount(), 'Invalid search results count. Not a string');
+        $this->assertInternalType('int', $response->getRoot()->getSearchResultsCount(), 'Invalid search results count. Not a string');
+
+
+        $searchResults = $response->getSearchResults();
+
+        $item = $searchResults->getItemById('360778402701');
+
+        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item', $item, 'Invalid Item');
+
+        $this->assertInternalType('string', $item->getPrimaryCategoryId(), 'Invalid primary category id. Expected string');
+        $this->assertInternalType('string', $item->getPrimaryCategoryName(), 'Invalid primary category name. Expected string');
     }
 }

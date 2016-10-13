@@ -14,10 +14,64 @@ class AbstractItemIterator extends AbstractItem implements \Iterator, \Countable
     protected $iterated = array();
     /**
      * @param ResponseItemInterface $item
+     * @return ResponseItemInterface
      */
-    public function addItem(ResponseItemInterface $item)
+    public function addItem(ResponseItemInterface $item) : ResponseItemInterface
     {
         $this->iterated[] = $item;
+
+        return $this;
+    }
+
+    /**
+     * @param string $itemName
+     * @param ResponseItemInterface $item
+     */
+    public function addItemByName(string $itemName, ResponseItemInterface $item) : ResponseItemInterface
+    {
+        $this->iterated[$itemName] = $item;
+
+        return $this;
+    }
+    /**
+     * @param int $position
+     * @return mixed|null
+     */
+    public function getItemByPosition(int $position)
+    {
+        if ($this->hasItem($position)) {
+            return null;
+        }
+
+        return $this->iterated[$position];
+    }
+    /**
+     * @param string $name
+     * @return mixed|null
+     */
+    public function getItemByName(string $name)
+    {
+        if (!$this->hasItem($name)) {
+            return null;
+        }
+
+        return $this->iterated[$name];
+    }
+    /**
+     * @param $key
+     * @return bool
+     */
+    public function hasItem($key) : bool
+    {
+        return array_key_exists($key, $this->iterated);
+    }
+    /**
+     * @param \SimpleXMLElement $simpleXML
+     * @param \Closure $callable
+     */
+    public function loadItemsAsync(\SimpleXMLElement $simpleXML, \Closure $callable)
+    {
+        $callable->call($this, $simpleXML);
     }
     /**
      * @return \Iterator
@@ -28,6 +82,7 @@ class AbstractItemIterator extends AbstractItem implements \Iterator, \Countable
 
         return $this;
     }
+
     /**
      * @return mixed
      */
@@ -35,6 +90,7 @@ class AbstractItemIterator extends AbstractItem implements \Iterator, \Countable
     {
         return $this->iterated[$this->position];
     }
+
     /**
      * @return int
      */
@@ -42,6 +98,7 @@ class AbstractItemIterator extends AbstractItem implements \Iterator, \Countable
     {
         return $this->position;
     }
+
     /**
      * @return \Iterator
      */
@@ -51,6 +108,7 @@ class AbstractItemIterator extends AbstractItem implements \Iterator, \Countable
 
         return $this;
     }
+
     /**
      * @return bool
      */
@@ -58,6 +116,7 @@ class AbstractItemIterator extends AbstractItem implements \Iterator, \Countable
     {
         return isset($this->iterated[$this->position]);
     }
+
     /**
      * @return int
      */

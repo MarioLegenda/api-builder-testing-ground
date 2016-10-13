@@ -38,6 +38,10 @@ class Item extends AbstractItemIterator
      */
     public function getItemId() : string
     {
+        if ($this->itemId === null) {
+            $this->setItemId((string) $this->simpleXml->itemId);
+        }
+
         return $this->itemId;
     }
     /**
@@ -55,6 +59,10 @@ class Item extends AbstractItemIterator
      */
     public function getTitle() : string
     {
+        if ($this->title === null) {
+            $this->setTitle((string) $this->simpleXml->{'title'});
+        }
+
         return $this->title;
     }
     /**
@@ -72,6 +80,10 @@ class Item extends AbstractItemIterator
      */
     public function getGlobalId() : string
     {
+        if ($this->globalId === null) {
+            $this->setGlobalId((string) $this->simpleXml->globalId);
+        }
+
         return $this->globalId;
     }
     /**

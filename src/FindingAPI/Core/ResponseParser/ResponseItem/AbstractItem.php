@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem;
 
-abstract class AbstractItem
+abstract class AbstractItem implements ResponseItemInterface
 {
     /**
      * @var $simpleXml

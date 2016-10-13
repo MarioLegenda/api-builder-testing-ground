@@ -15,30 +15,45 @@ class PrimaryCategory extends AbstractItem
      */
     private $categoryName;
     /**
-     * PrimaryCategory constructor.
-     * @param string $name
-     * @param string $categoryId
-     * @param string $categoryName
-     */
-    public function __construct(string $name, string $categoryId, string $categoryName)
-    {
-        parent::__construct($name);
-
-        $this->categoryId = $categoryId;
-        $this->categoryName = $categoryName;
-    }
-    /**
      * @return string
      */
     public function getCategoryId() : string
     {
+        if ($this->categoryId === null) {
+            $this->setCategoryId((string) $this->simpleXml->categoryId);
+        }
+
         return $this->categoryId;
+    }
+    /**
+     * @param string $categoryId
+     * @return PrimaryCategory
+     */
+    public function setCategoryId(string $categoryId) : PrimaryCategory
+    {
+        $this->categoryId = $categoryId;
+
+        return $this;
     }
     /**
      * @return string
      */
     public function getCategoryName() : string
     {
+        if ($this->categoryName === null) {
+            $this->setCategoryName((string) $this->simpleXml->categoryName);
+        }
+
         return $this->categoryName;
+    }
+    /**
+     * @param string $categoryName
+     * @return PrimaryCategory
+     */
+    public function setCategoryName(string $categoryName) : PrimaryCategory
+    {
+        $this->categoryName = $categoryName;
+
+        return $this;
     }
 }
