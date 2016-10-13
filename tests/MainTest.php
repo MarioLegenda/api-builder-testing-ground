@@ -155,16 +155,16 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
     private function validateItem(Item $item)
     {
-
-        if ($item->getGalleryUrl() !== null) {
-            $this->assertInternalType('string', $item->getGalleryUrl(), 'Item::getGalleryUrl() should return a string');
-        }
+        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item', $item, 'Invalid Item');
 
         $this->assertInternalType('string', $item->getItemId(), 'Item::getItemId() should return a string');
         $this->assertInternalType('string', $item->getGlobalId(), 'Item::getGlobalId() should return a string');
         $this->assertInternalType('string', $item->getTitle(), 'Item::getTitle() should return a title');
+        $this->assertInternalType('string', $item->getViewItemUrl(), 'Item::getViewItemUrl() should return a string');
 
-        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item', $item, 'Invalid Item');
+        if ($item->getGalleryUrl() !== null) {
+            $this->assertInternalType('string', $item->getGalleryUrl(), 'Item::getGalleryUrl() should return a string');
+        }
 
         $this->assertInternalType('string', $item->getPrimaryCategoryId(), 'Invalid primary category id. Expected string');
         $this->assertInternalType('string', $item->getPrimaryCategoryName(), 'Invalid primary category name. Expected string');

@@ -8,6 +8,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
 class Item extends AbstractItemIterator
 {
     /**
+     * @var string $viewItemUrl
+     */
+    private $viewItemUrl;
+    /**
      * @var string $galleryUrl
      */
     private $galleryUrl;
@@ -134,5 +138,26 @@ class Item extends AbstractItemIterator
         }
 
         return $this->galleryUrl;
+    }
+    /**
+     * @param string $url
+     * @return Item
+     */
+    public function setViewItemUrl(string $url) : Item
+    {
+        $this->viewItemUrl = $url;
+
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getViewItemUrl() : string
+    {
+        if ($this->viewItemUrl === null) {
+            $this->setViewItemUrl((string) $this->simpleXml->viewItemURL);
+        }
+
+        return $this->viewItemUrl;
     }
 }
