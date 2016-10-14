@@ -41,7 +41,7 @@ class ListingInfo extends AbstractItem
     /**
      * @return bool|null
      */
-    public function getBestOfferEnabled()
+    public function getBestOfferEnabled($default = null)
     {
         if ($this->bestOfferEnabled === null) {
             if (!empty($this->simpleXml->bestOfferEnabled)) {
@@ -49,12 +49,17 @@ class ListingInfo extends AbstractItem
             }
         }
 
+        if ($default !== null) {
+            return $default;
+        }
+
         return $this->bestOfferEnabled;
     }
     /**
+     * @param mixed $default
      * @return bool|null
      */
-    public function getBuyItNowAvailable()
+    public function getBuyItNowAvailable($default = null)
     {
         if ($this->buyItNowAvailable === null) {
             if (!empty($this->simpleXml->buyItNowAvailable)) {
@@ -62,12 +67,18 @@ class ListingInfo extends AbstractItem
             }
         }
 
+        if ($default !== null) {
+            return $default;
+        }
+
+
         return $this->buyItNowAvailable;
     }
     /**
+     * @param mixed $default
      * @return array|null
      */
-    public function getBuyItNowPrice()
+    public function getBuyItNowPrice($default = null)
     {
         if ($this->buyItNowPrice === null) {
             if (!empty($this->simpleXml->buyItNowPrice)) {
@@ -75,12 +86,18 @@ class ListingInfo extends AbstractItem
             }
         }
 
+        if ($default !== null) {
+            return $default;
+        }
+
+
         return $this->buyItNowPrice;
     }
     /**
+     * @param mixed $default
      * @return array|null
      */
-    public function getConvertedBuyItNowPrice()
+    public function getConvertedBuyItNowPrice($default = null)
     {
         if ($this->convertedBuyItNowPrice === null) {
             if (!empty($this->simpleXml->convertedBuyItNowPrice)) {
@@ -88,12 +105,17 @@ class ListingInfo extends AbstractItem
             }
         }
 
+        if ($default !== null) {
+            return $default;
+        }
+
         return $this->convertedBuyItNowPrice;
     }
     /**
+     * @param mixed $default
      * @return \DateTime|null
      */
-    public function getEndTime()
+    public function getEndTime($default = null)
     {
         if ($this->endTime === null) {
             if (!empty($this->simpleXml->endTime)) {
@@ -101,13 +123,18 @@ class ListingInfo extends AbstractItem
             }
         }
 
+        if ($default !== null) {
+            return $default;
+        }
+
         return $this->endTime;
     }
 
     /**
+     * @param mixed $default
      * @return bool|null
      */
-    public function getGift()
+    public function getGift($default = null)
     {
         if ($this->gift === null) {
             if (!empty($this->simpleXml->gift)) {
@@ -115,12 +142,17 @@ class ListingInfo extends AbstractItem
             }
         }
 
+        if ($default !== null) {
+            return $default;
+        }
+
         return $this->gift;
     }
     /**
+     * @param mixed $default
      * @return null|string
      */
-    public function getListingType()
+    public function getListingType($default = null)
     {
         if ($this->listingType === null) {
             if (!empty($this->simpleXml->listingType)) {
@@ -128,17 +160,26 @@ class ListingInfo extends AbstractItem
             }
         }
 
+        if ($default !== null) {
+            return $default;
+        }
+
         return $this->listingType;
     }
     /**
+     * @param mixed $default
      * @return \DateTime|null
      */
-    public function getStartTime()
+    public function getStartTime($default = null)
     {
         if ($this->startTime === null) {
             if (!empty($this->simpleXml->startTime)) {
                 $this->setStartTime((string) $this->simpleXml->startTime);
             }
+        }
+
+        if ($default !== null) {
+            return $default;
         }
 
         return $this->startTime;

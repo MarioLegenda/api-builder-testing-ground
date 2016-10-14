@@ -238,73 +238,73 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\ListingInfo', $listingInfo, 'Invalid instance. Expected ListingInfo');
 
         $this->assertThat(
-            $listingInfo->getBestOfferEnabled(),
+            $listingInfo->getBestOfferEnabled('bestOfferEnabled'),
             $this->logicalOr(
-                $this->isType('null'),
+                $this->equalTo('bestOfferEnabled'),
                 $this->isType('bool')
             ),
             'ListingInfo::getBestOfferEnabled() should return either null or a boolean'
         );
 
         $this->assertThat(
-            $listingInfo->getBuyItNowAvailable(),
+            $listingInfo->getBuyItNowAvailable('buyItNowAvailable'),
             $this->logicalOr(
-                $this->isType('null'),
-                $this->isType('bool')
+                $this->isType('string'),
+                $this->equalTo('buyItNowAvailable')
             ),
             'ListingInfo::getBuyItNowAvailable() should return a boolean'
         );
 
         $this->assertThat(
-            $listingInfo->getStartTime(),
+            $listingInfo->getStartTime('startTime'),
             $this->logicalOr(
-                $this->isType('null'),
-                $this->isType('string')
+                $this->isType('string'),
+                $this->equalTo('startTime')
             ),
             'ListingInfo::getStartTime() should return a string'
         );
 
         $this->assertThat(
-            $listingInfo->getEndTime(),
+            $listingInfo->getEndTime('endTime'),
             $this->logicalOr(
-                $this->isType('null'),
-                $this->isType('string')
+                $this->isType('string'),
+                $this->equalTo('endTime')
             ),
             'ListingInfo::getEndTime() should return a string'
         );
 
         $this->assertThat(
-            $listingInfo->getListingType(),
+            $listingInfo->getListingType('listingType'),
             $this->logicalOr(
-                $this->isType('null'),
-                $this->isType('string')
+                $this->isType('string'),
+                $this->equalTo('listingType')
             ),
             'ListingInfo::getListingType() should return a string'
         );
 
         $this->assertThat(
-            $listingInfo->getGift(),
+            $listingInfo->getGift('gift'),
             $this->logicalOr(
-                $this->isType('null'),
-                $this->isType('bool')
+                $this->isType('string'),
+                $this->equalTo('gift')
             ),
             'ListingInfo::getGift() should return a boolean'
         );
 
         $this->assertThat(
-            $listingInfo->getBuyItNowPrice(),
+            $listingInfo->getBuyItNowPrice('buyItNowPrice'),
             $this->logicalOr(
-                $this->isType('null'),
-                $this->isType('array')
+                $this->isType('array'),
+                $this->equalTo('buyItNowPrice')
             ),
             'ListingInfo::getBuyItNowPrice() should return a array'
         );
 
         $this->assertThat(
-            $listingInfo->getConvertedBuyItNowPrice(),
+            $listingInfo->getConvertedBuyItNowPrice('convertedBuyItNowPrice'),
             $this->logicalOr(
-                $this->isType('null'),
-                $this->isType('array')
+                $this->isType('string'),
+                $this->equalTo('convertedBuyItNowPrice')
             ),
             'ListingInfo::getConvertedBuyItNowPrice() should return a array'
         );
