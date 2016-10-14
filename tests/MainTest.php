@@ -232,5 +232,81 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ),
             'SellingStatus::getTimeLeft() should return either null or a string'
         );
+
+        $listingInfo = $item->getListingInfo();
+
+        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\ListingInfo', $listingInfo, 'Invalid instance. Expected ListingInfo');
+
+        $this->assertThat(
+            $listingInfo->getBestOfferEnabled(),
+            $this->logicalOr(
+                $this->isType('null'),
+                $this->isType('bool')
+            ),
+            'ListingInfo::getBestOfferEnabled() should return either null or a boolean'
+        );
+
+        $this->assertThat(
+            $listingInfo->getBuyItNowAvailable(),
+            $this->logicalOr(
+                $this->isType('null'),
+                $this->isType('bool')
+            ),
+            'ListingInfo::getBuyItNowAvailable() should return a boolean'
+        );
+
+        $this->assertThat(
+            $listingInfo->getStartTime(),
+            $this->logicalOr(
+                $this->isType('null'),
+                $this->isType('string')
+            ),
+            'ListingInfo::getStartTime() should return a string'
+        );
+
+        $this->assertThat(
+            $listingInfo->getEndTime(),
+            $this->logicalOr(
+                $this->isType('null'),
+                $this->isType('string')
+            ),
+            'ListingInfo::getEndTime() should return a string'
+        );
+
+        $this->assertThat(
+            $listingInfo->getListingType(),
+            $this->logicalOr(
+                $this->isType('null'),
+                $this->isType('string')
+            ),
+            'ListingInfo::getListingType() should return a string'
+        );
+
+        $this->assertThat(
+            $listingInfo->getGift(),
+            $this->logicalOr(
+                $this->isType('null'),
+                $this->isType('bool')
+            ),
+            'ListingInfo::getGift() should return a boolean'
+        );
+
+        $this->assertThat(
+            $listingInfo->getBuyItNowPrice(),
+            $this->logicalOr(
+                $this->isType('null'),
+                $this->isType('array')
+            ),
+            'ListingInfo::getBuyItNowPrice() should return a array'
+        );
+
+        $this->assertThat(
+            $listingInfo->getConvertedBuyItNowPrice(),
+            $this->logicalOr(
+                $this->isType('null'),
+                $this->isType('array')
+            ),
+            'ListingInfo::getConvertedBuyItNowPrice() should return a array'
+        );
     }
 }
