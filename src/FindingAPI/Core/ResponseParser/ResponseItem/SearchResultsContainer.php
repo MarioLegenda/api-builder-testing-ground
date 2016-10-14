@@ -50,16 +50,8 @@ class SearchResultsContainer extends AbstractItemIterator
 
         foreach ($items as $item) {
             $productItem = new Item($item);
+
             $itemId = (string) $item->itemId;
-
-            $productItem->setTitle((string) $item->{'title'});
-            $productItem->setGlobalId((string) $item->globalId);
-            $productItem->setItemId((string) $item->itemId);
-
-            $primaryCategory = new PrimaryCategory($item->primaryCategory);
-
-            $productItem->setPrimaryCategory($primaryCategory);
-
             $this->addItemByName($itemId, $productItem);
         }
 

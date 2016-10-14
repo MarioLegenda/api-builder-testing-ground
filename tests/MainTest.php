@@ -161,12 +161,28 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $item->getGlobalId(), 'Item::getGlobalId() should return a string');
         $this->assertInternalType('string', $item->getTitle(), 'Item::getTitle() should return a title');
         $this->assertInternalType('string', $item->getViewItemUrl(), 'Item::getViewItemUrl() should return a string');
+        $this->assertInternalType('array', $item->getProductId(), 'Item::getProductId() should return an array');
+        $this->assertInternalType('string', $item->getPaymentMethod(), 'Item::getPaymentMethod() should return a string');
+        $this->assertInternalType('bool', $item->getAutoPay(), 'Item::getAutoPay() should return a bool');
+        $this->assertInternalType('int', $item->getPostalCode(), 'Item::getPostalCode() should return a int');
+        $this->assertInternalType('string', $item->getLocation(), 'Item::getLocation() should return a string');
+        $this->assertInternalType('string', $item->getCountry(), 'Item::getCountry() should return a string');
 
         if ($item->getGalleryUrl() !== null) {
             $this->assertInternalType('string', $item->getGalleryUrl(), 'Item::getGalleryUrl() should return a string');
         }
 
-        $this->assertInternalType('string', $item->getPrimaryCategoryId(), 'Invalid primary category id. Expected string');
-        $this->assertInternalType('string', $item->getPrimaryCategoryName(), 'Invalid primary category name. Expected string');
+        $this->assertInternalType('string', $item->getPrimaryCategory()->getCategoryId(), 'Invalid primary category id. Expected string');
+        $this->assertInternalType('string', $item->getPrimaryCategory()->getCategoryName(), 'Invalid primary category name. Expected string');
+
+        $shippingInfo = $item->getShippingInfo();
+
+        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\ShippingInfo', $shippingInfo, 'Invalid object. Expected ShippingInfo');
+        $this->assertInternalType('array', $shippingInfo->getShippingServiceCost(), 'ShippingInfo::getShippingServiceCost() has to return array');
+        $this->assertInternalType('bool', $shippingInfo->getExpeditedShipping(), 'ShippingInfo::getExpeditedShipping() has to return bool');
+        $this->assertInternalType('int', $shippingInfo->getHandlingTime(), 'ShippingInfo::getHandlingTime() has to return int');
+        $this->assertInternalType('bool', (bool) $shippingInfo->getOneDayShippingAvailable(), 'ShippingInfo::oneDayShippingAvailable() has to return bool');
+        $this->assertInternalType('string', $shippingInfo->getShippingType(), 'ShippingInfo::shippingType() has to return string');
+        $this->assertInternalType('array', $shippingInfo->getShipToLocations(), 'ShippingInfo::shipToLocations() has to return array');
     }
 }
