@@ -184,5 +184,53 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('bool', (bool) $shippingInfo->getOneDayShippingAvailable(), 'ShippingInfo::oneDayShippingAvailable() has to return bool');
         $this->assertInternalType('string', $shippingInfo->getShippingType(), 'ShippingInfo::shippingType() has to return string');
         $this->assertInternalType('array', $shippingInfo->getShipToLocations(), 'ShippingInfo::shipToLocations() has to return array');
+
+        $sellingStatus = $item->getSellingStatus();
+
+        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\SellingStatus', $sellingStatus, 'Invalid instance. SellingStatus expected');
+        $this->assertThat(
+            $sellingStatus->getBidCount(),
+            $this->logicalOr(
+                $this->isType('null'),
+                $this->isType('int')
+            ),
+            'SellingStatus::getBidCount() should return either null or an integer'
+        );
+
+        $this->assertThat(
+            $sellingStatus->getConvertedCurrentPrice(),
+            $this->logicalOr(
+                $this->isType('null'),
+                $this->isType('array')
+            ),
+            'SellingStatus::getConvertedCurrentPrice() should return either null or a array'
+        );
+
+        $this->assertThat(
+            $sellingStatus->getCurrentPrice(),
+            $this->logicalOr(
+                $this->isType('null'),
+                $this->isType('array')
+            ),
+            'SellingStatus::getCurrentPrice() should return either null or a array'
+        );
+
+        $this->assertThat(
+            $sellingStatus->getSellingState(),
+            $this->logicalOr(
+                $this->isType('null'),
+                $this->isType('string')
+            ),
+            'SellingStatus::getSellingState() should return either null or a string'
+        );
+
+        $this->assertThat(
+            $sellingStatus->getTimeLeft(),
+            $this->logicalOr(
+                $this->isType('null'),
+                $this->isType('string')
+            ),
+            'SellingStatus::getTimeLeft() should return either null or a string'
+        );
     }
 }

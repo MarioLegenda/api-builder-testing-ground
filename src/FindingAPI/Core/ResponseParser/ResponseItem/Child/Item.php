@@ -8,6 +8,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
 class Item extends AbstractItemIterator
 {
     /**
+     * @var SellingStatus $sellingStatus
+     */
+    private $sellingStatus;
+    /**
      * @var $shippingInfo
      */
     private $shippingInfo;
@@ -120,6 +124,15 @@ class Item extends AbstractItemIterator
         return $this->shippingInfo;
     }
 
+    public function getSellingStatus() : SellingStatus
+    {
+        if ($this->sellingStatus === null) {
+            $this->setSellingStatus(new SellingStatus($this->simpleXml->sellingStatus));
+        }
+
+        return $this->sellingStatus;
+    }
+
     /**
      * @return string
      */
@@ -209,6 +222,13 @@ class Item extends AbstractItemIterator
         }
 
         return $this->country;
+    }
+
+    private function setSellingStatus(SellingStatus $sellingStatus) : Item
+    {
+        $this->sellingStatus = $sellingStatus;
+
+        return $this;
     }
 
     private function setLocation(string $location) : Item
