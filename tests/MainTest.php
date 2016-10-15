@@ -332,5 +332,16 @@ class MainTest extends \PHPUnit_Framework_TestCase
             $this->assertInternalType('int', $condition->getConditionId(), 'Condition::getConditionId() should return an int');
             $this->assertInternalType('string', $condition->getConditionDisplayName(), 'Condition::getConditionDisplayName() should return a string');
         }
+
+        if (is_array($item->getAttributes())) {
+            $attributes = $item->getAttributes();
+
+            foreach ($attributes as $attribute) {
+                $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Attribute', $attribute, 'Unknown instance. Expected Attribute');
+
+                $this->assertInternalType('string', $attribute->getAttributeName(), 'Attribute::getAttributeName() should return a string');
+                $this->assertInternalType('string', $attribute->getAttributeValue(), 'Attribute::getAttributeValue() should return a string');
+            }
+        }
     }
 }

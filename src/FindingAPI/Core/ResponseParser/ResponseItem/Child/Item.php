@@ -3,10 +3,16 @@
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child;
 
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
-use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{Condition, ShippingInfo, ListingInfo, SellingStatus, PrimaryCategory};
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
+    Attribute, Condition, ShippingInfo, ListingInfo, SellingStatus, PrimaryCategory
+};
 
 class Item extends AbstractItemIterator
 {
+    /**
+     * @var Attribute[] $attributes
+     */
+    private $attributes;
     /**
      * @var Condition $condition
      */
@@ -362,6 +368,26 @@ class Item extends AbstractItemIterator
 
         return $this->topRatedListing;
     }
+    /**
+     * @param null $default
+     * @return Item\Attribute[]|null
+     */
+    public function getAttributes($default = null)
+    {
+        if ($this->attributes === null) {
+            if (!empty($this->simpleXml->attribute)) {
+                foreach ($this->attribute as $attr) {
+                    $this->setAttribute(new Attribute($attr));
+                }
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
+        }
+
+        return $this->attributes;
+    }
 
     private function setSellingStatus(SellingStatus $sellingStatus) : Item
     {
@@ -495,6 +521,13 @@ class Item extends AbstractItemIterator
     private function setCondition(Condition $condition) : Item
     {
         $this->condition = $condition;
+
+        return $this;
+    }
+
+    private function setAttribute(Attribute $attribute) : Item
+    {
+        $this->attributes[] = $attribute;
 
         return $this;
     }
