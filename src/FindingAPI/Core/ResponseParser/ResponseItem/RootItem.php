@@ -25,16 +25,6 @@ class RootItem extends AbstractItem implements ResponseItemInterface
      */
     private $itemNamespace;
     /**
-     * @param string $namespace
-     * @return $this
-     */
-    public function setNamespace(string $namespace) : RootItem
-    {
-        $this->itemNamespace = $namespace;
-
-        return $this;
-    }
-    /**
      * @return string
      */
     public function getNamespace() : string
@@ -48,16 +38,6 @@ class RootItem extends AbstractItem implements ResponseItemInterface
         return $this->itemNamespace;
     }
     /**
-     * @param string $version
-     * @return RootItem
-     */
-    public function setVersion(string $version) : RootItem
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-    /**
      * @return string
      */
     public function getVersion() : string
@@ -67,16 +47,6 @@ class RootItem extends AbstractItem implements ResponseItemInterface
         }
 
         return $this->version;
-    }
-    /**
-     * @param string $ack
-     * @return RootItem
-     */
-    public function setAck(string $ack) : RootItem
-    {
-        $this->ack = $ack;
-
-        return $this;
     }
     /**
      * @return string
@@ -90,16 +60,6 @@ class RootItem extends AbstractItem implements ResponseItemInterface
         return $this->ack;
     }
     /**
-     * @param string $timestamp
-     * @return RootItem
-     */
-    public function setTimestamp(string $timestamp) : RootItem
-    {
-        $this->timestamp = $timestamp;
-
-        return $this;
-    }
-    /**
      * @return string
      */
     public function getTimestamp() : string
@@ -111,24 +71,49 @@ class RootItem extends AbstractItem implements ResponseItemInterface
         return $this->timestamp;
     }
     /**
-     * @param string $count
-     * @return RootItem
-     */
-    public function setSearchResultsCount(string $count) : RootItem
-    {
-        $this->searchResultsCount = $count;
-
-        return $this;
-    }
-    /**
      * @return int
      */
     public function getSearchResultsCount() : int
     {
         if ($this->searchResultsCount === null) {
-            $this->searchResultsCount = (int) $this->simpleXml->searchResult['count'];
+            $this->setSearchResultsCount((int) $this->simpleXml['count']);
         }
 
         return $this->searchResultsCount;
+    }
+
+    private function setAck(string $ack) : RootItem
+    {
+        $this->ack = $ack;
+
+        return $this;
+    }
+
+    private function setTimestamp(string $timestamp) : RootItem
+    {
+        $this->timestamp = $timestamp;
+
+        return $this;
+    }
+
+    private function setSearchResultsCount(string $count) : RootItem
+    {
+        $this->searchResultsCount = $count;
+
+        return $this;
+    }
+
+    private function setNamespace(string $namespace) : RootItem
+    {
+        $this->itemNamespace = $namespace;
+
+        return $this;
+    }
+
+    private function setVersion(string $version) : RootItem
+    {
+        $this->version = $version;
+
+        return $this;
     }
 }
