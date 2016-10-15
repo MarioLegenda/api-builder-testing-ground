@@ -6,6 +6,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Response;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Condition;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 use FindingAPI\Finding;
 use FindingAPI\Core\Request;
@@ -328,5 +329,12 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ),
             'ListingInfo::getConvertedBuyItNowPrice() should return a array'
         );
+
+        if ($item->getCondition() instanceof Condition) {
+            $condition = $item->getCondition();
+
+            $this->assertInternalType('int', $condition->getConditionId(), 'Condition::getConditionId() should return an int');
+            $this->assertInternalType('string', $condition->getConditionDisplayName(), 'Condition::getConditionDisplayName() should return a string');
+        }
     }
 }

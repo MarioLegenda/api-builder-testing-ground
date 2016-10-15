@@ -8,6 +8,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
 class Item extends AbstractItemIterator
 {
     /**
+     * @var Condition $condition
+     */
+    private $condition;
+    /**
      * @var bool $topRatedListing
      */
     private $topRatedListing;
@@ -163,6 +167,17 @@ class Item extends AbstractItemIterator
         }
 
         return $this->listingInfo;
+    }
+
+    public function getCondition()
+    {
+        if ($this->condition === null) {
+            if (!empty($this->simpleXml->condition)) {
+                $this->setCondition(new Condition($this->simpleXml->condition));
+            }
+        }
+
+        return $this->condition;
     }
 
     /**
@@ -473,6 +488,13 @@ class Item extends AbstractItemIterator
     private function setTopRatedListing(bool $topRatedListing) : Item
     {
         $this->topRatedListing = $topRatedListing;
+
+        return $this;
+    }
+
+    private function setCondition(Condition $condition) : Item
+    {
+        $this->condition = $condition;
 
         return $this;
     }
