@@ -9,6 +9,13 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
 
 class Item extends AbstractItemIterator
 {
+    /**
+     * @var string $compatibility
+     */
+    private $compatibility;
+    /**
+     * @var string $charityId
+     */
     private $charityId;
     /**
      * @var Attribute[] $attributes
@@ -408,6 +415,21 @@ class Item extends AbstractItemIterator
         return $this->charityId;
     }
 
+    public function getCompatibility($default = null)
+    {
+        if ($this->compatibility === null) {
+            if (!empty($this->simpleXml->compatibility)) {
+                $this->setCompatibility((string) $this->simpleXml->compatibility);
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
+        }
+
+        return $this->compatibility;
+    }
+
     private function setSellingStatus(SellingStatus $sellingStatus) : Item
     {
         $this->sellingStatus = $sellingStatus;
@@ -554,6 +576,13 @@ class Item extends AbstractItemIterator
     private function setCharityId(string $charityId) : Item
     {
         $this->charityId = $charityId;
+
+        return $this;
+    }
+
+    private function setCompatibility(string $compatibility) : Item
+    {
+        $this->compatibility = $compatibility;
 
         return $this;
     }
