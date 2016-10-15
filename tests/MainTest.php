@@ -163,8 +163,25 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $item->getViewItemUrl(), 'Item::getViewItemUrl() should return a string');
         $this->assertInternalType('array', $item->getProductId(), 'Item::getProductId() should return an array');
         $this->assertInternalType('string', $item->getPaymentMethod(), 'Item::getPaymentMethod() should return a string');
-        $this->assertInternalType('bool', $item->getAutoPay(), 'Item::getAutoPay() should return a bool');
-        $this->assertInternalType('int', $item->getPostalCode(), 'Item::getPostalCode() should return a int');
+
+        $this->assertThat(
+            $item->getAutoPay('autoPay'),
+            $this->logicalOr(
+                $this->isType('bool'),
+                $this->equalTo('autoPay')
+            ),
+            'Item::getAutoPay() should return a bool'
+        );
+
+        $this->assertThat(
+            $item->getPostalCode('postalCode'),
+            $this->logicalOr(
+                $this->isType('int'),
+                $this->equalTo('postalCode')
+            ),
+            'Item::getPostalCode() should return a int'
+        );
+
         $this->assertInternalType('string', $item->getLocation(), 'Item::getLocation() should return a string');
         $this->assertInternalType('string', $item->getCountry(), 'Item::getCountry() should return a string');
 

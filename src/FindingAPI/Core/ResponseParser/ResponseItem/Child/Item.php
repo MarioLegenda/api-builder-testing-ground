@@ -83,12 +83,17 @@ class Item extends AbstractItemIterator
     }
 
     /**
+     * @param mixed $default
      * @return string
      */
-    public function getTitle() : string
+    public function getTitle($default = null) : string
     {
         if ($this->title === null) {
             $this->setTitle((string)$this->simpleXml->{'title'});
+        }
+
+        if ($default !== null) {
+            return $default;
         }
 
         return $this->title;
@@ -149,24 +154,34 @@ class Item extends AbstractItemIterator
     }
 
     /**
+     * @param mixed $default
      * @return string
      */
-    public function getGalleryUrl() : string
+    public function getGalleryUrl($default = null) : string
     {
         if ($this->galleryUrl === null) {
-            $this->setGalleryUrl((string)$this->simpleXml->galleryURL);
+            if (!empty($this->simpleXml->galleryURL)) {
+                $this->setGalleryUrl((string) $this->simpleXml->galleryURL);
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
         }
 
         return $this->galleryUrl;
     }
 
     /**
+     * @param mixed $default
      * @return string
      */
-    public function getViewItemUrl() : string
+    public function getViewItemUrl($default = null) : string
     {
         if ($this->viewItemUrl === null) {
-            $this->setViewItemUrl((string)$this->simpleXml->viewItemURL);
+            if ($this->simpleXml->viewItemURL) {
+                $this->setViewItemUrl((string)$this->simpleXml->viewItemURL);
+            }
         }
 
         return $this->viewItemUrl;
@@ -194,46 +209,74 @@ class Item extends AbstractItemIterator
         return $this->paymentMethod;
     }
     /**
+     * @param mixed $default
      * @return bool|null
      */
-    public function getAutoPay()
+    public function getAutoPay($default = null)
     {
         if ($this->autoPay === null) {
-            $this->setAutoPay((bool) $this->simpleXml->autoPay);
+            if (!empty($this->simpleXml->autoPay)) {
+                $this->setAutoPay((bool) $this->simpleXml->autoPay);
+            }
+        }
+        
+        if ($default !== null) {
+            return $default;
         }
 
         return $this->autoPay;
     }
 
     /**
+     * @param mixed $default
      * @return int|null
      */
-    public function getPostalCode() 
+    public function getPostalCode($default = null) 
     {
         if ($this->postalCode === null) {
-            $this->setPostalCode((int) $this->simpleXml->postalCode);
+            if (!empty($this->simpleXml->postalCode)) {
+                $this->setPostalCode((int) $this->simpleXml->postalCode);
+            }
         }
-        
+
+        if ($default !== null) {
+            return $default;
+        }
+
         return $this->postalCode;
     }
     /**
+     * @param mixed $default
      * @return string
      */
-    public function getLocation() : string
+    public function getLocation($default = null) : string
     {
         if ($this->location === null) {
-            $this->setLocation((string) $this->simpleXml->location);
+            if (!empty($this->simpleXml->location)) {
+                $this->setLocation((string) $this->simpleXml->location);
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
         }
 
         return $this->location;
     }
     /**
+     * @param $default
      * @return string
      */
-    public function getCountry() : string
+    public function getCountry($default = null) : string
     {
         if ($this->country === null) {
-            $this->setCountry((string) $this->simpleXml->country);
+            if (!empty($this->simpleXml->country)) {
+                $this->setCountry((string) $this->simpleXml->country);
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
         }
 
         return $this->country;
