@@ -42,71 +42,109 @@ class ShippingInfo
         $this->simpleXml = $simpleXml;
     }
     /**
+     * @param mixed $default
      * @return array
      */
-    public function getShippingServiceCost()
+    public function getShippingServiceCost($default = null)
     {
         if ($this->shippingServiceCost === null) {
-            $this->setShippingServiceCost(
-                (string) $this->simpleXml->shippingServiceCost['currencyId'],
-                (float) $this->simpleXml->shippingServiceCost
-            );
+            if (!empty($this->simpleXml->shippingServiceCost)) {
+                $this->setShippingServiceCost(
+                    (string) $this->simpleXml->shippingServiceCost['currencyId'],
+                    (float) $this->simpleXml->shippingServiceCost
+                );
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
         }
 
         return $this->shippingServiceCost;
     }
     /**
+     * @param mixed $default
      * @return bool|null
      */
-    public function getExpeditedShipping()
+    public function getExpeditedShipping($default = null)
     {
         if ($this->expeditedShipping === null) {
-            $this->setExpeditedShipping((bool) $this->simpleXml->expeditedShipping);
+            if (!empty($this->simpleXml->expeditedShipping)) {
+                $this->setExpeditedShipping((bool) $this->simpleXml->expeditedShipping);
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
         }
 
         return $this->expeditedShipping;
     }
 
     /**
+     * @param mixed $default
      * @return int
      */
-    public function getHandlingTime() : int
+    public function getHandlingTime($default = null) : int
     {
         if ($this->handlingTime === null) {
-            $this->setHandlingTime((int) $this->simpleXml->handlingTime);
+            if (!empty($this->simpleXml->handlingTime)) {
+                $this->setHandlingTime((int) $this->simpleXml->handlingTime);
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
         }
 
         return $this->handlingTime;
     }
     /**
+     * @param mixed $default
      * @return int
      */
-    public function getOneDayShippingAvailable() : int
+    public function getOneDayShippingAvailable($default = null) : int
     {
         if ($this->oneDayShippingAvailable === null) {
-            $this->setOneDayShippingAvailable((bool) $this->simpleXml->oneDayShippingAvailable);
+            if (!empty($this->simpleXml->oneDayShippingAvailable)) {
+                $this->setOneDayShippingAvailable((bool) $this->simpleXml->oneDayShippingAvailable);
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
         }
 
         return $this->oneDayShippingAvailable;
     }
     /**
+     * @param mixed $default
      * @return string
      */
-    public function getShippingType() : string
+    public function getShippingType($default = null) : string
     {
         if ($this->shippingType === null) {
-            $this->setShippingType((string) $this->simpleXml->shippingType);
+            if (!empty($this->simpleXml->shippingType)) {
+                $this->setShippingType((string) $this->simpleXml->shippingType);
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
         }
 
         return $this->shippingType;
     }
     /**
+     * @param mixed $default
      * @return array
      */
-    public function getShipToLocations() : array
+    public function getShipToLocations($default = null) : array
     {
         if ($this->shipToLocations === null) {
-            $this->setShipToLocations($this->simpleXml->shipToLocations);
+            if (!empty($this->simpleXml->shipToLocations)) {
+                $this->setShipToLocations($this->simpleXml->shipToLocations);
+            }
         }
 
         return $this->shipToLocations;
