@@ -9,6 +9,7 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
 
 class Item extends AbstractItemIterator
 {
+    private $charityId;
     /**
      * @var Attribute[] $attributes
      */
@@ -388,6 +389,24 @@ class Item extends AbstractItemIterator
 
         return $this->attributes;
     }
+    /**
+     * @param null $default
+     * @return null
+     */
+    public function getCharityId($default = null) 
+    {
+        if ($this->charityId === null) {
+            if (!empty($this->simpleXml->charityId)) {
+                $this->setCharityId((string) $this->simpleXml->charityId);
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
+        }
+
+        return $this->charityId;
+    }
 
     private function setSellingStatus(SellingStatus $sellingStatus) : Item
     {
@@ -528,6 +547,13 @@ class Item extends AbstractItemIterator
     private function setAttribute(Attribute $attribute) : Item
     {
         $this->attributes[] = $attribute;
+
+        return $this;
+    }
+
+    private function setCharityId(string $charityId) : Item
+    {
+        $this->charityId = $charityId;
 
         return $this;
     }
