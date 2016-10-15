@@ -1,6 +1,6 @@
 <?php
 
-namespace FindingAPI\Core\ResponseParser\ResponseItem\Child;
+namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
 class ShippingInfo
 {

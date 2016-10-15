@@ -2,8 +2,8 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child;
 
-use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{Condition, ShippingInfo, ListingInfo, SellingStatus, PrimaryCategory};
 
 class Item extends AbstractItemIterator
 {

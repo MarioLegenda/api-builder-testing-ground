@@ -6,15 +6,11 @@ require __DIR__.'/../vendor/autoload.php';
 
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Response;
-use FindingAPI\Core\ResponseParser\ResponseItem\Child\Condition;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 use FindingAPI\Finding;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\Definition;
-use FindingAPI\Core\ItemFilter\ItemFilter;
-use FindingAPI\Core\Information\Currency;
-use FindingAPI\Core\Information\SortOrder;
-use FindingAPI\Core\Information\GlobalId;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Condition;
 
 class MainTest extends \PHPUnit_Framework_TestCase
 {
@@ -198,7 +194,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         $shippingInfo = $item->getShippingInfo();
 
-        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\ShippingInfo', $shippingInfo, 'Invalid object. Expected ShippingInfo');
+        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ShippingInfo', $shippingInfo, 'Invalid object. Expected ShippingInfo');
         $this->assertInternalType('array', $shippingInfo->getShippingServiceCost(), 'ShippingInfo::getShippingServiceCost() has to return array');
         $this->assertInternalType('bool', $shippingInfo->getExpeditedShipping(), 'ShippingInfo::getExpeditedShipping() has to return bool');
         $this->assertInternalType('int', $shippingInfo->getHandlingTime(), 'ShippingInfo::getHandlingTime() has to return int');
@@ -208,7 +204,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         $sellingStatus = $item->getSellingStatus();
 
-        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\SellingStatus', $sellingStatus, 'Invalid instance. SellingStatus expected');
+        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellingStatus', $sellingStatus, 'Invalid instance. SellingStatus expected');
         $this->assertThat(
             $sellingStatus->getBidCount(),
             $this->logicalOr(
@@ -256,7 +252,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         $listingInfo = $item->getListingInfo();
 
-        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\ListingInfo', $listingInfo, 'Invalid instance. Expected ListingInfo');
+        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ListingInfo', $listingInfo, 'Invalid instance. Expected ListingInfo');
 
         $this->assertThat(
             $listingInfo->getBestOfferEnabled('bestOfferEnabled'),
