@@ -8,6 +8,18 @@ use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
 class Item extends AbstractItemIterator
 {
     /**
+     * @var bool $topRatedListing
+     */
+    private $topRatedListing;
+    /**
+     * @var bool $isMultiVariationListing
+     */
+    private $isMultiVariationListing;
+    /**
+     * @var bool $returnsAccepted
+     */
+    private $returnsAccepted;
+    /**
      * @var ListingInfo $listingInfo
      */
     private $listingInfo;
@@ -281,6 +293,60 @@ class Item extends AbstractItemIterator
 
         return $this->country;
     }
+    /**
+     * @param null $default
+     * @return bool|null
+     */
+    public function getReturnsAccepted($default = null) 
+    {
+        if ($this->returnsAccepted === null) {
+            if (!empty($this->simpleXml->returnsAccepted)) {
+                $this->setReturnsAccepted((bool) $this->simpleXml->returnsAccepted);
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
+        }
+
+        return $this->returnsAccepted;
+    }
+    /**
+     * @param null $default
+     * @return bool|null
+     */
+    public function getIsMultiVariationListing($default = null) 
+    {
+        if ($this->isMultiVariationListing === null) {
+            if (!empty($this->simpleXml->isMultiVariationListing)) {
+                $this->setIsMultiVariationListing((bool) $this->simpleXml->isMultiVariationListing);
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
+        } 
+
+        return $this->isMultiVariationListing;
+    }
+    /**
+     * @param null $default
+     * @return bool|null
+     */
+    public function getTopRatedListing($default = null) 
+    {
+        if ($this->topRatedListing === null) {
+            if (!empty($this->simpleXml->topRatedListing)) {
+                $this->setTopRatedListing((bool) $this->simpleXml->topRatedListing);
+            }
+        }
+
+        if ($default !== null) {
+            return $default;
+        }
+
+        return $this->topRatedListing;
+    }
 
     private function setSellingStatus(SellingStatus $sellingStatus) : Item
     {
@@ -386,6 +452,27 @@ class Item extends AbstractItemIterator
     private function setListingInfo(ListingInfo $listingInfo) : Item
     {
         $this->listingInfo = $listingInfo;
+
+        return $this;
+    }
+
+    private function setReturnsAccepted(bool $returnsAccepted) : Item
+    {
+        $this->returnsAccepted = $returnsAccepted;
+        
+        return $this;
+    }
+
+    private function setIsMultiVariationListing(bool $isMultiVariationListing) : Item
+    {
+        $this->isMultiVariationListing = $isMultiVariationListing;
+
+        return $this;
+    }
+
+    private function setTopRatedListing(bool $topRatedListing) : Item
+    {
+        $this->topRatedListing = $topRatedListing;
 
         return $this;
     }

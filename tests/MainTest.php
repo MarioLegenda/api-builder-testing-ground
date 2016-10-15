@@ -163,6 +163,9 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $item->getViewItemUrl(), 'Item::getViewItemUrl() should return a string');
         $this->assertInternalType('array', $item->getProductId(), 'Item::getProductId() should return an array');
         $this->assertInternalType('string', $item->getPaymentMethod(), 'Item::getPaymentMethod() should return a string');
+        $this->assertInternalType('bool', $item->getReturnsAccepted(), 'Item::getReturnsAccepted() should return bool');
+        $this->assertInternalType('bool', $item->getIsMultiVariationListing(), 'Item::getIsMultiVariationListing() should return bool');
+        $this->assertInternalType('bool', $item->getTopRatedListing(), 'Item::getTopRatedListing() should return boolean');
 
         $this->assertThat(
             $item->getAutoPay('autoPay'),
