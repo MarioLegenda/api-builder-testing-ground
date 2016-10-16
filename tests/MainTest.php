@@ -412,5 +412,16 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
             $this->assertInternalType('array', $discountPriceInfo->getOriginalRetailPrice(), 'DiscountPriceInfo::getOriginalRetailPrice() should return an array');
         }
+
+        $galleryInfoContainer = $item->getGalleryContainer();
+
+        if ($galleryInfoContainer !== null) {
+            while ($galleryInfoContainer->valid()) {
+                $galleryUrl = $galleryInfoContainer->current();
+
+                $this->assertInternalType('string', $galleryUrl->getUrl(), 'GalleryUrl::getUrl() should return a string');
+                $this->assertInternalType('string', $galleryUrl->getSize(), 'GalleryUrl::getSize() should return a string');
+            }
+        }
     }
 }

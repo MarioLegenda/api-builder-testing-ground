@@ -10,6 +10,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
 class Item extends AbstractItemIterator
 {
     /**
+     * @var GalleryInfoContainer $galleryInfoContainer
+     */
+    private $galleryInfoContainer;
+    /**
      * @var array $eekStatus
      */
     private $eekStatus;
@@ -144,6 +148,29 @@ class Item extends AbstractItemIterator
         }
 
         return $this->globalId;
+    }
+    /**
+     * @param null $default
+     * @return GalleryInfoContainer|null
+     */
+    public function getGalleryContainer($default = null)
+    {
+        if ($this->galleryInfoContainer === null) {
+            if (!empty($this->simpleXml->galleryInfoContainer)) {
+                $galleryUrlContainer = new GalleryInfoContainer($this->simpleXml->galleryInfoContainer);
+                foreach ($this->galleryInfoContainer->galleryURL as $galleryUrl) {
+                    $galleryUrlContainer->addItem(new GalleryUrl($galleryUrl));
+                }
+
+                $this->setGalleryInfoContainer($galleryUrlContainer);
+            }
+        }
+
+        if ($this->galleryInfoContainer === null and $default !== null) {
+            return $default;
+        }
+
+        return $this->galleryInfoContainer;
     }
     /**
      * @param null $default
@@ -716,6 +743,13 @@ class Item extends AbstractItemIterator
     private function setEekStatus(string $eekStatus) : Item
     {
         $this->eekStatus[] = $eekStatus;
+
+        return $this;
+    }
+
+    private function setGalleryInfoContainer(GalleryInfoContainer $galleryInfoContainer)
+    {
+        $this->galleryInfoContainer = $galleryInfoContainer;
 
         return $this;
     }
