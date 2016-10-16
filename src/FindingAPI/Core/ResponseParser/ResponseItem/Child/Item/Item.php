@@ -88,7 +88,7 @@ class Item extends AbstractItemIterator
     /**
      * @var string $paymentMethod
      */
-    private $paymentMethod;
+    private $paymentMethods;
     /**
      * @var array $productId
      */
@@ -380,15 +380,20 @@ class Item extends AbstractItemIterator
         return $this->productId;
     }
     /**
-     * @return string
+     * @return array
      */
-    public function getPaymentMethod() : string
+    public function getPaymentMethod() : array
     {
-        if ($this->paymentMethod === null) {
-            $this->setPaymentMethod((string) $this->simpleXml->paymentMethod);
+        if ($this->paymentMethods === null) {
+            $paymentMethods = array();
+            foreach ($this->simpleXml->paymentMethod as $paymentMethod) {
+                $paymentMethods[] = (string) $paymentMethod;
+            }
+
+            $this->setPaymentMethod($paymentMethods);
         }
 
-        return $this->paymentMethod;
+        return $this->paymentMethods;
     }
     /**
      * @param mixed $default
@@ -673,9 +678,9 @@ class Item extends AbstractItemIterator
         return $this;
     }
 
-    private function setPaymentMethod(string $paymentMethod) : Item
+    private function setPaymentMethod(array $paymentMethods) : Item
     {
-        $this->paymentMethod = $paymentMethod;
+        $this->paymentMethods = $paymentMethods;
 
         return $this;
     }
