@@ -10,6 +10,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
 class Item extends AbstractItemIterator
 {
     /**
+     * @var array $galleryPlusPictureUrl
+     */
+    private $galleryPlusPictureUrl;
+    /**
      * @var GalleryInfoContainer $galleryInfoContainer
      */
     private $galleryInfoContainer;
@@ -148,6 +152,29 @@ class Item extends AbstractItemIterator
         }
 
         return $this->globalId;
+    }
+    /**
+     * @param $default
+     * @return array|null
+     */
+    public function getGalleryPlusPictureURL($default = null)
+    {
+        if ($this->galleryPlusPictureUrl === null) {
+            if (!empty($this->simpleXml->galleryPlusPictureURL)) {
+                $url = array();
+                foreach ($this->simpleXml->galleryPlusPictureURL as $galleryUrl) {
+                    $url[] = (string) $galleryUrl;
+                }
+
+                $this->setGalleryPlusPictureURL($url);
+            }
+        }
+
+        if ($this->galleryPlusPictureUrl === null and $default !== null) {
+            return $default;
+        }
+
+        return $this->galleryPlusPictureUrl;
     }
     /**
      * @param null $default
@@ -747,9 +774,16 @@ class Item extends AbstractItemIterator
         return $this;
     }
 
-    private function setGalleryInfoContainer(GalleryInfoContainer $galleryInfoContainer)
+    private function setGalleryInfoContainer(GalleryInfoContainer $galleryInfoContainer) : Item
     {
         $this->galleryInfoContainer = $galleryInfoContainer;
+
+        return $this;
+    }
+
+    private function setGalleryPlusPictureURL(array $galleryPlusPictureUrl)  : Item
+    {
+        $this->galleryInfoContainer = $galleryPlusPictureUrl;
 
         return $this;
     }

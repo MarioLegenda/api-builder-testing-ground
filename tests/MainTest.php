@@ -423,5 +423,15 @@ class MainTest extends \PHPUnit_Framework_TestCase
                 $this->assertInternalType('string', $galleryUrl->getSize(), 'GalleryUrl::getSize() should return a string');
             }
         }
+
+        $galleryPlusPictureUrls = $item->getGalleryPlusPictureURL();
+
+        if ($galleryPlusPictureUrls !== null) {
+            $this->assertInternalType('array', $galleryPlusPictureUrls, 'Item::getGalleryPlusPictureUrl() should return an array');
+
+            foreach ($galleryPlusPictureUrls as $url) {
+                $this->assertInternalType('string', $url, 'Item::getGalleryPlusPictureURL() should return an array with string urls');
+            }
+        }
     }
 }
