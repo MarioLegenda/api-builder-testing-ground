@@ -127,6 +127,13 @@ class Finding
         return $this;
     }
     /**
+     * @return Request
+     */
+    public function createRequest() : Request
+    {
+        return new Request();
+    }
+    /**
      * @return Response
      */
     public function getResponse() : Response
