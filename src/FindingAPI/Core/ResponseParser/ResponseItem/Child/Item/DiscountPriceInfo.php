@@ -39,7 +39,7 @@ class DiscountPriceInfo extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->originalRetailPrice === null and $default !== null) {
             return $default;
         }
 
@@ -57,7 +57,7 @@ class DiscountPriceInfo extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->minimumAdvertisedPriceExposure === null and $default !== null) {
             return $default;
         }
 
@@ -75,7 +75,7 @@ class DiscountPriceInfo extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->pricingTreatment === null and $default !== null) {
             return $default;
         }
 
@@ -93,7 +93,7 @@ class DiscountPriceInfo extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->soldOffEbay === null and $default !== null) {
             return $default;
         }
 
@@ -111,7 +111,7 @@ class DiscountPriceInfo extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->soldOnEbay === null and $default !== null) {
             return $default;
         }
 

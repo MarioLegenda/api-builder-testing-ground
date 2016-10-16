@@ -26,7 +26,7 @@ class Condition extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->conditionId === null and $default !== null) {
             return $default;
         }
 
@@ -44,7 +44,7 @@ class Condition extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->conditionDisplayName === null and $default !== null) {
             return $default;
         }
 

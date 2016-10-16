@@ -5,11 +5,6 @@ namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 class SellingStatus
 {
     /**
-     * @var \SimpleXMLElement $simpleXml
-     */
-    private $simpleXml;
-
-    /**
      * @var int $bidCount
      */
     private $bidCount;
@@ -31,9 +26,10 @@ class SellingStatus
     private $timeLeft;
 
     /**
+     * @param
      * @return int|null
      */
-    public function getBidCount()
+    public function getBidCount($default = null)
     {
         if ($this->bidCount === null) {
             if (!empty($this->simpleXml->bidCount)) {
@@ -41,12 +37,17 @@ class SellingStatus
             }
         }
 
+        if ($this->bidCount === null and $default !== null) {
+            return $default;
+        }
+
         return $this->bidCount;
     }
     /**
+     * @param mixed $default
      * @return float|null
      */
-    public function getConvertedCurrentPrice()
+    public function getConvertedCurrentPrice($default = null)
     {
         if ($this->convertedCurrentPrice === null) {
             if (!empty($this->simpleXml->convertedCurrentPrice)) {
@@ -54,13 +55,18 @@ class SellingStatus
             }
         }
 
+        if ($this->convertedCurrentPrice === null and $default !== null) {
+            return $default;
+        }
+
         return $this->convertedCurrentPrice;
     }
 
     /**
+     * @param mixed $default
      * @return float|null
      */
-    public function getCurrentPrice()
+    public function getCurrentPrice($default = null)
     {
         if ($this->currentPrice === null) {
             if (!empty($this->simpleXml->currentPrice)) {
@@ -68,13 +74,18 @@ class SellingStatus
             }
         }
 
+        if ($this->currentPrice === null and $default !== null) {
+            return $default;
+        }
+
         return $this->currentPrice;
     }
 
     /**
+     * @param mixed $default
      * @return string
      */
-    public function getSellingState()
+    public function getSellingState($default = null)
     {
         if ($this->sellingState === null) {
             if (!empty($this->simpleXml->sellingState)) {
@@ -82,17 +93,26 @@ class SellingStatus
             }
         }
 
+        if ($this->sellingState === null and $default !== null) {
+            return $default;
+        }
+
         return $this->sellingState;
     }
     /**
+     * @param mixed $default
      * @return int|null
      */
-    public function getTimeLeft()
+    public function getTimeLeft($default = null)
     {
         if ($this->timeLeft === null) {
             if (!empty($this->simpleXml->timeLeft)) {
                 $this->setTimeLeft((string) $this->simpleXml->timeLeft);
             }
+        }
+
+        if ($this->timeLeft === null and $default !== null) {
+            return $default;
         }
 
         return $this->timeLeft;

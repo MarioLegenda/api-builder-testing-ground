@@ -311,7 +311,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertThat(
             $listingInfo->getBuyItNowAvailable('buyItNowAvailable'),
             $this->logicalOr(
-                $this->isType('string'),
+                $this->isType('bool'),
                 $this->equalTo('buyItNowAvailable')
             ),
             'ListingInfo::getBuyItNowAvailable() should return a boolean'
@@ -347,7 +347,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertThat(
             $listingInfo->getGift('gift'),
             $this->logicalOr(
-                $this->isType('string'),
+                $this->isType('bool'),
                 $this->equalTo('gift')
             ),
             'ListingInfo::getGift() should return a boolean'
@@ -365,7 +365,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertThat(
             $listingInfo->getConvertedBuyItNowPrice('convertedBuyItNowPrice'),
             $this->logicalOr(
-                $this->isType('string'),
+                $this->isType('array'),
                 $this->equalTo('convertedBuyItNowPrice')
             ),
             'ListingInfo::getConvertedBuyItNowPrice() should return a array'

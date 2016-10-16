@@ -56,7 +56,7 @@ class ShippingInfo
             }
         }
 
-        if ($default !== null) {
+        if ($this->shippingServiceCost === null and $default !== null) {
             return $default;
         }
 
@@ -74,7 +74,7 @@ class ShippingInfo
             }
         }
 
-        if ($default !== null) {
+        if ($this->expeditedShipping === null and $default !== null) {
             return $default;
         }
 
@@ -93,7 +93,7 @@ class ShippingInfo
             }
         }
 
-        if ($default !== null) {
+        if ($this->handlingTime === null and $default !== null) {
             return $default;
         }
 
@@ -111,7 +111,7 @@ class ShippingInfo
             }
         }
 
-        if ($default !== null) {
+        if ($this->oneDayShippingAvailable === null and $default !== null) {
             return $default;
         }
 
@@ -129,7 +129,7 @@ class ShippingInfo
             }
         }
 
-        if ($default !== null) {
+        if ($this->shippingType === null and $default !== null) {
             return $default;
         }
 
@@ -145,6 +145,10 @@ class ShippingInfo
             if (!empty($this->simpleXml->shipToLocations)) {
                 $this->setShipToLocations($this->simpleXml->shipToLocations);
             }
+        }
+
+        if ($this->shipToLocations === null and $default !== null) {
+            return $default;
         }
 
         return $this->shipToLocations;

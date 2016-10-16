@@ -49,7 +49,7 @@ class ListingInfo extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->bestOfferEnabled === null and $default !== null) {
             return $default;
         }
 
@@ -67,7 +67,7 @@ class ListingInfo extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->buyItNowAvailable === null and $default !== null) {
             return $default;
         }
 
@@ -86,7 +86,7 @@ class ListingInfo extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->buyItNowPrice === null and $default !== null) {
             return $default;
         }
 
@@ -105,7 +105,7 @@ class ListingInfo extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->convertedBuyItNowPrice === null and $default !== null) {
             return $default;
         }
 
@@ -123,7 +123,7 @@ class ListingInfo extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->endTime === null and $default !== null) {
             return $default;
         }
 
@@ -142,7 +142,7 @@ class ListingInfo extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->gift === null and $default !== null) {
             return $default;
         }
 
@@ -160,7 +160,7 @@ class ListingInfo extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->listingType === null and $default !== null) {
             return $default;
         }
 
@@ -178,7 +178,7 @@ class ListingInfo extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->startTime === null and $default !== null) {
             return $default;
         }
 
