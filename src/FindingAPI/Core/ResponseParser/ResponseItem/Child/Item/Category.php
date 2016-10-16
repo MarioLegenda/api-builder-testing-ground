@@ -4,7 +4,7 @@ namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 
-class PrimaryCategory extends AbstractItem
+class Category extends AbstractItem
 {
     /**
      * @var string $categoryId
@@ -29,7 +29,7 @@ class PrimaryCategory extends AbstractItem
      * @param string $categoryId
      * @return PrimaryCategory
      */
-    public function setCategoryId(string $categoryId) : PrimaryCategory
+    public function setCategoryId(string $categoryId) : Category
     {
         $this->categoryId = $categoryId;
 
@@ -50,7 +50,7 @@ class PrimaryCategory extends AbstractItem
      * @param string $categoryName
      * @return PrimaryCategory
      */
-    public function setCategoryName(string $categoryName) : PrimaryCategory
+    public function setCategoryName(string $categoryName) : Category
     {
         $this->categoryName = $categoryName;
 

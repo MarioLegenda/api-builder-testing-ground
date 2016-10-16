@@ -4,7 +4,7 @@ namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
-    Attribute, Condition, DiscountPriceInfo, ShippingInfo, ListingInfo, SellingStatus, PrimaryCategory
+    Attribute, Condition, DiscountPriceInfo, ShippingInfo, ListingInfo, SellingStatus, Category
 };
 
 class Item extends AbstractItemIterator
@@ -110,7 +110,7 @@ class Item extends AbstractItemIterator
      */
     private $galleryUrl;
     /**
-     * @var PrimaryCategory $primaryCategory
+     * @var Category $primaryCategory
      */
     private $primaryCategory;
     /**
@@ -282,17 +282,17 @@ class Item extends AbstractItemIterator
     }
     /**
      * @param $default
-     * @return PrimaryCategory
+     * @return Category
      */
-    public function getPrimaryCategory($default = null) : PrimaryCategory
+    public function getPrimaryCategory($default = null) : Category
     {
-        if (!$this->primaryCategory instanceof PrimaryCategory) {
+        if (!$this->primaryCategory instanceof Category) {
             if (!empty($this->simpleXml->primaryCategory)) {
-                $this->setPrimaryCategory(new PrimaryCategory($this->simpleXml->primaryCategory));
+                $this->setPrimaryCategory(new Category($this->simpleXml->primaryCategory));
             }
         }
 
-        if (!$this->primaryCategory instanceof  PrimaryCategory and $default !== null) {
+        if (!$this->primaryCategory instanceof  Category and $default !== null) {
             return $default;
         }
 
@@ -676,7 +676,7 @@ class Item extends AbstractItemIterator
         return $this;
     }
 
-    private function setPrimaryCategory(PrimaryCategory $primaryCategory) : Item
+    private function setPrimaryCategory(Category $primaryCategory) : Item
     {
         $this->primaryCategory = $primaryCategory;
 
