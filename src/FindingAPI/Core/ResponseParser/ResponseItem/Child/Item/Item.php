@@ -10,6 +10,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
 class Item extends AbstractItemIterator
 {
     /**
+     * @var array $eekStatus
+     */
+    private $eekStatus;
+    /**
      * @var array $distance
      */
     private $distance;
@@ -141,7 +145,30 @@ class Item extends AbstractItemIterator
 
         return $this->globalId;
     }
+    /**
+     * @param null $default
+     * @return array|null
+     */
+    public function getEekStatus($default = null)
+    {
+        if ($this->eekStatus === null) {
+            if (!empty($this->simpleXml->eekStatus)) {
+                foreach ($this->simpleXml->eekStatus as $eekStatus) {
+                    $this->setEekStatus((string) $eekStatus);
+                }
+            }
+        }
 
+        if ($this->eekStatus === null and $default !== null) {
+            return $default;
+        }
+
+        return $this->eekStatus;
+    }
+    /**
+     * @param null $default
+     * @return array|null
+     */
     public function getDistance($default = null)
     {
         if ($this->distance === null) {
@@ -682,6 +709,13 @@ class Item extends AbstractItemIterator
             'unit' => $unit,
             'distance' => $distance,
         );
+
+        return $this;
+    }
+
+    private function setEekStatus(string $eekStatus) : Item
+    {
+        $this->eekStatus[] = $eekStatus;
 
         return $this;
     }
