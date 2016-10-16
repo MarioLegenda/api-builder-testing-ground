@@ -12,6 +12,7 @@ use FindingAPI\Core\Request;
 use FindingAPI\Definition\Definition;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Condition;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\DiscountPriceInfo;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Category;
 
 class MainTest extends \PHPUnit_Framework_TestCase
 {
@@ -254,6 +255,22 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType('string', $item->getPrimaryCategory()->getCategoryId(), 'Invalid primary category id. Expected string');
         $this->assertInternalType('string', $item->getPrimaryCategory()->getCategoryName(), 'Invalid primary category name. Expected string');
+
+        $secondaryCategory = $item->getSecondaryCategory('secondaryCategory');
+
+        $this->assertThat(
+            $secondaryCategory,
+            $this->logicalOr(
+                $this->isInstanceOf(Category::class),
+                $this->equalTo('secondaryCategory')
+            ),
+            'Item::getSecondaryCategory() should return a '.Category::class.' instance'
+        );
+
+        if ($secondaryCategory instanceof Category) {
+            $this->assertInternalType('string', $item->getPrimaryCategory()->getCategoryId(), 'Invalid secondary category id. Expected string');
+            $this->assertInternalType('string', $item->getPrimaryCategory()->getCategoryName(), 'Invalid secondary category name. Expected string');
+        }
 
         $shippingInfo = $item->getShippingInfo();
 

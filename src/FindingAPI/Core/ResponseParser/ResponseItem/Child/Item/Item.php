@@ -114,6 +114,10 @@ class Item extends AbstractItemIterator
      */
     private $primaryCategory;
     /**
+     * @var Category $secondaryCategory
+     */
+    private $secondaryCategory;
+    /**
      * @var string $globalId
      */
     private $globalId;
@@ -282,9 +286,9 @@ class Item extends AbstractItemIterator
     }
     /**
      * @param $default
-     * @return Category
+     * @return mixed/Category
      */
-    public function getPrimaryCategory($default = null) : Category
+    public function getPrimaryCategory($default = null)
     {
         if (!$this->primaryCategory instanceof Category) {
             if (!empty($this->simpleXml->primaryCategory)) {
@@ -298,6 +302,24 @@ class Item extends AbstractItemIterator
 
 
         return $this->primaryCategory;
+    }
+    /**
+     * @param null $default
+     * @return \FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Category|null
+     */
+    public function getSecondaryCategory($default = null) 
+    {
+        if (!$this->secondaryCategory instanceof Category) {
+            if (!empty($this->simpleXml->secondaryCategory)) {
+                $this->setSecondaryCategory(new Category($this->simpleXml->secondaryCategory));
+            }
+        }
+
+        if (!$this->secondaryCategory instanceof Category and $default !== null) {
+            return $default;
+        }
+
+        return $this->secondaryCategory;
     }
     /**
      * @param $default
@@ -846,6 +868,13 @@ class Item extends AbstractItemIterator
     private function setPictureURLSuperSize(string $pictureUrlSuperSize) : Item
     {
         $this->pictureUrlSuperSize = $pictureUrlSuperSize;
+
+        return $this;
+    }
+    
+    private function setSecondaryCategory(Category $category) : Item 
+    {
+        $this->secondaryCategory = $category;
 
         return $this;
     }
