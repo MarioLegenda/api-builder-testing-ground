@@ -66,7 +66,7 @@ class ShippingInfo
      * @param mixed $default
      * @return bool|null
      */
-    public function getExpeditedShipping($default = null)
+    public function getExpeditedShipping($default = null) : bool
     {
         if ($this->expeditedShipping === null) {
             if (!empty($this->simpleXml->expeditedShipping)) {
@@ -85,7 +85,7 @@ class ShippingInfo
      * @param mixed $default
      * @return int
      */
-    public function getHandlingTime($default = null) : int
+    public function getHandlingTime($default = null)
     {
         if ($this->handlingTime === null) {
             if (!empty($this->simpleXml->handlingTime)) {
@@ -121,7 +121,7 @@ class ShippingInfo
      * @param mixed $default
      * @return string
      */
-    public function getShippingType($default = null) : string
+    public function getShippingType($default = null)
     {
         if ($this->shippingType === null) {
             if (!empty($this->simpleXml->shippingType)) {
@@ -139,7 +139,7 @@ class ShippingInfo
      * @param mixed $default
      * @return array
      */
-    public function getShipToLocations($default = null) : array
+    public function getShipToLocations($default = null)
     {
         if ($this->shipToLocations === null) {
             if (!empty($this->simpleXml->shipToLocations)) {

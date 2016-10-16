@@ -2,28 +2,31 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem;
 
-use FindingAPI\Core\Debug\Debug;
-use FindingAPI\Core\Exception\ResponseException;
-use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
-use FindingAPI\Core\ResponseParser\ResponseItem\Child\PrimaryCategory;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item;
 
 class SearchResultsContainer extends AbstractItemIterator
 {
     /**
-     * @var bool $itemsLoaded
+     * SearchResultsContainer constructor.
+     * @param \SimpleXMLElement $simpleXML
      */
-    private $itemsLoaded = false;
+    public function __construct(\SimpleXMLElement $simpleXML)
+    {
+        parent::__construct($simpleXML);
+
+        $this->loadItems($simpleXML);
+    }
     /**
      * @param string $itemId
      * @return mixed
      */
     public function getItemById(string $itemId) : Item
     {
-        if ($this->itemsLoaded === false) {
-            $this->loadItems($this->simpleXml);
+        foreach ($this->items as $item) {
+            if ($item->getItemId() === $itemId) {
+                return $item;
+            }
         }
-
-        return $this->iterated[$itemId];
     }
     /**
      * @param string $name
@@ -31,11 +34,7 @@ class SearchResultsContainer extends AbstractItemIterator
      */
     public function getItemByName(string $name)
     {
-        if ($this->itemsLoaded === false) {
-            $this->loadItems($this->simpleXml);
-        }
-
-        foreach ($this->iterated as $item) {
+        foreach ($this->items as $item) {
             if ($item->getTitle() === $name) {
                 return $item;
             }
@@ -51,10 +50,7 @@ class SearchResultsContainer extends AbstractItemIterator
         foreach ($items as $item) {
             $productItem = new Item($item);
 
-            $itemId = (string) $item->itemId;
-            $this->addItemByName($itemId, $productItem);
+            $this->addItem($productItem);
         }
-
-        $this->itemsLoaded = true;
     }
 }

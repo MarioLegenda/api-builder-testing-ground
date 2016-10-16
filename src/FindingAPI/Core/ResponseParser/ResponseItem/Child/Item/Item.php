@@ -1,14 +1,18 @@
 <?php
 
-namespace FindingAPI\Core\ResponseParser\ResponseItem\Child;
+namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
-    Attribute, Condition, ShippingInfo, ListingInfo, SellingStatus, PrimaryCategory
+    Attribute, Condition, DiscountPriceInfo, ShippingInfo, ListingInfo, SellingStatus, PrimaryCategory
 };
 
 class Item extends AbstractItemIterator
 {
+    /**
+     * @var DiscountPriceInfo $discountPriceInfo
+     */
+    private $discountPriceInfo;
     /**
      * @var string $compatibility
      */
@@ -116,14 +120,10 @@ class Item extends AbstractItemIterator
      * @param mixed $default
      * @return string
      */
-    public function getTitle($default = null) : string
+    public function getTitle() : string
     {
         if ($this->title === null) {
             $this->setTitle((string)$this->simpleXml->{'title'});
-        }
-
-        if ($default !== null) {
-            return $default;
         }
 
         return $this->title;
@@ -141,54 +141,94 @@ class Item extends AbstractItemIterator
         return $this->globalId;
     }
     /**
+     * @param $default
      * @return PrimaryCategory
      */
-    public function getPrimaryCategory() : PrimaryCategory
+    public function getPrimaryCategory($default = null) : PrimaryCategory
     {
         if (!$this->primaryCategory instanceof PrimaryCategory) {
-            $this->setPrimaryCategory(new PrimaryCategory($this->simpleXml->primaryCategory));
+            if (!empty($this->simpleXml->primaryCategory)) {
+                $this->setPrimaryCategory(new PrimaryCategory($this->simpleXml->primaryCategory));
+            }
         }
+
+        if (!$this->primaryCategory instanceof  PrimaryCategory and $default !== null) {
+            return $default;
+        }
+
 
         return $this->primaryCategory;
     }
     /**
+     * @param $default
      * @return ShippingInfo
      */
-    public function getShippingInfo() : ShippingInfo
+    public function getShippingInfo($default = null) : ShippingInfo
     {
         if (!$this->shippingInfo instanceof ShippingInfo) {
-            $this->setShippingInfo(new ShippingInfo($this->simpleXml->shippingInfo));
+            if (!empty($this->simpleXml->shippingInfo)) {
+                $this->setShippingInfo(new ShippingInfo($this->simpleXml->shippingInfo));
+            }
+        }
+
+        if (!$this->shippingInfo instanceof ShippingInfo and $default !== null) {
+            return $default;
         }
 
         return $this->shippingInfo;
     }
 
-    public function getSellingStatus() : SellingStatus
+    /**
+     * @param null $default
+     * @return \FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellingStatus
+     */
+    public function getSellingStatus($default = null) : SellingStatus
     {
         if ($this->sellingStatus === null) {
-            $this->setSellingStatus(new SellingStatus($this->simpleXml->sellingStatus));
+            if (!empty($this->simpleXml->sellingStatus)) {
+                $this->setSellingStatus(new SellingStatus($this->simpleXml->sellingStatus));
+            }
+        }
+
+        if ($this->sellingStatus === null and $default !== null) {
+            return $default;
         }
 
         return $this->sellingStatus;
     }
     /**
+     * @param mixed $default
      * @return ListingInfo
      */
-    public function getListingInfo() : ListingInfo
+    public function getListingInfo($default = null) : ListingInfo
     {
         if ($this->listingInfo === null) {
-            $this->setListingInfo(new ListingInfo($this->simpleXml->listingInfo));
+            if (!empty($this->simpleXml->listingInfo)) {
+                $this->setListingInfo(new ListingInfo($this->simpleXml->listingInfo));
+            }
+        }
+
+        if ($this->listingInfo === null and $default !== null) {
+            return $default;
         }
 
         return $this->listingInfo;
     }
 
-    public function getCondition()
+    /**
+     * @param mixed $default
+     * @return \FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Condition|null
+     */
+    public function getCondition($default = null)
     {
         if ($this->condition === null) {
             if (!empty($this->simpleXml->condition)) {
                 $this->setCondition(new Condition($this->simpleXml->condition));
             }
+        }
+
+        if ($this->condition === null and $default !== null) {
+            return $default;
         }
 
         return $this->condition;
@@ -206,7 +246,7 @@ class Item extends AbstractItemIterator
             }
         }
 
-        if ($default !== null) {
+        if ($this->galleryUrl === null and $default !== null) {
             return $default;
         }
 
@@ -223,6 +263,10 @@ class Item extends AbstractItemIterator
             if ($this->simpleXml->viewItemURL) {
                 $this->setViewItemUrl((string)$this->simpleXml->viewItemURL);
             }
+        }
+
+        if ($this->viewItemUrl === null and $default !== null) {
+            return $default;
         }
 
         return $this->viewItemUrl;
@@ -261,7 +305,7 @@ class Item extends AbstractItemIterator
             }
         }
         
-        if ($default !== null) {
+        if ($this->autoPay === null and $default !== null) {
             return $default;
         }
 
@@ -280,7 +324,7 @@ class Item extends AbstractItemIterator
             }
         }
 
-        if ($default !== null) {
+        if ($this->postalCode === null and $default !== null) {
             return $default;
         }
 
@@ -298,7 +342,7 @@ class Item extends AbstractItemIterator
             }
         }
 
-        if ($default !== null) {
+        if ($this->location === null and $default !== null) {
             return $default;
         }
 
@@ -316,7 +360,7 @@ class Item extends AbstractItemIterator
             }
         }
 
-        if ($default !== null) {
+        if ($this->country === null and $default !== null) {
             return $default;
         }
 
@@ -334,7 +378,7 @@ class Item extends AbstractItemIterator
             }
         }
 
-        if ($default !== null) {
+        if ($this->returnsAccepted === null and $default !== null) {
             return $default;
         }
 
@@ -352,7 +396,7 @@ class Item extends AbstractItemIterator
             }
         }
 
-        if ($default !== null) {
+        if ($this->isMultiVariationListing === null and $default !== null) {
             return $default;
         } 
 
@@ -370,7 +414,7 @@ class Item extends AbstractItemIterator
             }
         }
 
-        if ($default !== null) {
+        if ($this->topRatedListing === null and $default !== null) {
             return $default;
         }
 
@@ -378,7 +422,7 @@ class Item extends AbstractItemIterator
     }
     /**
      * @param null $default
-     * @return Item\Attribute[]|null
+     * @return Attribute[]|null
      */
     public function getAttributes($default = null)
     {
@@ -390,7 +434,7 @@ class Item extends AbstractItemIterator
             }
         }
 
-        if ($default !== null) {
+        if ($this->attributes === null and $default !== null) {
             return $default;
         }
 
@@ -408,13 +452,16 @@ class Item extends AbstractItemIterator
             }
         }
 
-        if ($default !== null) {
+        if ($this->charityId === null and $default !== null) {
             return $default;
         }
 
         return $this->charityId;
     }
-
+    /**
+     * @param null $default
+     * @return null|string
+     */
     public function getCompatibility($default = null)
     {
         if ($this->compatibility === null) {
@@ -423,11 +470,37 @@ class Item extends AbstractItemIterator
             }
         }
 
-        if ($default !== null) {
+        if ($this->compatibility === null and $default !== null) {
             return $default;
         }
 
         return $this->compatibility;
+    }
+    /**
+     * @param null $default
+     * @return DiscountPriceInfo|null
+     */
+    public function getDiscountPriceInfo($default = null)
+    {
+        if (!$this->discountPriceInfo instanceof DiscountPriceInfo) {
+            //var_dump($this->simpleXml->discountPriceInfo->originalRetailPrice);
+            if (!empty($this->simpleXml->discountPriceInfo)) {
+                $this->setDiscountPriceInfo(new DiscountPriceInfo($this->simpleXml->discountPriceInfo));
+            }
+        }
+
+        if (!$this->discountPriceInfo instanceof DiscountPriceInfo and $default !== null) {
+            return $default;
+        }
+
+        return $this->discountPriceInfo;
+    }
+    
+    private function setDiscountPriceInfo(DiscountPriceInfo $discountPriceInfo) : Item 
+    {
+        $this->discountPriceInfo = $discountPriceInfo;
+
+        return $this;
     }
 
     private function setSellingStatus(SellingStatus $sellingStatus) : Item

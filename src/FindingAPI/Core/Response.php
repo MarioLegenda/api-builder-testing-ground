@@ -3,7 +3,6 @@
 namespace FindingAPI\Core;
 
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
-use FindingAPI\Core\ResponseParser\ResponseItem\ResponseItemInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use FindingAPI\Core\ResponseParser\ResponseItem\SearchResultsContainer;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
@@ -61,7 +60,7 @@ class Response
      */
     public function getAspectFilters()
     {
-        if ($this->responseItems['aspectHistogram'] instanceof RootItem) {
+        if ($this->responseItems['aspectHistogram'] instanceof AspectHistogramContainer) {
             return $this->responseItems['aspectHistogram'];
         }
 
@@ -74,7 +73,7 @@ class Response
      */
     public function getSearchResults() : SearchResultsContainer
     {
-        if ($this->responseItems['searchResult'] instanceof RootItem) {
+        if ($this->responseItems['searchResult'] instanceof SearchResultsContainer) {
             return $this->responseItems['searchResult'];
         }
 

@@ -6,11 +6,12 @@ require __DIR__.'/../vendor/autoload.php';
 
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Response;
-use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item;
 use FindingAPI\Finding;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\Definition;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Condition;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\DiscountPriceInfo;
 
 class MainTest extends \PHPUnit_Framework_TestCase
 {
@@ -148,11 +149,20 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         $item = $searchResults->getItemByName('Harry Potter Complete Book Series Special Edition Boxed Set by J.K. Rowling NEW!');
         $this->validateItem($item);
+
+        $searchResults = $response->getSearchResults();
+        while ($searchResults->valid()) {
+            $item = $searchResults->current();
+
+            $this->validateItem($item);
+
+            $searchResults->next();
+        }
     }
 
     private function validateItem(Item $item)
     {
-        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item', $item, 'Invalid Item');
+        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item', $item, 'Invalid Item');
 
         $this->assertInternalType('string', $item->getItemId(), 'Item::getItemId() should return a string');
         $this->assertInternalType('string', $item->getGlobalId(), 'Item::getGlobalId() should return a string');
@@ -212,9 +222,27 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $shippingInfo = $item->getShippingInfo();
 
         $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ShippingInfo', $shippingInfo, 'Invalid object. Expected ShippingInfo');
-        $this->assertInternalType('array', $shippingInfo->getShippingServiceCost(), 'ShippingInfo::getShippingServiceCost() has to return array');
+
+        $this->assertThat(
+            $shippingInfo->getShippingServiceCost('shippingServiceCost'),
+            $this->logicalOr(
+                $this->equalTo('shippingServiceCost'),
+                $this->isType('array')
+            ),
+            'ShippingInfo::getShippingServiceCost() has to return array'
+        );
+
         $this->assertInternalType('bool', $shippingInfo->getExpeditedShipping(), 'ShippingInfo::getExpeditedShipping() has to return bool');
-        $this->assertInternalType('int', $shippingInfo->getHandlingTime(), 'ShippingInfo::getHandlingTime() has to return int');
+
+        $this->assertThat(
+            $shippingInfo->getHandlingTime('handlingTime'),
+            $this->logicalOr(
+                $this->equalTo('handlingTime'),
+                $this->isType('int')
+            ),
+            'ShippingInfo::getHandlingTime() has to return int'
+        );
+
         $this->assertInternalType('bool', (bool) $shippingInfo->getOneDayShippingAvailable(), 'ShippingInfo::oneDayShippingAvailable() has to return bool');
         $this->assertInternalType('string', $shippingInfo->getShippingType(), 'ShippingInfo::shippingType() has to return string');
         $this->assertInternalType('array', $shippingInfo->getShipToLocations(), 'ShippingInfo::shipToLocations() has to return array');
@@ -359,6 +387,12 @@ class MainTest extends \PHPUnit_Framework_TestCase
                 $this->assertInternalType('string', $attribute->getAttributeName(), 'Attribute::getAttributeName() should return a string');
                 $this->assertInternalType('string', $attribute->getAttributeValue(), 'Attribute::getAttributeValue() should return a string');
             }
+        }
+
+        if ($item->getDiscountPriceInfo() instanceof DiscountPriceInfo) {
+            $discountPriceInfo = $item->getDiscountPriceInfo();
+
+            $this->assertInternalType('array', $discountPriceInfo->getOriginalRetailPrice(), 'DiscountPriceInfo::getOriginalRetailPrice() should return an array');
         }
     }
 }
