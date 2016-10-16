@@ -26,7 +26,7 @@ class Attribute extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->attributeName === null and $default !== null) {
             return $default;
         }
 
@@ -44,7 +44,7 @@ class Attribute extends AbstractItem
             }
         }
 
-        if ($default !== null) {
+        if ($this->attributeValue === null and $default !== null) {
             return $default;
         }
 
