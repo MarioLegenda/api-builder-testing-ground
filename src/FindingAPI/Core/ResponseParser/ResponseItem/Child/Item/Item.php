@@ -10,6 +10,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
 class Item extends AbstractItemIterator
 {
     /**
+     * @var string $pictureUrlSuperSize
+     */
+    private $pictureUrlSuperSize;
+    /**
      * @var string $pictureUrlLarge
      */
     private $pictureUrlLarge;
@@ -155,6 +159,24 @@ class Item extends AbstractItemIterator
         }
 
         return $this->globalId;
+    }
+    /**
+     * @param null $default
+     * @return null|string
+     */
+    public function getPictureURLSuperSize($default = null)
+    {
+        if ($this->pictureUrlSuperSize === null) {
+            if (!empty($this->simpleXml->pictureURLSuperSize)) {
+                $this->setPictureURLSuperSize((string) $this->simpleXml->pictureURLSuperSize);
+            }
+        }
+
+        if ($this->pictureUrlSuperSize === null and $default !== null) {
+            return $default;
+        }
+
+        return $this->pictureUrlSuperSize;
     }
     /**
      * @param null $default
@@ -817,6 +839,13 @@ class Item extends AbstractItemIterator
     private function setPictureURLLarge(string $pictureUrlLarge) : Item
     {
         $this->pictureUrlLarge = $pictureUrlLarge;
+
+        return $this;
+    }
+
+    private function setPictureURLSuperSize(string $pictureUrlSuperSize) : Item
+    {
+        $this->pictureUrlSuperSize = $pictureUrlSuperSize;
 
         return $this;
     }
