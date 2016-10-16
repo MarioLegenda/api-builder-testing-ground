@@ -10,6 +10,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
 class Item extends AbstractItemIterator
 {
     /**
+     * @var array $distance
+     */
+    private $distance;
+    /**
      * @var DiscountPriceInfo $discountPriceInfo
      */
     private $discountPriceInfo;
@@ -101,9 +105,6 @@ class Item extends AbstractItemIterator
      * @var string $itemId
      */
     private $itemId;
-
-
-
     /**
      * @return string
      */
@@ -139,6 +140,21 @@ class Item extends AbstractItemIterator
         }
 
         return $this->globalId;
+    }
+
+    public function getDistance($default = null)
+    {
+        if ($this->distance === null) {
+            if (!empty($this->simpleXml->distance)) {
+                $this->setDistance((string) $this->simpleXml->distance['unit'], (float) $this->simpleXml->distance);
+            }
+        }
+
+        if ($this->distance === null and $default !== null) {
+            return $default;
+        }
+
+        return $this->distance;
     }
     /**
      * @param $default
@@ -656,6 +672,16 @@ class Item extends AbstractItemIterator
     private function setCompatibility(string $compatibility) : Item
     {
         $this->compatibility = $compatibility;
+
+        return $this;
+    }
+
+    private function setDistance(string $unit, float $distance) : Item
+    {
+        $this->distance = array(
+            'unit' => $unit,
+            'distance' => $distance,
+        );
 
         return $this;
     }
