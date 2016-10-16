@@ -175,6 +175,15 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('bool', $item->getTopRatedListing(), 'Item::getTopRatedListing() should return boolean');
 
         $this->assertThat(
+            $item->getPictureURLLarge('pictureURLLarge'),
+            $this->logicalOr(
+                $this->equalTo('pictureURLLarge'),
+                $this->isType('string')
+            ),
+            'Item::getPictureURLLarge() should return and array'
+        );
+
+        $this->assertThat(
             $item->getDistance('eekStatus'),
             $this->logicalOr(
                 $this->equalTo('eekStatus'),
