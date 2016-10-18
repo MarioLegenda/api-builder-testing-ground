@@ -551,23 +551,8 @@ class MainTest extends \PHPUnit_Framework_TestCase
         );
 
         if ($storeInfo instanceof StoreInfo) {
-            $this->assertThat(
-                $storeInfo->getStoreName('storeName'),
-                $this->logicalOr(
-                    $this->isType('string'),
-                    $this->equalTo('storeName')
-                ),
-                'StoreInfo::getStoreName() should return a string'
-            );
-
-            $this->assertThat(
-                $storeInfo->getStoreURL('storeUrl'),
-                $this->logicalOr(
-                    $this->isType('string'),
-                    $this->equalTo('storeUrl')
-                ),
-                'StoreInfo::getStoreURL() should return a string'
-            );
+            $this->assertInternalType('string', $storeInfo->getStoreName(), 'StoreInfo::getStoreName() should return a string');
+            $this->assertInternalType('string', $storeInfo->getStoreURL(), 'StoreInfo::getStoreURL() should return a string');
         }
 
         $unitPrice = $item->getUnitPrice('unitPrice');
