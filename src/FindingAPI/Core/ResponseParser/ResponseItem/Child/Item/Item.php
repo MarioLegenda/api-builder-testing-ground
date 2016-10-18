@@ -10,6 +10,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
 class Item extends AbstractItemIterator
 {
     /**
+     * @var UnitPrice $unitPrice
+     */
+    private $unitPrice;
+    /**
      * @var string $subtitle
      */
     private $subtitle;
@@ -442,7 +446,24 @@ class Item extends AbstractItemIterator
 
         return $this->storeInfo;
     }
+    /**
+     * @param null $default
+     * @return UnitPrice|null
+     */
+    public function getUnitPrice($default = null)
+    {
+        if (!$this->unitPrice instanceof UnitPrice) {
+            if (!empty($this->simpleXml->unitPrice)) {
+                $this->setUnitPrice(new UnitPrice($this->simpleXml->unitPrice));
+            }
+        }
 
+        if (!$this->unitPrice instanceof UnitPrice and $default !== null) {
+            return $default;
+        }
+
+        return $this->unitPrice;
+    }
     /**
      * @param mixed $default
      * @return \FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Condition|null
@@ -962,6 +983,13 @@ class Item extends AbstractItemIterator
     private function setSubtitle(string $subtitle) : Item
     {
         $this->subtitle = $subtitle;
+
+        return $this;
+    }
+
+    public function setUnitPrice(UnitPrice $unitPrice) : Item
+    {
+        $this->unitPrice = $unitPrice;
 
         return $this;
     }

@@ -9,6 +9,7 @@ use FindingAPI\Core\Response;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellerInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\StoreInfo;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\UnitPrice;
 use FindingAPI\Finding;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\Definition;
@@ -567,6 +568,22 @@ class MainTest extends \PHPUnit_Framework_TestCase
                 ),
                 'StoreInfo::getStoreURL() should return a string'
             );
+        }
+
+        $unitPrice = $item->getUnitPrice('unitPrice');
+
+        $this->assertThat(
+            $unitPrice,
+            $this->logicalOr(
+                $this->isInstanceOf(UnitPrice::class),
+                $this->equalTo('unitPrice')
+            ),
+            'Item::getUnitPrice() should return an instance of '.UnitPrice::class
+        );
+
+        if ($unitPrice instanceof UnitPrice) {
+            $this->assertInternalType('float', $unitPrice->getQuantity(), 'UnitPrice::getQuantity() should return a float');
+            $this->assertInternalType('string', $unitPrice->getType(), 'UnitPrice::getType() should return a string');
         }
     }
 }
