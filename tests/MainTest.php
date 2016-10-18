@@ -8,6 +8,7 @@ use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Response;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellerInfo;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\StoreInfo;
 use FindingAPI\Finding;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\Definition;
@@ -525,6 +526,37 @@ class MainTest extends \PHPUnit_Framework_TestCase
                     $this->equalTo('topRatedSeller')
                 ),
                 'SellerInfo::getSellerUsername() should return string'
+            );
+        }
+
+        $storeInfo = $item->getStoreInfo('storeInfo');
+
+        $this->assertThat(
+            $storeInfo,
+            $this->logicalOr(
+                $this->isInstanceOf(StoreInfo::class),
+                $this->equalTo('storeInfo')
+            ),
+            'Item::getStoreInfo() should return a '.StoreInfo::class.' instance'
+        );
+
+        if ($storeInfo instanceof StoreInfo) {
+            $this->assertThat(
+                $storeInfo->getStoreName('storeName'),
+                $this->logicalOr(
+                    $this->isType('string'),
+                    $this->equalTo('storeName')
+                ),
+                'StoreInfo::getStoreName() should return a string'
+            );
+
+            $this->assertThat(
+                $storeInfo->getStoreURL('storeUrl'),
+                $this->logicalOr(
+                    $this->isType('string'),
+                    $this->equalTo('storeUrl')
+                ),
+                'StoreInfo::getStoreURL() should return a string'
             );
         }
     }

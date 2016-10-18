@@ -10,6 +10,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
 class Item extends AbstractItemIterator
 {
     /**
+     * @var StoreInfo $storeInfo
+     */
+    private $storeInfo;
+    /**
      * @var SellerInfo $sellerInfo
      */
     private $sellerInfo;
@@ -384,7 +388,7 @@ class Item extends AbstractItemIterator
      * @param mixed $default
      * @return ListingInfo
      */
-    public function getListingInfo($default = null) : ListingInfo
+    public function getListingInfo($default = null)
     {
         if ($this->listingInfo === null) {
             if (!empty($this->simpleXml->listingInfo)) {
@@ -397,6 +401,24 @@ class Item extends AbstractItemIterator
         }
 
         return $this->listingInfo;
+    }
+    /**
+     * @param null $default
+     * @return StoreInfo|null
+     */
+    public function getStoreInfo($default = null)
+    {
+        if (!$this->storeInfo instanceof StoreInfo) {
+            if (!empty($this->simpleXml->storeInfo)) {
+                $this->setStoreInfo(new StoreInfo($this->simpleXml->storeInfo));
+            }
+        }
+
+        if (!$this->storeInfo instanceof StoreInfo and $default !== null) {
+            return $default;
+        }
+
+        return $this->storeInfo;
     }
 
     /**
@@ -904,6 +926,13 @@ class Item extends AbstractItemIterator
     private function setSellerInfo(SellerInfo $sellerInfo) : Item
     {
         $this->sellerInfo = $sellerInfo;
+
+        return $this;
+    }
+
+    private function setStoreInfo(StoreInfo $storeInfo) : Item
+    {
+        $this->storeInfo = $storeInfo;
 
         return $this;
     }
