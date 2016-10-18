@@ -40,7 +40,7 @@ class StoreInfo extends AbstractItem
     {
         if ($this->storeName === null) {
             if (!empty($this->simpleXml->storeName)) {
-                $this->setStoreName($this->simpleXml->storeName);
+                $this->setStoreName((string) $this->simpleXml->storeName);
             }
         }
 
