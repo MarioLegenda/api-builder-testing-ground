@@ -10,6 +10,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
 class Item extends AbstractItemIterator
 {
     /**
+     * @var SellerInfo $sellerInfo
+     */
+    private $sellerInfo;
+    /**
      * @var string $pictureUrlSuperSize
      */
     private $pictureUrlSuperSize;
@@ -357,6 +361,24 @@ class Item extends AbstractItemIterator
         }
 
         return $this->sellingStatus;
+    }
+    /**
+     * @param null $default
+     * @return SellerInfo|null
+     */
+    public function getSellerInfo($default = null)
+    {
+        if (!$this->sellerInfo instanceof SellerInfo) {
+            if (!empty($this->simpleXml->sellerInfo)) {
+                $this->setSellerInfo(new SellerInfo($this->simpleXml->sellerInfo));
+            }
+        }
+
+        if (!$this->sellerInfo instanceof SellerInfo and $default !== null) {
+            return $default;
+        }
+
+        return $this->sellerInfo;
     }
     /**
      * @param mixed $default
@@ -875,6 +897,13 @@ class Item extends AbstractItemIterator
     private function setSecondaryCategory(Category $category) : Item 
     {
         $this->secondaryCategory = $category;
+
+        return $this;
+    }
+
+    private function setSellerInfo(SellerInfo $sellerInfo) : Item
+    {
+        $this->sellerInfo = $sellerInfo;
 
         return $this;
     }

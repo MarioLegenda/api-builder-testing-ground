@@ -7,6 +7,7 @@ require __DIR__.'/../vendor/autoload.php';
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Response;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellerInfo;
 use FindingAPI\Finding;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\Definition;
@@ -467,6 +468,64 @@ class MainTest extends \PHPUnit_Framework_TestCase
             foreach ($galleryPlusPictureUrls as $url) {
                 $this->assertInternalType('string', $url, 'Item::getGalleryPlusPictureURL() should return an array with string urls');
             }
+        }
+
+        $sellerInfo = $item->getSellerInfo('sellerInfo');
+
+        $this->assertThat(
+            $sellerInfo,
+            $this->logicalOr(
+                $this->isInstanceOf(SellerInfo::class),
+                $this->equalTo('sellerInfo')
+            ),
+            'Item::getSellerInfo() should return an instance of '.SellerInfo::class
+        );
+
+        if ($sellerInfo instanceof SellerInfo) {
+            $this->assertThat(
+                $sellerInfo->getFeedbackRatingStar('feedbackRatingStar'),
+                $this->logicalOr(
+                    $this->isType('string'),
+                    $this->equalTo('feedbackRatingStar')
+                ),
+                'SellerInfo::getFeedbackRatingStar() should return string'
+            );
+
+            $this->assertThat(
+                $sellerInfo->getFeedbackScore('feedbackScore'),
+                $this->logicalOr(
+                    $this->isType('int'),
+                    $this->equalTo('feedbackScore')
+                ),
+                'SellerInfo::getFeedbackScore() should return int'
+            );
+
+            $this->assertThat(
+                $sellerInfo->getPositiveFeedbackPercent('positiveFeedbackPercent'),
+                $this->logicalOr(
+                    $this->isType('int'),
+                    $this->equalTo('positiveFeedbackPercent')
+                ),
+                'SellerInfo::getPositiveFeedbackPercent() should return int'
+            );
+
+            $this->assertThat(
+                $sellerInfo->getSellerUsername('sellerUsername'),
+                $this->logicalOr(
+                    $this->isType('string'),
+                    $this->equalTo('sellerUsername')
+                ),
+                'SellerInfo::getSellerUsername() should return string'
+            );
+
+            $this->assertThat(
+                $sellerInfo->getTopRatedSeller('topRatedSeller'),
+                $this->logicalOr(
+                    $this->isType('bool'),
+                    $this->equalTo('topRatedSeller')
+                ),
+                'SellerInfo::getSellerUsername() should return string'
+            );
         }
     }
 }
