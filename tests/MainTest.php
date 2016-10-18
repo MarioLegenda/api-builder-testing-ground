@@ -178,6 +178,15 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('bool', $item->getTopRatedListing(), 'Item::getTopRatedListing() should return boolean');
 
         $this->assertThat(
+            $item->getSubtitle('subtitle'),
+            $this->logicalOr(
+                $this->isType('string'),
+                $this->equalTo('subtitle')
+            ),
+            'Item::getSubtitle() should return a string'
+        );
+
+        $this->assertThat(
             $item->getPictureURLSuperSize('pictureURLSuperSize'),
             $this->logicalOr(
                 $this->equalTo('pictureURLSuperSize'),

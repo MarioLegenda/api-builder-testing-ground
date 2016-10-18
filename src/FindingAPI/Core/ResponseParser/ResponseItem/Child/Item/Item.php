@@ -10,6 +10,10 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
 class Item extends AbstractItemIterator
 {
     /**
+     * @var string $subtitle
+     */
+    private $subtitle;
+    /**
      * @var StoreInfo $storeInfo
      */
     private $storeInfo;
@@ -171,6 +175,24 @@ class Item extends AbstractItemIterator
         }
 
         return $this->globalId;
+    }
+    /**
+     * @param null $default
+     * @return null|string
+     */
+    public function getSubtitle($default = null)
+    {
+        if ($this->subtitle === null) {
+            if (!empty($this->simpleXml->subtitle)) {
+                $this->setSubtitle((string) $this->simpleXml->subtitle);
+            }
+        }
+
+        if ($this->subtitle === null and $default !== null) {
+            return $default;
+        }
+
+        return $this->subtitle;
     }
     /**
      * @param null $default
@@ -933,6 +955,13 @@ class Item extends AbstractItemIterator
     private function setStoreInfo(StoreInfo $storeInfo) : Item
     {
         $this->storeInfo = $storeInfo;
+
+        return $this;
+    }
+
+    private function setSubtitle(string $subtitle) : Item
+    {
+        $this->subtitle = $subtitle;
 
         return $this;
     }
