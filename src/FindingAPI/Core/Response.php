@@ -20,6 +20,7 @@ class Response
         'rootItem' => null,
         'aspectHistogram' => null,
         'searchResult' => null,
+        'conditionHistogramContainer' => null,
     );
     /**
      * @var GuzzleResponse
@@ -56,12 +57,17 @@ class Response
         return $this->responseItems['rootItem'];
     }
     /**
+     * @param mixed $default
      * @return null|AspectHistogramContainer
      */
-    public function getAspectFilters()
+    public function getAspectFilters($default = null)
     {
         if ($this->responseItems['aspectHistogram'] instanceof AspectHistogramContainer) {
             return $this->responseItems['aspectHistogram'];
+        }
+
+        if (!$this->responseItems['aspectHistogram'] instanceof AspectHistogramContainer and $default !== null) {
+            return $default;
         }
 
         $this->responseItems['aspectHistogram'] = new AspectHistogramContainer($this->simpleXmlBase->aspectHistogramContainer);
@@ -82,7 +88,5 @@ class Response
         return $this->responseItems['searchResult'];
     }
 
-    private function createRootItem() : RootItem
-    {
-    }
+    
 }
