@@ -10,6 +10,7 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellerInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\StoreInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\UnitPrice;
+use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
 use FindingAPI\Finding;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\Definition;
@@ -55,14 +56,29 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
     public function testRequest()
     {
-        $request = new Request();
+        $queries = array(
+            'harry potter',
+        );
 
-        $request
-            ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
-            ->setMethod('get')
-            ->setResponseDataFormat('xml')
-            ->setSecurityAppId('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
-            ->addSearch(Definition::customDefinition('harry potter'));
+        foreach ($queries as $query) {
+            $request = new Request();
+
+            $request
+                ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
+                ->setMethod('get')
+                ->setResponseDataFormat('xml')
+                ->setSecurityAppId('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
+                ->addSearch(Definition::customDefinition($query));
+
+            $finder = Finding::getInstance($request);
+
+            $finder->setValidationRule('global-item-filters', false);
+            $finder->setValidationRule('individual-item-filters', false);
+
+            $response = $finder->getResponse();
+
+            $this->validateResponse($response);
+        }
  //           ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
             //->specialFeature()->findLocalItems(31000)
 //            ->setBuyerPostalCode(31000)
@@ -114,29 +130,9 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::START_TIME_TO, array(new \DateTime('1.9.2019')))
             ->addItemFilter(ItemFilter::TOP_RATED_SELLER_ONLY, array(true))
             ->addItemFilter(ItemFilter::WORLD_OF_GOOD_ONLY, array(false));*/
-
-        return $request;
     }
-    /**
-     * @depends testRequest
-     */
-    public function testFinder(Request $request)
-    {
-        $finder = Finding::getInstance($request);
 
-        $finder->setValidationRule('global-item-filters', false);
-        $finder->setValidationRule('individual-item-filters', false);
-
-        $processed = $finder->send()->getProcessed();
-
-        $response = $finder->getResponse();
-
-        return $response;
-    }
-    /**
-     * @depends testFinder
-     */
-    public function testResponse(Response $response)
+    private function validateResponse(Response $response)
     {
         $this->assertInternalType('string', $response->getRoot()->getName(), 'RootItem name should be ebay method name, for instance findItemByKeywordsResponse');
         $this->assertEquals('http://www.ebay.com/marketplace/search/v1/services', $response->getRoot()->getNamespace(), 'Invalid ebay api url, not a string');
@@ -145,23 +141,15 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $response->getRoot()->getVersion(), 'Invalid version. Not a string');
         $this->assertInternalType('int', $response->getRoot()->getSearchResultsCount(), 'Invalid search results count. Not a string');
 
-
         $searchResults = $response->getSearchResults();
-
-        $item = $searchResults->getItemById('360778402701');
-        $this->validateItem($item);
-
-        $item = $searchResults->getItemByName('Harry Potter Complete Book Series Special Edition Boxed Set by J.K. Rowling NEW!');
-        $this->validateItem($item);
-
-        $searchResults = $response->getSearchResults();
-        while ($searchResults->valid()) {
-            $item = $searchResults->current();
-
+        foreach ($searchResults as $item) {
             $this->validateItem($item);
-
-            $searchResults->next();
         }
+
+        // TODO: Implement ConditionCategoryHistogram later
+        //$conditionHistogramContainer = $response->getConditionHistogramContainer();
+
+        //$this->assertInstanceOf(ConditionHistogramContainer::class, $conditionHistogramContainer, 'Response::getConditionHistogramContainer() should return '.ConditionHistogramContainer::class);
     }
 
     private function validateItem(Item $item)
@@ -463,11 +451,9 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $galleryInfoContainer = $item->getGalleryContainer();
 
         if ($galleryInfoContainer !== null) {
-            while ($galleryInfoContainer->valid()) {
-                $galleryUrl = $galleryInfoContainer->current();
-
-                $this->assertInternalType('string', $galleryUrl->getUrl(), 'GalleryUrl::getUrl() should return a string');
-                $this->assertInternalType('string', $galleryUrl->getSize(), 'GalleryUrl::getSize() should return a string');
+            foreach ($galleryInfoContainer as $galleryContainer) {
+                $this->assertInternalType('string', $galleryContainer->getUrl(), 'GalleryUrl::getUrl() should return a string');
+                $this->assertInternalType('string', $galleryContainer->getSize(), 'GalleryUrl::getSize() should return a string');
             }
         }
 

@@ -3,6 +3,7 @@
 namespace FindingAPI\Core;
 
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
+use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use FindingAPI\Core\ResponseParser\ResponseItem\SearchResultsContainer;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
@@ -87,6 +88,26 @@ class Response
 
         return $this->responseItems['searchResult'];
     }
+    /**
+     * @param null $default
+     * @return mixed
+     */
+    public function getConditionHistogramContainer($default = null)
+    {
+        if ($this->responseItems['conditionHistogramContainer'] instanceof ConditionHistogramContainer) {
+            return $this->responseItems['conditionHistogramContainer'];
+        }
 
-    
+        if (!$this->responseItems['conditionHistogramContainer'] instanceof ConditionHistogramContainer) {
+            return null;
+        }
+
+        if (!$this->responseItems['conditionHistogramContainer'] instanceof ConditionHistogramContainer and $default !== null) {
+            return $default;
+        }
+
+        $this->responseItems['conditionHistogramContainer'] = new ConditionHistogramContainer($this->simpleXmlBase->conditionHistogramContainer);
+
+        return $this->responseItems['conditionHistogramContainer'];
+    }
 }

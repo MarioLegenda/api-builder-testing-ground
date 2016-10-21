@@ -4,7 +4,7 @@ namespace FindingAPI\Core\ResponseParser\ResponseItem;
 
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
-class AbstractItemIterator extends AbstractItem implements \Iterator, \Countable
+class AbstractItemIterator extends AbstractItem implements \IteratorAggregate
 {
     /**
      * @var int $position
@@ -45,54 +45,10 @@ class AbstractItemIterator extends AbstractItem implements \Iterator, \Countable
         return array_key_exists($key, $this->items);
     }
     /**
-     * @return \Iterator
+     * @return \ArrayIterator
      */
-    public function rewind() : \Iterator
+    public function getIterator()
     {
-        $this->position = 0;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function current()
-    {
-        return $this->items[$this->position];
-    }
-
-    /**
-     * @return int
-     */
-    public function key() : int
-    {
-        return $this->position;
-    }
-
-    /**
-     * @return \Iterator
-     */
-    public function next() : \Iterator
-    {
-        ++$this->position;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function valid() : bool
-    {
-        return $this->hasItem($this->position);
-    }
-
-    /**
-     * @return int
-     */
-    public function count() : int
-    {
-        return count($this->items);
+        return new \ArrayIterator($this->items);
     }
 }
