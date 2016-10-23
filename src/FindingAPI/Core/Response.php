@@ -61,7 +61,7 @@ class Response
      * @param mixed $default
      * @return null|AspectHistogramContainer
      */
-    public function getAspectFilters($default = null)
+    public function getAspectHistogramContainer($default = null)
     {
         if ($this->responseItems['aspectHistogram'] instanceof AspectHistogramContainer) {
             return $this->responseItems['aspectHistogram'];

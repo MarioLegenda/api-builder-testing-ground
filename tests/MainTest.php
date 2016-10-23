@@ -7,6 +7,8 @@ require __DIR__.'/../vendor/autoload.php';
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Response;
+use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\Aspect;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ListingInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellerInfo;
@@ -160,6 +162,17 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $searchResults = $response->getSearchResults();
         foreach ($searchResults as $item) {
             $this->validateItem($item);
+        }
+
+        $aspectHistogram = $response->getAspectHistogramContainer();
+
+        if ($aspectHistogram instanceof AspectHistogramContainer) {
+            $this->assertInstanceOf(AspectHistogramContainer::class, $aspectHistogram, 'Response::getAspectHistogramContainer() should return an instance of '.AspectHistogramContainer::class);
+
+
+            foreach ($aspectHistogram as $aspect) {
+                $this->assertInstanceOf(Aspect::class, $aspect, 'When foreach-ing AspectHistogramContainer, every iteration should have '.Aspect::class);
+            }
         }
 
         // TODO: Implement ConditionCategoryHistogram later
