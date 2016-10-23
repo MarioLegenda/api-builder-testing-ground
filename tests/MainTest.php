@@ -9,6 +9,7 @@ use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Response;
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\Aspect;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\ValueHistogram;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ListingInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellerInfo;
@@ -169,9 +170,17 @@ class MainTest extends \PHPUnit_Framework_TestCase
         if ($aspectHistogram instanceof AspectHistogramContainer) {
             $this->assertInstanceOf(AspectHistogramContainer::class, $aspectHistogram, 'Response::getAspectHistogramContainer() should return an instance of '.AspectHistogramContainer::class);
 
-
             foreach ($aspectHistogram as $aspect) {
                 $this->assertInstanceOf(Aspect::class, $aspect, 'When foreach-ing AspectHistogramContainer, every iteration should have '.Aspect::class);
+
+                $this->assertInternalType('string', $aspect->getAspectName(), 'Aspect::getAspectName() should return a string');
+
+                foreach ($aspect as $valueHistogram) {
+                    $this->assertInstanceOf(ValueHistogram::class, '', 'When foreach-ing Aspect, every interation should return a ValueHistogram');
+
+                    $this->assertInternalType('string', $valueHistogram->getValueName());
+                    $this->assertInternalType('int', $valueHistogram->getCount());
+                }
             }
         }
 
