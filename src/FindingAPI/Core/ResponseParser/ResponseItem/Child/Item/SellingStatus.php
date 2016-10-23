@@ -2,7 +2,9 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
-class SellingStatus
+use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
+
+class SellingStatus extends AbstractItem
 {
     /**
      * @var int $bidCount

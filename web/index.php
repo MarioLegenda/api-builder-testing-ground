@@ -7,6 +7,8 @@ use FindingAPI\Core\Request;
 
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Definition\Definition;
+use FindingAPI\Core\ItemFilter\ItemFilter;
+use FindingAPI\Core\Information\Currency as InformationCurrency;
 
 $request = new Request();
 
@@ -15,7 +17,10 @@ $request
     ->setMethod('get')
     ->setResponseDataFormat('xml')
     ->setSecurityAppId('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
-    ->addSearch(Definition::customDefinition('harry potter'));
+    ->addSearch(Definition::customDefinition('harry potter'))
+    ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram'))
+    ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
+    ->addItemFilter(ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN));
 
 $finder = Finding::getInstance($request);
 

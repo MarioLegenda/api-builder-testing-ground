@@ -5,18 +5,22 @@ namespace Test;
 require __DIR__.'/../vendor/autoload.php';
 
 use FindingAPI\Core\Information\OperationName;
+use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Response;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ListingInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellerInfo;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellingStatus;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ShippingInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\StoreInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\UnitPrice;
-use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
 use FindingAPI\Finding;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\Definition;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Condition;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\DiscountPriceInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Category;
+use FindingAPI\Core\Information\Currency as InformationCurrency;
 
 class MainTest extends \PHPUnit_Framework_TestCase
 {
@@ -57,10 +61,13 @@ class MainTest extends \PHPUnit_Framework_TestCase
     public function testRequest()
     {
         $queries = array(
-            'harry potter',
+            'harry potter' => array(
+                array (ItemFilter::BEST_OFFER_ONLY, array(true)),
+                array (ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN)),
+            ),
         );
 
-        foreach ($queries as $query) {
+        foreach ($queries as $query => $filters) {
             $request = new Request();
 
             $request
@@ -68,14 +75,23 @@ class MainTest extends \PHPUnit_Framework_TestCase
                 ->setMethod('get')
                 ->setResponseDataFormat('xml')
                 ->setSecurityAppId('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
+                ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
                 ->addSearch(Definition::customDefinition($query));
+
+            if ($filters !== null) {
+                foreach ($filters as $filter) {
+                    $request->addItemFilter($filter[0], $filter[1]);
+                }
+            }
 
             $finder = Finding::getInstance($request);
 
-            $finder->setValidationRule('global-item-filters', false);
-            $finder->setValidationRule('individual-item-filters', false);
+            $processed = $finder->getProcessed();
 
-            $response = $finder->getResponse();
+            $finder->setValidationRule('global-item-filters', true);
+            $finder->setValidationRule('individual-item-filters', true);
+
+            $response = $finder->send()->getResponse();
 
             $this->validateResponse($response);
         }
@@ -166,85 +182,41 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('bool', $item->getIsMultiVariationListing(), 'Item::getIsMultiVariationListing() should return bool');
         $this->assertInternalType('bool', $item->getTopRatedListing(), 'Item::getTopRatedListing() should return boolean');
 
-        $this->assertThat(
-            $item->getSubtitle('subtitle'),
-            $this->logicalOr(
-                $this->isType('string'),
-                $this->equalTo('subtitle')
-            ),
-            'Item::getSubtitle() should return a string'
-        );
+        if ($item->getSubtitle() !== null) {
+            $this->assertInternalType('string', $item->getSubtitle(), 'Item::getSubtitle() should return a string');
+        }
 
-        $this->assertThat(
-            $item->getPictureURLSuperSize('pictureURLSuperSize'),
-            $this->logicalOr(
-                $this->equalTo('pictureURLSuperSize'),
-                $this->isType('string')
-            ),
-            'Item::getPictureURLSuperSize() should return and array'
-        );
+        if ($item->getPictureURLSuperSize() !== null) {
+            $this->assertInternalType('string', $item->getPictureURLSuperSize(), 'Item::getPictureURLSuperSize() should return string');
+        }
 
-        $this->assertThat(
-            $item->getPictureURLLarge('pictureURLLarge'),
-            $this->logicalOr(
-                $this->equalTo('pictureURLLarge'),
-                $this->isType('string')
-            ),
-            'Item::getPictureURLLarge() should return and array'
-        );
+        if ($item->getPictureURLLarge() !== null) {
+            $this->assertInternalType('string', $item->getPictureURLLarge(), 'Item::getPictureURLLarge() should return string');
+        }
 
-        $this->assertThat(
-            $item->getDistance('eekStatus'),
-            $this->logicalOr(
-                $this->equalTo('eekStatus'),
-                $this->isType('array')
-            ),
-            'Item::getEekStatus() should return and array'
-        );
+        if ($item->getEekStatus() !== null) {
+            $this->assertInternalType('array', $item->getEekStatus(), 'Item::getEekStatus() should return an array');
+        }
 
-        $this->assertThat(
-            $item->getDistance('distance'),
-            $this->logicalOr(
-                $this->equalTo('distance'),
-                $this->isType('array')
-            ),
-            'Item::getDistance() should return and array'
-        );
+        if ($item->getDistance() !== null) {
+            $this->assertInternalType('string', $item->getDistance(), 'Item::getDistance() should return an array');
+        }
 
-        $this->assertThat(
-            $item->getCompatibility('compatibility'),
-            $this->logicalOr(
-                $this->equalTo('compatibility'),
-                $this->isType('string')
-            ),
-            'Item::getCompatibility() should return a string'
-        );
+        if ($item->getCompatibility() !== null) {
+            $this->assertInternalType('string', $item->getCompatibility(), 'Item::getCompatibility() should return a string');
+        }
 
-        $this->assertThat(
-            $item->getCharityId('charityId'),
-            $this->logicalOr(
-                $this->equalTo('charityId'),
-                $this->isType('string')
-            )
-        );
+        if ($item->getCharityId() !== null) {
+            $this->assertInternalType('string', $item->getCharityId(), 'Item::getCarityId() should return a string');
+        }
 
-        $this->assertThat(
-            $item->getAutoPay('autoPay'),
-            $this->logicalOr(
-                $this->isType('bool'),
-                $this->equalTo('autoPay')
-            ),
-            'Item::getAutoPay() should return a bool'
-        );
+        if ($item->getAutoPay() !== null) {
+            $this->assertInternalType('bool', $item->getAutoPay(), 'Item::getAutoPay() should return a boolean');
+        }
 
-        $this->assertThat(
-            $item->getPostalCode('postalCode'),
-            $this->logicalOr(
-                $this->isType('int'),
-                $this->equalTo('postalCode')
-            ),
-            'Item::getPostalCode() should return a int'
-        );
+        if ($item->getPostalCode() !== null) {
+            $this->assertInternalType('int', $item->getPostalCode(), 'Item::getPostalCode() should return an int');
+        }
 
         $this->assertInternalType('string', $item->getLocation(), 'Item::getLocation() should return a string');
         $this->assertInternalType('string', $item->getCountry(), 'Item::getCountry() should return a string');
@@ -256,173 +228,104 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $item->getPrimaryCategory()->getCategoryId(), 'Invalid primary category id. Expected string');
         $this->assertInternalType('string', $item->getPrimaryCategory()->getCategoryName(), 'Invalid primary category name. Expected string');
 
-        $secondaryCategory = $item->getSecondaryCategory('secondaryCategory');
-
-        $this->assertThat(
-            $secondaryCategory,
-            $this->logicalOr(
-                $this->isInstanceOf(Category::class),
-                $this->equalTo('secondaryCategory')
-            ),
-            'Item::getSecondaryCategory() should return a '.Category::class.' instance'
-        );
+        $secondaryCategory = $item->getSecondaryCategory();
 
         if ($secondaryCategory instanceof Category) {
-            $this->assertInternalType('string', $item->getPrimaryCategory()->getCategoryId(), 'Invalid secondary category id. Expected string');
-            $this->assertInternalType('string', $item->getPrimaryCategory()->getCategoryName(), 'Invalid secondary category name. Expected string');
+            $this->assertInstanceOf(Category::class, $secondaryCategory, 'Item::getSecondaryCategory() should return an instance of '.Category::class);
+
+            $this->assertInternalType('string', $item->getSecondaryCategory()->getCategoryId(), 'Invalid secondary category id. Expected string');
+            $this->assertInternalType('string', $item->getSecondaryCategory()->getCategoryName(), 'Invalid secondary category name. Expected string');
         }
 
         $shippingInfo = $item->getShippingInfo();
 
-        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ShippingInfo', $shippingInfo, 'Invalid object. Expected ShippingInfo');
+        if ($shippingInfo instanceof ShippingInfo) {
+            $this->assertInstanceOf(ShippingInfo::class, $shippingInfo, 'Invalid object. Expected '.ShippingInfo::class);
 
-        $this->assertThat(
-            $shippingInfo->getShippingServiceCost('shippingServiceCost'),
-            $this->logicalOr(
-                $this->equalTo('shippingServiceCost'),
-                $this->isType('array')
-            ),
-            'ShippingInfo::getShippingServiceCost() has to return array'
-        );
+            if ($shippingInfo->getShippingServiceCost() !== null) {
+                $this->assertInternalType('array', $shippingInfo->getShippingServiceCost(), 'Item::getShippingServiceCost() should return an array');
+            }
 
-        $this->assertInternalType('bool', $shippingInfo->getExpeditedShipping(), 'ShippingInfo::getExpeditedShipping() has to return bool');
+            if ($shippingInfo->getExpeditedShipping() !== null) {
+                $this->assertInternalType('bool', $shippingInfo->getExpeditedShipping(), 'ShippingInfo::getExpeditedShipping() has to return bool');
+            }
 
-        $this->assertThat(
-            $shippingInfo->getHandlingTime('handlingTime'),
-            $this->logicalOr(
-                $this->equalTo('handlingTime'),
-                $this->isType('int')
-            ),
-            'ShippingInfo::getHandlingTime() has to return int'
-        );
+            if ($shippingInfo->getHandlingTime() !== null) {
+                $this->assertInternalType('int', $shippingInfo->getHandlingTime(), 'ShippingInfo::getHandlingTime() should return an int');
+            }
 
-        $this->assertInternalType('bool', (bool) $shippingInfo->getOneDayShippingAvailable(), 'ShippingInfo::oneDayShippingAvailable() has to return bool');
-        $this->assertInternalType('string', $shippingInfo->getShippingType(), 'ShippingInfo::shippingType() has to return string');
-        $this->assertInternalType('array', $shippingInfo->getShipToLocations(), 'ShippingInfo::shipToLocations() has to return array');
+            if ($shippingInfo->getOneDayShippingAvailable() !== null) {
+                $this->assertInternalType('bool', (bool) $shippingInfo->getOneDayShippingAvailable(), 'ShippingInfo::oneDayShippingAvailable() has to return bool');
+            }
+
+            if ($shippingInfo->getShippingType() !== null) {
+                $this->assertInternalType('string', $shippingInfo->getShippingType(), 'ShippingInfo::shippingType() has to return string');
+            }
+
+            if ($shippingInfo->getShipToLocations()) {
+                $this->assertInternalType('array', $shippingInfo->getShipToLocations(), 'ShippingInfo::shipToLocations() has to return array');
+            }
+        }
 
         $sellingStatus = $item->getSellingStatus();
 
-        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellingStatus', $sellingStatus, 'Invalid instance. SellingStatus expected');
-        $this->assertThat(
-            $sellingStatus->getBidCount(),
-            $this->logicalOr(
-                $this->isType('null'),
-                $this->isType('int')
-            ),
-            'SellingStatus::getBidCount() should return either null or an integer'
-        );
+        if ($sellingStatus instanceof SellingStatus) {
+            $this->assertInstanceOf(SellingStatus::class, $sellingStatus, 'Invalid instance. Expected '.SellingStatus::class);
 
-        $this->assertThat(
-            $sellingStatus->getConvertedCurrentPrice(),
-            $this->logicalOr(
-                $this->isType('null'),
-                $this->isType('array')
-            ),
-            'SellingStatus::getConvertedCurrentPrice() should return either null or a array'
-        );
+            if ($sellingStatus->getConvertedCurrentPrice() !== null) {
+                $this->assertInternalType('array', $sellingStatus->getConvertedCurrentPrice(), 'SellingStatus::getConvertedCurrentPrice() should return an array');
+            }
 
-        $this->assertThat(
-            $sellingStatus->getCurrentPrice(),
-            $this->logicalOr(
-                $this->isType('null'),
-                $this->isType('array')
-            ),
-            'SellingStatus::getCurrentPrice() should return either null or a array'
-        );
+            if ($sellingStatus->getCurrentPrice() !== null) {
+                $this->assertInternalType('array', $sellingStatus->getCurrentPrice(), 'SellingStatus::getCurrentPrice() should return an array');
+            }
 
-        $this->assertThat(
-            $sellingStatus->getSellingState(),
-            $this->logicalOr(
-                $this->isType('null'),
-                $this->isType('string')
-            ),
-            'SellingStatus::getSellingState() should return either null or a string'
-        );
+            if ($sellingStatus->getSellingState() !== null) {
+                $this->assertInternalType('string', $sellingStatus->getSellingState(), 'SellingStatus::getSellingState() should return a string');
+            }
 
-        $this->assertThat(
-            $sellingStatus->getTimeLeft(),
-            $this->logicalOr(
-                $this->isType('null'),
-                $this->isType('string')
-            ),
-            'SellingStatus::getTimeLeft() should return either null or a string'
-        );
+            if ($sellingStatus->getTimeLeft() !== null) {
+                $this->assertInternalType('string', $sellingStatus->getTimeLeft(), 'SellingStatus::getTimeLeft() should return a string');
+            }
+        }
 
         $listingInfo = $item->getListingInfo();
 
-        $this->assertInstanceOf('FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ListingInfo', $listingInfo, 'Invalid instance. Expected ListingInfo');
+        if ($listingInfo instanceof ListingInfo) {
+            $this->assertInstanceOf(ListingInfo::class, $listingInfo, 'Invalid instance. Expected '.ListingInfo::class);
 
-        $this->assertThat(
-            $listingInfo->getBestOfferEnabled('bestOfferEnabled'),
-            $this->logicalOr(
-                $this->equalTo('bestOfferEnabled'),
-                $this->isType('bool')
-            ),
-            'ListingInfo::getBestOfferEnabled() should return either null or a boolean'
-        );
+            if ($listingInfo->getBestOfferEnabled() !== null) {
+                $this->assertInternalType('bool', $listingInfo->getBestOfferEnabled(), 'ListingInfo::getBestOfferEnabled() should return a bool');
+            }
 
-        $this->assertThat(
-            $listingInfo->getBuyItNowAvailable('buyItNowAvailable'),
-            $this->logicalOr(
-                $this->isType('bool'),
-                $this->equalTo('buyItNowAvailable')
-            ),
-            'ListingInfo::getBuyItNowAvailable() should return a boolean'
-        );
+            if ($listingInfo->getBuyItNowAvailable() !== null) {
+                $this->assertInternalType('bool', $listingInfo->getBuyItNowAvailable(), 'ListingInfo::getBuyItNowAvailable() should return a bool');
+            }
 
-        $this->assertThat(
-            $listingInfo->getStartTime('startTime'),
-            $this->logicalOr(
-                $this->isType('string'),
-                $this->equalTo('startTime')
-            ),
-            'ListingInfo::getStartTime() should return a string'
-        );
+            if ($listingInfo->getStartTime() !== null) {
+                $this->assertInternalType('string', $listingInfo->getStartTime(), 'ListingInfo::getStartTime() should return a string');
+            }
 
-        $this->assertThat(
-            $listingInfo->getEndTime('endTime'),
-            $this->logicalOr(
-                $this->isType('string'),
-                $this->equalTo('endTime')
-            ),
-            'ListingInfo::getEndTime() should return a string'
-        );
+            if ($listingInfo->getEndTime() !== null) {
+                $this->assertInternalType('string', $listingInfo->getEndTime(), 'ListingInfo::getEndTime() should return a string');
+            }
 
-        $this->assertThat(
-            $listingInfo->getListingType('listingType'),
-            $this->logicalOr(
-                $this->isType('string'),
-                $this->equalTo('listingType')
-            ),
-            'ListingInfo::getListingType() should return a string'
-        );
+            if ($listingInfo->getListingType() !== null) {
+                $this->assertInternalType('string', $listingInfo->getListingType(), 'ListingInfo::getListingType() should return a string');
+            }
 
-        $this->assertThat(
-            $listingInfo->getGift('gift'),
-            $this->logicalOr(
-                $this->isType('bool'),
-                $this->equalTo('gift')
-            ),
-            'ListingInfo::getGift() should return a boolean'
-        );
+            if ($listingInfo->getGift() !== null) {
+                $this->assertInternalType('bool', $listingInfo->getGift(), 'ListingInfo::getGift() should return a bool');
+            }
 
-        $this->assertThat(
-            $listingInfo->getBuyItNowPrice('buyItNowPrice'),
-            $this->logicalOr(
-                $this->isType('array'),
-                $this->equalTo('buyItNowPrice')
-            ),
-            'ListingInfo::getBuyItNowPrice() should return a array'
-        );
+            if ($listingInfo->getBuyItNowPrice() !== null) {
+                $this->assertInternalType('array', $listingInfo->getBuyItNowPrice(), 'ListingInfo::getBuyItNowPrice() should return an array');
+            }
 
-        $this->assertThat(
-            $listingInfo->getConvertedBuyItNowPrice('convertedBuyItNowPrice'),
-            $this->logicalOr(
-                $this->isType('array'),
-                $this->equalTo('convertedBuyItNowPrice')
-            ),
-            'ListingInfo::getConvertedBuyItNowPrice() should return a array'
-        );
+            if ($listingInfo->getConvertedBuyItNowPrice() !== null) {
+                $this->assertInternalType('array', $listingInfo->getConvertedBuyItNowPrice(), 'ListingInfo::getConvertedBuyItNowPrice() should return an array');
+            }
+        }
 
         if ($item->getCondition() instanceof Condition) {
             $condition = $item->getCondition();
@@ -469,90 +372,44 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         $sellerInfo = $item->getSellerInfo('sellerInfo');
 
-        $this->assertThat(
-            $sellerInfo,
-            $this->logicalOr(
-                $this->isInstanceOf(SellerInfo::class),
-                $this->equalTo('sellerInfo')
-            ),
-            'Item::getSellerInfo() should return an instance of '.SellerInfo::class
-        );
-
         if ($sellerInfo instanceof SellerInfo) {
-            $this->assertThat(
-                $sellerInfo->getFeedbackRatingStar('feedbackRatingStar'),
-                $this->logicalOr(
-                    $this->isType('string'),
-                    $this->equalTo('feedbackRatingStar')
-                ),
-                'SellerInfo::getFeedbackRatingStar() should return string'
-            );
+            $this->assertInstanceOf(SellerInfo::class, $sellerInfo, 'Item::getSellerInfo() should return an instance of '.SellerInfo::class);
 
-            $this->assertThat(
-                $sellerInfo->getFeedbackScore('feedbackScore'),
-                $this->logicalOr(
-                    $this->isType('int'),
-                    $this->equalTo('feedbackScore')
-                ),
-                'SellerInfo::getFeedbackScore() should return int'
-            );
+            if ($sellerInfo->getFeedbackRatingStar() !== null) {
+                $this->assertInternalType('string', $sellerInfo->getFeedbackRatingStar(), 'SellerInfo::getFeedbackRatingStar() should return a string');
+            }
 
-            $this->assertThat(
-                $sellerInfo->getPositiveFeedbackPercent('positiveFeedbackPercent'),
-                $this->logicalOr(
-                    $this->isType('int'),
-                    $this->equalTo('positiveFeedbackPercent')
-                ),
-                'SellerInfo::getPositiveFeedbackPercent() should return int'
-            );
+            if ($sellerInfo->getFeedbackScore() !== null) {
+                $this->assertInternalType('int', $sellerInfo->getFeedbackScore(), 'SellerInfo::getFeedbackScore() should reteurn an int');
+            }
 
-            $this->assertThat(
-                $sellerInfo->getSellerUsername('sellerUsername'),
-                $this->logicalOr(
-                    $this->isType('string'),
-                    $this->equalTo('sellerUsername')
-                ),
-                'SellerInfo::getSellerUsername() should return string'
-            );
+            if ($sellerInfo->getPositiveFeedbackPercent() !== null) {
+                $this->assertInternalType('float', $sellerInfo->getPositiveFeedbackPercent(), 'SellerInfo::getPositiveFeedbackPercent() should return a float');
+            }
 
-            $this->assertThat(
-                $sellerInfo->getTopRatedSeller('topRatedSeller'),
-                $this->logicalOr(
-                    $this->isType('bool'),
-                    $this->equalTo('topRatedSeller')
-                ),
-                'SellerInfo::getSellerUsername() should return string'
-            );
+            if ($sellerInfo->getSellerUsername() !== null) {
+                $this->assertInternalType('string', $sellerInfo->getSellerUsername(), 'SellerInfo::getSellerUsername() should return a string');
+            }
+
+            if ($sellerInfo->getTopRatedSeller() !== null) {
+                $this->assertInternalType('bool', $sellerInfo->getTopRatedSeller(), 'SellerInfo::getTopRatedSeller() should return a boolean');
+            }
         }
 
         $storeInfo = $item->getStoreInfo('storeInfo');
 
-        $this->assertThat(
-            $storeInfo,
-            $this->logicalOr(
-                $this->isInstanceOf(StoreInfo::class),
-                $this->equalTo('storeInfo')
-            ),
-            'Item::getStoreInfo() should return a '.StoreInfo::class.' instance'
-        );
-
         if ($storeInfo instanceof StoreInfo) {
+            $this->assertInstanceOf(StoreInfo::class, $storeInfo, 'Item::getStoreInfo() should return an instance of '.StoreInfo::class);
+
             $this->assertInternalType('string', $storeInfo->getStoreName(), 'StoreInfo::getStoreName() should return a string');
             $this->assertInternalType('string', $storeInfo->getStoreURL(), 'StoreInfo::getStoreURL() should return a string');
         }
 
         $unitPrice = $item->getUnitPrice('unitPrice');
 
-        $this->assertThat(
-            $unitPrice,
-            $this->logicalOr(
-                $this->isInstanceOf(UnitPrice::class),
-                $this->equalTo('unitPrice')
-            ),
-            'Item::getUnitPrice() should return an instance of '.UnitPrice::class
-        );
-
         if ($unitPrice instanceof UnitPrice) {
+            $this->assertInstanceOf($unitPrice, UnitPrice::class, 'Item::getUnitPrice() should return an instance of '.UnitPrice::class);
+
             $this->assertInternalType('float', $unitPrice->getQuantity(), 'UnitPrice::getQuantity() should return a float');
             $this->assertInternalType('string', $unitPrice->getType(), 'UnitPrice::getType() should return a string');
         }

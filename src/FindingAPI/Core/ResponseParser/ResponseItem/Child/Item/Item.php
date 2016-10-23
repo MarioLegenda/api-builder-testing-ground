@@ -341,7 +341,7 @@ class Item extends AbstractItemIterator
      * @param null $default
      * @return \FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Category|null
      */
-    public function getSecondaryCategory($default = null) 
+    public function getSecondaryCategory($default = null)
     {
         if (!$this->secondaryCategory instanceof Category) {
             if (!empty($this->simpleXml->secondaryCategory)) {
@@ -378,7 +378,7 @@ class Item extends AbstractItemIterator
      * @param null $default
      * @return \FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellingStatus
      */
-    public function getSellingStatus($default = null) : SellingStatus
+    public function getSellingStatus($default = null)
     {
         if ($this->sellingStatus === null) {
             if (!empty($this->simpleXml->sellingStatus)) {
