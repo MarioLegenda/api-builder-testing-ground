@@ -69,6 +69,25 @@ class Finding
 
         $this->eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
         $this->eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
+
+        $individualItemFilterValidation = $this->validation['individual-item-filters'];
+        $globalItemFilterValidation = $this->validation['global-item-filters'];
+
+        if ($globalItemFilterValidation === true) {
+            $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        }
+
+        if ($individualItemFilterValidation === true) {
+            (new RequestValidator($this->request))->validate();
+        }
+
+        if ($globalItemFilterValidation === true) {
+            $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        }
+
+        $processors = (new ProcessorFactory($this->request))->createProcessors();
+
+        $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
     }
     /**
      * @param string $validationType
@@ -99,25 +118,6 @@ class Finding
      */
     public function send() : Finding
     {
-        $individualItemFilterValidation = $this->validation['individual-item-filters'];
-        $globalItemFilterValidation = $this->validation['global-item-filters'];
-
-        if ($globalItemFilterValidation === true) {
-            $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
-        }
-
-        if ($individualItemFilterValidation === true) {
-            (new RequestValidator($this->request))->validate();
-        }
-
-        if ($globalItemFilterValidation === true) {
-            $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
-        }
-
-        $processors = (new ProcessorFactory($this->request))->createProcessors();
-
-        $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
-
         $guzzleResponse = $this->request->sendRequest($this->processed);
 
         $xmlToParse = (string) $guzzleResponse->getBody();

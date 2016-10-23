@@ -28,9 +28,12 @@ class OutputSelector extends AbstractFilter implements FilterInterface
      */
     public function urlify(int $counter) : string
     {
+        $counter = 0;
         $final = '';
         foreach ($this->filter as $filter) {
             $final.='outputSelector('.$counter.')='.$filter.'&';
+
+            $counter++;
         }
 
         return $final;

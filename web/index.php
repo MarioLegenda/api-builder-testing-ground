@@ -18,7 +18,7 @@ $request
     ->setResponseDataFormat('xml')
     ->setSecurityAppId('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
     ->addSearch(Definition::customDefinition('harry potter'))
-    ->setOutputSelector(array('AspectHistogram'))
+    ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
     ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
     ->addItemFilter(ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN));
 
