@@ -24,6 +24,7 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Condition;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\DiscountPriceInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Category;
 use FindingAPI\Core\Information\Currency as InformationCurrency;
+use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
 
 class MainTest extends \PHPUnit_Framework_TestCase
 {
@@ -185,9 +186,17 @@ class MainTest extends \PHPUnit_Framework_TestCase
         }
 
         // TODO: Implement ConditionCategoryHistogram later
-        //$conditionHistogramContainer = $response->getConditionHistogramContainer();
+        $conditionHistogramContainer = $response->getConditionHistogramContainer();
 
-        //$this->assertInstanceOf(ConditionHistogramContainer::class, $conditionHistogramContainer, 'Response::getConditionHistogramContainer() should return '.ConditionHistogramContainer::class);
+        if ($conditionHistogramContainer instanceof ConditionHistogramContainer) {
+            $this->assertInstanceOf(ConditionHistogramContainer::class, $conditionHistogramContainer, 'Response::getConditionHistogramContainer() should return '.ConditionHistogramContainer::class);
+
+            foreach ($conditionHistogramContainer as $conditionHistogram) {
+                $this->assertInternalType('string', $conditionHistogram->getConditionDisplayName(), 'ConditionHistogram::getConditionDisplayName() should return a string');
+                $this->assertInternalType('string', $conditionHistogram->getConditionId(), 'ConditionHistogram::getConditionId() has to be of type string');
+                $this->assertInternalType('int', $conditionHistogram->getCount(), 'ConditionHistogram::getCount() should be an integer');
+            }
+        }
     }
 
     private function validateItem(Item $item)
