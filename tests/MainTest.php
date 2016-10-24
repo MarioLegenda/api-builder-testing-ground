@@ -19,6 +19,7 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ShippingInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\StoreInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\UnitPrice;
 use FindingAPI\Core\ResponseParser\ResponseItem\ErrorContainer;
+use FindingAPI\Core\ResponseParser\ResponseItem\PaginationOutput;
 use FindingAPI\Core\ResponseParser\ResponseItem\SearchResultsContainer;
 use FindingAPI\Finding;
 use FindingAPI\Core\Request;
@@ -197,6 +198,15 @@ class MainTest extends \PHPUnit_Framework_TestCase
                     $this->assertInternalType('string', $parameter->getParameter());
                 }
             }
+        }
+
+        $paginationOutput = $response->getPaginationOutput();
+
+        if ($paginationOutput instanceof PaginationOutput) {
+            $this->assertInternalType('int', $paginationOutput->getEntriesPerPage(), 'PaginationOutput::getEntriesPerPage() should return an int');
+            $this->assertInternalType('int', $paginationOutput->getPageNumber(), 'PaginationOutput::getPageNumber() should return an int');
+            $this->assertInternalType('int', $paginationOutput->getTotalEntries(), 'PaginationOutput::getTotalEntries() should return an int');
+            $this->assertInternalType('int', $paginationOutput->getTotalPages(), 'PaginationOutput::getTotalPages() should return an int');
         }
 
         $searchResults = $response->getSearchResults();
