@@ -5,6 +5,7 @@ namespace FindingAPI\Core;
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\ErrorContainer;
+use FindingAPI\Core\ResponseParser\ResponseItem\PaginationOutput;
 use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use FindingAPI\Core\ResponseParser\ResponseItem\SearchResultsContainer;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
@@ -24,6 +25,7 @@ class Response
         'searchResult' => null,
         'conditionHistogramContainer' => null,
         'errorContainer' => null,
+        'paginationOutput' => null,
     );
     /**
      * @var GuzzleResponse
@@ -117,6 +119,26 @@ class Response
         }
 
         return $this->responseItems['conditionHistogramContainer'];
+    }
+    /**
+     * @param null $default
+     * @return mixed|null
+     */
+    public function getPaginationOutput($default = null)
+    {
+        if ($this->responseItems['paginationOutput'] instanceof PaginationOutput) {
+            return $this->responseItems['paginationOutput'];
+        }
+
+        if (!empty($this->simpleXmlBase->paginationOutput)) {
+            $this->responseItems['paginationOutput'] = new PaginationOutput($this->simpleXmlBase->paginationOutput);
+        }
+
+        if (!$this->responseItems['paginationOutput'] instanceof PaginationOutput and $default !== null) {
+            return $default;
+        }
+
+        return $this->responseItems['paginationOutput'];
     }
     /**
      * @return bool
