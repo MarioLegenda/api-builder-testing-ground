@@ -10,6 +10,7 @@ use FindingAPI\Core\Response;
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\Aspect;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\ValueHistogram;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Error\ErrorMessage;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ListingInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellerInfo;
@@ -17,6 +18,8 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellingStatus;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ShippingInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\StoreInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\UnitPrice;
+use FindingAPI\Core\ResponseParser\ResponseItem\ErrorContainer;
+use FindingAPI\Core\ResponseParser\ResponseItem\SearchResultsContainer;
 use FindingAPI\Finding;
 use FindingAPI\Core\Request;
 use FindingAPI\Definition\Definition;
@@ -68,6 +71,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             'harry potter' => array(
                 array (ItemFilter::BEST_OFFER_ONLY, array(true)),
                 array (ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN)),
+                array (ItemFilter::FEEDBACK_SCORE_MAX, array(-1)),
             ),
         );
 
@@ -90,12 +94,16 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
             $finder = Finding::getInstance($request);
 
-            $processed = $finder->getProcessed();
-
-            $finder->setValidationRule('global-item-filters', true);
-            $finder->setValidationRule('individual-item-filters', true);
+            $finder->setValidationRule('global-item-filters', false);
+            $finder->setValidationRule('individual-item-filters', false);
 
             $response = $finder->send()->getResponse();
+
+            $processed = $finder->getProcessed();
+
+            //var_dump($processed);
+
+            //var_dump((string) $response->getGuzzleResponse()->getBody());
 
             $this->validateResponse($response);
         }
@@ -161,9 +169,42 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $response->getRoot()->getVersion(), 'Invalid version. Not a string');
         $this->assertInternalType('int', $response->getRoot()->getSearchResultsCount(), 'Invalid search results count. Not a string');
 
+        if ($response->isErrorResponse()) {
+            $errors = $response->getErrors();
+
+            $this->assertInstanceOf(ErrorContainer::class, $errors, 'Response::getErrors() has to return an instance of '.ErrorContainer::class);
+
+            foreach ($response->getErrors() as $errorMessage) {
+                $this->assertInstanceOf(ErrorMessage::class, $errorMessage, 'When foreach-ing error messages, value has to be an instance of '.ErrorMessage::class);
+
+                $this->assertInternalType('string', $errorMessage->getSubdomain(), 'ErrorMessage::getSubdomain() has to return a string');
+                $this->assertInternalType('string', $errorMessage->getSeverity(), 'ErrorMessage::getSeverity() has to return a string');
+                $this->assertInternalType('string', $errorMessage->getMessage(), 'ErrorMessage::getMessage() has to return a string');
+
+                if ($errorMessage->getExceptionId() !== null) {
+                    $this->assertInternalType('string', $errorMessage->getExceptionId(), 'ErrorMessage::getExceptionId() has to return a string');
+                }
+
+                $this->assertInternalType('int', $errorMessage->getErrorId(), 'ErrorMessage::getErrorId() has to return an int');
+                $this->assertInternalType('string', $errorMessage->getDomain(), 'ErrorMessage::getDomain() has to return an string');
+                $this->assertInternalType('string', $errorMessage->getCategory(), 'ErrorMessage::getDomain() has to return an string');
+
+                foreach ($errorMessage as $parameter) {
+                    if ($parameter->getParameterName() !== null) {
+                        $this->assertInternalType('string', $parameter->getName(), 'Parameter::getName() should return a string');
+                    }
+
+                    $this->assertInternalType('string', $parameter->getParameter());
+                }
+            }
+        }
+
         $searchResults = $response->getSearchResults();
-        foreach ($searchResults as $item) {
-            $this->validateItem($item);
+
+        if ($searchResults instanceof SearchResultsContainer) {
+            foreach ($searchResults as $item) {
+                $this->validateItem($item);
+            }
         }
 
         $aspectHistogram = $response->getAspectHistogramContainer();

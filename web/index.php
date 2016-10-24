@@ -20,9 +20,13 @@ $request
     ->addSearch(Definition::customDefinition('harry potter'))
     ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
     ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
-    ->addItemFilter(ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN));
+    ->addItemFilter(ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN))
+    ->addItemFilter(ItemFilter::FEEDBACK_SCORE_MAX, array(-1));
 
 $finder = Finding::getInstance($request);
+
+$finder->setValidationRule('global-item-filters', false);
+$finder->setValidationRule('individual-item-filters', false);
 
 $body = (string) $finder->send()->getResponse()->getGuzzleResponse()->getBody();
 
