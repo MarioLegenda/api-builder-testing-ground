@@ -28,7 +28,10 @@ $finder = Finding::getInstance($request);
 $finder->setValidationRule('global-item-filters', false);
 $finder->setValidationRule('individual-item-filters', false);
 
-$body = (string) $finder->send()->getResponse()->getGuzzleResponse()->getBody();
+$finder->send();
+$response = $finder->getResponse();
+
+$body = $response->getGuzzleResponse()->getBody();
 
 $dom = new DOMDocument();
 $dom->loadXML($body);

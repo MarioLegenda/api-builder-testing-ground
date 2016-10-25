@@ -118,12 +118,6 @@ class Finding
 
         $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
 
-        $guzzleResponse = $this->request->sendRequest($this->processed);
-
-        $xmlToParse = (string) $guzzleResponse->getBody();
-
-        $this->response = new Response(simplexml_load_string($xmlToParse), $guzzleResponse);
-
         return $this;
     }
     /**
@@ -138,6 +132,16 @@ class Finding
      */
     public function getResponse() : Response
     {
+        if ($this->response instanceof Response) {
+            return $this->response;
+        }
+
+        $guzzleResponse = $this->request->sendRequest($this->processed);
+
+        $xmlToParse = (string) $guzzleResponse->getBody();
+
+        $this->response = new Response($xmlToParse, $guzzleResponse);
+
         return $this->response;
     }
 }

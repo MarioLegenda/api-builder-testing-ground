@@ -72,7 +72,6 @@ class MainTest extends \PHPUnit_Framework_TestCase
             'harry potter' => array(
                 array (ItemFilter::BEST_OFFER_ONLY, array(true)),
                 array (ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN)),
-                array (ItemFilter::FEEDBACK_SCORE_MAX, array(-1)),
             ),
         );
 

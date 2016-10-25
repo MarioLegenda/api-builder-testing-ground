@@ -13,6 +13,10 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
 class Response
 {
     /**
+     * @var string $xmlString
+     */
+    private $xmlString;
+    /**
      * @var \SimpleXMLElement $simpleXmlBase
      */
     private $simpleXmlBase;
@@ -34,11 +38,11 @@ class Response
     /**
      * Response constructor.
      * @param GuzzleResponse $guzzleResponse
-     * @param \SimpleXmlElement $simpleXMLBase
+     * @param string $xmlString
      */
-    public function __construct(\SimpleXMLElement $simpleXMLBase, GuzzleResponse $guzzleResponse)
+    public function __construct(string $xmlString, GuzzleResponse $guzzleResponse)
     {
-        $this->simpleXmlBase = $simpleXMLBase;
+        $this->xmlString = $xmlString;
         $this->guzzleResponse = $guzzleResponse;
     }
     /**
@@ -53,6 +57,8 @@ class Response
      */
     public function getRoot() : RootItem
     {
+        $this->lazyLoadSimpleXml($this->xmlString);
+
         if ($this->responseItems['rootItem'] instanceof RootItem) {
             return $this->responseItems['rootItem'];
         }
@@ -67,6 +73,8 @@ class Response
      */
     public function getAspectHistogramContainer($default = null)
     {
+        $this->lazyLoadSimpleXml($this->xmlString);
+
         if ($this->responseItems['aspectHistogram'] instanceof AspectHistogramContainer) {
             return $this->responseItems['aspectHistogram'];
         }
@@ -86,6 +94,8 @@ class Response
      */
     public function getSearchResults($default = null)
     {
+        $this->lazyLoadSimpleXml($this->xmlString);
+
         if ($this->responseItems['searchResult'] instanceof SearchResultsContainer) {
             return $this->responseItems['searchResult'];
         }
@@ -106,6 +116,8 @@ class Response
      */
     public function getConditionHistogramContainer($default = null)
     {
+        $this->lazyLoadSimpleXml($this->xmlString);
+
         if ($this->responseItems['conditionHistogramContainer'] instanceof ConditionHistogramContainer) {
             return $this->responseItems['conditionHistogramContainer'];
         }
@@ -126,6 +138,8 @@ class Response
      */
     public function getPaginationOutput($default = null)
     {
+        $this->lazyLoadSimpleXml($this->xmlString);
+
         if ($this->responseItems['paginationOutput'] instanceof PaginationOutput) {
             return $this->responseItems['paginationOutput'];
         }
@@ -145,6 +159,8 @@ class Response
      */
     public function isErrorResponse()
     {
+        $this->lazyLoadSimpleXml($this->xmlString);
+
         return $this->getRoot()->getAck() === 'Failure';
     }
     /**
@@ -153,6 +169,8 @@ class Response
      */
     public function getErrors($default = null)
     {
+        $this->lazyLoadSimpleXml($this->xmlString);
+
         if ($this->responseItems['errorContainer'] instanceof ErrorContainer) {
             return $this->responseItems['errorContainer'];
         }
@@ -166,5 +184,16 @@ class Response
         }
 
         return $this->responseItems['errorContainer'];
+    }
+
+    private function lazyLoadSimpleXml($xmlString)
+    {
+        if ($this->simpleXmlBase instanceof \SimpleXMLElement) {
+            return;
+        }
+
+        $this->simpleXmlBase = simplexml_load_string($xmlString);
+
+        $this->xmlString = null;
     }
 }
