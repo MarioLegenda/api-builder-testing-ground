@@ -209,6 +209,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             foreach ($categoryHistogramContainer as $histogram) {
                 $this->assertInstanceOf(CategoryHistogram::class, $histogram, 'When foreach-ing a CategoryHistogramContainer, foreach should receive a '.CategoryHistogram::class);
 
+                var_dump('MainCategory: '.$histogram->getCategoryName().', Depth: '.$histogram->getDepth());
                 $this->assertInternalType('string', $histogram->getCategoryId(), 'CategoryHistogram::getCategoryId() should return a string');
                 $this->assertInternalType('string', $histogram->getCategoryName(), 'CategoryHistogram::getCategoryName() should return a string');
                 $this->assertInternalType('int', $histogram->getCount(), 'CategoryHistogram::getCount() should return a string');
@@ -216,6 +217,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
                 foreach ($histogram as $childHistogram) {
                     $this->assertInstanceOf(CategoryHistogram::class, $childHistogram, 'When foreach-ing a CategoryHistogramContainer, foreach should receive a '.CategoryHistogram::class);
 
+                    var_dump('Subcategory: '.$childHistogram->getCategoryName().', Parent: '.$childHistogram->getParent()->getCategoryName().', Depth: '.$childHistogram->getDepth());
                     $this->assertInternalType('string', $histogram->getCategoryId(), 'Child CategoryHistogram::getCategoryId() should return a string');
                     $this->assertInternalType('string', $histogram->getCategoryName(), 'Child CategoryHistogram::getCategoryName() should return a string');
                     $this->assertInternalType('int', $histogram->getCount(), 'Child CategoryHistogram::getCount() should return a string');

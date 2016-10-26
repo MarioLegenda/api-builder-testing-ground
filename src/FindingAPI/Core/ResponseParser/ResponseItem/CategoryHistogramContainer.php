@@ -6,7 +6,6 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\CategoryHistogram\Category
 
 class CategoryHistogramContainer extends AbstractItemIterator
 {
-    const ONE_LINE_ITERATION = 1;
     /**
      * CategoryHistogramContainer constructor.
      * @param \SimpleXMLElement $simpleXML

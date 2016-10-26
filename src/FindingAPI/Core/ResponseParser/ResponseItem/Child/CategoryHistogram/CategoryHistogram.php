@@ -7,6 +7,14 @@ use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
 class CategoryHistogram extends AbstractItemIterator
 {
     /**
+     * @var int $depth
+     */
+    private $depth;
+    /**
+     * @var CategoryHistogram $parent
+     */
+    private $parent;
+    /**
      * @var string $categoryId
      */
     private $categoryId;
@@ -21,10 +29,16 @@ class CategoryHistogram extends AbstractItemIterator
     /**
      * CategoryHistogram constructor.
      * @param \SimpleXMLElement $simpleXML
+     * @param CategoryHistogram $parent
+     * @param int $depth
      */
-    public function __construct(\SimpleXMLElement $simpleXML)
+    public function __construct(\SimpleXMLElement $simpleXML, CategoryHistogram $parent = null, int $depth = 0)
     {
         parent::__construct($simpleXML);
+
+        $this->parent = $parent;
+
+        $this->depth = $depth;
 
         if (!empty($simpleXML->childCategoryHistogram)) {
             $this->loadChildCategoryHistograms($simpleXML->childCategoryHistogram);
@@ -84,6 +98,20 @@ class CategoryHistogram extends AbstractItemIterator
 
         return $this->count;
     }
+    /**
+     * @return CategoryHistogram
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+    /**
+     * @return int
+     */
+    public function getDepth()
+    {
+        return $this->depth;
+    }
 
     private function setCount(int $count) : CategoryHistogram
     {
@@ -108,8 +136,9 @@ class CategoryHistogram extends AbstractItemIterator
 
     private function loadChildCategoryHistograms(\SimpleXMLElement $simpleXml)
     {
+        $depth = $this->depth + 1;
         foreach ($simpleXml as $childCategoryHistogram) {
-            $this->addItem(new CategoryHistogram($childCategoryHistogram));
+            $this->addItem(new CategoryHistogram($childCategoryHistogram, $this, $depth));
         }
     }
 }
