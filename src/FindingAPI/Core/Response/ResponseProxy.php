@@ -1,6 +1,6 @@
 <?php
 
-namespace FindingAPI\Core;
+namespace FindingAPI\Core\Response;
 
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 

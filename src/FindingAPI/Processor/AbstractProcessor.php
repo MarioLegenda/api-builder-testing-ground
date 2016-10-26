@@ -2,8 +2,7 @@
 
 namespace FindingAPI\Processor;
 
-use FindingAPI\Core\Request;
-use FindingAPI\Processor\Factory\DefinitionTypeInterface;
+use FindingAPI\Core\Request\Request;
 
 abstract class AbstractProcessor
 {

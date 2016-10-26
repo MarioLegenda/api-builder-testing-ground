@@ -5,7 +5,7 @@ namespace FindingAPI\Processor\Get;
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 use FindingAPI\Processor\AbstractProcessor;
 use FindingAPI\Processor\ProcessorInterface;
-use FindingAPI\Core\Request;
+use FindingAPI\Core\Request\Request;
 use FindingAPI\Processor\UrlifyInterface;
 
 class GetItemFiltersProcessor extends AbstractProcessor implements ProcessorInterface

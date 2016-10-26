@@ -1,6 +1,6 @@
 <?php
 
-namespace FindingAPI\Core;
+namespace FindingAPI\Core\Response;
 
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\CategoryHistogramContainer;

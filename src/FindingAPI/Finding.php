@@ -6,11 +6,13 @@ use FindingAPI\Core\Event\ItemFilterEvent;
 use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\Listener\PostValidateItemFilters;
 use FindingAPI\Core\Listener\PreValidateItemFilters;
-use FindingAPI\Core\RequestValidator;
+use FindingAPI\Core\Request\RequestValidator;
+use FindingAPI\Core\Request\Request as FindingRequest;
 use FindingAPI\Core\Request;
 use FindingAPI\Core\Response;
 use FindingAPI\Processor\Factory\ProcessorFactory;
 use FindingAPI\Processor\RequestProducer;
+use FindingAPI\Core\Response\Response as FindingResponse;
 
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use GuzzleHttp\Exception\ConnectException;
@@ -32,7 +34,7 @@ class Finding
      */
     private $request;
     /**
-     * @var Response $response
+     * @var FindingResponse $response
      */
     private $response;
     /**
@@ -55,10 +57,10 @@ class Finding
      */
     private static $instance;
     /**
-     * @param Request|null $configuration
+     * @param FindingRequest|null $configuration
      * @return $this
      */
-    public static function getInstance(Request $request) : Finding
+    public static function getInstance(FindingRequest $request) : Finding
     {
         if (self::$instance instanceof self) {
             return self::$instance;
@@ -70,9 +72,9 @@ class Finding
     }
     /**
      * FinderSearch constructor.
-     * @param Request $configuration
+     * @param FindingRequest $configuration
      */
-    private function __construct(Request $request)
+    private function __construct(FindingRequest $request)
     {
         $this->request = $request;
 
@@ -140,22 +142,22 @@ class Finding
         return $this;
     }
     /**
-     * @return Request
+     * @return FindingRequest
      */
-    public function createRequest() : Request
+    public function createRequest() : FindingRequest
     {
-        return new Request();
+        return new FindingRequest();
     }
     /**
-     * @return Response
+     * @return FindingResponse
      */
-    public function getResponse() : Response
+    public function getResponse() : FindingResponse
     {
-        if ($this->response instanceof Response) {
+        if ($this->response instanceof FindingResponse) {
             return $this->response;
         }
 
-        $this->response = new Response($this->responseToParse, $this->guzzleResponse);
+        $this->response = new FindingResponse($this->responseToParse, $this->guzzleResponse);
 
         unset($this->responseToParse);
         unset($this->guzzleResponse);

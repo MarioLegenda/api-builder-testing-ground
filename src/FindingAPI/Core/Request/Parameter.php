@@ -1,6 +1,6 @@
 <?php
 
-namespace FindingAPI\Core;
+namespace FindingAPI\Core\Request;
 
 use FindingAPI\Core\Exception\RequestException;
 

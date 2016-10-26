@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace FindingAPI\Definition;
 
-use FindingAPI\Core\Options;
+use FindingAPI\Core\Request\Options;
 
 class Definition
 {

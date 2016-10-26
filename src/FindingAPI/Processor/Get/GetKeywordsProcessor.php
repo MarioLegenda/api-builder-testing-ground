@@ -4,8 +4,7 @@ namespace FindingAPI\Processor\Get;
 
 use FindingAPI\Processor\AbstractProcessor;
 use FindingAPI\Processor\ProcessorInterface;
-use FindingAPI\Core\Request;
-use FindingAPI\Processor\Factory\DefinitionTypeInterface;
+use FindingAPI\Core\Request\Request;
 
 class GetKeywordsProcessor extends AbstractProcessor implements ProcessorInterface
 {

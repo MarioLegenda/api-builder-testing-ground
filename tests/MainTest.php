@@ -31,12 +31,14 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\DiscountPriceInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Category;
 use FindingAPI\Core\Information\Currency as InformationCurrency;
 use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
+use FindingAPI\Core\Response\Response as FindingResponse;
+use FindingAPI\Core\Request\Request as FindingRequest;
 
 class MainTest extends \PHPUnit_Framework_TestCase
 {
     public function testItemFilters()
     {
-        $request = new Request();
+        $request = new FindingRequest();
 
         $itemFilterStorage = $request->getItemFilterStorage();
 
@@ -78,7 +80,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
         );
 
         foreach ($queries as $query => $filters) {
-            $request = new Request();
+            $request = new FindingRequest();
 
             $request
                 ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
@@ -96,8 +98,8 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
             $finder = Finding::getInstance($request);
 
-            $finder->setValidationRule('global-item-filters', false);
-            $finder->setValidationRule('individual-item-filters', false);
+            $finder->setValidationRule('global-item-filters', true);
+            $finder->setValidationRule('individual-item-filters', true);
 
             $response = $finder->send()->getResponse();
 
@@ -162,7 +164,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::WORLD_OF_GOOD_ONLY, array(false));*/
     }
 
-    private function validateResponse(Response $response)
+    private function validateResponse(FindingResponse $response)
     {
         $this->assertInternalType('string', $response->getRoot()->getName(), 'RootItem name should be ebay method name, for instance findItemByKeywordsResponse');
         $this->assertEquals('http://www.ebay.com/marketplace/search/v1/services', $response->getRoot()->getNamespace(), 'Invalid ebay api url, not a string');

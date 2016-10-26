@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Processor\Factory;
 
-use FindingAPI\Core\Request;
+use FindingAPI\Core\Request\Request;
 
 class ProcessorFactory
 {

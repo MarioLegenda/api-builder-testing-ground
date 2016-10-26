@@ -1,6 +1,6 @@
 <?php
 
-namespace FindingAPI\Core;
+namespace FindingAPI\Core\Request;
 
 use FindingAPI\Core\Cache\CacheProxy;
 use FindingAPI\Core\Exception\RequestException;
@@ -44,7 +44,7 @@ class Request
             $config = CacheProxy::instance()->get('config.yml');
             $this->parameters = new RequestParameters($config['parameters']);
         } else {
-            $config = Yaml::parse(file_get_contents(__DIR__.'/config.yml'))['finding'];
+            $config = Yaml::parse(file_get_contents(__DIR__.'/../config.yml'))['finding'];
             CacheProxy::instance()->put('config.yml', $config);
             $this->parameters = new RequestParameters($config['parameters']);
         }
