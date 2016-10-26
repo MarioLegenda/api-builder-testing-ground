@@ -52,17 +52,17 @@ class AbstractItemIterator extends AbstractItem implements \IteratorAggregate, \
         return empty($this->items);
     }
     /**
-     * @return \ArrayIterator
-     */
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->items);
-    }
-    /**
      * @return int|mixed
      */
     public function count()
     {
         return count($this->items);
+    }
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->items);
     }
 }

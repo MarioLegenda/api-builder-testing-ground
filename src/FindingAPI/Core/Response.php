@@ -3,6 +3,7 @@
 namespace FindingAPI\Core;
 
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
+use FindingAPI\Core\ResponseParser\ResponseItem\CategoryHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\ErrorContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\PaginationOutput;
@@ -30,6 +31,7 @@ class Response
         'conditionHistogramContainer' => null,
         'errorContainer' => null,
         'paginationOutput' => null,
+        'categoryHistogram' => null,
     );
     /**
      * @var GuzzleResponse
@@ -155,13 +157,26 @@ class Response
         return $this->responseItems['paginationOutput'];
     }
     /**
-     * @return bool
+     * @param null $default
+     * @return mixed|null
      */
-    public function isErrorResponse()
+    public function getCategoryHistogramContainer($default = null)
     {
         $this->lazyLoadSimpleXml($this->xmlString);
 
-        return $this->getRoot()->getAck() === 'Failure';
+        if ($this->responseItems['categoryHistogram'] instanceof CategoryHistogramContainer) {
+            return $this->responseItems['categoryHistogram'];
+        }
+
+        if (!empty($this->simpleXmlBase->categoryHistogramContainer)) {
+            $this->responseItems['categoryHistogram'] = new CategoryHistogramContainer($this->simpleXmlBase->categoryHistogramContainer);
+        }
+
+        if (!$this->responseItems['categoryHistogram'] instanceof CategoryHistogramContainer and $default !== null) {
+            return $default;
+        }
+
+        return $this->responseItems['categoryHistogram'];
     }
     /**
      * @param null $default
@@ -184,6 +199,15 @@ class Response
         }
 
         return $this->responseItems['errorContainer'];
+    }
+    /**
+     * @return bool
+     */
+    public function isErrorResponse()
+    {
+        $this->lazyLoadSimpleXml($this->xmlString);
+
+        return $this->getRoot()->getAck() === 'Failure';
     }
 
     private function lazyLoadSimpleXml($xmlString)

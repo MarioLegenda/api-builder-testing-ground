@@ -8,8 +8,10 @@ use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Response;
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
+use FindingAPI\Core\ResponseParser\ResponseItem\CategoryHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\Aspect;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\ValueHistogram;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\CategoryHistogram\CategoryHistogram;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Error\ErrorMessage;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ListingInfo;
@@ -195,6 +197,28 @@ class MainTest extends \PHPUnit_Framework_TestCase
                     }
 
                     $this->assertInternalType('string', $parameter->getParameter());
+                }
+            }
+        }
+
+        $categoryHistogramContainer = $response->getCategoryHistogramContainer();
+
+        if ($categoryHistogramContainer instanceof CategoryHistogramContainer) {
+            $this->assertInstanceOf(CategoryHistogramContainer::class, $categoryHistogramContainer, 'Response::getCategoryHistogramContainer() has to return an instance of '.CategoryHistogramContainer::class);
+
+            foreach ($categoryHistogramContainer as $histogram) {
+                $this->assertInstanceOf(CategoryHistogram::class, $histogram, 'When foreach-ing a CategoryHistogramContainer, foreach should receive a '.CategoryHistogram::class);
+
+                $this->assertInternalType('string', $histogram->getCategoryId(), 'CategoryHistogram::getCategoryId() should return a string');
+                $this->assertInternalType('string', $histogram->getCategoryName(), 'CategoryHistogram::getCategoryName() should return a string');
+                $this->assertInternalType('int', $histogram->getCount(), 'CategoryHistogram::getCount() should return a string');
+
+                foreach ($histogram as $childHistogram) {
+                    $this->assertInstanceOf(CategoryHistogram::class, $childHistogram, 'When foreach-ing a CategoryHistogramContainer, foreach should receive a '.CategoryHistogram::class);
+
+                    $this->assertInternalType('string', $histogram->getCategoryId(), 'Child CategoryHistogram::getCategoryId() should return a string');
+                    $this->assertInternalType('string', $histogram->getCategoryName(), 'Child CategoryHistogram::getCategoryName() should return a string');
+                    $this->assertInternalType('int', $histogram->getCount(), 'Child CategoryHistogram::getCount() should return a string');
                 }
             }
         }
