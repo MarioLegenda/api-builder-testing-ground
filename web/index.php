@@ -3,7 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 use FindingAPI\Finding;
-use FindingAPI\Core\Request;
+use FindingAPI\Core\Request\Request;
 
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Definition\Definition;
