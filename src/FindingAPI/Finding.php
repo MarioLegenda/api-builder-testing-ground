@@ -12,10 +12,21 @@ use FindingAPI\Core\Response;
 use FindingAPI\Processor\Factory\ProcessorFactory;
 use FindingAPI\Processor\RequestProducer;
 
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use GuzzleHttp\Exception\ConnectException;
+use FindingAPI\Core\Exception\ConnectException as FindingConnectException;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Finding
 {
+    /**
+     * @var GuzzleResponse $guzzleResponse
+     */
+    private $guzzleResponse;
+    /**
+     * @var mixed $responseToParse
+     */
+    private $responseToParse;
     /**
      * @var Request $configuration
      */
@@ -69,6 +80,25 @@ class Finding
 
         $this->eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
         $this->eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
+
+        $individualItemFilterValidation = $this->validation['individual-item-filters'];
+        $globalItemFilterValidation = $this->validation['global-item-filters'];
+
+        if ($globalItemFilterValidation === true) {
+            $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        }
+
+        if ($individualItemFilterValidation === true) {
+            (new RequestValidator($this->request))->validate();
+        }
+
+        if ($globalItemFilterValidation === true) {
+            $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        }
+
+        $processors = (new ProcessorFactory($this->request))->createProcessors();
+
+        $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
     }
     /**
      * @param string $validationType
@@ -99,24 +129,13 @@ class Finding
      */
     public function send() : Finding
     {
-        $individualItemFilterValidation = $this->validation['individual-item-filters'];
-        $globalItemFilterValidation = $this->validation['global-item-filters'];
-
-        if ($globalItemFilterValidation === true) {
-            $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        try {
+            $this->guzzleResponse = $this->request->sendRequest($this->processed);
+        } catch (ConnectException $e) {
+            throw new FindingConnectException('GuzzleHttp threw a ConnectException. You are probably not connected to the internet. Exception message is '.$e->getMessage());
         }
 
-        if ($individualItemFilterValidation === true) {
-            (new RequestValidator($this->request))->validate();
-        }
-
-        if ($globalItemFilterValidation === true) {
-            $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
-        }
-
-        $processors = (new ProcessorFactory($this->request))->createProcessors();
-
-        $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
+        $this->responseToParse = (string) $this->guzzleResponse->getBody();
 
         return $this;
     }
@@ -136,11 +155,10 @@ class Finding
             return $this->response;
         }
 
-        $guzzleResponse = $this->request->sendRequest($this->processed);
+        $this->response = new Response($this->responseToParse, $this->guzzleResponse);
 
-        $xmlToParse = (string) $guzzleResponse->getBody();
-
-        $this->response = new Response($xmlToParse, $guzzleResponse);
+        unset($this->responseToParse);
+        unset($this->guzzleResponse);
 
         return $this->response;
     }

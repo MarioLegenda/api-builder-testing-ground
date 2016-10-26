@@ -2,12 +2,22 @@
 
 namespace FindingAPI\Core;
 
-use FindingAPI\Core\ResponseParser\ResponseParser;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
-use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
-use FindingAPI\Core\ResponseParser\ResponseItem\SearchResultsContainer;
 
 class ResponseProxy
 {
-
+    /**
+     * @var GuzzleResponse $guzzleResponse
+     */
+    private $guzzleResponse;
+    /**
+     * ResponseProxy constructor.
+     * @param $responseToParse
+     * @param GuzzleResponse $guzzleResponse
+     * @param string $responseDataFormat
+     */
+    public function __construct($responseToParse, GuzzleResponse $guzzleResponse, string $responseDataFormat)
+    {
+        
+    }
 }
