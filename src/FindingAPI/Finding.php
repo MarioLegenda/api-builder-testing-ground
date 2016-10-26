@@ -8,11 +8,12 @@ use FindingAPI\Core\Listener\PostValidateItemFilters;
 use FindingAPI\Core\Listener\PreValidateItemFilters;
 use FindingAPI\Core\Request\RequestValidator;
 use FindingAPI\Core\Request\Request as FindingRequest;
-use FindingAPI\Core\Request;
+use FindingAPI\Core\Request\Request;
 use FindingAPI\Core\Response;
 use FindingAPI\Processor\Factory\ProcessorFactory;
 use FindingAPI\Processor\RequestProducer;
-use FindingAPI\Core\Response\Response as FindingResponse;
+use FindingAPI\Core\Response\ResponseInterface;
+use FindingAPI\Core\Response\ResponseProxy;
 
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use GuzzleHttp\Exception\ConnectException;
@@ -34,7 +35,7 @@ class Finding
      */
     private $request;
     /**
-     * @var FindingResponse $response
+     * @var ResponseInterface $response
      */
     private $response;
     /**
@@ -149,15 +150,19 @@ class Finding
         return new FindingRequest();
     }
     /**
-     * @return FindingResponse
+     * @return ResponseInterface
      */
-    public function getResponse() : FindingResponse
+    public function getResponse() : ResponseInterface
     {
-        if ($this->response instanceof FindingResponse) {
+        if ($this->response instanceof ResponseInterface) {
             return $this->response;
         }
 
-        $this->response = new FindingResponse($this->responseToParse, $this->guzzleResponse);
+        $this->response = new ResponseProxy(
+            $this->responseToParse,
+            $this->guzzleResponse,
+            $this->request->getRequestParameters()->getParameter('RESPONSE-DATA-FORMAT')->getValue()
+        );
 
         unset($this->responseToParse);
         unset($this->guzzleResponse);

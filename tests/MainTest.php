@@ -31,7 +31,7 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\DiscountPriceInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Category;
 use FindingAPI\Core\Information\Currency as InformationCurrency;
 use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
-use FindingAPI\Core\Response\Response as FindingResponse;
+use FindingAPI\Core\Response\ResponseInterface;
 use FindingAPI\Core\Request\Request as FindingRequest;
 
 class MainTest extends \PHPUnit_Framework_TestCase
@@ -164,7 +164,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::WORLD_OF_GOOD_ONLY, array(false));*/
     }
 
-    private function validateResponse(FindingResponse $response)
+    private function validateResponse(ResponseInterface $response)
     {
         $this->assertInternalType('string', $response->getRoot()->getName(), 'RootItem name should be ebay method name, for instance findItemByKeywordsResponse');
         $this->assertEquals('http://www.ebay.com/marketplace/search/v1/services', $response->getRoot()->getNamespace(), 'Invalid ebay api url, not a string');

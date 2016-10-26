@@ -2,14 +2,16 @@
 
 namespace FindingAPI\Core\Response;
 
+use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use FindingAPI\Core\Response\ResponseInterface;
 
-class ResponseProxy
+class ResponseProxy implements ResponseInterface
 {
     /**
-     * @var GuzzleResponse $guzzleResponse
+     * @var ResponseInterface $response
      */
-    private $guzzleResponse;
+    private $response;
     /**
      * ResponseProxy constructor.
      * @param $responseToParse
@@ -18,6 +20,73 @@ class ResponseProxy
      */
     public function __construct($responseToParse, GuzzleResponse $guzzleResponse, string $responseDataFormat)
     {
-        
+        switch ($responseDataFormat) {
+            case 'xml':
+                $this->response = new XmlResponse($responseToParse, $guzzleResponse);
+
+                break;
+        }
+    }
+    /**
+     * @return \FindingAPI\Core\ResponseParser\ResponseItem\RootItem
+     */
+    public function getRoot() : RootItem
+    {
+        return $this->response->getRoot();
+    }
+    /**
+     * @param null $default
+     * @return \FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer|null
+     */
+    public function getAspectHistogramContainer($default = null)
+    {
+        return $this->response->getAspectHistogramContainer($default);
+    }
+    /**
+     * @param null $default
+     * @return \FindingAPI\Core\ResponseParser\ResponseItem\SearchResultsContainer
+     */
+    public function getSearchResults($default = null)
+    {
+        return $this->response->getSearchResults($default);
+    }
+    /**
+     * @param null $default
+     * @return mixed
+     */
+    public function getConditionHistogramContainer($default = null)
+    {
+        return $this->response->getConditionHistogramContainer($default);
+    }
+    /**
+     * @param null $default
+     * @return mixed|null
+     */
+    public function getPaginationOutput($default = null)
+    {
+        return $this->response->getPaginationOutput($default);
+    }
+    /**
+     * @param null $default
+     * @return mixed|null
+     */
+    public function getCategoryHistogramContainer($default = null)
+    {
+        return $this->response->getCategoryHistogramContainer($default);
+    }
+    /**
+     * @param null $default
+     * @return mixed|null
+     */
+    public function getErrors($default = null)
+    {
+        return $this->response->getErrors($default);
+    }
+    /**
+     * @return bool
+     */
+    public function isErrorResponse() : bool
+    {
+        return $this->response->isErrorResponse();
     }
 }

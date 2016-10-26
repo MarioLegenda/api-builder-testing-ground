@@ -11,7 +11,7 @@ use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use FindingAPI\Core\ResponseParser\ResponseItem\SearchResultsContainer;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
-class Response
+class XmlResponse implements ResponseInterface
 {
     /**
      * @var string $xmlString
@@ -203,7 +203,7 @@ class Response
     /**
      * @return bool
      */
-    public function isErrorResponse()
+    public function isErrorResponse() : bool
     {
         $this->lazyLoadSimpleXml($this->xmlString);
 
