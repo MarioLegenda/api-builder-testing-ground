@@ -4,37 +4,45 @@ namespace FindingAPI\Core\Response;
 
 use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
-use FindingAPI\Core\Response\ResponseInterface;
 
-class ResponseProxy implements ResponseInterface
+class JsonResponse implements ResponseInterface
 {
     /**
-     * @var ResponseInterface $response
+     * @var GuzzleResponse $response
      */
-    private $response;
+    private $guzzleResponse;
     /**
-     * ResponseProxy constructor.
-     * @param $responseToParse
-     * @param GuzzleResponse $guzzleResponse
-     * @param string $responseDataFormat
+     * @var array $jsonResponse
      */
-    public function __construct($responseToParse, GuzzleResponse $guzzleResponse, string $responseDataFormat)
+    private $jsonResponse;
+    /**
+     * @var array $responseItems
+     */
+    private $responseItems = array(
+        'rootItem' => null,
+        'aspectHistogram' => null,
+        'searchResult' => null,
+        'conditionHistogramContainer' => null,
+        'errorContainer' => null,
+        'paginationOutput' => null,
+        'categoryHistogram' => null,
+    );
+    /**
+     * JsonResponse constructor.
+     * @param array $json
+     * @param GuzzleResponse $response
+     */
+    public function __construct(array $json, GuzzleResponse $response)
     {
-        switch ($responseDataFormat) {
-            case 'xml':
-                $this->response = new XmlResponse($responseToParse, $guzzleResponse);
-
-                break;
-            case 'json':
-                $this->response = new JsonResponse($responseToParse, $guzzleResponse);
-        }
+        $this->jsonResponse = $json;
+        $this->guzzleResponse = $response;
     }
+
     /**
      * @return \FindingAPI\Core\ResponseParser\ResponseItem\RootItem
      */
     public function getRoot() : RootItem
     {
-        return $this->response->getRoot();
     }
     /**
      * @param null $default
@@ -42,7 +50,6 @@ class ResponseProxy implements ResponseInterface
      */
     public function getAspectHistogramContainer($default = null)
     {
-        return $this->response->getAspectHistogramContainer($default);
     }
     /**
      * @param null $default
@@ -50,7 +57,6 @@ class ResponseProxy implements ResponseInterface
      */
     public function getSearchResults($default = null)
     {
-        return $this->response->getSearchResults($default);
     }
     /**
      * @param null $default
@@ -58,7 +64,6 @@ class ResponseProxy implements ResponseInterface
      */
     public function getConditionHistogramContainer($default = null)
     {
-        return $this->response->getConditionHistogramContainer($default);
     }
     /**
      * @param null $default
@@ -66,7 +71,6 @@ class ResponseProxy implements ResponseInterface
      */
     public function getPaginationOutput($default = null)
     {
-        return $this->response->getPaginationOutput($default);
     }
     /**
      * @param null $default
@@ -74,7 +78,6 @@ class ResponseProxy implements ResponseInterface
      */
     public function getCategoryHistogramContainer($default = null)
     {
-        return $this->response->getCategoryHistogramContainer($default);
     }
     /**
      * @param null $default
@@ -82,13 +85,11 @@ class ResponseProxy implements ResponseInterface
      */
     public function getErrors($default = null)
     {
-        return $this->response->getErrors($default);
     }
     /**
      * @return bool
      */
     public function isErrorResponse() : bool
     {
-        return $this->response->isErrorResponse();
     }
 }
