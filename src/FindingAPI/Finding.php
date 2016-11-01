@@ -3,9 +3,10 @@
 namespace FindingAPI;
 
 use FindingAPI\Core\Event\ItemFilterEvent;
-use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\Listener\PostValidateItemFilters;
 use FindingAPI\Core\Listener\PreValidateItemFilters;
+use FindingAPI\Core\Options\Option;
+use FindingAPI\Core\Options\Options;
 use FindingAPI\Core\Request\RequestValidator;
 use FindingAPI\Core\Request\Request as FindingRequest;
 use FindingAPI\Core\Request\Request;
@@ -22,6 +23,10 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Finding implements EbayApiInterface
 {
+    /**
+     * @var Options[] $options
+     */
+    private $options;
     /**
      * @var GuzzleResponse $guzzleResponse
      */
@@ -79,23 +84,26 @@ class Finding implements EbayApiInterface
     {
         $this->request = $request;
 
+        $options = new Options();
+        $options->addOption(new Option(Options::GLOBAL_ITEM_FILTERS, true));
+        $options->addOption(new Option(Options::INDIVIDUAL_ITEM_FILTERS, true));
+
+        $this->options = $options;
+
         $this->eventDispatcher = new EventDispatcher();
 
         $this->eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
         $this->eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
 
-        $individualItemFilterValidation = $this->validation['individual-item-filters'];
-        $globalItemFilterValidation = $this->validation['global-item-filters'];
-
-        if ($globalItemFilterValidation === true) {
+        if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
             $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
         }
 
-        if ($individualItemFilterValidation === true) {
+        if ($this->options->getOption(Options::INDIVIDUAL_ITEM_FILTERS)->getValue() === true) {
             (new RequestValidator($this->request))->validate();
         }
 
-        if ($globalItemFilterValidation === true) {
+        if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
             $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
         }
 
@@ -112,19 +120,16 @@ class Finding implements EbayApiInterface
         return $this->request;
     }
     /**
-     * @param string $validationType
-     * @param bool $rule
-     * @return $this
-     * @throws FindingApiException
+     * @param string $option
+     * @param $value
+     * @return Finding
      */
-    public function setValidationRule(string $validationType, bool $rule) : Finding
+    public function setOption(string $option, $value) : Finding 
     {
-        if (!array_key_exists($validationType, $this->validation)) {
-            throw new FindingApiException('Unknown validation rule '.$validationType);
+        if ($this->options->hasOption($option)) {
+            $this->options->modifyOption($option, $value);
         }
-
-        $this->validation[$validationType] = $rule;
-
+        
         return $this;
     }
     /**

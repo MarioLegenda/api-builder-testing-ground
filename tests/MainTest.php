@@ -98,9 +98,6 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
             $finder = Finding::getInstance($request);
 
-            $finder->setValidationRule('global-item-filters', true);
-            $finder->setValidationRule('individual-item-filters', true);
-
             $response = $finder->send()->getResponse();
 
             $processed = $finder->getProcessed();
