@@ -42,7 +42,7 @@ class XmlResponse implements ResponseInterface
      * @param GuzzleResponse $guzzleResponse
      * @param string $xmlString
      */
-    public function __construct(string $xmlString, GuzzleResponse $guzzleResponse)
+    public function __construct(string $xmlString, GuzzleResponse $guzzleResponse = null)
     {
         $this->xmlString = $xmlString;
         $this->guzzleResponse = $guzzleResponse;
