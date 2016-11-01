@@ -20,7 +20,7 @@ use GuzzleHttp\Exception\ConnectException;
 use FindingAPI\Core\Exception\ConnectException as FindingConnectException;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class Finding
+class Finding implements EbayApiInterface
 {
     /**
      * @var GuzzleResponse $guzzleResponse
@@ -102,6 +102,14 @@ class Finding
         $processors = (new ProcessorFactory($this->request))->createProcessors();
 
         $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest() : Request
+    {
+        return $this->request;
     }
     /**
      * @param string $validationType
