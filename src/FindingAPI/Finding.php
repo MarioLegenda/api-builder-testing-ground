@@ -150,10 +150,19 @@ class Finding
         return new FindingRequest();
     }
     /**
+     * @param string $inlineResponse
      * @return ResponseInterface
      */
-    public function getResponse() : ResponseInterface
+    public function getResponse(string $inlineResponse = null) : ResponseInterface
     {
+        if (is_string($inlineResponse)) {
+            return new ResponseProxy(
+                $inlineResponse,
+                null,
+                $this->request->getRequestParameters()->getParameter('RESPONSE-DATA-FORMAT')->getValue()
+            );
+        }
+
         if ($this->response instanceof ResponseInterface) {
             return $this->response;
         }
