@@ -438,7 +438,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             $condition = $item->getCondition();
 
             $this->assertInternalType('int', $condition->getConditionId(), 'Condition::getConditionId() should return an int');
-            $this->assertInternalType('string', $condition->getConditionDisplayName(), 'Condition::getConditionDisplayName() should return a string');
+            $this->assertInternalType('string', $condition->getConditionDisplayName('conditionDisplayName'), 'Condition::getConditionDisplayName() should return a string');
         }
 
         if (is_array($item->getAttributes())) {

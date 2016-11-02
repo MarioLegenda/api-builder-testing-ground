@@ -18,7 +18,7 @@ class ResponseProxy implements ResponseInterface
      * @param GuzzleResponse $guzzleResponse
      * @param string $responseDataFormat
      */
-    public function __construct($responseToParse, GuzzleResponse $guzzleResponse = null, string $responseDataFormat)
+    public function __construct($responseToParse, $guzzleResponse = null, string $responseDataFormat)
     {
         switch ($responseDataFormat) {
             case 'xml':

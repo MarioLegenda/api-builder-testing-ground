@@ -20,6 +20,7 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use GuzzleHttp\Exception\ConnectException;
 use FindingAPI\Core\Exception\ConnectException as FindingConnectException;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use FindingAPI\Core\Response\FakeGuzzleResponse;
 
 class Finding implements EbayApiInterface
 {
@@ -169,7 +170,7 @@ class Finding implements EbayApiInterface
         if (is_string($inlineResponse)) {
             return new ResponseProxy(
                 $inlineResponse,
-                null,
+                new FakeGuzzleResponse($inlineResponse),
                 $this->request->getRequestParameters()->getParameter('RESPONSE-DATA-FORMAT')->getValue()
             );
         }
