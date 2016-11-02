@@ -306,8 +306,5 @@ class Request
         $client = new Client();
 
         return $client->request($this->getRequestParameters()->getParameter('method')->getValue(), $request);
-
-        //var_dump(get_class($response));
-        //var_dump((string) $response->getBody());
     }
 }

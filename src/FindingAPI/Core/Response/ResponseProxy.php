@@ -30,6 +30,13 @@ class ResponseProxy implements ResponseInterface
         }
     }
     /**
+     * @return mixed
+     */
+    public function getGuzzleResponse()
+    {
+        return $this->response->getGuzzleResponse();
+    }
+    /**
      * @return \FindingAPI\Core\ResponseParser\ResponseItem\RootItem
      */
     public function getRoot() : RootItem

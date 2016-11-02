@@ -6,6 +6,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\ItemFilter\ItemFilter;
+use FindingAPI\Core\Options\Options;
 use FindingAPI\Core\Response;
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\CategoryHistogramContainer;
@@ -97,6 +98,8 @@ class MainTest extends \PHPUnit_Framework_TestCase
             }
 
             $finder = Finding::getInstance($request);
+
+            $finder->setOption(Options::OFFLINE_MODE, true);
 
             $response = $finder->send()->getResponse();
 
@@ -265,7 +268,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf(ConditionHistogramContainer::class, $conditionHistogramContainer, 'Response::getConditionHistogramContainer() should return '.ConditionHistogramContainer::class);
 
             foreach ($conditionHistogramContainer as $conditionHistogram) {
-                $this->assertInternalType('string', $conditionHistogram->getConditionDisplayName(), 'ConditionHistogram::getConditionDisplayName() should return a string');
+                $this->assertInternalType('string', $conditionHistogram->getConditionDisplayName('conditionDisplayName'), 'ConditionHistogram::getConditionDisplayName() should return a string');
                 $this->assertInternalType('string', $conditionHistogram->getConditionId(), 'ConditionHistogram::getConditionId() has to be of type string');
                 $this->assertInternalType('int', $conditionHistogram->getCount(), 'ConditionHistogram::getCount() should be an integer');
             }

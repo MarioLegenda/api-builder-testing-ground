@@ -87,6 +87,7 @@ class Finding implements EbayApiInterface
         $options = new Options();
         $options->addOption(new Option(Options::GLOBAL_ITEM_FILTERS, true));
         $options->addOption(new Option(Options::INDIVIDUAL_ITEM_FILTERS, true));
+        $options->addOption(new Option(Options::OFFLINE_MODE, false));
 
         $this->options = $options;
 
@@ -143,8 +144,12 @@ class Finding implements EbayApiInterface
      * @return $this
      * @throws Core\Exception\FindingApiException
      */
-    public function send() : Finding
+    public function send() : EbayApiInterface
     {
+        if ($this->options->getOption(Options::OFFLINE_MODE)->getValue() === true) {
+            return $this;
+        }
+
         try {
             $this->guzzleResponse = $this->request->sendRequest($this->processed);
         } catch (ConnectException $e) {
@@ -154,13 +159,6 @@ class Finding implements EbayApiInterface
         $this->responseToParse = (string) $this->guzzleResponse->getBody();
 
         return $this;
-    }
-    /**
-     * @return FindingRequest
-     */
-    public function createRequest() : FindingRequest
-    {
-        return new FindingRequest();
     }
     /**
      * @param string $inlineResponse
@@ -174,6 +172,14 @@ class Finding implements EbayApiInterface
                 null,
                 $this->request->getRequestParameters()->getParameter('RESPONSE-DATA-FORMAT')->getValue()
             );
+        }
+
+        if (class_exists('EbayOfflineMode\EbayOfflineMode')) {
+            if ($this->options->getOption(Options::OFFLINE_MODE)->getValue() === true) {
+                $offlineMode = new \EbayOfflineMode\EbayOfflineMode($this);
+
+                return $offlineMode->getResponse();
+            }
         }
 
         if ($this->response instanceof ResponseInterface) {

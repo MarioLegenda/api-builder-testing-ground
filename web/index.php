@@ -9,6 +9,8 @@ use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Definition\Definition;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Information\Currency as InformationCurrency;
+use FindingAPI\Core\Options\Options;
+
 
 $request = new Request();
 
@@ -17,19 +19,16 @@ $request
     ->setMethod('get')
     ->setResponseDataFormat('xml')
     ->setSecurityAppId('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
-    ->addSearch(Definition::customDefinition('harry potter'))
     ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
     ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
-    ->addItemFilter(ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN));
-    //->addItemFilter(ItemFilter::FEEDBACK_SCORE_MAX, array(-1));
+    ->addItemFilter(ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN))
+    ->addSearch(Definition::customDefinition('harry potter'));
 
 $finder = Finding::getInstance($request);
 
-$finder->setValidationRule('global-item-filters', false);
-$finder->setValidationRule('individual-item-filters', false);
+$finder->setOption(Options::OFFLINE_MODE, true);
 
-$finder->send();
-$response = $finder->getResponse();
+$response = $finder->send()->getResponse();
 
 $body = $response->getGuzzleResponse()->getBody();
 

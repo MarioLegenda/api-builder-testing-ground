@@ -17,7 +17,7 @@ class Option
      * @param string $name
      * @param $value
      */
-    public function __construct(string $name, $value)
+    public function __construct(string $name, bool $value)
     {
         $this->name = $name;
         $this->value = $value;
@@ -40,10 +40,10 @@ class Option
         return $this->name;
     }
     /**
-     * @param string $value
+     * @param bool $value
      * @return Option
      */
-    public function setValue(string $value) : Option 
+    public function setValue(bool $value) : Option 
     {
         $this->value = $value;
 
