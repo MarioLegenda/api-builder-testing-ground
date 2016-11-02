@@ -76,7 +76,7 @@ class RootItem extends AbstractItem implements ResponseItemInterface
     public function getSearchResultsCount() : int
     {
         if ($this->searchResultsCount === null) {
-            $this->setSearchResultsCount((int) $this->simpleXml['count']);
+            $this->setSearchResultsCount((int) $this->simpleXml->searchResult['count']);
         }
 
         return $this->searchResultsCount;
