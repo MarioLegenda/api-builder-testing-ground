@@ -14,6 +14,7 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\Aspect;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\ValueHistogram;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\CategoryHistogram\CategoryHistogram;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Error\ErrorMessage;
+use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\GalleryInfoContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\ListingInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\SellerInfo;
@@ -460,7 +461,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         $galleryInfoContainer = $item->getGalleryContainer();
 
-        if ($galleryInfoContainer !== null) {
+        if ($galleryInfoContainer instanceof GalleryInfoContainer) {
             foreach ($galleryInfoContainer as $galleryContainer) {
                 $this->assertInternalType('string', $galleryContainer->getUrl(), 'GalleryUrl::getUrl() should return a string');
                 $this->assertInternalType('string', $galleryContainer->getSize(), 'GalleryUrl::getSize() should return a string');

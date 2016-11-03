@@ -27,7 +27,7 @@ class Category extends AbstractItem
     }
     /**
      * @param string $categoryId
-     * @return PrimaryCategory
+     * @return Category
      */
     public function setCategoryId(string $categoryId) : Category
     {
@@ -48,7 +48,7 @@ class Category extends AbstractItem
     }
     /**
      * @param string $categoryName
-     * @return PrimaryCategory
+     * @return Category
      */
     public function setCategoryName(string $categoryName) : Category
     {

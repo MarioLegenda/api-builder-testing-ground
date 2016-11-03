@@ -4,7 +4,7 @@
 
     <div class="content content-appearance content-looks">
         {% include '_includes/_rootItem.html.twig' with {'rootItem': response.getRoot() } %}
-        {% include '_includes/_items.html.twig' with {'rootItem': response.getRoot() } %}
+        {% include '_includes/_items.html.twig' with {'items': response.getSearchResults() } %}
     </div>
 
 {% endblock %}

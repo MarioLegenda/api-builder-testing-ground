@@ -266,10 +266,6 @@ class Item extends AbstractItemIterator
         if ($this->galleryInfoContainer === null) {
             if (!empty($this->simpleXml->galleryInfoContainer)) {
                 $galleryUrlContainer = new GalleryInfoContainer($this->simpleXml->galleryInfoContainer);
-                foreach ($this->galleryInfoContainer->galleryURL as $galleryUrl) {
-                    $galleryUrlContainer->addItem(new GalleryUrl($galleryUrl));
-                }
-
                 $this->setGalleryInfoContainer($galleryUrlContainer);
             }
         }
