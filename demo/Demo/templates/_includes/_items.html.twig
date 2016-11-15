@@ -177,6 +177,59 @@
                             </div>
                         </div>
                     {% endif %}
+
+                    {% if item.getSellerInfo() != null %}
+                        <div class="item move-right-80 generic-position">
+                            <a href="#" class="item-title">SELLER INFO</a>
+
+                            <div class="show-hide-wrapper generic-position hide">
+                                <div class="item move-right-100 generic-position">
+                                    <p class="name">Feedback Rating Star</p>
+                                    <p class="value">{{ item.getSellerInfo().getFeedbackRatingStar() }}</p>
+                                </div>
+
+                                <div class="item move-right-100 generic-position">
+                                    <p class="name">Feedback Score</p>
+                                    <p class="value">{{ item.getSellerInfo().getFeedbackScore() }}</p>
+                                </div>
+
+                                <div class="item move-right-100 generic-position">
+                                    <p class="name">Positive Feedback Percent</p>
+                                    <p class="value">{{ item.getSellerInfo().getPositiveFeedbackPercent() }}</p>
+                                </div>
+
+                                <div class="item move-right-100 generic-position">
+                                    <p class="name">Seller Username</p>
+                                    <p class="value">{{ item.getSellerInfo().getSellerUsername() }}</p>
+                                </div>
+
+                                <div class="item move-right-100 generic-position">
+                                    <p class="name">Top Rated Seller</p>
+                                    <p class="value">{{ item.getSellerInfo().getTopRatedSeller() }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+                    {% if item.getStoreInfo() != null %}
+                        <div class="item move-right-80 generic-position">
+                            <a href="#" class="item-title">STORE INFO</a>
+
+                            <div class="show-hide-wrapper generic-position hide">
+                                <div class="item move-right-100 generic-position">
+                                    <p class="name">Store name</p>
+                                    <p class="value">{{ item.getStoreInfo().getStoreName() }}</p>
+                                </div>
+
+                                <div class="item move-right-100 generic-position">
+                                    <p class="name">Store URL</p>
+                                    <a href="{{ item.getStoreInfo().getStoreUrl() }}" class="value" target="_blank">{{ item.getStoreInfo().getStoreUrl() }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
                 </div>
 
             {% endfor %}
