@@ -22,7 +22,7 @@ $request
     ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
     ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
     ->addItemFilter(ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN))
-    ->addSearch(Definition::customDefinition('harry potter'));
+    ->addSearch(Definition::customDefinition('call of duty'));
 
 $finder = Finding::getInstance($request);
 
