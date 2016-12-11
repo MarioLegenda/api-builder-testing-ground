@@ -2,10 +2,9 @@
 
 namespace FindingAPI\Core\Request;
 
-use FindingAPI\Core\Cache\CacheProxy;
+use FindingAPI\Core\Configuration\Configuration;
 use FindingAPI\Core\Exception\RequestException;
 use GuzzleHttp\Client;
-use Symfony\Component\Yaml\Yaml;
 use FindingAPI\Definition\SearchDefinitionInterface;
 use FindingAPI\Definition\Exception\DefinitionException;
 use FindingAPI\Definition\DefinitionValidator;
@@ -13,6 +12,10 @@ use FindingAPI\Definition\Definition;
 use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 use FindingAPI\Core\Exception\ItemFilterException;
+use FindingAPI\Core\Cache\CacheProxy;
+
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Config\Definition\Processor;
 
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
@@ -48,7 +51,6 @@ class Request
             CacheProxy::instance()->put('config.yml', $config);
             $this->parameters = new RequestParameters($config['parameters']);
         }
-
 
         $this->itemFilterStorage = new ItemFilterStorage();
 

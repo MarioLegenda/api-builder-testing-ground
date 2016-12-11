@@ -32,4 +32,7 @@ $response = $finder->send()->getResponse();
 
 $twigBridge = new TwigBridge();
 
-echo $twigBridge->getTwig()->render('index.html.twig', array('response' => $response));
+echo $twigBridge->getTwig()->render('index.html.twig', array(
+    'response' => $response,
+    'processed' => $finder->getProcessed(),
+));

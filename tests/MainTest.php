@@ -86,10 +86,8 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
             $request
                 ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
-                ->setMethod('get')
-                ->setResponseDataFormat('xml')
                 ->setSecurityAppId('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
-                ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
+                ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram'))
                 ->addSearch(Definition::customDefinition($query));
 
             if ($filters !== null) {
