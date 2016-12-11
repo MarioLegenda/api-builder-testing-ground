@@ -39,15 +39,17 @@ class Request
     private $parameters;
     /**
      * Request constructor.
-     * @param array|null $parameters
+     * @param string|null $configFile
      */
-    public function __construct()
+    public function __construct(string $configFile = null)
     {
+        $configFile = ($configFile) ? $configFile : __DIR__.'/../config.yml';
+
         if (CacheProxy::instance()->has('config.yml')) {
             $config = CacheProxy::instance()->get('config.yml');
             $this->parameters = new RequestParameters($config['parameters']);
         } else {
-            $config = Yaml::parse(file_get_contents(__DIR__.'/../config.yml'))['finding'];
+            $config = Yaml::parse(file_get_contents($configFile))['finding'];
             CacheProxy::instance()->put('config.yml', $config);
             $this->parameters = new RequestParameters($config['parameters']);
         }

@@ -4,10 +4,8 @@ namespace Test;
 
 require __DIR__.'/../vendor/autoload.php';
 
-use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Options\Options;
-use FindingAPI\Core\Response;
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\CategoryHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\Aspect;
@@ -26,7 +24,6 @@ use FindingAPI\Core\ResponseParser\ResponseItem\ErrorContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\PaginationOutput;
 use FindingAPI\Core\ResponseParser\ResponseItem\SearchResultsContainer;
 use FindingAPI\Finding;
-use FindingAPI\Core\Request;
 use FindingAPI\Definition\Definition;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Condition;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\DiscountPriceInfo;
@@ -35,6 +32,7 @@ use FindingAPI\Core\Information\Currency as InformationCurrency;
 use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
 use FindingAPI\Core\Response\ResponseInterface;
 use FindingAPI\Core\Request\Request as FindingRequest;
+use FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest;
 
 class MainTest extends \PHPUnit_Framework_TestCase
 {
@@ -82,12 +80,10 @@ class MainTest extends \PHPUnit_Framework_TestCase
         );
 
         foreach ($queries as $query => $filters) {
-            $request = new FindingRequest();
+            $request = new FindItemsByKeywordsRequest();
 
             $request
-                ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
-                ->setSecurityAppId('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
-                ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram'))
+                ->setOutputSelector(array('StoreInfo', 'CategoryHistogram'))
                 ->addSearch(Definition::customDefinition($query));
 
             if ($filters !== null) {
