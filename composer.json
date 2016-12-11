@@ -14,8 +14,7 @@
         "symfony/yaml": "^3.1",
         "guzzlehttp/guzzle": "~6.0",
         "mario-legenda/php-strong-types": "dev-master",
-        "symfony/event-dispatcher": "^3.1",
-        "symfony/config": "^3.2"
+        "symfony/event-dispatcher": "^3.1"
     },
 
     "require-dev": {
