@@ -34,6 +34,8 @@ class Parameter
     /**
      * Parameter constructor.
      * @param array $parameter
+     *
+     * A Parameters has to have a name, type, valid, value and synonyms field
      */
     public function __construct(array $parameter = null)
     {

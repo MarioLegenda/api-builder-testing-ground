@@ -94,6 +94,8 @@ class RequestParameters implements \IteratorAggregate
      * @param string $type
      * @return RequestParameters
      * @throws RequestException
+     *
+     * Sets the parameters name and value
      */
     public function setParameter(string $name, string $value) : RequestParameters
     {
@@ -119,6 +121,8 @@ class RequestParameters implements \IteratorAggregate
      * @param array $possible
      * @return RequestParameters
      * @throws RequestException
+     *
+     * Adds a new Parameter to RequestParameters
      */
     public function addParameter(Parameter $parameter) : RequestParameters
     {

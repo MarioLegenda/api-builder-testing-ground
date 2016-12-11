@@ -11,3 +11,5 @@ finding:
       - { name: sortOrder, value: null, type: optional, valid: [BestMatch, BidCountFewest, BidCountMost, CountryAscending, CountryDescending, CurrentPriceHighest, DistanceNearest, EndTimeSoonest, PricePlusShippingHighest, PricePlusShippingLowest, StartTimeNewest], deprecated: false, synonyms: {}}
       - { name: paginationInput, value: null, type: optional, valid: {}, deprecated: false, synonyms: {}}
       - { name: paginationOutput, value: null, type: optional, valid: {}, deprecated: false, synonyms: {}}
+
+
