@@ -6,7 +6,7 @@ finding:
       - { name: ebay_url, value: http://svcs.ebay.com/services/search/FindingService/v1, type: required, valid: {}, deprecated: false }
       - { name: OPERATION-NAME, value: null, type: required, valid: [findItemsByKeywords, findItemsByCategory], deprecated: false }
       - { name: SERVICE-VERSION, value: 1.0.0, type: required, valid: {}, deprecated: false, synonyms: {}}
-      - { name: SECURITY-APPNAME, value: Mariokrl-testing-PRD-ee6e68035-e73c8a53, type: required, valid: {}, deprecated: false }
+      #- { name: SECURITY-APPNAME, value: Mariokrl-testing-PRD-ee6e68035-e73c8a53, type: required, valid: {}, deprecated: false }
       - { name: RESPONSE-DATA-FORMAT, value: xml, type: optional, valid: [xml, json], deprecated: false, synonyms: {}}
       - { name: GLOBAL-ID, value: EBAY-US, type: optional, valid: [EBAY-US, EBAY-ENCA, EBAY-GB, EBAY-AU, EBAY-AT, EBAY-FRBE, EBAY-FR, EBAY-DE, EBAY-MOTOR, EBAY-IT, EBAY-NLBE, EBAY-NL, EBAY-ES, EBAY-CH, EBAY-HK, EBAY-IN, EBAY-IE, EBAY-MY, EBAY-FRCA, EBAY-PH, EBAY-PL, EBAY-SG], deprecated: false}
       - { name: buyerPostalCode, value: null, type: optional, valid: {}, deprecated: false, synonyms: {}}

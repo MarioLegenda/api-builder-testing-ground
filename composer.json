@@ -26,6 +26,7 @@
     "autoload": {
         "psr-0": {
             "FindingAPI": "src/",
+            "EbaySDK": "src/",
             "Test": "tests/",
             "Demo": "demo/"
         }

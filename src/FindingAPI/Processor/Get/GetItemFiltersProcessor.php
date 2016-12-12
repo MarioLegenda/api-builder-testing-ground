@@ -47,7 +47,7 @@ class GetItemFiltersProcessor extends AbstractProcessor implements ProcessorInte
             $count++;
         }
 
-        $this->processed = rtrim($finalProduct, '&');
+        $this->processed = $finalProduct.'&';
 
         return $this;
     }

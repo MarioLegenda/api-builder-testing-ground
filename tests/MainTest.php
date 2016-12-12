@@ -4,6 +4,8 @@ namespace Test;
 
 require __DIR__.'/../vendor/autoload.php';
 
+use EbaySDK\EbaySDK;
+use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Options\Options;
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
@@ -31,14 +33,23 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Category;
 use FindingAPI\Core\Information\Currency as InformationCurrency;
 use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
 use FindingAPI\Core\Response\ResponseInterface;
-use FindingAPI\Core\Request\Request as FindingRequest;
-use FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest;
 
 class MainTest extends \PHPUnit_Framework_TestCase
 {
     public function testItemFilters()
     {
-        $request = new FindingRequest();
+        $findingApi = EbaySDK::inst()
+            ->setSecurityAppName('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
+            ->createFindingApi();
+
+        $request = $findingApi->getRequest();
+
+        $request
+            ->setMethod('get')
+            ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
+            ->addSearch(Definition::customDefinition('some search'));
+
+        $findingApi->send($request);
 
         $itemFilterStorage = $request->getItemFilterStorage();
 
@@ -80,9 +91,13 @@ class MainTest extends \PHPUnit_Framework_TestCase
         );
 
         foreach ($queries as $query => $filters) {
-            $request = new FindItemsByKeywordsRequest();
+            $findingApi = EbaySDK::inst()->createFindingApi();
+
+            $request = $findingApi->getRequest();
 
             $request
+                ->setMethod('get')
+                ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
                 ->setOutputSelector(array('StoreInfo', 'CategoryHistogram'))
                 ->addSearch(Definition::customDefinition($query));
 
@@ -92,13 +107,11 @@ class MainTest extends \PHPUnit_Framework_TestCase
                 }
             }
 
-            $finder = Finding::getInstance($request);
 
-            $finder->setOption(Options::OFFLINE_MODE, true);
+            $findingApi->setOption(Options::OFFLINE_MODE, true);
 
-            $response = $finder->send()->getResponse();
+            $response = $findingApi->send($request)->getResponse();
 
-            $processed = $finder->getProcessed();
 
             //var_dump($processed);
 

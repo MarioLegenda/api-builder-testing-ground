@@ -5,14 +5,12 @@ namespace FindingAPI\Core\Request;
 use FindingAPI\Core\Exception\RequestException;
 use GuzzleHttp\Client;
 use FindingAPI\Definition\SearchDefinitionInterface;
-use FindingAPI\Definition\Exception\DefinitionException;
 use FindingAPI\Definition\DefinitionValidator;
 use FindingAPI\Definition\Definition;
 use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 use FindingAPI\Core\Exception\ItemFilterException;
-
-use Symfony\Component\Yaml\Yaml;
+use FindingAPI\Definition\Exception\DefinitionException;
 
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
@@ -34,14 +32,14 @@ class Request
      * @var RequestParameters $parameters
      */
     private $parameters;
+
     /**
      * Request constructor.
-     * @param string|null $configFile
+     * @param RequestParameters $requestParameters
      */
-    public function __construct(string $configFile = null)
+    public function __construct(RequestParameters $requestParameters)
     {
-        $config = Yaml::parse(file_get_contents(__DIR__.'/../config.yml'))['finding'];
-        $this->parameters = new RequestParameters($config['parameters']);
+        $this->parameters = $requestParameters;
 
         $this->itemFilterStorage = new ItemFilterStorage();
 
@@ -183,17 +181,6 @@ class Request
         }
 
         $this->parameters->setParameter('RESPONSE-DATA-FORMAT', $format);
-
-        return $this;
-    }
-    /**
-     * @param string $securityId
-     * @return Request
-     * @throws RequestException
-     */
-    public function setSecurityAppId(string $securityId) : Request
-    {
-        $this->parameters->setParameter('SECURITY-APPNAME', $securityId);
 
         return $this;
     }

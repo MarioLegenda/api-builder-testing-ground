@@ -38,7 +38,7 @@ class RequestProducer
             $processed.=$processor->process()->getProcessed();
         }
 
-        $this->product = $processed;
+        $this->product = rtrim($processed, '&');
 
         return $this;
     }

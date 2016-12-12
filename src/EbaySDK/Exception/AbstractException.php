@@ -1,6 +1,6 @@
 <?php
 
-namespace FindingAPI\Core\Exception;
+namespace EbaySDK\Exception;
 
 abstract class AbstractException extends \Exception
 {

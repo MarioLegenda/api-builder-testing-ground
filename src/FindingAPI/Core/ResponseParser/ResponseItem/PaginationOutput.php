@@ -28,7 +28,7 @@ class PaginationOutput extends AbstractItem
     public function getEntriesPerPage($default = null)
     {
         if ($this->entriesPerPage === null) {
-            if (!empty($this->simpleXml->entriesPerPage)) {
+            if (isset($this->simpleXml->entriesPerPage)) {
                 $this->setEntriesPerPage((int) $this->simpleXml->entriesPerPage);
             }
         }
@@ -46,7 +46,7 @@ class PaginationOutput extends AbstractItem
     public function getPageNumber($default = null)
     {
         if ($this->pageNumber === null) {
-            if (!empty($this->simpleXml->pageNumber)) {
+            if (isset($this->simpleXml->pageNumber)) {
                 $this->setPageNumber((int) $this->simpleXml->pageNumber);
             }
         }
@@ -64,7 +64,7 @@ class PaginationOutput extends AbstractItem
     public function getTotalEntries($default = null)
     {
         if ($this->totalEntries === null) {
-            if (!empty($this->simpleXml->totalEntries)) {
+            if (isset($this->simpleXml->totalEntries)) {
                 $this->setTotalEntries((int) $this->simpleXml->totalEntries);
             }
         }
@@ -82,7 +82,7 @@ class PaginationOutput extends AbstractItem
     public function getTotalPages($default = null)
     {
         if ($this->totalPages === null) {
-            if (!empty($this->simpleXml->totalPages)) {
+            if (isset($this->simpleXml->totalPages)) {
                 $this->setTotalPages((int) $this->simpleXml->totalPages);
             }
         }

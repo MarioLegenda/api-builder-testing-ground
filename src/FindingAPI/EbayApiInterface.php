@@ -13,9 +13,10 @@ interface EbayApiInterface
      */
     public function getResponse(string $inlineResponse = null) : ResponseInterface;
     /**
+     * @param Request $request
      * @return EbayApiInterface
      */
-    public function send() : EbayApiInterface;
+    public function send(Request $request) : EbayApiInterface;
     /**
      * @return mixed
      */

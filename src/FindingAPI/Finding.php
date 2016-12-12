@@ -15,6 +15,7 @@ use FindingAPI\Processor\RequestProducer;
 use FindingAPI\Core\Response\ResponseInterface;
 use FindingAPI\Core\Response\ResponseProxy;
 
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use GuzzleHttp\Exception\ConnectException;
 use FindingAPI\Core\Exception\ConnectException as FindingConnectException;
@@ -52,60 +53,17 @@ class Finding implements EbayApiInterface
      */
     private $processed;
     /**
-     * @var static FinderSearch $instance
+     * Finding constructor.
+     * @param Request $request
+     * @param Options $options
+     * @param EventDispatcher $eventDispatcher
      */
-    private static $instance;
-    /**
-     * @param FindingRequest|null $configuration
-     * @return $this
-     */
-    public static function getInstance(Request $request) : Finding
-    {
-        if (self::$instance instanceof self) {
-            return self::$instance;
-        }
-
-        self::$instance = new Finding($request);
-
-        return self::$instance;
-    }
-    /**
-     * FinderSearch constructor.
-     * @param FindingRequest $configuration
-     */
-    private function __construct(Request $request)
+    public function __construct(Request $request, Options $options, EventDispatcher $eventDispatcher)
     {
         $this->request = $request;
-
-        $options = new Options();
-        $options->addOption(new Option(Options::GLOBAL_ITEM_FILTERS, true));
-        $options->addOption(new Option(Options::INDIVIDUAL_ITEM_FILTERS, true));
-        $options->addOption(new Option(Options::OFFLINE_MODE, false));
-
         $this->options = $options;
-
-        $this->eventDispatcher = new EventDispatcher();
-
-        $this->eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
-        $this->eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
-
-        if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
-            $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
-        }
-
-        if ($this->options->getOption(Options::INDIVIDUAL_ITEM_FILTERS)->getValue() === true) {
-            (new RequestValidator($this->request))->validate();
-        }
-
-        if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
-            $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
-        }
-
-        $processors = (new ProcessorFactory($this->request))->createProcessors();
-
-        $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
+        $this->eventDispatcher = $eventDispatcher;
     }
-
     /**
      * @return Request
      */
@@ -134,11 +92,28 @@ class Finding implements EbayApiInterface
         return $this->processed;
     }
     /**
-     * @return $this
-     * @throws Core\Exception\FindingApiException
+     * @param Request $request
+     * @return EbayApiInterface
+     * @throws FindingConnectException
      */
-    public function send() : EbayApiInterface
+    public function send(Request $request) : EbayApiInterface
     {
+        if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
+            $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        }
+
+        if ($this->options->getOption(Options::INDIVIDUAL_ITEM_FILTERS)->getValue() === true) {
+            (new RequestValidator($this->request))->validate();
+        }
+
+        if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
+            $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        }
+
+        $processors = (new ProcessorFactory($this->request))->createProcessors();
+
+        $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
+
         if ($this->options->getOption(Options::OFFLINE_MODE)->getValue() === true) {
             return $this;
         }
@@ -147,6 +122,8 @@ class Finding implements EbayApiInterface
             $this->guzzleResponse = $this->request->sendRequest($this->processed);
         } catch (ConnectException $e) {
             throw new FindingConnectException('GuzzleHttp threw a ConnectException. You are probably not connected to the internet. Exception message is '.$e->getMessage());
+        } catch (ServerException $e) {
+            throw new FindingConnectException('GuzzleHttp threw an exception with message: \''.$e->getMessage().'\'');
         }
 
         $this->responseToParse = (string) $this->guzzleResponse->getBody();

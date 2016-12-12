@@ -6,7 +6,8 @@ require __DIR__.'/../vendor/autoload.php';
 
 use FindingAPI\Core\Request\Request;
 use FindingAPI\Core\Request\Parameter;
-use FindingAPI\Core\Exception\RequestException;
+use Symfony\Component\Yaml\Yaml;
+use FindingAPI\Core\Request\RequestParameters;
 
 class ParametersTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,7 +84,11 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
      */
     public function testRequestParameters()
     {
-        $request = new Request();
+        $config = Yaml::parse(file_get_contents(__DIR__.'/finding.yml'))['finding'];
+
+        $requestParameters = new RequestParameters($config['parameters']);
+
+        $request = new Request($requestParameters);
 
         $requestParameters = $request->getRequestParameters();
 
@@ -138,7 +143,11 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
 
     public function testRequestParametersValidity()
     {
-        $request = new Request();
+        $config = Yaml::parse(file_get_contents(__DIR__.'/finding.yml'))['finding'];
+
+        $requestParameters = new RequestParameters($config['parameters']);
+
+        $request = new Request($requestParameters);
 
         $request->setOperationName('findItemsByKeywords');
 
