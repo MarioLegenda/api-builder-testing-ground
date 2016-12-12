@@ -2,7 +2,6 @@
 
 namespace FindingAPI\Core\Request;
 
-use FindingAPI\Core\Configuration\Configuration;
 use FindingAPI\Core\Exception\RequestException;
 use GuzzleHttp\Client;
 use FindingAPI\Definition\SearchDefinitionInterface;
@@ -12,10 +11,8 @@ use FindingAPI\Definition\Definition;
 use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 use FindingAPI\Core\Exception\ItemFilterException;
-use FindingAPI\Core\Cache\CacheProxy;
 
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Config\Definition\Processor;
 
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
@@ -43,16 +40,8 @@ class Request
      */
     public function __construct(string $configFile = null)
     {
-        $configFile = ($configFile) ? $configFile : __DIR__.'/../config.yml';
-
-        if (CacheProxy::instance()->has('config.yml')) {
-            $config = CacheProxy::instance()->get('config.yml');
-            $this->parameters = new RequestParameters($config['parameters']);
-        } else {
-            $config = Yaml::parse(file_get_contents($configFile))['finding'];
-            CacheProxy::instance()->put('config.yml', $config);
-            $this->parameters = new RequestParameters($config['parameters']);
-        }
+        $config = Yaml::parse(file_get_contents(__DIR__.'/../config.yml'))['finding'];
+        $this->parameters = new RequestParameters($config['parameters']);
 
         $this->itemFilterStorage = new ItemFilterStorage();
 

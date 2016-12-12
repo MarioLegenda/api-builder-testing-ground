@@ -20,8 +20,7 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
             ->setName('')
             ->setType('required')
             ->setValue('budala')
-            ->setValid(array('budala', 'idiot'))
-            ->setSynonyms(array('other-name', 'by-name'));
+            ->setValid(array('budala', 'idiot'));
 
         $paramter->validateParameter();
     }
@@ -35,8 +34,7 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
             ->setName('test-name')
             ->setType('required')
             ->setValue('kreten')
-            ->setValid(array('budala', 'idiot'))
-            ->setSynonyms(array('other-name', 'by-name'));
+            ->setValid(array('budala', 'idiot'));
 
         $paramter->validateParameter();
     }
@@ -50,8 +48,7 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
             ->setName('test-name')
             ->setType('required')
             ->setValue('')
-            ->setValid(array('budala', 'idiot'))
-            ->setSynonyms(array('other-name', 'by-name'));
+            ->setValid(array('budala', 'idiot'));
 
         $paramter->validateParameter();
     }
@@ -65,8 +62,7 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
             ->setName('test-name')
             ->setType('required')
             ->setValue('kretenčina')
-            ->setValid(array('budala', 'idiot'))
-            ->setSynonyms(array('other-name', 'by-name'));
+            ->setValid(array('budala', 'idiot'));
 
         $paramter->validateParameter();
     }
@@ -78,8 +74,7 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
             ->setName('test-name')
             ->setType('required')
             ->setValue('budala')
-            ->setValid(array('budala', 'idiot'))
-            ->setSynonyms(array('other-name', 'by-name'));
+            ->setValid(array('budala', 'idiot'));
 
         $paramter->validateParameter();
     }
@@ -109,8 +104,7 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
             ->setName('test-name')
             ->setType('required')
             ->setValue('budala')
-            ->setValid(array('budala', 'idiot'))
-            ->setSynonyms(array('other-name', 'by-name'));
+            ->setValid(array('budala', 'idiot'));
 
         $requestParameters->addParameter($paramter);
 
@@ -155,8 +149,7 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
             ->setName('test-name')
             ->setType('required')
             ->setValue('budala')
-            ->setValid(array('budala', 'idiot'))
-            ->setSynonyms(array('other-name', 'by-name'));
+            ->setValid(array('budala', 'idiot'));
 
         $requestParameters->addParameter($paramter);
 

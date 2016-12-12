@@ -125,9 +125,7 @@ abstract class AbstractFilter implements UrlifyInterface
 
     protected function checkBoolean($value) : bool
     {
-        try {
-            new Boolean($value);
-        } catch (CriticalTypeException $e) {
+        if (!is_bool($value)) {
             $this->exceptionMessages[] = $this->name.' can only accept true or false boolean values';
 
             return false;

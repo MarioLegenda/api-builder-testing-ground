@@ -1,16 +1,25 @@
 finding:
     parameters:
-      - { name: method, value: get, type: required, valid: {}, deprecated: false, synonyms: {}}
-      - { name: ebay_url, value: http://svcs.ebay.com/services/search/FindingService/v1, type: required, valid: {}, deprecated: false, synonyms: {}}
-      - { name: OPERATION-NAME, value: null, type: required, valid: [findItemsByKeywords, findItemsByCategory], deprecated: false, synonyms: {}}
+      # configurable at runtime but has to be set in config as a default
+      - { name: method, value: get, type: required, valid: {}, deprecated: false}
+      # configurable at runtime but has to be set in config as a default
+      - { name: ebay_url, value: http://svcs.ebay.com/services/search/FindingService/v1, type: required, valid: {}, deprecated: false }
+      - { name: OPERATION-NAME, value: null, type: required, valid: [findItemsByKeywords, findItemsByCategory], deprecated: false }
       - { name: SERVICE-VERSION, value: 1.0.0, type: required, valid: {}, deprecated: false, synonyms: {}}
-      - { name: SECURITY-APPNAME, value: Mariokrl-testing-PRD-ee6e68035-e73c8a53, type: required, valid: {}, deprecated: false, synonyms: {}}
+      - { name: SECURITY-APPNAME, value: Mariokrl-testing-PRD-ee6e68035-e73c8a53, type: required, valid: {}, deprecated: false }
       - { name: RESPONSE-DATA-FORMAT, value: xml, type: optional, valid: [xml, json], deprecated: false, synonyms: {}}
-      - { name: GLOBAL-ID, value: EBAY-US, type: optional, valid: [EBAY-US, EBAY-ENCA, EBAY-GB, EBAY-AU, EBAY-AT, EBAY-FRBE, EBAY-FR, EBAY-DE, EBAY-MOTOR, EBAY-IT, EBAY-NLBE, EBAY-NL, EBAY-ES, EBAY-CH, EBAY-HK, EBAY-IN, EBAY-IE, EBAY-MY, EBAY-FRCA, EBAY-PH, EBAY-PL, EBAY-SG], deprecated: false, synonyms: {}}
+      - { name: GLOBAL-ID, value: EBAY-US, type: optional, valid: [EBAY-US, EBAY-ENCA, EBAY-GB, EBAY-AU, EBAY-AT, EBAY-FRBE, EBAY-FR, EBAY-DE, EBAY-MOTOR, EBAY-IT, EBAY-NLBE, EBAY-NL, EBAY-ES, EBAY-CH, EBAY-HK, EBAY-IN, EBAY-IE, EBAY-MY, EBAY-FRCA, EBAY-PH, EBAY-PL, EBAY-SG], deprecated: false}
       - { name: buyerPostalCode, value: null, type: optional, valid: {}, deprecated: false, synonyms: {}}
-      - { name: sortOrder, value: null, type: optional, valid: [BestMatch, BidCountFewest, BidCountMost, CountryAscending, CountryDescending, CurrentPriceHighest, DistanceNearest, EndTimeSoonest, PricePlusShippingHighest, PricePlusShippingLowest, StartTimeNewest], deprecated: false, synonyms: {}}
-      - { name: paginationInput, value: null, type: optional, valid: {}, deprecated: false, synonyms: {}}
-      - { name: paginationOutput, value: null, type: optional, valid: {}, deprecated: false, synonyms: {}}
+      - { name: sortOrder, value: null, type: optional, valid: [BestMatch, BidCountFewest, BidCountMost, CountryAscending, CountryDescending, CurrentPriceHighest, DistanceNearest, EndTimeSoonest, PricePlusShippingHighest, PricePlusShippingLowest, StartTimeNewest], deprecated: false}
+      - { name: paginationInput, value: null, type: optional, valid: {}, deprecated: false}
+      - { name: paginationOutput, value: null, type: optional, valid: {}, deprecated: false}
+
+# Make EVERYTHING configurable at runtime. When in bundle, I could choose what will be configurable globally
+
+# 1. Make 'method' optional and configurable at runtime (when in bundle, it will be configurable globally)
+# 2. Make ebay_url optional and configurable at runtime (when in bundle, it will be configurable globally)
+# 3. Make SECURITY-APPNAME configurable globally and only once
+# 4. The rest of the paramters have to be configurable per request call
 
 
 

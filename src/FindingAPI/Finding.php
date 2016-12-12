@@ -10,7 +10,6 @@ use FindingAPI\Core\Options\Options;
 use FindingAPI\Core\Request\RequestValidator;
 use FindingAPI\Core\Request\Request as FindingRequest;
 use FindingAPI\Core\Request\Request;
-use FindingAPI\Core\Response;
 use FindingAPI\Processor\Factory\ProcessorFactory;
 use FindingAPI\Processor\RequestProducer;
 use FindingAPI\Core\Response\ResponseInterface;
@@ -53,13 +52,6 @@ class Finding implements EbayApiInterface
      */
     private $processed;
     /**
-     * @var array $validation
-     */
-    private $validation = array(
-        'individual-item-filters' => true,
-        'global-item-filters' => true,
-    );
-    /**
      * @var static FinderSearch $instance
      */
     private static $instance;
@@ -67,7 +59,7 @@ class Finding implements EbayApiInterface
      * @param FindingRequest|null $configuration
      * @return $this
      */
-    public static function getInstance(FindingRequest $request) : Finding
+    public static function getInstance(Request $request) : Finding
     {
         if (self::$instance instanceof self) {
             return self::$instance;
@@ -81,7 +73,7 @@ class Finding implements EbayApiInterface
      * FinderSearch constructor.
      * @param FindingRequest $configuration
      */
-    private function __construct(FindingRequest $request)
+    private function __construct(Request $request)
     {
         $this->request = $request;
 

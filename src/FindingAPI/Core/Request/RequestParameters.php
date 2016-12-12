@@ -199,10 +199,6 @@ class RequestParameters implements \IteratorAggregate
         }
 
         foreach ($this->parameters as $parameter) {
-            if ($parameter->hasSynonym($name)) {
-                return $parameter;
-            }
-
             if ($parameter->getName() === $name) {
                 return $parameter;
             }

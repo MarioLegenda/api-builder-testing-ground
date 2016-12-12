@@ -44,8 +44,7 @@ class Parameter
                 ->setName($parameter['name'])
                 ->setType($parameter['type'])
                 ->setValid($parameter['valid'])
-                ->setValue($parameter['value'])
-                ->setSynonyms($parameter['synonyms']);
+                ->setValue($parameter['value']);
 
             ($parameter['deprecated'] === true) ? $this->setDeprecated() : $this->removeDeprecated();
         }

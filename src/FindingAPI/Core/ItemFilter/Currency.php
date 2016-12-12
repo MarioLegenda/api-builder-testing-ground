@@ -16,7 +16,7 @@ class Currency extends AbstractFilter implements FilterInterface
             return false;
         }
 
-        $allowedCurrencies = new ArrayType(array(
+        $allowedCurrencies = array(
             'aud',
             'cad',
             'chf',
@@ -32,11 +32,11 @@ class Currency extends AbstractFilter implements FilterInterface
             'sgd',
             'twd',
             'usd',
-        ));
+        );
 
         $currency = strtolower($this->filter[0]);
 
-        if (!$allowedCurrencies->inArray($currency)) {
+        if (in_array($currency, $allowedCurrencies) === false) {
             $this->exceptionMessages[] = 'Invalid Currency item filter value supplied. Allowed currencies are '.implode(',', $allowedCurrencies);
 
             return false;
