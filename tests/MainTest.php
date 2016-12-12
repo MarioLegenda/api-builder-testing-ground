@@ -47,7 +47,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $request
             ->setMethod('get')
             ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
-            ->addSearch(Definition::customDefinition('some search'));
+            ->addSearch('some search');
 
         $findingApi->send($request);
 
@@ -99,7 +99,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
                 ->setMethod('get')
                 ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
                 ->setOutputSelector(array('StoreInfo', 'CategoryHistogram'))
-                ->addSearch(Definition::customDefinition($query));
+                ->addSearch($query);
 
             if ($filters !== null) {
                 foreach ($filters as $filter) {

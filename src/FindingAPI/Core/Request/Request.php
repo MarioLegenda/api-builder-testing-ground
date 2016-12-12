@@ -169,26 +169,14 @@ class Request
         return $this;
     }
     /**
-     * @param SearchDefinitionInterface $definition
+     * @param string $searchString
      * @return Request
      */
-    public function addSearch(SearchDefinitionInterface $definition) : Request
+    public function addSearch(string $searchString) : Request
     {
-        try {
-            $definition->validateDefinition();
-        } catch (DefinitionException $e) {
-            if ($this->options->hasOption(Options::SMART_GUESS_SYSTEM)) {
-                $definitionMethod = (new DefinitionValidator())->findDefinition($definition->getDefinition());
+        $definition = Definition::customDefinition($searchString);
 
-                if ($definitionMethod === false) {
-                    throw new DefinitionException($e->getMessage());
-                }
-
-                $definition = Definition::$definitionMethod($definition->getDefinition());
-
-                $definition->validateDefinition();
-            }
-        }
+        $definition->validateDefinition();
 
         $this->definitions[] = $definition;
 
