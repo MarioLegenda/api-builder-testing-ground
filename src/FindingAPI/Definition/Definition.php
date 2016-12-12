@@ -32,42 +32,6 @@ class Definition
     {
         $this->options = $options;
     }
-
-    /**
-     * @param string $searchString
-     * @return SearchDefinitionInterface
-     */
-    public static function andOperator(string $searchString) : SearchDefinitionInterface
-    {
-        return new AndDefinition($searchString);
-    }
-
-    /**
-     * @param string $searchString
-     * @return SearchDefinitionInterface
-     */
-    public static function exactSearchOperator(string $searchString) : SearchDefinitionInterface
-    {
-        return new ExactSequenceDefinition($searchString);
-    }
-
-    /**
-     * @param string $searchString
-     * @return SearchDefinitionInterface
-     */
-    public static function orOperator(string $searchString) : SearchDefinitionInterface
-    {
-        return new OrDefinition($searchString);
-    }
-
-    /**
-     * @param string $searchString
-     * @return SearchDefinitionInterface
-     */
-    public static function notOperator(string $searchString) : SearchDefinitionInterface
-    {
-        return new NotDefinition($searchString);
-    }
     /**
      * @param string $searchString
      * @return SearchDefinitionInterface

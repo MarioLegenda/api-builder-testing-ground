@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Definition;
 
-use FindingAPI\Definition\Exception\DefinitionException;
+use FindingAPI\Core\Exception\DefinitionException;
 
 abstract class AbstractDefinition implements SearchDefinitionInterface
 {

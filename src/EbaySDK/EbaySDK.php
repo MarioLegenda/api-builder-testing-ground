@@ -2,14 +2,8 @@
 
 namespace EbaySDK;
 
-use EbaySDK\Exception\SDKException;
 use EbaySDK\SDK\FindingFactory;
-use FindingAPI\Core\Request\Parameter;
-use FindingAPI\Core\Request\Request;
 use FindingAPI\EbayApiInterface;
-use FindingAPI\Finding;
-use Symfony\Component\Yaml\Yaml;
-use FindingAPI\Core\Request\RequestParameters;
 
 class EbaySDK
 {

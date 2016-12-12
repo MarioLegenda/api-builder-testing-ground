@@ -10,7 +10,7 @@ use FindingAPI\Definition\Definition;
 use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 use FindingAPI\Core\Exception\ItemFilterException;
-use FindingAPI\Definition\Exception\DefinitionException;
+use FindingAPI\Core\Exception\DefinitionException;
 
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
@@ -48,38 +48,8 @@ class Request
         Definition::initiate($this->options);
     }
     /**
-     * @return Request
-     */
-    public function specialFeature() : Request
-    {
-        return $this;
-    }
-    /**
-     * @param int $buyerPostalCode
-     * @throws FindingApiException
-     * @return Request
-     */
-    public function findLocalItems(int $buyerPostalCode) : Request
-    {
-        $this->setBuyerPostalCode($buyerPostalCode)->setSortOrder('Distance');
-
-        return $this;
-    }
-    /**
-     * @param string $url
-     * @return Request
-     * @throws RequestException
-     */
-    public function setEbayUrl(string $url) : Request
-    {
-        $this->parameters->setParameter('ebay_url', $url);
-
-        return $this;
-    }
-    /**
      * @param string $serviceVersion
      * @return Request
-     * @throws Exception\RequestException
      */
     public function setServiceVersion(string $serviceVersion) : Request
     {
@@ -105,7 +75,7 @@ class Request
     /**
      * @param string $buyerPostalCode
      * @return Request
-     * @throws RequestException
+     * @throws FindingApiException
      */
     public function setBuyerPostalCode(string $buyerPostalCode) : Request
     {
@@ -122,6 +92,7 @@ class Request
     /**
      * @param string $sortOrder
      * @return Request
+     * @throws FindingApiException
      */
     public function setSortOrder(string $sortOrder) : Request
     {
@@ -139,9 +110,7 @@ class Request
      * @param int $pagination
      * @param string $paginationType
      * @return Request
-     * @throws Exception\ItemFilterException
      * @throws FindingApiException
-     * @throws RequestException
      */
     public function setPaginationInput(int $pagination, string $paginationType) : Request
     {
@@ -226,9 +195,10 @@ class Request
         return $this;
     }
     /**
-     * @param $itemFilter
-     * @param $value
+     * @param string $itemFilter
+     * @param array $value
      * @return Request
+     * @throws ItemFilterException
      */
     public function addItemFilter(string $itemFilterName, array $value) : Request
     {
@@ -279,7 +249,7 @@ class Request
         return $this->definitions;
     }
     /**
-     * @param string $definitionType
+     * @param string $request
      */
     public function sendRequest(string $request) : GuzzleResponse
     {
