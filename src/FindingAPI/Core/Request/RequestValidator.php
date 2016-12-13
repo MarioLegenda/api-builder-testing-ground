@@ -3,6 +3,7 @@
 namespace FindingAPI\Core\Request;
 
 use FindingAPI\Core\Exception\{ FindingApiException, ItemFilterException };
+use FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest;
 
 class RequestValidator
 {
@@ -27,8 +28,10 @@ class RequestValidator
         $itemFilterStorage = $this->request->getItemFilterStorage();
         $definitions = $this->request->getDefinitions();
 
-        if (empty($definitions)) {
-            throw new FindingApiException('You have\'t specified any search words');
+        if ($this->request instanceof FindItemsByKeywordsRequest) {
+            if (empty($definitions)) {
+                throw new FindingApiException('You have\'t specified any search words');
+            }
         }
 
         $addedItemFilters = $itemFilterStorage->filterAddedFilter(array('SortOrder', 'PaginationInput'));

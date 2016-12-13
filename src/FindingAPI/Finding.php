@@ -5,7 +5,9 @@ namespace FindingAPI;
 use FindingAPI\Core\Event\ItemFilterEvent;
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Options\Options;
+use FindingAPI\Core\Request\Method\FindItemsByCategory;
 use FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest;
+use FindingAPI\Core\Request\RequestParameters;
 use FindingAPI\Core\Request\RequestValidator;
 use FindingAPI\Core\Request\Request;
 use FindingAPI\Processor\Factory\ProcessorFactory;
@@ -20,7 +22,7 @@ use FindingAPI\Core\Exception\ConnectException as FindingConnectException;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use FindingAPI\Core\Response\FakeGuzzleResponse;
 
-class Finding implements EbayApiInterface
+class Finding
 {
     /**
      * @var Options[] $options
@@ -51,6 +53,10 @@ class Finding implements EbayApiInterface
      */
     private $processed;
     /**
+     * @var RequestParameters $originalRequestParameters
+     */
+    private $originalRequestParameters;
+    /**
      * Finding constructor.
      * @param Request $request
      * @param Options $options
@@ -58,6 +64,7 @@ class Finding implements EbayApiInterface
      */
     public function __construct(Request $request, Options $options, EventDispatcher $eventDispatcher)
     {
+        $this->originalRequestParameters = $request->getRequestParameters();
         $this->request = $request;
         $this->options = $options;
         $this->eventDispatcher = $eventDispatcher;
@@ -78,15 +85,15 @@ class Finding implements EbayApiInterface
     /**
      * @return string
      */
-    public function getProcessedRequestString()
+    public function getProcessedRequestString() : string
     {
         return $this->processed;
     }
     /**
-     * @return EbayApiInterface
+     * @return Finding
      * @throws FindingConnectException
      */
-    public function send() : EbayApiInterface
+    public function send() : Finding
     {
         $this->dispatchListeners();
 
@@ -136,17 +143,16 @@ class Finding implements EbayApiInterface
     /**
      * @return Request
      */
-    public function getRequest() : Request
+    public function createFindItemsByKeywordsRequest() : FindItemsByKeywordsRequest
     {
+        $this->request = $this->createMethod(OperationName::FIND_ITEMS_BY_KEYWORDS);
+
         return $this->request;
     }
-    /**
-     * @param string $operationName
-     * @return Request
-     */
-    public function createMethodCall(string $operationName) : Request
+
+    public function createFindItemsByCategory() : FindItemsByCategory
     {
-        $this->request = $this->createMethod($operationName);
+        $this->request = $this->createMethod(OperationName::FIND_ITEMS_BY_CATEGORY);
 
         return $this->request;
     }
@@ -182,7 +188,7 @@ class Finding implements EbayApiInterface
         try {
             $this->guzzleResponse = $this->request->sendRequest($this->processed);
         } catch (ConnectException $e) {
-            throw new FindingConnectException('GuzzleHttp threw a ConnectException. You are probably not connected to the internet. Exception message is '.$e->getMessage());
+            throw new FindingConnectException('GuzzleHttp threw a ConnectException. Exception message is '.$e->getMessage());
         } catch (ServerException $e) {
             throw new FindingConnectException('GuzzleHttp threw an exception with message: \''.$e->getMessage().'\'');
         }
@@ -194,9 +200,9 @@ class Finding implements EbayApiInterface
     {
         switch ($operationName) {
             case OperationName::FIND_ITEMS_BY_KEYWORDS:
-                return new FindItemsByKeywordsRequest($this->request);
-
-                break;
+                return new FindItemsByKeywordsRequest(new Request($this->originalRequestParameters));
+            case OperationName::FIND_ITEMS_BY_CATEGORY:
+                return new FindItemsByCategory(new Request($this->originalRequestParameters));
         }
     }
 }

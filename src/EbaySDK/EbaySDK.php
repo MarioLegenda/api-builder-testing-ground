@@ -5,6 +5,7 @@ namespace EbaySDK;
 use EbaySDK\SDK\FindingFactory;
 use FindingAPI\Core\Request\RequestParameters;
 use FindingAPI\EbayApiInterface;
+use FindingAPI\Finding;
 
 class EbaySDK
 {
@@ -48,15 +49,15 @@ class EbaySDK
     /**
      * @param bool $singleton
      * @param RequestParameters|null $parameters
-     * @return EbayApiInterface
+     * @return Finding
      */
-    public function createFindingApi(bool $singleton = true, RequestParameters $parameters = null) : EbayApiInterface
+    public function createFindingApi(bool $singleton = true, RequestParameters $parameters = null) : Finding
     {
         if ($singleton === false) {
             $this->sdkRepository['finding'] = FindingFactory::create($this->securityAppname, $parameters);
         }
 
-        if (!$this->sdkRepository['finding'] instanceof EbayApiInterface) {
+        if (!$this->sdkRepository['finding'] instanceof Finding) {
             $this->sdkRepository['finding'] = FindingFactory::create($this->securityAppname, $parameters);
         }
 

@@ -2,6 +2,7 @@
 
 namespace FindingAPI\Processor\Factory;
 
+use FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest;
 use FindingAPI\Core\Request\Request;
 
 class ProcessorFactory
@@ -33,13 +34,17 @@ class ProcessorFactory
         $mainNamespace = 'FindingAPI\Processor\Get\\';
 
         $requestParametersProcessorClass = $mainNamespace.ucfirst($method).'RequestParametersProcessor';
-        $keywordsProcessorClass = $mainNamespace.ucfirst($method).'KeywordsProcessor';
-        $itemFiltersProcessorClass = $mainNamespace.ucfirst($method).'ItemFiltersProcessor';
-
         $processors['request-parameters-processor'] = new $requestParametersProcessorClass($this->request);
-        $processors['keywords-processor'] = new $keywordsProcessorClass($this->request, $definitions);
+
+        if ($this->request instanceof FindItemsByKeywordsRequest) {
+            $keywordsProcessorClass = $mainNamespace.ucfirst($method).'KeywordsProcessor';
+
+            $processors['keywords-processor'] = new $keywordsProcessorClass($this->request, $definitions);
+        }
 
         if (!empty($itemFilters)) {
+            $itemFiltersProcessorClass = $mainNamespace.ucfirst($method).'ItemFiltersProcessor';
+
             $processors['item-filters-processor'] = new $itemFiltersProcessorClass($this->request, $itemFilters);
         }
 

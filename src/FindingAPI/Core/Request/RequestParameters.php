@@ -123,8 +123,6 @@ class RequestParameters implements \IteratorAggregate
             throw new RequestException($parameter->getName().' already exists');
         }
 
-        $parameter->validateParameter();
-
         $this->parameters[] = $parameter;
 
         return $this;

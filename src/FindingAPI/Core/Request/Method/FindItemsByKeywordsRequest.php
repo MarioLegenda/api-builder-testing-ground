@@ -12,5 +12,6 @@ class FindItemsByKeywordsRequest extends Request
         parent::__construct($request->getRequestParameters());
 
         $this->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS);
+        $this->setResponseDataFormat('xml');
     }
 }

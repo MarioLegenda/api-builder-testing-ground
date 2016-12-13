@@ -405,12 +405,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MarioLegenda/ebay-offline-mode.git",
-                "reference": "3db0604183b867b2a6b3290105db690b1627d207"
+                "reference": "10f5ebe88d5e8fd5e0e181bb43f3352077edcc6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MarioLegenda/ebay-offline-mode/zipball/3db0604183b867b2a6b3290105db690b1627d207",
-                "reference": "3db0604183b867b2a6b3290105db690b1627d207",
+                "url": "https://api.github.com/repos/MarioLegenda/ebay-offline-mode/zipball/10f5ebe88d5e8fd5e0e181bb43f3352077edcc6f",
+                "reference": "10f5ebe88d5e8fd5e0e181bb43f3352077edcc6f",
                 "shasum": ""
             },
             "type": "library",
@@ -430,7 +430,7 @@
                 }
             ],
             "description": "Ebay API development helper",
-            "time": "2016-12-13 18:00:50"
+            "time": "2016-12-13 19:40:44"
         },
         {
             "name": "phpdocumentor/reflection-common",

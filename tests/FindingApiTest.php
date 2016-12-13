@@ -40,13 +40,11 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->setSecurityAppName('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
             ->createFindingApi();
 
-        $request = $findingApi->createMethodCall(OperationName::FIND_ITEMS_BY_KEYWORDS);
+        $request = $findingApi->createFindItemsByKeywordsRequest();
 
-        $request
-            ->setMethod('get')
-            ->addSearch('constantine reborn');
+        $request->addSearch('constantine reborn');
 
-        $findingApi->send($request);
+        $findingApi->send();
 
         $itemFilterStorage = $request->getItemFilterStorage();
 
@@ -78,7 +76,16 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-    public function testRequest()
+    public function testFindItemsByCategoryRequest()
+    {
+        $findingApi = EbaySDK::inst()->createFindingApi();
+
+        $request = $findingApi->createFindItemsByCategory()->setCategoryId(23);
+
+        $findingApi->send();
+    }
+
+    public function testFindItemsByKeywordsRequest()
     {
         $queries = array(
             'zoey deschanel' => array(
@@ -102,11 +109,9 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         foreach ($queries as $query => $filters) {
             $findingApi = EbaySDK::inst()->createFindingApi();
 
-            $request = $findingApi->getRequest();
+            $request = $findingApi->createFindItemsByKeywordsRequest();
 
             $request
-                ->setMethod('get')
-                ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
                 ->setOutputSelector(array('StoreInfo', 'CategoryHistogram'))
                 ->addSearch($query);
 
@@ -116,10 +121,9 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
                 }
             }
 
-
             $findingApi->setOption(Options::OFFLINE_MODE, true);
 
-            $response = $findingApi->send($request)->getResponse();
+            $response = $findingApi->send()->getResponse();
 
 
             //var_dump($processed);
