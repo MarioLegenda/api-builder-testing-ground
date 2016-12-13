@@ -47,16 +47,17 @@ class EbaySDK
     }
     /**
      * @param bool $singleton
+     * @param RequestParameters|null $parameters
      * @return EbayApiInterface
      */
-    public function createFindingApi(bool $singleton = true) : EbayApiInterface
+    public function createFindingApi(bool $singleton = true, RequestParameters $parameters = null) : EbayApiInterface
     {
         if ($singleton === false) {
-            $this->sdkRepository['finding'] = FindingFactory::create($this->securityAppname);
+            $this->sdkRepository['finding'] = FindingFactory::create($this->securityAppname, $parameters);
         }
 
         if (!$this->sdkRepository['finding'] instanceof EbayApiInterface) {
-            $this->sdkRepository['finding'] = FindingFactory::create($this->securityAppname);
+            $this->sdkRepository['finding'] = FindingFactory::create($this->securityAppname, $parameters);
         }
 
         return $this->sdkRepository['finding'];

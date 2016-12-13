@@ -32,7 +32,7 @@ use FindingAPI\Core\Information\Currency as InformationCurrency;
 use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
 use FindingAPI\Core\Response\ResponseInterface;
 
-class MainTest extends \PHPUnit_Framework_TestCase
+class FindingApiTest extends \PHPUnit_Framework_TestCase
 {
     public function testItemFilters()
     {

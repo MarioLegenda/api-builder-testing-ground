@@ -3,12 +3,8 @@
 namespace FindingAPI;
 
 use FindingAPI\Core\Event\ItemFilterEvent;
-use FindingAPI\Core\Listener\PostValidateItemFilters;
-use FindingAPI\Core\Listener\PreValidateItemFilters;
-use FindingAPI\Core\Options\Option;
 use FindingAPI\Core\Options\Options;
 use FindingAPI\Core\Request\RequestValidator;
-use FindingAPI\Core\Request\Request as FindingRequest;
 use FindingAPI\Core\Request\Request;
 use FindingAPI\Processor\Factory\ProcessorFactory;
 use FindingAPI\Processor\RequestProducer;
@@ -87,46 +83,21 @@ class Finding implements EbayApiInterface
     /**
      * @return string
      */
-    public function getProcessed()
+    public function getProcessedRequestString()
     {
         return $this->processed;
     }
     /**
-     * @param Request $request
      * @return EbayApiInterface
      * @throws FindingConnectException
      */
-    public function send(Request $request) : EbayApiInterface
+    public function send() : EbayApiInterface
     {
-        if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
-            $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
-        }
+        $this->dispatchListeners();
 
-        if ($this->options->getOption(Options::INDIVIDUAL_ITEM_FILTERS)->getValue() === true) {
-            (new RequestValidator($this->request))->validate();
-        }
+        $this->processRequest();
 
-        if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
-            $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
-        }
-
-        $processors = (new ProcessorFactory($this->request))->createProcessors();
-
-        $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
-
-        if ($this->options->getOption(Options::OFFLINE_MODE)->getValue() === true) {
-            return $this;
-        }
-
-        try {
-            $this->guzzleResponse = $this->request->sendRequest($this->processed);
-        } catch (ConnectException $e) {
-            throw new FindingConnectException('GuzzleHttp threw a ConnectException. You are probably not connected to the internet. Exception message is '.$e->getMessage());
-        } catch (ServerException $e) {
-            throw new FindingConnectException('GuzzleHttp threw an exception with message: \''.$e->getMessage().'\'');
-        }
-
-        $this->responseToParse = (string) $this->guzzleResponse->getBody();
+        $this->sendRequest();
 
         return $this;
     }
@@ -166,5 +137,44 @@ class Finding implements EbayApiInterface
         unset($this->guzzleResponse);
 
         return $this->response;
+    }
+
+    private function dispatchListeners()
+    {
+        if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
+            $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        }
+
+        if ($this->options->getOption(Options::INDIVIDUAL_ITEM_FILTERS)->getValue() === true) {
+            (new RequestValidator($this->request))->validate();
+        }
+
+        if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
+            $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        }
+    }
+
+    private function processRequest()
+    {
+        $processors = (new ProcessorFactory($this->request))->createProcessors();
+
+        $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
+
+        if ($this->options->getOption(Options::OFFLINE_MODE)->getValue() === true) {
+            return $this;
+        }
+    }
+
+    private function sendRequest()
+    {
+        try {
+            $this->guzzleResponse = $this->request->sendRequest($this->processed);
+        } catch (ConnectException $e) {
+            throw new FindingConnectException('GuzzleHttp threw a ConnectException. You are probably not connected to the internet. Exception message is '.$e->getMessage());
+        } catch (ServerException $e) {
+            throw new FindingConnectException('GuzzleHttp threw an exception with message: \''.$e->getMessage().'\'');
+        }
+
+        $this->responseToParse = (string) $this->guzzleResponse->getBody();
     }
 }

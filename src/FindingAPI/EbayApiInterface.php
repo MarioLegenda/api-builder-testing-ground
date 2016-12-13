@@ -16,11 +16,11 @@ interface EbayApiInterface
      * @param Request $request
      * @return EbayApiInterface
      */
-    public function send(Request $request) : EbayApiInterface;
+    public function send() : EbayApiInterface;
     /**
      * @return mixed
      */
-    public function getProcessed();
+    public function getProcessedRequestString();
     /**
      * @return Request
      */
