@@ -28,7 +28,6 @@ class GlobalId
     const EBAY_PL = 'ebay-pl';
     const EBAY_SG = 'ebay-sg';
     const EBAY_US = 'ebay-us';
-
     /**
      * @var array $globalIds
      */

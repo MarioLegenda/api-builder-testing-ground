@@ -3,8 +3,9 @@
 namespace FindingAPI\Processor\Get;
 
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
-use FindingAPI\Processor\AbstractProcessor;
-use FindingAPI\Processor\ProcessorInterface;
+
+use FindingAPI\Processor\{ AbstractProcessor, ProcessorInterface };
+
 use FindingAPI\Core\Request\Request;
 use FindingAPI\Processor\UrlifyInterface;
 
@@ -18,17 +19,19 @@ class GetItemFiltersProcessor extends AbstractProcessor implements ProcessorInte
      * @var ItemFilterStorage $itemFilterStorage
      */
     private $itemFilterStorage;
-
+    /**
+     * GetItemFiltersProcessor constructor.
+     * @param Request $request
+     * @param ItemFilterStorage $itemFilterStorage
+     */
     public function __construct(Request $request, ItemFilterStorage $itemFilterStorage)
     {
         parent::__construct($request);
 
         $this->itemFilterStorage = $itemFilterStorage;
     }
-
     /**
-     * @return string
-     * @throws \FindingAPI\Core\Exception\RequestException
+     * @return ProcessorInterface
      */
     public function process() : ProcessorInterface
     {

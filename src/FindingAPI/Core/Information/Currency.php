@@ -39,7 +39,6 @@ class Currency
         'TWD',
         'USD',
     );
-
     /**
      * @var GlobalId $instance
      */

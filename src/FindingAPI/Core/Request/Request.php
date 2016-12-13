@@ -2,15 +2,11 @@
 
 namespace FindingAPI\Core\Request;
 
-use FindingAPI\Core\Exception\RequestException;
 use GuzzleHttp\Client;
-use FindingAPI\Definition\SearchDefinitionInterface;
-use FindingAPI\Definition\DefinitionValidator;
 use FindingAPI\Definition\Definition;
-use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
-use FindingAPI\Core\Exception\ItemFilterException;
-use FindingAPI\Core\Exception\DefinitionException;
+
+use FindingAPI\Core\Exception\{ RequestException, FindingApiException, ItemFilterException };
 
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 

@@ -7,7 +7,6 @@ use FindingAPI\Core\Helper;
 class MaxPrice extends AbstractFilter implements FilterInterface
 {
     /**
-     * @param array $filter
      * @return bool
      */
     public function validateFilter() : bool

@@ -5,7 +5,7 @@ namespace FindingAPI\Processor;
 interface ProcessorInterface
 {
     /**
-     * @return string
+     * @return ProcessorInterface
      */
     public function process() : ProcessorInterface;
     /**

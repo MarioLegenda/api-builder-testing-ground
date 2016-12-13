@@ -7,7 +7,6 @@ use FindingAPI\Core\Exception\ItemFilterException;
 class ExcludeSeller extends AbstractFilter implements FilterInterface
 {
     /**
-     * @throws ItemFilterException
      * @return bool
      */
     public function validateFilter() : bool

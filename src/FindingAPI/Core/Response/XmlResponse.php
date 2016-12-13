@@ -2,13 +2,16 @@
 
 namespace FindingAPI\Core\Response;
 
-use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
-use FindingAPI\Core\ResponseParser\ResponseItem\CategoryHistogramContainer;
-use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
-use FindingAPI\Core\ResponseParser\ResponseItem\ErrorContainer;
-use FindingAPI\Core\ResponseParser\ResponseItem\PaginationOutput;
-use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
-use FindingAPI\Core\ResponseParser\ResponseItem\SearchResultsContainer;
+use FindingAPI\Core\ResponseParser\ResponseItem\{
+    AspectHistogramContainer,
+    CategoryHistogramContainer,
+    ConditionHistogramContainer,
+    ErrorContainer,
+    PaginationOutput,
+    RootItem,
+    SearchResultsContainer
+};
+
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 class XmlResponse implements ResponseInterface

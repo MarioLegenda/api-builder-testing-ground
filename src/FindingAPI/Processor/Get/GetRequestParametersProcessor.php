@@ -2,10 +2,7 @@
 
 namespace FindingAPI\Processor\Get;
 
-use FindingAPI\Processor\AbstractProcessor;
-use FindingAPI\Processor\ProcessorInterface;
-use FindingAPI\Processor\Factory\DefinitionTypeInterface;
-use FindingAPI\Core\Request;
+use FindingAPI\Processor\{ AbstractProcessor, ProcessorInterface };
 
 class GetRequestParametersProcessor extends AbstractProcessor implements ProcessorInterface
 {
@@ -14,8 +11,7 @@ class GetRequestParametersProcessor extends AbstractProcessor implements Process
      */
     private $processed = '';
     /**
-     * @return string
-     * @throws \FindingAPI\Core\Exception\RequestException
+     * @return ProcessorInterface
      */
     public function process() : ProcessorInterface
     {

@@ -2,8 +2,7 @@
 
 namespace FindingAPI\Core\Request;
 
-use FindingAPI\Core\Exception\DeprecatedException;
-use FindingAPI\Core\Exception\RequestException;
+use FindingAPI\Core\Exception\{ DeprecatedException, RequestException };
 
 class RequestParameters implements \IteratorAggregate
 {

@@ -2,12 +2,9 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use StrongType\ArrayType;
-
 class Currency extends AbstractFilter implements FilterInterface
 {
     /**
-     * @param array $filter
      * @return bool
      */
     public function validateFilter() : bool

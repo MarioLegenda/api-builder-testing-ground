@@ -4,7 +4,6 @@ namespace FindingAPI\Core\Response;
 
 use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
-use FindingAPI\Core\Response\ResponseInterface;
 
 class ResponseProxy implements ResponseInterface
 {

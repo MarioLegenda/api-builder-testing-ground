@@ -2,8 +2,6 @@
 
 namespace FindingAPI\Core;
 
-use Carbon\Carbon;
-
 class Helper
 {
     public static function compareFloatNumbers($float1, $float2, $operator='=')

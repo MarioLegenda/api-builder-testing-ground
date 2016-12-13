@@ -2,8 +2,8 @@
 
 namespace FindingAPI\Processor\Get;
 
-use FindingAPI\Processor\AbstractProcessor;
-use FindingAPI\Processor\ProcessorInterface;
+use FindingAPI\Processor\{ AbstractProcessor, ProcessorInterface };
+
 use FindingAPI\Core\Request\Request;
 
 class GetKeywordsProcessor extends AbstractProcessor implements ProcessorInterface
@@ -27,9 +27,8 @@ class GetKeywordsProcessor extends AbstractProcessor implements ProcessorInterfa
 
         $this->definitions = $definitions;
     }
-
     /**
-     * @return string
+     * @return ProcessorInterface
      */
     public function process() : ProcessorInterface
     {

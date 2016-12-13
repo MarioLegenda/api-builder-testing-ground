@@ -5,10 +5,6 @@ namespace FindingAPI\Core\Request;
 class Options
 {
     /**
-     *  const SMART_GUESS_SYSTEM
-     */
-    const SMART_GUESS_SYSTEM = 1;
-    /**
      * @var array $options
      */
     private $options = array();

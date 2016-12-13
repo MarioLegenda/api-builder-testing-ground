@@ -2,9 +2,7 @@
 
 namespace FindingAPI\Core\Request;
 
-use FindingAPI\Core\Exception\FindingApiException;
-use FindingAPI\Core\Exception\ItemFilterException;
-use FindingAPI\Core\ItemFilter\ItemFilterStorage;
+use FindingAPI\Core\Exception\{ FindingApiException, ItemFilterException };
 
 class RequestValidator
 {
@@ -13,15 +11,16 @@ class RequestValidator
      */
     private $request;
     /**
-     * ItemFilterProcessor constructor.
-     * @param Request $itemFilters
+     * RequestValidator constructor.
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
         $this->request = $request;
     }
     /**
-     * @void
+     * @throws FindingApiException
+     * @throws ItemFilterException
      */
     public function validate()
     {

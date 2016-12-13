@@ -7,7 +7,6 @@ use FindingAPI\Core\Information\ISO3166CountryCode;
 class LocatedIn extends AbstractFilter implements FilterInterface
 {
     /**
-     * @param array $filter
      * @return bool
      */
     public function validateFilter() : bool

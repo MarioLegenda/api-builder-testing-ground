@@ -8,7 +8,9 @@ class DefinitionValidator
      * @var array $validators
      */
     private $validators = array();
-
+    /**
+     * DefinitionValidator constructor.
+     */
     public function __construct()
     {
         $this->validators[] = function (string $searchString) {
@@ -81,7 +83,6 @@ class DefinitionValidator
             return 'notOperator';
         };
     }
-
     /**
      * @param string $searchString
      * @return bool

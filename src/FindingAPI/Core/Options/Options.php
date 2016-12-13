@@ -7,7 +7,6 @@ class Options
     const GLOBAL_ITEM_FILTERS = 'global_item_filters';
     const INDIVIDUAL_ITEM_FILTERS = 'individual_item_filters';
     const OFFLINE_MODE = 'offline_mode';
-
     /**
      * @var array $options
      */

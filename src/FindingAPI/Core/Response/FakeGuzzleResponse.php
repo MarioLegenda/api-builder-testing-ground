@@ -16,7 +16,6 @@ class FakeGuzzleResponse
     {
         $this->responseBody = $responseBody;
     }
-
     /**
      * @return string
      */

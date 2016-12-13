@@ -15,7 +15,7 @@ abstract class AbstractDefinition implements SearchDefinitionInterface
      */
     protected $isValidated = false;
     /**
-     * AndDefinition constructor.
+     * AbstractDefinition constructor.
      * @param string $searchString
      */
     public function __construct(string $searchString)

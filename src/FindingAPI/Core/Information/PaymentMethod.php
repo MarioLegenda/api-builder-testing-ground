@@ -16,11 +16,11 @@ class PaymentMethod
         'PaisaPayEMI',
     );
     /**
-     * @var GlobalId $instance
+     * @var PaymentMethod $instance
      */
     private static $instance;
     /**
-     * @return GlobalId
+     * @return PaymentMethod
      */
     public static function instance()
     {
@@ -29,7 +29,7 @@ class PaymentMethod
         return self::$instance;
     }
     /**
-     * @param string $id
+     * @param string $method
      * @return mixed
      */
     public function has(string $method) : bool
@@ -37,9 +37,8 @@ class PaymentMethod
         return in_array($method, $this->paymentMethods) !== false;
     }
     /**
-     * @param string $name
-     * @param array $values
-     * @return GlobalId
+     * @param string $method
+     * @return PaymentMethod
      */
     public function add(string $method)
     {

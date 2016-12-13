@@ -2,8 +2,6 @@
 
 namespace FindingAPI\Core\Information;
 
-use FindingAPI\Core\Exception\ItemFilterException;
-
 class SortOrder
 {
     const BEST_MATCH = 'BestMatch';

@@ -7,7 +7,6 @@ use FindingAPI\Core\Information\PaymentMethod as PaymentMethodInformation;
 class PaymentMethod extends AbstractFilter implements FilterInterface
 {
     /**
-     * @param array $filter
      * @return bool
      */
     public function validateFilter() : bool

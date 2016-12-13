@@ -28,7 +28,7 @@ class ISO3166CountryCode
         return self::$instance;
     }
     /**
-     * @param string $id
+     * @param string $code
      * @return mixed|null
      */
     public function get(string $code) : array
@@ -49,6 +49,7 @@ class ISO3166CountryCode
     }
     /**
      * @param string $id
+     * @param bool $returnRemoved
      * @return bool
      */
     public function has(string $id, bool $returnRemoved = false)
@@ -73,9 +74,8 @@ class ISO3166CountryCode
         return !empty($filtered);
     }
     /**
-     * @param string $name
      * @param array $values
-     * @return GlobalId
+     * @return ISO3166CountryCode
      * @throws ItemFilterException
      */
     public function add(array $values) : ISO3166CountryCode

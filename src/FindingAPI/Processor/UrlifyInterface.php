@@ -5,7 +5,7 @@ namespace FindingAPI\Processor;
 interface UrlifyInterface
 {
     /**
-     * @param string $counter
+     * @param int $counter
      * @return string
      */
     public function urlify(int $counter) : string;

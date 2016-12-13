@@ -7,7 +7,6 @@ use FindingAPI\Core\Information\GlobalId;
 class ListedIn extends AbstractFilter implements FilterInterface
 {
     /**
-     * @param array $filter
      * @return bool
      */
     public function validateFilter() : bool

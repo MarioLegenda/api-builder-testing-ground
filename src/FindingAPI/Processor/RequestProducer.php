@@ -15,14 +15,15 @@ class RequestProducer
      */
     private $processors;
     /**
-     * RequestBinder constructor.
+     * RequestProducer constructor.
      * @param array $processors
+     * @throws FindingApiException
      */
     public function __construct(array $processors)
     {
         foreach ($processors as $key => $processor) {
             if (!$processor instanceof ProcessorInterface) {
-                throw new \RuntimeException('Invalid argument supplied to '.get_class($this).'. $processors should be an array of ProcessorInterface objects');
+                throw new FindingApiException('Invalid argument supplied to '.get_class($this).'. $processors should be an array of ProcessorInterface objects');
             }
         }
 

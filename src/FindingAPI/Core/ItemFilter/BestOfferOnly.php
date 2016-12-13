@@ -5,7 +5,6 @@ namespace FindingAPI\Core\ItemFilter;
 class BestOfferOnly extends AbstractFilter implements FilterInterface
 {
     /**
-     * @param array $filter
      * @return bool
      */
     public function validateFilter() : bool

@@ -2,13 +2,10 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use StrongType\ArrayType;
-
 class Condition extends AbstractFilter implements FilterInterface
 {
     protected $filter;
     /**
-     * @param array $filter
      * @return bool
      */
     public function validateFilter() : bool

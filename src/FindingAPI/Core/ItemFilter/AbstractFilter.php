@@ -4,8 +4,6 @@ namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Helper;
 use FindingAPI\Processor\UrlifyInterface;
-use StrongType\Boolean;
-use StrongType\Exceptions\CriticalTypeException;
 
 abstract class AbstractFilter implements UrlifyInterface
 {
