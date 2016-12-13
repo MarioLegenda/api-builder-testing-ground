@@ -40,11 +40,10 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->setSecurityAppName('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
             ->createFindingApi();
 
-        $request = $findingApi->getRequest();
+        $request = $findingApi->createMethodCall(OperationName::FIND_ITEMS_BY_KEYWORDS);
 
         $request
             ->setMethod('get')
-            ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
             ->addSearch('constantine reborn');
 
         $findingApi->send($request);

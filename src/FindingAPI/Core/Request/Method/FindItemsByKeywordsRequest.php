@@ -7,9 +7,9 @@ use FindingAPI\Core\Request\Request;
 
 class FindItemsByKeywordsRequest extends Request
 {
-    public function __construct()
+    public function __construct(Request $request)
     {
-        parent::__construct(__DIR__.'/../config.yml');
+        parent::__construct($request->getRequestParameters());
 
         $this->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS);
     }

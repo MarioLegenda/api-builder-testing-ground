@@ -25,4 +25,9 @@ interface EbayApiInterface
      * @return Request
      */
     public function getRequest() : Request;
+    /**
+     * @param string $operationName
+     * @return Request
+     */
+    public function createMethodCall(string $operationName) : Request;
 }

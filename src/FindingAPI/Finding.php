@@ -3,7 +3,9 @@
 namespace FindingAPI;
 
 use FindingAPI\Core\Event\ItemFilterEvent;
+use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Options\Options;
+use FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest;
 use FindingAPI\Core\Request\RequestValidator;
 use FindingAPI\Core\Request\Request;
 use FindingAPI\Processor\Factory\ProcessorFactory;
@@ -59,13 +61,6 @@ class Finding implements EbayApiInterface
         $this->request = $request;
         $this->options = $options;
         $this->eventDispatcher = $eventDispatcher;
-    }
-    /**
-     * @return Request
-     */
-    public function getRequest() : Request
-    {
-        return $this->request;
     }
     /**
      * @param string $option
@@ -138,6 +133,23 @@ class Finding implements EbayApiInterface
 
         return $this->response;
     }
+    /**
+     * @return Request
+     */
+    public function getRequest() : Request
+    {
+        return $this->request;
+    }
+    /**
+     * @param string $operationName
+     * @return Request
+     */
+    public function createMethodCall(string $operationName) : Request
+    {
+        $this->request = $this->createMethod($operationName);
+
+        return $this->request;
+    }
 
     private function dispatchListeners()
     {
@@ -176,5 +188,15 @@ class Finding implements EbayApiInterface
         }
 
         $this->responseToParse = (string) $this->guzzleResponse->getBody();
+    }
+
+    private function createMethod(string $operationName)
+    {
+        switch ($operationName) {
+            case OperationName::FIND_ITEMS_BY_KEYWORDS:
+                return new FindItemsByKeywordsRequest($this->request);
+
+                break;
+        }
     }
 }
