@@ -91,11 +91,8 @@ class RequestParameters implements \IteratorAggregate
     /**
      * @param string $name
      * @param string $value
-     * @param string $type
      * @return RequestParameters
      * @throws RequestException
-     *
-     * Sets the parameters name and value
      */
     public function setParameter(string $name, string $value) : RequestParameters
     {
@@ -113,16 +110,9 @@ class RequestParameters implements \IteratorAggregate
         return $this;
     }
     /**
-     * @param string $name
-     * @param string $value
-     * @param string $type
-     * @param array $valids
-     * @param array $synonyms
-     * @param array $possible
+     * @param Parameter $parameter
      * @return RequestParameters
      * @throws RequestException
-     *
-     * Adds a new Parameter to RequestParameters
      */
     public function addParameter(Parameter $parameter) : RequestParameters
     {
@@ -141,11 +131,7 @@ class RequestParameters implements \IteratorAggregate
         return $this;
     }
     /**
-     * @param string $name
-     * @param string $value
-     * @param string $type
-     * @param array $valids
-     * @param array $synonyms
+     * @param Parameter $parameter
      * @return RequestParameters
      * @throws RequestException
      */
@@ -164,8 +150,8 @@ class RequestParameters implements \IteratorAggregate
         return $this;
     }
     /**
-     * @param string $name
-     * @return bool
+     * @param Parameter $parameterToDelete
+     * @return RequestParameters
      * @throws RequestException
      */
     public function removeParameter(Parameter $parameterToDelete) : RequestParameters
@@ -190,7 +176,8 @@ class RequestParameters implements \IteratorAggregate
     }
     /**
      * @param string $name
-     * @return mixed
+     * @return Parameter
+     * @throws RequestException
      */
     public function getParameter(string $name) : Parameter
     {
@@ -211,10 +198,6 @@ class RequestParameters implements \IteratorAggregate
     public function hasParameter(string $name) : bool
     {
         foreach ($this->parameters as $parameter) {
-            if ($parameter->hasSynonym($name)) {
-                return true;
-            }
-
             if ($parameter->getName() === $name) {
                 return true;
             }

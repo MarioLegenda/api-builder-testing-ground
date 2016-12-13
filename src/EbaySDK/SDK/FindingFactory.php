@@ -2,6 +2,7 @@
 
 namespace EbaySDK\SDK;
 
+use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\Options\Options;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
@@ -16,11 +17,35 @@ use FindingAPI\Core\Listener\PostValidateItemFilters;
 
 class FindingFactory
 {
-    public static function create(string $securityAppname)
+    /**
+     * @param string $securityAppname
+     * @param RequestParameters $parameters
+     * @return Finding
+     * @throws SDKException
+     */
+    public static function create(string $securityAppname, RequestParameters $parameters = null)
     {
         $config = Yaml::parse(file_get_contents(__DIR__.'/../config/finding.yml'))['finding'];
 
         $requestParameters = new RequestParameters($config['parameters']);
+
+        if ($parameters instanceof RequestParameters) {
+            foreach ($parameters as $param) {
+                if (!$param instanceof Parameter) {
+                    throw new FindingApiException('When injecting new or replacing request parameters, individual parameter has to be of type '.Parameter::class);
+                }
+
+                $param->validateParameter();
+
+                if ($requestParameters->hasParameter($param->getName())) {
+                    $requestParameters->replaceParameter($param);
+
+                    continue;
+                }
+
+                $requestParameters->addParameter($param);
+            }
+        }
 
         if ($securityAppname === null) {
             throw new SDKException('When using EbaySDK for the first time, you have to provide SECURITY-APPNAME. Go to https://go.developer.ebay.com/ to sign up');

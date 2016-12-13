@@ -25,8 +25,6 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\UnitPrice;
 use FindingAPI\Core\ResponseParser\ResponseItem\ErrorContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\PaginationOutput;
 use FindingAPI\Core\ResponseParser\ResponseItem\SearchResultsContainer;
-use FindingAPI\Finding;
-use FindingAPI\Definition\Definition;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Condition;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\DiscountPriceInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Category;
@@ -47,7 +45,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $request
             ->setMethod('get')
             ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
-            ->addSearch('some search');
+            ->addSearch('constantine reborn');
 
         $findingApi->send($request);
 
@@ -84,7 +82,19 @@ class MainTest extends \PHPUnit_Framework_TestCase
     public function testRequest()
     {
         $queries = array(
-            'harry potter' => array(
+            'zoey deschanel' => array(
+                array (ItemFilter::BEST_OFFER_ONLY, array(true)),
+                array (ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN)),
+            ),
+            'christopher hitchens' => array(
+                array (ItemFilter::BEST_OFFER_ONLY, array(true)),
+                array (ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN)),
+            ),
+            'britanny murphy' => array(
+                array (ItemFilter::BEST_OFFER_ONLY, array(true)),
+                array (ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN)),
+            ),
+            'gibonni' => array(
                 array (ItemFilter::BEST_OFFER_ONLY, array(true)),
                 array (ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN)),
             ),
