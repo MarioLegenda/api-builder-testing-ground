@@ -2,11 +2,11 @@
 
 namespace FindingAPI\Core\Request\Method;
 
-use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Request\Request;
+use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Request\RequestParameters;
 
-class FindItemsByKeywordsRequest extends Request
+class FindItemsAdvanced extends Request
 {
     /**
      * FindItemsByKeywordsRequest constructor.
@@ -21,11 +21,21 @@ class FindItemsByKeywordsRequest extends Request
     }
     /**
      * @param string $searchString
-     * @return FindItemsByKeywordsRequest
+     * @return FindItemsAdvanced
      */
-    public function addKeyword(string $searchString) : FindItemsByKeywordsRequest
+    public function addKeyword(string $searchString) : FindItemsAdvanced
     {
         $this->getRequestParameters()->setParameter('keywords', urlencode($searchString));
+
+        return $this;
+    }
+    /**
+     * @param int $categoryId
+     * @return FindItemsAdvanced
+     */
+    public function setCategoryId(int $categoryId) : FindItemsAdvanced
+    {
+        $this->getRequestParameters()->setParameter('categoryId', $categoryId);
 
         return $this;
     }

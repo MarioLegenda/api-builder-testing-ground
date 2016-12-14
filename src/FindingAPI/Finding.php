@@ -5,6 +5,7 @@ namespace FindingAPI;
 use FindingAPI\Core\Event\ItemFilterEvent;
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Options\Options;
+use FindingAPI\Core\Request\Method\FindItemsAdvanced;
 use FindingAPI\Core\Request\Method\FindItemsByCategory;
 use FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest;
 use FindingAPI\Core\Request\RequestParameters;
@@ -53,10 +54,6 @@ class Finding
      */
     private $processed;
     /**
-     * @var RequestParameters $originalRequestParameters
-     */
-    private $originalRequestParameters;
-    /**
      * Finding constructor.
      * @param Request $request
      * @param Options $options
@@ -88,6 +85,11 @@ class Finding
     public function getProcessedRequestString() : string
     {
         return $this->processed;
+    }
+
+    public function getRequest()
+    {
+        return $this->request;
     }
     /**
      * @return Finding
@@ -141,7 +143,7 @@ class Finding
         return $this->response;
     }
     /**
-     * @return Request
+     * @return FindItemsByKeywordsRequest
      */
     public function createFindItemsByKeywordsRequest() : FindItemsByKeywordsRequest
     {
@@ -149,10 +151,21 @@ class Finding
 
         return $this->request;
     }
-
+    /**
+     * @return FindItemsByCategory
+     */
     public function createFindItemsByCategory() : FindItemsByCategory
     {
         $this->request = $this->createMethod(OperationName::FIND_ITEMS_BY_CATEGORY);
+
+        return $this->request;
+    }
+    /**
+     * @return FindItemsAdvanced|FindItemsByCategory|FindItemsByKeywordsRequest|Request
+     */
+    public function createFindItemsAdvancedRequest()
+    {
+        $this->request = $this->createMethod(OperationName::FIND_ITEMS_ADVANCED);
 
         return $this->request;
     }
@@ -200,9 +213,11 @@ class Finding
     {
         switch ($operationName) {
             case OperationName::FIND_ITEMS_BY_KEYWORDS:
-                return new FindItemsByKeywordsRequest(new Request($this->originalRequestParameters));
+                return new FindItemsByKeywordsRequest($this->request->getRequestParameters());
             case OperationName::FIND_ITEMS_BY_CATEGORY:
-                return new FindItemsByCategory(new Request($this->originalRequestParameters));
+                return new FindItemsByCategory($this->request->getRequestParameters());
+            case OperationName::FIND_ITEMS_ADVANCED:
+                return new FindItemsAdvanced($this->request->getRequestParameters());
         }
     }
 }

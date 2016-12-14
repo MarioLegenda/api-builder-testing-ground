@@ -26,13 +26,6 @@ class RequestValidator
     public function validate()
     {
         $itemFilterStorage = $this->request->getItemFilterStorage();
-        $definitions = $this->request->getDefinitions();
-
-        if ($this->request instanceof FindItemsByKeywordsRequest) {
-            if (empty($definitions)) {
-                throw new FindingApiException('You have\'t specified any search words');
-            }
-        }
 
         $addedItemFilters = $itemFilterStorage->filterAddedFilter(array('SortOrder', 'PaginationInput'));
 

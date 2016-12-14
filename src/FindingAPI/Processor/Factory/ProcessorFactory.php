@@ -35,12 +35,12 @@ class ProcessorFactory
 
         $requestParametersProcessorClass = $mainNamespace.ucfirst($method).'RequestParametersProcessor';
         $processors['request-parameters-processor'] = new $requestParametersProcessorClass($this->request);
-
+/*
         if ($this->request instanceof FindItemsByKeywordsRequest) {
             $keywordsProcessorClass = $mainNamespace.ucfirst($method).'KeywordsProcessor';
 
             $processors['keywords-processor'] = new $keywordsProcessorClass($this->request, $definitions);
-        }
+        }*/
 
         if (!empty($itemFilters)) {
             $itemFiltersProcessorClass = $mainNamespace.ucfirst($method).'ItemFiltersProcessor';

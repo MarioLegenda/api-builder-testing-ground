@@ -40,9 +40,11 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->setSecurityAppName('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
             ->createFindingApi();
 
+        $findingApi->setOption(Options::OFFLINE_MODE, true);
+
         $request = $findingApi->createFindItemsByKeywordsRequest();
 
-        $request->addSearch('constantine reborn');
+        $request->addKeyword('constantine');
 
         $findingApi->send();
 
@@ -80,27 +82,40 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
     {
         $findingApi = EbaySDK::inst()->createFindingApi();
 
-        $request = $findingApi->createFindItemsByCategory()->setCategoryId(23);
+        $findingApi->setOption(Options::OFFLINE_MODE, true);
 
-        $findingApi->send();
+        $findingApi->createFindItemsByCategory()->setCategoryId(23);
+
+        $this->validateResponse($findingApi->send()->getResponse());
+    }
+
+    public function testFindItemsAdvancedRequest()
+    {
+        $findingApi = EbaySDK::inst()->createFindingApi();
+
+        $findingApi->setOption(Options::OFFLINE_MODE, true);
+
+        $findingApi->createFindItemsAdvancedRequest()->setCategoryId(23)->addKeyword('baseball');
+
+        $this->validateResponse($findingApi->send()->getResponse());
     }
 
     public function testFindItemsByKeywordsRequest()
     {
         $queries = array(
-            'zoey deschanel' => array(
+            'hats' => array(
                 array (ItemFilter::BEST_OFFER_ONLY, array(true)),
                 array (ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN)),
             ),
-            'christopher hitchens' => array(
+            'harry potter' => array(
                 array (ItemFilter::BEST_OFFER_ONLY, array(true)),
                 array (ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN)),
             ),
-            'britanny murphy' => array(
+            'independence day' => array(
                 array (ItemFilter::BEST_OFFER_ONLY, array(true)),
                 array (ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN)),
             ),
-            'gibonni' => array(
+            'the hunger games' => array(
                 array (ItemFilter::BEST_OFFER_ONLY, array(true)),
                 array (ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN)),
             ),
@@ -109,19 +124,19 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         foreach ($queries as $query => $filters) {
             $findingApi = EbaySDK::inst()->createFindingApi();
 
+            $findingApi->setOption(Options::OFFLINE_MODE, true);
+
             $request = $findingApi->createFindItemsByKeywordsRequest();
 
             $request
                 ->setOutputSelector(array('StoreInfo', 'CategoryHistogram'))
-                ->addSearch($query);
+                ->addKeyword($query);
 
             if ($filters !== null) {
                 foreach ($filters as $filter) {
                     $request->addItemFilter($filter[0], $filter[1]);
                 }
             }
-
-            $findingApi->setOption(Options::OFFLINE_MODE, true);
 
             $response = $findingApi->send()->getResponse();
 

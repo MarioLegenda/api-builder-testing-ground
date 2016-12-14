@@ -23,7 +23,7 @@ class Request
     /**
      * @var array $definitions
      */
-    private $definitions = array();
+    protected $definitions = array();
     /**
      * @var RequestParameters $parameters
      */
@@ -161,20 +161,6 @@ class Request
         }
 
         $this->itemFilterStorage->updateItemFilterValue('OutputSelector', $outputSelector);
-
-        return $this;
-    }
-    /**
-     * @param string $searchString
-     * @return Request
-     */
-    public function addSearch(string $searchString) : Request
-    {
-        $definition = Definition::customDefinition($searchString);
-
-        $definition->validateDefinition();
-
-        $this->definitions[] = $definition;
 
         return $this;
     }
