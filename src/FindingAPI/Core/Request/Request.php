@@ -44,6 +44,36 @@ class Request
         Definition::initiate($this->options);
     }
     /**
+     * @param string $keywords
+     * @return Request
+     */
+    public function addKeywords(string $keywords) : Request
+    {
+        $this->getRequestParameters()->setParameter('keywords', urlencode($keywords));
+
+        return $this;
+    }
+
+    /**
+     * @param int $categoryId
+     * @return Request
+     */
+    public function setCategoryId(int $categoryId) : Request
+    {
+        $this->getRequestParameters()->setParameter('categoryId', $categoryId);
+
+        return $this;
+    }
+    /**
+     * @return Request
+     */
+    public function enableDescriptionSearch() : Request
+    {
+        $this->getRequestParameters()->setParameter('descriptionSearch', 'true');
+
+        return $this;
+    }
+    /**
      * @param string $serviceVersion
      * @return Request
      */

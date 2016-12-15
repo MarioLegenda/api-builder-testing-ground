@@ -14,6 +14,8 @@ class FindItemsByCategory extends Request
      */
     public function __construct(RequestParameters $parameters)
     {
+        $parameters->restoreDefaults();
+
         parent::__construct($parameters);
 
         $this->setOperationName(OperationName::FIND_ITEMS_BY_CATEGORY);
@@ -21,9 +23,9 @@ class FindItemsByCategory extends Request
     }
     /**
      * @param int $categoryId
-     * @return FindItemsByCategory
+     * @return Request
      */
-    public function setCategoryId(int $categoryId) : FindItemsByCategory
+    public function setCategoryId(int $categoryId) : Request
     {
         $this->getRequestParameters()->setParameter('categoryId', $categoryId);
 

@@ -2,13 +2,14 @@
 
 namespace FindingAPI;
 
+use EbaySDK\Common\Logger;
 use FindingAPI\Core\Event\ItemFilterEvent;
+use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Options\Options;
 use FindingAPI\Core\Request\Method\FindItemsAdvanced;
 use FindingAPI\Core\Request\Method\FindItemsByCategory;
 use FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest;
-use FindingAPI\Core\Request\RequestParameters;
 use FindingAPI\Core\Request\RequestValidator;
 use FindingAPI\Core\Request\Request;
 use FindingAPI\Processor\Factory\ProcessorFactory;
@@ -86,11 +87,6 @@ class Finding
     {
         return $this->processed;
     }
-
-    public function getRequest()
-    {
-        return $this->request;
-    }
     /**
      * @return Finding
      * @throws FindingConnectException
@@ -112,11 +108,13 @@ class Finding
     public function getResponse(string $inlineResponse = null) : ResponseInterface
     {
         if (is_string($inlineResponse)) {
-            return new ResponseProxy(
+            $response = new ResponseProxy(
                 $inlineResponse,
                 new FakeGuzzleResponse($inlineResponse),
                 $this->request->getRequestParameters()->getParameter('RESPONSE-DATA-FORMAT')->getValue()
             );
+
+            return $response;
         }
 
         if (class_exists('EbayOfflineMode\EbayOfflineMode')) {
@@ -131,7 +129,7 @@ class Finding
             return $this->response;
         }
 
-        $this->response = new ResponseProxy(
+        $response = new ResponseProxy(
             $this->responseToParse,
             $this->guzzleResponse,
             $this->request->getRequestParameters()->getParameter('RESPONSE-DATA-FORMAT')->getValue()
@@ -140,34 +138,25 @@ class Finding
         unset($this->responseToParse);
         unset($this->guzzleResponse);
 
+        $this->response = $response;
+
         return $this->response;
     }
-    /**
-     * @return FindItemsByKeywordsRequest
-     */
-    public function createFindItemsByKeywordsRequest() : FindItemsByKeywordsRequest
-    {
-        $this->request = $this->createMethod(OperationName::FIND_ITEMS_BY_KEYWORDS);
 
+    public function getRequest()
+    {
         return $this->request;
     }
-    /**
-     * @return FindItemsByCategory
-     */
-    public function createFindItemsByCategory() : FindItemsByCategory
-    {
-        $this->request = $this->createMethod(OperationName::FIND_ITEMS_BY_CATEGORY);
 
-        return $this->request;
-    }
-    /**
-     * @return FindItemsAdvanced|FindItemsByCategory|FindItemsByKeywordsRequest|Request
-     */
-    public function createFindItemsAdvancedRequest()
+    public function __call($methodName, $arguments)
     {
-        $this->request = $this->createMethod(OperationName::FIND_ITEMS_ADVANCED);
+        $validMethods = $this->request->getRequestParameters()->getMethods();
 
-        return $this->request;
+        if (in_array($methodName, $validMethods) === false) {
+            throw new FindingApiException('Invalid method name \''.$methodName.'\'. Valid methods are '.implode(', ', $validMethods));
+        }
+
+        return $this->createMethod($methodName);
     }
 
     private function dispatchListeners()
@@ -206,13 +195,15 @@ class Finding
             throw new FindingConnectException('GuzzleHttp threw an exception with message: \''.$e->getMessage().'\'');
         }
 
+        Logger::log($this->processed);
+
         $this->responseToParse = (string) $this->guzzleResponse->getBody();
     }
 
-    private function createMethod(string $operationName)
+    private function createMethod(string $methodName)
     {
-        switch ($operationName) {
-            case OperationName::FIND_ITEMS_BY_KEYWORDS:
+        switch ($methodName) {
+            case 'findItemsByKeywords':
                 return new FindItemsByKeywordsRequest($this->request->getRequestParameters());
             case OperationName::FIND_ITEMS_BY_CATEGORY:
                 return new FindItemsByCategory($this->request->getRequestParameters());

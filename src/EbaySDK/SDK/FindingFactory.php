@@ -27,7 +27,7 @@ class FindingFactory
     {
         $config = Yaml::parse(file_get_contents(__DIR__.'/../config/finding.yml'))['finding'];
 
-        $requestParameters = new RequestParameters($config['parameters']);
+        $requestParameters = new RequestParameters($config['parameters'], $config['methods']);
 
         if ($parameters instanceof RequestParameters) {
             foreach ($parameters as $param) {

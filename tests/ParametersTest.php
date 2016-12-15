@@ -86,7 +86,7 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
     {
         $config = Yaml::parse(file_get_contents(__DIR__.'/finding.yml'))['finding'];
 
-        $requestParameters = new RequestParameters($config['parameters']);
+        $requestParameters = new RequestParameters($config['parameters'], $config['methods']);
 
         $request = new Request($requestParameters);
 
@@ -145,7 +145,7 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
     {
         $config = Yaml::parse(file_get_contents(__DIR__.'/finding.yml'))['finding'];
 
-        $requestParameters = new RequestParameters($config['parameters']);
+        $requestParameters = new RequestParameters($config['parameters'], $config['methods']);
 
         $request = new Request($requestParameters);
 

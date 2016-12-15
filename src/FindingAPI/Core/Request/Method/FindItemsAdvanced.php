@@ -14,29 +14,34 @@ class FindItemsAdvanced extends Request
      */
     public function __construct(RequestParameters $parameters)
     {
+        $parameters->restoreDefaults();
+
         parent::__construct($parameters);
 
-        $this->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS);
+        $this->setOperationName(OperationName::FIND_ITEMS_ADVANCED);
         $this->setResponseDataFormat('xml');
     }
     /**
      * @param string $searchString
-     * @return FindItemsAdvanced
+     * @return Request
      */
-    public function addKeyword(string $searchString) : FindItemsAdvanced
+    public function addKeywords(string $searchString) : Request
     {
-        $this->getRequestParameters()->setParameter('keywords', urlencode($searchString));
-
-        return $this;
+        return parent::addKeywords($searchString);
     }
     /**
      * @param int $categoryId
-     * @return FindItemsAdvanced
+     * @return Request
      */
-    public function setCategoryId(int $categoryId) : FindItemsAdvanced
+    public function setCategoryId(int $categoryId) : Request
     {
-        $this->getRequestParameters()->setParameter('categoryId', $categoryId);
-
-        return $this;
+        return parent::setCategoryId($categoryId);
+    }
+    /**
+     * @return Request
+     */
+    public function enableDescriptionSearch() : Request
+    {
+        return parent::enableDescriptionSearch();
     }
 }

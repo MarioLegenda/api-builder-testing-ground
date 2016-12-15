@@ -27,10 +27,9 @@ class Parameter
      */
     private $valid = array();
     /**
-     * @var array $synonyms
+     * @var array $methods
      */
-    private $synonyms = array();
-
+    private $methods = array();
     /**
      * Parameter constructor.
      * @param array $parameter
@@ -46,10 +45,13 @@ class Parameter
                 ->setValid($parameter['valid'])
                 ->setValue($parameter['value']);
 
+            if (array_key_exists('methods', $parameter)) {
+                $this->setMethods($parameter['methods']);
+            }
+
             ($parameter['deprecated'] === true) ? $this->setDeprecated() : $this->removeDeprecated();
         }
     }
-
     /**
      * @return string
      */
@@ -72,7 +74,16 @@ class Parameter
 
         return $this;
     }
+    /**
+     * @param array $methods
+     * @return Parameter
+     */
+    public function setMethods(array $methods) : Parameter
+    {
+        $this->methods = $methods;
 
+        return $this;
+    }
     /**
      * @return string
      */
@@ -187,45 +198,6 @@ class Parameter
         }
 
         return in_array($value, $this->valid);
-    }
-
-    /**
-     * @param array $synonym
-     * @return Parameter
-     */
-    public function addSynonym(array $synonym) : Parameter
-    {
-        $this->synonyms = array_merge($synonym);
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSynonyms() : array
-    {
-        return $this->synonyms;
-    }
-
-    /**
-     * @param array $synonyms
-     * @return Parameter
-     */
-    public function setSynonyms(array $synonyms) : Parameter
-    {
-        $this->synonyms = $synonyms;
-
-        return $this;
-    }
-
-    /**
-     * @param $synonym
-     * @return bool
-     */
-    public function hasSynonym($synonym) : bool
-    {
-        return in_array($synonym, $this->synonyms);
     }
     /**
      * @return bool

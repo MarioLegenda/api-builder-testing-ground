@@ -27,6 +27,10 @@ class RequestParameters implements \IteratorAggregate
      */
     private $parameters;
     /**
+     * @var array $methods
+     */
+    private $methods = array();
+    /**
      * @var bool $isDeadlocked
      */
     private $isDeadlocked = false;
@@ -37,12 +41,22 @@ class RequestParameters implements \IteratorAggregate
     /**
      * RequestParameters constructor.
      * @param array|null $parameters
+     * @param array $methods
      */
-    public function __construct(array $parameters)
+    public function __construct(array $parameters, array $methods)
     {
+        $this->methods = $methods;
+
         foreach ($parameters as $parameter) {
             $this->parameters[] = new Parameter($parameter);
         }
+    }
+    /**
+     * @return array
+     */
+    public function getMethods() : array
+    {
+        return $this->methods;
     }
     /**
      * @param string $name
@@ -262,6 +276,17 @@ class RequestParameters implements \IteratorAggregate
     public function excludeFromLoop(array $toExclude)
     {
         $this->excluded = $toExclude;
+    }
+    /**
+     * @void
+     */
+    public function restoreDefaults()
+    {
+        foreach ($this->parameters as $parameter) {
+            if ($parameter->getType() === 'optional') {
+                $parameter->setValue(null);
+            }
+        }
     }
     /**
      * @return \ArrayIterator
