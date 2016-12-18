@@ -28,6 +28,10 @@ class RequestValidator
     public function validate()
     {
         $globalParameters = $this->request->getGlobalParameters();
+        $specialParameters = $this->request->getSpecialParameters();
+
+        $globalParameters->valid();
+        $specialParameters->valid();
 
         $domainParameter = $globalParameters[0];
 

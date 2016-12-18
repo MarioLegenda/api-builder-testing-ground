@@ -9,6 +9,11 @@ use FindingAPI\Core\Request\RequestParameters;
 
 class FindItemsByKeywords extends Request
 {
+    /**
+     * FindItemsByKeywords constructor.
+     * @param RequestParameters $globalParameters
+     * @param RequestParameters $specialParameters
+     */
     public function __construct(RequestParameters $globalParameters, RequestParameters $specialParameters)
     {
         parent::__construct($globalParameters, $specialParameters);

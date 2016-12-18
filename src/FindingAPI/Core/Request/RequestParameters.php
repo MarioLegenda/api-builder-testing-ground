@@ -127,7 +127,7 @@ class RequestParameters implements \IteratorAggregate, \ArrayAccess
     public function restoreDefaults()
     {
         foreach ($this->parameters as $parameter) {
-            if ($parameter->getType() === 'optional') {
+            if ($parameter->getType()->isOptional()) {
                 $parameter->setValue(null);
             }
         }

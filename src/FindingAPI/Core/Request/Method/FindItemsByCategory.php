@@ -9,14 +9,15 @@ use FindingAPI\Core\Request\RequestParameters;
 class FindItemsByCategory extends Request
 {
     /**
-     * FindItemsByCategory constructor.
-     * @param RequestParameters $parameters
+     * FindItemsByKeywords constructor.
+     * @param RequestParameters $globalParameters
+     * @param RequestParameters $specialParameters
      */
-    public function __construct(RequestParameters $parameters)
+    public function __construct(RequestParameters $globalParameters, RequestParameters $specialParameters)
     {
-        parent::__construct($parameters);
+        parent::__construct($globalParameters, $specialParameters);
 
-        $this->setOperationName(OperationName::FIND_ITEMS_BY_CATEGORY);
+        $this->getGlobalParameters()->getParameter('operation_name')->setValue('findItemsByCategory');
     }
     /**
      * @param int $categoryId
@@ -24,7 +25,7 @@ class FindItemsByCategory extends Request
      */
     public function setCategoryId(int $categoryId) : Request
     {
-        $this->getRequestParameters()->setParameter('categoryId', $categoryId);
+        $this->getSpecialParameters()->getParameter('category_id')->setValue($categoryId);
 
         return $this;
     }

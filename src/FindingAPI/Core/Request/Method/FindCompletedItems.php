@@ -3,10 +3,9 @@
 namespace FindingAPI\Core\Request\Method;
 
 use FindingAPI\Core\Request\Request;
-use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Request\RequestParameters;
 
-class FindItemsAdvanced extends Request
+class FindCompletedItems extends Request
 {
     /**
      * FindItemsByKeywords constructor.
@@ -17,7 +16,7 @@ class FindItemsAdvanced extends Request
     {
         parent::__construct($globalParameters, $specialParameters);
 
-        $this->getGlobalParameters()->getParameter('operation_name')->setValue('findItemsAdvanced');
+        $this->getGlobalParameters()->getParameter('operation_name')->setValue('findCompletedItems');
     }
 
     /**
@@ -34,15 +33,6 @@ class FindItemsAdvanced extends Request
     public function setCategoryId(int $categoryId) : Request
     {
         $this->getSpecialParameters()->getParameter('category_id')->setValue($categoryId);
-
-        return $this;
-    }
-    /**
-     * @return Request
-     */
-    public function enableDescriptionSearch() : Request
-    {
-        $this->getSpecialParameters()->getParameter('description_search')->setValue('true');
 
         return $this;
     }

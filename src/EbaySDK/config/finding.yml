@@ -87,7 +87,7 @@ ebay_sdk:
                 deprecated: false
                 obsolete: false
                 throws_exception_if_deprecated: false
-                error_message: 'Invalid value for %s and represented as %s'
+                error_message: '%s is obsolete and cannot be used anymore. Represented by %s'
             description_search:
                 representation: descriptionSearch
                 value: null
@@ -97,10 +97,21 @@ ebay_sdk:
                 obsolete: false
                 throws_exception_if_deprecated: false
                 error_message: 'Invalid value for %s and represented as %s'
-
         methods:
             valid_methods: operation_name
             find_items_by_keywords:
                 name: findItemsByKeywords
                 object: FindingAPI\Core\Request\Method\FindItemsByKeywords
                 methods: [keywords]
+            find_items_by_category:
+                name: findItemsByCategory
+                object: FindingAPI\Core\Request\Method\FindItemsByCategory
+                methods: [category_id]
+            find_items_advanced:
+                name: findItemsAdvanced
+                object: FindingAPI\Core\Request\Method\FindItemsAdvanced
+                methods: [keywords, category_id, description_search]
+            find_completed_items:
+                name: findCompletedItems
+                object: FindingAPI\Core\Request\Method\FindCompletedItems
+                methods: [keywords, category_id]

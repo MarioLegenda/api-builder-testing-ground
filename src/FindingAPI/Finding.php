@@ -218,10 +218,17 @@ class Finding
 
         $objectMethods = $method->getMethods();
 
+        $specialParameters = $this->request->getSpecialParameters();
+
         foreach ($objectMethods as $objectMethod) {
+            if (!$specialParameters->hasParameter($objectMethod)) {
+                throw new MethodParametersException('Cannot create request method because parameter '.$objectMethod.' does not exist for request method '.$method->getName());
+            }
+
             $possibleMethods = array(
-                'set'.ucfirst($objectMethod),
-                'add'.ucfirst($objectMethod),
+                'set'.ucfirst($this->request->getSpecialParameters()->getParameter($objectMethod)->getRepresentation()),
+                'add'.ucfirst($this->request->getSpecialParameters()->getParameter($objectMethod)->getRepresentation()),
+                'enable'.ucfirst($this->request->getSpecialParameters()->getParameter($objectMethod)->getRepresentation()),
                 $objectMethod,
             );
 

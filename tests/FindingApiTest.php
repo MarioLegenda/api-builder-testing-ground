@@ -76,7 +76,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ),
         ));
     }
-/*
+
     public function testFindItemsByCategoryRequest()
     {
         $findingApi = EbaySDK::inst()->createFindingApi();
@@ -97,7 +97,19 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->enableDescriptionSearch();
 
         $this->validateResponse($findingApi->send()->getResponse());
-    }*/
+    }
+
+    public function testFindCompletedItemsRequest()
+    {
+        $findingApi = EbaySDK::inst()->createFindingApi();
+
+        $findingApi
+            ->findCompletedItems()
+            ->setCategoryId(23)
+            ->addKeywords('baseball');
+
+        $this->validateResponse($findingApi->send()->getResponse());
+    }
 
     public function testFindItemsByKeywordsRequest()
     {

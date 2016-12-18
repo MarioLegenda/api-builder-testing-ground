@@ -48,7 +48,7 @@ class Request
         $this->specialParameters = $specialParameters;
 
         $this->globalParameters->restoreDefaults();
-        $this->globalParameters->restoreDefaults();
+        $this->specialParameters->restoreDefaults();
 
         $this->itemFilterStorage = new ItemFilterStorage();
 
