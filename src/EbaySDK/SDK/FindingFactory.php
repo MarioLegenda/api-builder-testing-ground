@@ -4,6 +4,7 @@ namespace EbaySDK\SDK;
 
 use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\Options\Options;
+use FindingAPI\Core\Request\Method\MethodParameters;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
 use FindingAPI\Core\Request\RequestParameters;
@@ -23,43 +24,16 @@ class FindingFactory
      * @return Finding
      * @throws SDKException
      */
-    public static function create(string $securityAppname, RequestParameters $parameters = null)
+    public static function create(RequestParameters $parameters = null)
     {
-        $config = Yaml::parse(file_get_contents(__DIR__.'/../config/finding.yml'))['finding'];
+        $config = Yaml::parse(file_get_contents(__DIR__.'/../config/finding.yml'))['ebay_sdk']['finding'];
 
-        $requestParameters = new RequestParameters($config['parameters'], $config['methods']);
+        $request = new Request(
+            new RequestParameters($config['global_parameters']),
+            new RequestParameters($config['special_parameters'])
+        );
 
-        if ($parameters instanceof RequestParameters) {
-            foreach ($parameters as $param) {
-                if (!$param instanceof Parameter) {
-                    throw new FindingApiException('When injecting new or replacing request parameters, individual parameter has to be of type '.Parameter::class);
-                }
-
-                $param->validateParameter();
-
-                if ($requestParameters->hasParameter($param->getName())) {
-                    $requestParameters->replaceParameter($param);
-
-                    continue;
-                }
-
-                $requestParameters->addParameter($param);
-            }
-        }
-
-        if ($securityAppname === null) {
-            throw new SDKException('When using EbaySDK for the first time, you have to provide SECURITY-APPNAME. Go to https://go.developer.ebay.com/ to sign up');
-        }
-
-        $requestParameters->addParameter(new Parameter(array(
-            'name' => 'SECURITY-APPNAME',
-            'value' => $securityAppname,
-            'valid' => array(),
-            'type' => 'required',
-            'deprecated' => false,
-        )));
-
-        $request = new Request($requestParameters);
+        $methodParameters = new MethodParameters($config['methods']);
 
         $options = new Options();
 
@@ -72,6 +46,6 @@ class FindingFactory
         $eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
         $eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
 
-        return new Finding($request, $options, $eventDispatcher);
+        return new Finding($request, $options, $eventDispatcher, $methodParameters);
     }
 }

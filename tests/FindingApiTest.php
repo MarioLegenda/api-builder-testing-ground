@@ -37,12 +37,11 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
     public function testItemFilters()
     {
         $findingApi = EbaySDK::inst()
-            ->setSecurityAppName('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
             ->createFindingApi();
 
-        $findingApi->setOption(Options::OFFLINE_MODE, true);
+        $findingApi->setOption(Options::OFFLINE_MODE, false);
 
-        $request = $findingApi->findItemsByKeywords();
+        $request = $findingApi->findItemsByKeywords()->setMethod('get');
 
         $request->addKeywords('constantine');
 
@@ -77,7 +76,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ),
         ));
     }
-
+/*
     public function testFindItemsByCategoryRequest()
     {
         $findingApi = EbaySDK::inst()->createFindingApi();
@@ -98,7 +97,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->enableDescriptionSearch();
 
         $this->validateResponse($findingApi->send()->getResponse());
-    }
+    }*/
 
     public function testFindItemsByKeywordsRequest()
     {
@@ -112,7 +111,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         foreach ($queries as $query => $filters) {
             $findingApi = EbaySDK::inst()->createFindingApi();
 
-            $request = $findingApi->findItemsByKeywords();
+            $request = $findingApi->findItemsByKeywords()->setMethod('get');
 
             $request
                 ->setOutputSelector(array('StoreInfo', 'CategoryHistogram'))

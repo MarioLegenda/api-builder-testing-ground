@@ -1,20 +1,106 @@
-finding:
-    methods: [findItemsByKeywords, findItemsByCategory, findItemsAdvanced, findCompletedItems, findItemsByProduct, findItemsIneBayStores, getHistograms, getSearchKeywordsRecommendation, getVersion]
-    parameters:
-        - { name: categoryId, value: null, type: optional, valid: {}, deprecated: false, methods: [findItemsByCategory, findItemsAdvanced] }
-        - { name: keywords, value: null, type: optional, valid: {}, deprecated: false, methods: [findItemsByKeywords, findItemsAdvanced] }
-        - { name: descriptionSearch, value: null, type: optional, valid: {}, deprecated: false, methods: [findItemsAdvanced] }
+ebay_sdk:
+    finding:
+        global_parameters:
+            # string that will be saved as the name of the parameter
+            security_appname:
+                # string that will be in the url
+                representation: SECURITY-APPNAME
+                # value that will be appended as the value in the query part of the url
+                value: Mariokrl-testing-PRD-ee6e68035-e73c8a53
+                # valid types: required, optional, injectable, standalone. has to be an array and can have multiple values
+                # a type cannot be required and optional at the same time
+                # if required, then 'value' has to be present and parameter construction
+                # if value is injectable and required, then it has to be present on application runtime
+                type: [required]
+                # valid values for this option. has corelation with 'value' option
+                valid: null
+                # is the parameter deprecated or not
+                deprecated: false
+                # if the parameter is deprecated, then user can choose whether its usage will throw an exception or not
+                throws_exception_if_deprecated: false
+                # if obsolite is set to true, then usage of this parameter will always throw an exception no matter what value
+                # is set on 'deprecated' option
+                obsolete: false
+                # the message of the exception for obsolete or deprecated
+                error_message: 'Invalid value for %s and represented as %s'
+            ebay_url:
+                representation: null
+                value: http://svcs.ebay.com/services/search/FindingService/v1
+                type: [required, standalone]
+                valid: null
+                deprecated: false
+                obsolete: false
+                throws_exception_if_deprecated: false
+                error_message: 'Invalid value for %s: %s'
+            operation_name:
+                representation: OPERATION-NAME
+                value: null
+                type: [injectable, required]
+                valid: [findItemsByKeywords, findItemsByCategory, findItemsAdvanced, findCompletedItems, findItemsByProduct, findItemsIneBayStores, getHistograms, getSearchKeywordsRecommendation, getVersion]
+                deprecated: false
+                throws_exception_if_deprecated: false
+                obsolete: false
+                error_message: 'Invalid value for %s and represented as %s'
+            service_version:
+                representation: SERVICE-VERSION
+                value: 1.0.0
+                type: [injectable, required]
+                valid: [1.0.0]
+                deprecated: false
+                obsolete: false
+                throws_exception_if_deprecated: false
+                error_message: 'Invalid value for %s and represented as %s'
+            response_data_format:
+                representation: RESPONSE-DATA-FORMAT
+                value: xml
+                valid: [xml, json]
+                type: [required]
+                deprecated: false
+                obsolete: false
+                throws_exception_if_deprecated: false
+                error_message: 'Invalid value for %s and represented as %s'
+            global_id:
+                representation: GLOBAL-ID
+                value: EBAY-US
+                type: [injectable, required]
+                valid: [EBAY-US, EBAY-ENCA, EBAY-GB, EBAY-AU, EBAY-AT, EBAY-FRBE, EBAY-FR, EBAY-DE, EBAY-MOTOR, EBAY-IT, EBAY-NLBE, EBAY-NL, EBAY-ES, EBAY-CH, EBAY-HK, EBAY-IN, EBAY-IE, EBAY-MY, EBAY-FRCA, EBAY-PH, EBAY-PL, EBAY-SG]
+                deprecated: false
+                obsolete: false
+                throws_exception_if_deprecated: false
+                error_message: 'Invalid value for %s and represented as %s'
 
-        - { name: method, value: get, type: required, valid: [get, post], deprecated: false }
-        - { name: ebay_url, value: http://svcs.ebay.com/services/search/FindingService/v1, type: required, valid: {}, deprecated: false }
-        - { name: OPERATION-NAME, value: null, type: required, valid: [findItemsByKeywords, findItemsByCategory], deprecated: false }
-        - { name: SERVICE-VERSION, value: 1.0.0, type: required, valid: {}, deprecated: false }
-        - { name: RESPONSE-DATA-FORMAT, value: xml, type: optional, valid: [xml, json], deprecated: false }
-        - { name: GLOBAL-ID, value: EBAY-US, type: optional, valid: [EBAY-US, EBAY-ENCA, EBAY-GB, EBAY-AU, EBAY-AT, EBAY-FRBE, EBAY-FR, EBAY-DE, EBAY-MOTOR, EBAY-IT, EBAY-NLBE, EBAY-NL, EBAY-ES, EBAY-CH, EBAY-HK, EBAY-IN, EBAY-IE, EBAY-MY, EBAY-FRCA, EBAY-PH, EBAY-PL, EBAY-SG], deprecated: false}
-        - { name: buyerPostalCode, value: null, type: optional, valid: {}, deprecated: false, synonyms: {}}
-        - { name: sortOrder, value: null, type: optional, valid: [BestMatch, BidCountFewest, BidCountMost, CountryAscending, CountryDescending, CurrentPriceHighest, DistanceNearest, EndTimeSoonest, PricePlusShippingHighest, PricePlusShippingLowest, StartTimeNewest], deprecated: false}
-        - { name: paginationInput, value: null, type: optional, valid: {}, deprecated: false }
-        - { name: paginationOutput, value: null, type: optional, valid: {}, deprecated: false }
+        special_parameters:
+            keywords:
+                representation: keywords
+                value: null
+                type: [optional]
+                valid: null
+                deprecated: false
+                obsolete: false
+                throws_exception_if_deprecated: false
+                error_message: 'Invalid value for %s and represented as %s'
+            category_id:
+                representation: categoryId
+                value: null
+                type: [optional]
+                valid: null
+                deprecated: false
+                obsolete: false
+                throws_exception_if_deprecated: false
+                error_message: 'Invalid value for %s and represented as %s'
+            description_search:
+                representation: descriptionSearch
+                value: null
+                type: [optional]
+                valid: null
+                deprecated: false
+                obsolete: false
+                throws_exception_if_deprecated: false
+                error_message: 'Invalid value for %s and represented as %s'
 
-
-
+        methods:
+            valid_methods: operation_name
+            find_items_by_keywords:
+                name: findItemsByKeywords
+                object: FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest
+                parameters: [keywords]

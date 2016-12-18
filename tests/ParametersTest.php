@@ -2,166 +2,54 @@
 
 namespace Test;
 
-require __DIR__.'/../vendor/autoload.php';
-
-use FindingAPI\Core\Request\Request;
 use FindingAPI\Core\Request\Parameter;
-use Symfony\Component\Yaml\Yaml;
 use FindingAPI\Core\Request\RequestParameters;
+use Symfony\Component\Yaml\Yaml;
+
+require __DIR__.'/../vendor/autoload.php';
 
 class ParametersTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException FindingAPI\Core\Exception\RequestException
+     * @var array $config
      */
-    public function testNameFailure()
-    {
-        $paramter = new Parameter();
-        $paramter
-            ->setName('')
-            ->setType('required')
-            ->setValue('budala')
-            ->setValid(array('budala', 'idiot'));
-
-        $paramter->validateParameter();
-    }
+    private $config = array();
     /**
-     * @expectedException FindingAPI\Core\Exception\RequestException
+     * @var RequestParameters $globalParameters
      */
-    public function testValueFailure()
-    {
-        $paramter = new Parameter();
-        $paramter
-            ->setName('test-name')
-            ->setType('required')
-            ->setValue('kreten')
-            ->setValid(array('budala', 'idiot'));
-
-        $paramter->validateParameter();
-    }
+    private $globalParameters;
     /**
-     * @expectedException FindingAPI\Core\Exception\RequestException
+     * @var RequestParameters $specialParameters
      */
-    public function testTypeFailure()
-    {
-        $paramter = new Parameter();
-        $paramter
-            ->setName('test-name')
-            ->setType('required')
-            ->setValue('')
-            ->setValid(array('budala', 'idiot'));
+    private $specialParameters;
 
-        $paramter->validateParameter();
-    }
-    /**
-     * @expectedException FindingAPI\Core\Exception\RequestException
-     */
-    public function testValidFailure()
+    public function initiate()
     {
-        $paramter = new Parameter();
-        $paramter
-            ->setName('test-name')
-            ->setType('required')
-            ->setValue('kretenčina')
-            ->setValid(array('budala', 'idiot'));
+        $this->config = Yaml::parse(file_get_contents(__DIR__.'/finding.yml'))['ebay_sdk']['finding'];
+        $globalConfig = $this->config['global_parameters'];
+        $specialConfig = $this->config['special_parameters'];
 
-        $paramter->validateParameter();
+        $this->globalParameters = new RequestParameters($globalConfig);
+        $this->specialParameters = new RequestParameters($specialConfig);
     }
 
-    public function testParameterValidity()
+    public function testUsability()
     {
-        $paramter = new Parameter();
-        $paramter
-            ->setName('test-name')
-            ->setType('required')
-            ->setValue('budala')
-            ->setValid(array('budala', 'idiot'));
+        $this->initiate();
 
-        $paramter->validateParameter();
-    }
-    /**
-     * @expectedException FindingAPI\Core\Exception\RequestException
-     */
-    public function testRequestParameters()
-    {
-        $config = Yaml::parse(file_get_contents(__DIR__.'/finding.yml'))['finding'];
+        $this->globalParameters->getParameter('operation_name')->setValue('findItemsByKeywords');
 
-        $requestParameters = new RequestParameters($config['parameters'], $config['methods']);
+        $this->globalParameters->valid();
+        $this->specialParameters->valid();
 
-        $request = new Request($requestParameters);
+        $parameter = $this->globalParameters->getParameter('security_appname');
 
-        $requestParameters = $request->getRequestParameters();
+        $this->assertInstanceOf(Parameter::class, $parameter);
 
-        $requestParameters->markDeprecated('method');
+        $parameter = $this->globalParameters->getParameter('SECURITY-APPNAME');
 
-        $this->assertTrue($requestParameters->isDeprecated('method'), '\'method should be deprecated\'');
+        $this->assertInstanceOf(Parameter::class, $parameter);
 
-        $requestParameters->unmarkDeprecated('method');
-
-        $this->assertFalse($requestParameters->isDeprecated('method'), '\'method\' should not be deprecated');
-
-        $requestParameters->setParameter('method', 'post');
-
-        $this->assertEquals('post', $requestParameters->getParameter('method')->getValue(), '\'method\' parameter should be \'post\'');
-
-        $paramter = new Parameter();
-        $paramter
-            ->setName('test-name')
-            ->setType('required')
-            ->setValue('budala')
-            ->setValid(array('budala', 'idiot'));
-
-        $requestParameters->addParameter($paramter);
-
-        $this->assertTrue($requestParameters->hasParameter('test-name'), 'RequestParameters should contain \'test-name\' Parameter');
-
-        $requestParameters->removeParameter($requestParameters->getParameter('test-name'));
-
-        $this->assertFalse($requestParameters->hasParameter('test-name'), 'RequestParameters should not contain \'test-name\' Parameter');
-
-        $requestParameters->addParameter($paramter);
-
-        $paramter->setName('some-other-name');
-
-        $requestParameters->replaceParameter($paramter);
-
-        $this->assertTrue($requestParameters->hasParameter('some-other-name'), 'RequestParameters should contain \'some-other-name\' Parameter');
-
-        $this->assertInstanceOf(Parameter::class, $requestParameters->getParameter('other-name'));
-        $this->assertInstanceOf(Parameter::class, $requestParameters->getParameter('by-name'));
-
-        $requestParameters->lock();
-
-        $requestParameters->setParameter('method', 'get');
-
-        $this->assertFalse($requestParameters->isLocked(), 'RequestParameters should not be locked');
-
-        $requestParameters->unlock();
-
-        return $requestParameters;
-    }
-
-    public function testRequestParametersValidity()
-    {
-        $config = Yaml::parse(file_get_contents(__DIR__.'/finding.yml'))['finding'];
-
-        $requestParameters = new RequestParameters($config['parameters'], $config['methods']);
-
-        $request = new Request($requestParameters);
-
-        $request->setOperationName('findItemsByKeywords');
-
-        $requestParameters = $request->getRequestParameters();
-
-        $paramter = new Parameter();
-        $paramter
-            ->setName('test-name')
-            ->setType('required')
-            ->setValue('budala')
-            ->setValid(array('budala', 'idiot'));
-
-        $requestParameters->addParameter($paramter);
-
-        $requestParameters->valid();
+        $parameter->validateParameter();
     }
 }

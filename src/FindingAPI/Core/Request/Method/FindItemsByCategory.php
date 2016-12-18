@@ -14,12 +14,9 @@ class FindItemsByCategory extends Request
      */
     public function __construct(RequestParameters $parameters)
     {
-        $parameters->restoreDefaults();
-
         parent::__construct($parameters);
 
         $this->setOperationName(OperationName::FIND_ITEMS_BY_CATEGORY);
-        $this->setResponseDataFormat('xml');
     }
     /**
      * @param int $categoryId

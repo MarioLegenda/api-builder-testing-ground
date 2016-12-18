@@ -13,6 +13,10 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
 class Request
 {
     /**
+     * @var string $method
+     */
+    private $method = 'get';
+    /**
      * @var ItemFilterStorage
      */
     private $itemFilterStorage;
@@ -25,17 +29,26 @@ class Request
      */
     protected $definitions = array();
     /**
-     * @var RequestParameters $parameters
+     * @var RequestParameters $globalParameters
      */
-    private $parameters;
+    private $globalParameters;
+    /**
+     * @var RequestParameters $specialParameters
+     */
+    private $specialParameters;
 
     /**
      * Request constructor.
-     * @param RequestParameters $requestParameters
+     * @param RequestParameters $globalParameters
+     * @param RequestParameters $specialParameters
      */
-    public function __construct(RequestParameters $requestParameters)
+    public function __construct(RequestParameters $globalParameters, RequestParameters $specialParameters)
     {
-        $this->parameters = $requestParameters;
+        $this->globalParameters = $globalParameters;
+        $this->specialParameters = $specialParameters;
+
+        $this->globalParameters->restoreDefaults();
+        $this->globalParameters->restoreDefaults();
 
         $this->itemFilterStorage = new ItemFilterStorage();
 
@@ -44,59 +57,26 @@ class Request
         Definition::initiate($this->options);
     }
     /**
-     * @param string $keywords
-     * @return Request
-     */
-    public function addKeywords(string $keywords) : Request
-    {
-        $this->getRequestParameters()->setParameter('keywords', urlencode($keywords));
-
-        return $this;
-    }
-
-    /**
-     * @param int $categoryId
-     * @return Request
-     */
-    public function setCategoryId(int $categoryId) : Request
-    {
-        $this->getRequestParameters()->setParameter('categoryId', $categoryId);
-
-        return $this;
-    }
-    /**
-     * @return Request
-     */
-    public function enableDescriptionSearch() : Request
-    {
-        $this->getRequestParameters()->setParameter('descriptionSearch', 'true');
-
-        return $this;
-    }
-    /**
-     * @param string $serviceVersion
-     * @return Request
-     */
-    public function setServiceVersion(string $serviceVersion) : Request
-    {
-        $this->parameters->setParameter('SERVICE-VERSION', $serviceVersion);
-
-        return $this;
-    }
-    /**
      * @param string $method
      * @return Request
      * @throws RequestException
      */
     public function setMethod(string $method) : Request
     {
-        if (RequestParameters::REQUEST_METHOD_GET !== strtolower($method) and RequestParameters::REQUEST_METHOD_POST !== strtolower($method)) {
+        if ('get' !== strtolower($method) and 'post' !== strtolower($method)) {
             throw new RequestException('Unknown request method '.$method.'. Only GET and POST are allowed');
         }
 
-        $this->parameters->setParameter('method', strtolower($method));
+        $this->method = $method;
 
         return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getMethod() : string
+    {
+        return $this->method;
     }
     /**
      * @param string $buyerPostalCode
@@ -105,8 +85,6 @@ class Request
      */
     public function setBuyerPostalCode(string $buyerPostalCode) : Request
     {
-        $this->parameters->setParameter('buyerPostalCode', $buyerPostalCode);
-
         if (!$this->itemFilterStorage->hasItemFilter('BuyerPostalCode')) {
             throw new FindingApiException('Item filter BuyerPostalCode does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
         }
@@ -122,8 +100,6 @@ class Request
      */
     public function setSortOrder(string $sortOrder) : Request
     {
-        $this->parameters->setParameter('sortOrder', $sortOrder);
-
         if (!$this->itemFilterStorage->hasItemFilter('SortOrder')) {
             throw new FindingApiException('Item filter SortOrder does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
         }
@@ -140,42 +116,11 @@ class Request
      */
     public function setPaginationInput(int $pagination, string $paginationType) : Request
     {
-        $this->parameters->setParameter('paginationInput', $pagination);
-
         if (!$this->itemFilterStorage->hasItemFilter('PaginationInput')) {
             throw new FindingApiException('Item filter PaginationInput does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
         }
 
         $this->itemFilterStorage->updateItemFilterValue('PaginationInput', array($paginationType));
-
-        return $this;
-    }
-    /**
-     * @param string $operationName
-     * @return Request
-     * @throws RequestException
-     */
-    public function setOperationName(string $operationName) : Request
-    {
-        $this->parameters->setParameter('OPERATION-NAME', $operationName);
-
-        return $this;
-    }
-    /**
-     * @param string $format
-     * @return Request
-     * @throws RequestException
-     */
-    public function setResponseDataFormat(string $format) : Request
-    {
-        $allowedFormat = array('xml', 'json');
-        $format = strtolower($format);
-
-        if (RequestParameters::RESPONSE_DATA_FORMAT_XML !== $format and RequestParameters::RESPONSE_DATA_FORMAT_JSON !== $format) {
-            throw new RequestException('Response format can only be '.implode(', ', $allowedFormat));
-        }
-
-        $this->parameters->setParameter('RESPONSE-DATA-FORMAT', $format);
 
         return $this;
     }
@@ -228,18 +173,18 @@ class Request
         return $this->itemFilterStorage;
     }
     /**
-     * @return bool
+     * @return RequestParameters
      */
-    public function isRequestValid() : bool
+    public function getGlobalParameters() : RequestParameters
     {
-        return $this->parameters->valid();
+        return $this->globalParameters;
     }
     /**
      * @return RequestParameters
      */
-    public function getRequestParameters() : RequestParameters
+    public function getSpecialParameters() : RequestParameters
     {
-        return $this->parameters;
+        return $this->specialParameters;
     }
     /**
      * @return array
@@ -255,6 +200,6 @@ class Request
     {
         $client = new Client();
 
-        return $client->request($this->getRequestParameters()->getParameter('method')->getValue(), $request);
+        return $client->request($this->getMethod(), $request);
     }
 }

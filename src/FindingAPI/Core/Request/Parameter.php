@@ -3,15 +3,20 @@
 namespace FindingAPI\Core\Request;
 
 use FindingAPI\Core\Exception\RequestException;
+use FindingAPI\Core\Exception\RequestParametersException;
 
 class Parameter
 {
+    /**
+     * @var string $representation
+     */
+    private $representation;
     /**
      * @var string $name
      */
     private $name = null;
     /**
-     * @var string $type
+     * @var Type $type
      */
     private $type = null;
     /**
@@ -23,34 +28,98 @@ class Parameter
      */
     private $deprecated = false;
     /**
+     * @var bool $obsolete
+     */
+    private $obsolete = false;
+    /**
+     * @var bool $throwExceptionMessageIfDeprecated
+     */
+    private $throwExceptionMessageIfDeprecated;
+    /**
+     * @var string $errorMessage
+     */
+    private $errorMessage;
+    /**
      * @var array $valid
      */
     private $valid = array();
     /**
-     * @var array $methods
-     */
-    private $methods = array();
-    /**
      * Parameter constructor.
      * @param array $parameter
+     * @param string $parameterName
      *
      * A Parameters has to have a name, type, valid, value and synonyms field
      */
-    public function __construct(array $parameter = null)
+    public function __construct(string $parameterName, array $parameter = null)
     {
-        if (!empty($parameter)) {
-            $this
-                ->setName($parameter['name'])
-                ->setType($parameter['type'])
-                ->setValid($parameter['valid'])
-                ->setValue($parameter['value']);
+        if (empty($parameter)) {
+            throw new RequestParametersException('Configuration parameters, weather it is global or special, cannot be empty');
+        }
 
-            if (array_key_exists('methods', $parameter)) {
-                $this->setMethods($parameter['methods']);
+        $this
+            ->setName($parameterName)
+            ->setValid($parameter['valid'])
+            ->setValue($parameter['value'])
+            ->setType(new Type($parameter['type'], array('required', 'optional', 'standalone', 'injectable')));
+
+        if (!$this->getType()->isStandalone()) {
+            $representation = $parameter['representation'];
+
+            if (empty($representation)) {
+                throw new RequestParametersException('If \'type\' is not \'standalone\', \'representation\' should not be null');
             }
 
-            ($parameter['deprecated'] === true) ? $this->setDeprecated() : $this->removeDeprecated();
+            $this->setRepresentation($representation);
         }
+
+        $this->deprecated = ($parameter['deprecated'] === true) ? true : false;
+
+        $this->obsolete = ($parameter['obsolete'] === true) ? true : false;
+
+        $this->throwExceptionMessageIfDeprecated = ($parameter['throws_exception_if_deprecated'] === true) ? true : false;
+
+        $this->setErrorMessage($parameter['error_message']);
+    }
+    /**
+     * @param string $representation
+     * @return Parameter
+     */
+    public function setRepresentation(string $representation) : Parameter
+    {
+        $this->representation = $representation;
+
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getRepresentation()
+    {
+        return $this->representation;
+    }
+    /**
+     * @return bool
+     */
+    public function shouldThrowExceptionIfDeprecated() : bool
+    {
+        return $this->throwExceptionMessageIfDeprecated;
+    }
+    /**
+     * @param string $errorMessage
+     * @return Parameter
+     */
+    public function setErrorMessage(string $errorMessage) : Parameter
+    {
+        $this->errorMessage = $errorMessage;
+
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getErrorMessage() : string
+    {
+        return $this->errorMessage;
     }
     /**
      * @return string
@@ -62,53 +131,37 @@ class Parameter
     /**
      * @param string $name
      * @return Parameter
-     * @throws RequestException
      */
     public function setName(string $name) : Parameter
     {
-        if (empty($name)) {
-            throw new RequestException('$name parameter cannot be an empty string. Given name: '.$name);
-        }
-
         $this->name = $name;
 
         return $this;
     }
     /**
-     * @param array $methods
-     * @return Parameter
+     * @return Type
      */
-    public function setMethods(array $methods) : Parameter
-    {
-        $this->methods = $methods;
-
-        return $this;
-    }
-    /**
-     * @return string
-     */
-    public function getType() : string
+    public function getType() : Type
     {
         return $this->type;
     }
-
     /**
-     * @param string $type
+     * @param Type $type
      * @return Parameter
      */
-    public function setType(string $type) : Parameter
+    public function setType(Type $type) : Parameter
     {
-        $allowedTypes = array('required', 'optional');
-
-        if (in_array($type, $allowedTypes) === false) {
-            throw new RequestException('Invalid $type. Allowed types are '.implode(', ', $allowedTypes).' for Parameter '.$this->getName());
-        }
-
         $this->type = $type;
 
         return $this;
     }
-
+    /**
+     * @return bool
+     */
+    public function isObsolete() : bool
+    {
+        return $this->obsolete;
+    }
     /**
      * @return string
      */
@@ -137,7 +190,7 @@ class Parameter
     }
 
     /**
-     * @param boolean $deprecated
+     * @param bool $deprecated
      * @return Parameter
      */
     public function setDeprecated() : Parameter
@@ -158,9 +211,9 @@ class Parameter
     }
 
     /**
-     * @return array
+     * @return mixed
      */
-    public function getValid() : array
+    public function getValid()
     {
         return $this->valid;
     }
@@ -169,24 +222,12 @@ class Parameter
      * @param array $valid
      * @return Parameter
      */
-    public function setValid(array $valid) : Parameter
+    public function setValid($valid) : Parameter
     {
         $this->valid = $valid;
 
         return $this;
     }
-
-    /**
-     * @param array $valid
-     * @return Parameter
-     */
-    public function addValid(array $valid) : Parameter
-    {
-        $this->valid = array_merge($valid);
-
-        return $this;
-    }
-
     /**
      * @param string $value
      * @return bool
@@ -200,43 +241,35 @@ class Parameter
         return in_array($value, $this->valid);
     }
     /**
-     * @return bool
+     * @return mixed
      * @throws RequestException
      */
     public function validateParameter()
     {
-        $type = $this->getType();
-        $value = $this->getValue();
+        $errorMessages = array();
 
-        if ($type === 'required') {
-            if (empty($value)) {
-                throw new RequestException('If $type is \'required\', then $value should not be empty for Parameter '.$this->getName());
-            }
-
-            $valids = $this->getValid();
-            if (!empty($valids)) {
-                if (!$this->validateValids($value, $valids)) {
-                    throw new RequestException('If $valid is provided for '.$this->getName().', then $value should be one of '.implode(', ', $valids).', '.$value.' given');
-                }
-            }
+        if ($this->isObsolete()) {
+            throw new RequestParametersException(sprintf($this->errorMessage, $this->getName(), $this->getRepresentation()));
         }
 
-        if (!empty($valid)) {
-            $valids = $this->getValid();
-            if (!empty($valids)) {
-                if (!$this->validateValids($value, $valids)) {
-                    throw new RequestException('If $valid is provided for '.$this->getName().', then $value should be one of '.implode(', ', $valids).', '.$value.' given');
-                }
+        if ($this->isDeprecated() and $this->shouldThrowExceptionIfDeprecated()) {
+            throw new RequestParametersException(sprintf($this->errorMessage, $this->getName(), $this->getRepresentation()));
+        }
+
+        if ($this->isDeprecated()) {
+            $errorMessages['deprecated'] = sprintf($this->errorMessage, $this->getName(), $this->getRepresentation());
+
+            return $errorMessages;
+        }
+
+        if ($this->getType()->isRequired() and $this->getValue() === null) {
+            throw new RequestParametersException('If \'type\' is required, then it\'s \'value\' should be present in the configuration, not at runtime for configuration \''.$this->getName().'\'');
+        }
+
+        if (!empty($this->getValid())) {
+            if (in_array($this->getValue(), $this->getValid()) === false) {
+                throw new RequestParametersException('Invalid value for '.$this->getName().'. Valid values for '.$this->getName().' are '.implode(', ', $this->getValid()));
             }
         }
-    }
-
-    private function validateValids(string $value, array $valids)
-    {
-        if (in_array($value, $valids) === false) {
-            return false;
-        }
-
-        return true;
     }
 }

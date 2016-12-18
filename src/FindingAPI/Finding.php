@@ -5,11 +5,14 @@ namespace FindingAPI;
 use EbaySDK\Common\Logger;
 use FindingAPI\Core\Event\ItemFilterEvent;
 use FindingAPI\Core\Exception\FindingApiException;
+use FindingAPI\Core\Exception\MethodParametersException;
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Options\Options;
 use FindingAPI\Core\Request\Method\FindItemsAdvanced;
 use FindingAPI\Core\Request\Method\FindItemsByCategory;
 use FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest;
+use FindingAPI\Core\Request\Method\Method;
+use FindingAPI\Core\Request\Method\MethodParameters;
 use FindingAPI\Core\Request\RequestValidator;
 use FindingAPI\Core\Request\Request;
 use FindingAPI\Processor\Factory\ProcessorFactory;
@@ -51,6 +54,10 @@ class Finding
      */
     private $eventDispatcher;
     /**
+     * @var MethodParameters $methodParameters
+     */
+    private $methodParameters;
+    /**
      * @var string $processed
      */
     private $processed;
@@ -59,13 +66,14 @@ class Finding
      * @param Request $request
      * @param Options $options
      * @param EventDispatcher $eventDispatcher
+     * @param MethodParameters $methodParameters
      */
-    public function __construct(Request $request, Options $options, EventDispatcher $eventDispatcher)
+    public function __construct(Request $request, Options $options, EventDispatcher $eventDispatcher, MethodParameters $methodParameters)
     {
-        $this->originalRequestParameters = $request->getRequestParameters();
         $this->request = $request;
         $this->options = $options;
         $this->eventDispatcher = $eventDispatcher;
+        $this->methodParameters = $methodParameters;
     }
     /**
      * @param string $option
@@ -93,6 +101,10 @@ class Finding
      */
     public function send() : Finding
     {
+        if ($this->options->getOption(Options::INDIVIDUAL_ITEM_FILTERS)->getValue() === true) {
+            (new RequestValidator($this->request))->validate();
+        }
+
         $this->dispatchListeners();
 
         $this->processRequest();
@@ -132,7 +144,7 @@ class Finding
         $response = new ResponseProxy(
             $this->responseToParse,
             $this->guzzleResponse,
-            $this->request->getRequestParameters()->getParameter('RESPONSE-DATA-FORMAT')->getValue()
+            $this->request->getGlobalParameters()->getParameter('response_data_format')->getValue()
         );
 
         unset($this->responseToParse);
@@ -148,25 +160,23 @@ class Finding
         return $this->request;
     }
 
-    public function __call($methodName, $arguments)
+    public function __call($methodName, $arguments) : Request
     {
-        $validMethods = $this->request->getRequestParameters()->getMethods();
+        $method = $this->methodParameters->getMethod($methodName);
 
-        if (in_array($methodName, $validMethods) === false) {
-            throw new FindingApiException('Invalid method name \''.$methodName.'\'. Valid methods are '.implode(', ', $validMethods));
-        }
+        $validMethodsParameter = $this->getRequest()->getGlobalParameters()->getParameter($this->methodParameters->getValidMethodsParameter());
 
-        return $this->createMethod($methodName);
+        $method->validate($validMethodsParameter);
+
+        $this->request = $this->createMethod($method);
+
+        return $this->request;
     }
 
     private function dispatchListeners()
     {
         if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
             $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
-        }
-
-        if ($this->options->getOption(Options::INDIVIDUAL_ITEM_FILTERS)->getValue() === true) {
-            (new RequestValidator($this->request))->validate();
         }
 
         if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
@@ -200,15 +210,37 @@ class Finding
         $this->responseToParse = (string) $this->guzzleResponse->getBody();
     }
 
-    private function createMethod(string $methodName)
+    private function createMethod(Method $method) : Request
     {
-        switch ($methodName) {
-            case 'findItemsByKeywords':
-                return new FindItemsByKeywordsRequest($this->request->getRequestParameters());
-            case OperationName::FIND_ITEMS_BY_CATEGORY:
-                return new FindItemsByCategory($this->request->getRequestParameters());
-            case OperationName::FIND_ITEMS_ADVANCED:
-                return new FindItemsAdvanced($this->request->getRequestParameters());
+        $instanceString = $method->getInstanceObjectString();
+
+        $object = new $instanceString($this->request->getGlobalParameters(), $this->request->getSpecialParameters());
+
+        $objectMethods = $method->getMethods();
+
+        foreach ($objectMethods as $objectMethod) {
+            $possibleMethods = array(
+                'set'.ucfirst($objectMethod),
+                'add'.ucfirst($objectMethod),
+                $objectMethod,
+            );
+
+            $classMethods = get_class_methods($object);
+
+            $methodValidated = false;
+            foreach ($possibleMethods as $possibleMethod) {
+                if (in_array($possibleMethod, $classMethods)) {
+                    $methodValidated = true;
+
+                    break;
+                }
+            }
+
+            if ($methodValidated === false) {
+                throw new MethodParametersException('Possible methods '.implode(', ', $possibleMethods).' for object '.$instanceString.' not found');
+            }
         }
+
+        return $object;
     }
 }

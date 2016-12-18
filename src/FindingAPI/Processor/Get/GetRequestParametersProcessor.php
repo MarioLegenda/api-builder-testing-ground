@@ -15,20 +15,30 @@ class GetRequestParametersProcessor extends AbstractProcessor implements Process
      */
     public function process() : ProcessorInterface
     {
-        $parameters = $this->request->getRequestParameters();
-        $parameters->excludeFromLoop(array('method', 'ebay_url'));
+        $globalParameters = $this->request->getGlobalParameters();
+        $specialParameters = $this->request->getSpecialParameters();
 
-        $ebayUrl = $parameters->getParameter('ebay_url')->getValue();
+        $finalUrl = '';
 
-        $finalUrl = $ebayUrl.'?';
+        foreach ($globalParameters as $key => $parameter) {
+            if ($key === 0) {
+                $finalUrl.=$parameter->getValue().'?';
 
-        foreach ($parameters as $parameter) {
-            $name = $parameter->getName();
+                continue;
+            }
 
-            $value = $parameter->getValue();
+            if ($parameter->getType()->isStandalone()) {
+                $finalUrl.=$parameter->getRepresentation().'&';
 
-            if (!empty($value)) {
-                $finalUrl.=$name.'='.$value.'&';
+                continue;
+            }
+
+            $finalUrl.=$parameter->getRepresentation().'='.$parameter->getValue().'&';
+        }
+
+        foreach ($specialParameters as $specialParameter) {
+            if ($specialParameter->getValue() !== null) {
+                $finalUrl.=$specialParameter->getRepresentation().'='.$specialParameter->getValue().'&';
             }
         }
 
