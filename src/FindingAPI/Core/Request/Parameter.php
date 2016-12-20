@@ -8,6 +8,10 @@ use FindingAPI\Core\Exception\RequestParametersException;
 class Parameter
 {
     /**
+     * @var bool $enable
+     */
+    private $enable = false;
+    /**
      * @var string $representation
      */
     private $representation;
@@ -79,6 +83,27 @@ class Parameter
         $this->throwExceptionMessageIfDeprecated = ($parameter['throws_exception_if_deprecated'] === true) ? true : false;
 
         $this->setErrorMessage($parameter['error_message']);
+    }
+    /**
+     * @void
+     */
+    public function enable()
+    {
+        $this->enable = true;
+    }
+    /**
+     * @void
+     */
+    public function disable()
+    {
+        $this->enable = false;
+    }
+    /**
+     * @return bool
+     */
+    public function isEnabled() : bool
+    {
+        return $this->enable;
     }
     /**
      * @param string $representation
@@ -266,9 +291,9 @@ class Parameter
             throw new RequestParametersException('If \'type\' is required, then it\'s \'value\' should be present in the configuration, not at runtime for configuration \''.$this->getName().'\'');
         }
 
-        if (!empty($this->getValid())) {
+        if (!empty($this->getValid()) and !$this->getType()->isOptional()) {
             if (in_array($this->getValue(), $this->getValid()) === false) {
-                throw new RequestParametersException('Invalid value for '.$this->getName().'. Valid values for '.$this->getName().' are '.implode(', ', $this->getValid()));
+                throw new RequestParametersException('Invalid value for '.$this->getName().'. Valid values for '.$this->getName().' are '.implode(', ', $this->getValid()).'. '.$this->getValue().' given');
             }
         }
     }

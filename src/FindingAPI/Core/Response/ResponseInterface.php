@@ -44,4 +44,8 @@ interface ResponseInterface
      * @return bool
      */
     public function isErrorResponse() : bool;
+    /**
+     * @return string
+     */
+    public function getRawResponse() : string;
 }

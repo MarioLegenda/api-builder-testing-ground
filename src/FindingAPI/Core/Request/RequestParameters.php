@@ -129,6 +129,7 @@ class RequestParameters implements \IteratorAggregate, \ArrayAccess
         foreach ($this->parameters as $parameter) {
             if ($parameter->getType()->isOptional()) {
                 $parameter->setValue(null);
+                $parameter->disable();
             }
         }
     }

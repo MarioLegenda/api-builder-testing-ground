@@ -212,6 +212,13 @@ class XmlResponse implements ResponseInterface
 
         return $this->getRoot()->getAck() === 'Failure';
     }
+    /**
+     * @return string
+     */
+    public function getRawResponse() : string
+    {
+        return $this->xmlString;
+    }
 
     private function lazyLoadSimpleXml($xmlString)
     {

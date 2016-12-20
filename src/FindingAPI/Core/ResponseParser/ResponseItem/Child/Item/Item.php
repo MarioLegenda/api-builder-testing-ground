@@ -483,10 +483,10 @@ class Item extends AbstractItemIterator
      * @param mixed $default
      * @return string
      */
-    public function getGalleryUrl($default = null) : string
+    public function getGalleryUrl($default = null)
     {
         if ($this->galleryUrl === null) {
-            if (!empty($this->simpleXml->galleryURL)) {
+            if (isset($this->simpleXml->galleryURL)) {
                 $this->setGalleryUrl((string) $this->simpleXml->galleryURL);
             }
         }

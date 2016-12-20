@@ -225,10 +225,19 @@ class Finding
                 throw new MethodParametersException('Cannot create request method because parameter '.$objectMethod.' does not exist for request method '.$method->getName());
             }
 
+            $parameter = $this->request->getSpecialParameters()->getParameter($objectMethod);
+            $parameter->enable();
+
+            $set = 'set'.preg_replace('#\s#', '', ucwords(preg_replace('#_#', ' ', $parameter->getName())));
+            $add = 'add'.preg_replace('#\s#', '', ucwords(preg_replace('#_#', ' ', $parameter->getName())));
+            $enable = 'enable'.preg_replace('#\s#', '', ucwords(preg_replace('#_#', ' ', $parameter->getName())));
+            $disable = 'disable'.preg_replace('#\s#', '', ucwords(preg_replace('#_#', ' ', $parameter->getName())));
+
             $possibleMethods = array(
-                'set'.ucfirst($this->request->getSpecialParameters()->getParameter($objectMethod)->getRepresentation()),
-                'add'.ucfirst($this->request->getSpecialParameters()->getParameter($objectMethod)->getRepresentation()),
-                'enable'.ucfirst($this->request->getSpecialParameters()->getParameter($objectMethod)->getRepresentation()),
+                $set,
+                $add,
+                $enable,
+                $disable,
                 $objectMethod,
             );
 

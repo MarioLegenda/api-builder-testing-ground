@@ -77,11 +77,51 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
+    public function testHistograms()
+    {
+        $findingApi = EbaySDK::inst()->createFindingApi();
+
+        $findingApi
+            ->getHistograms()
+            ->setCategoryId(23);
+
+        $response = $findingApi->send()->getResponse();
+
+        $this->validateResponse($response);
+    }
+
+    public function testGetSearchKeywordsRecommendations()
+    {
+        $findingApi = EbaySDK::inst()->createFindingApi();
+
+        $findingApi
+            ->getSearchKeywordsRecommendation()
+            ->addKeywords('baseball');
+
+        $response = $findingApi->send()->getResponse();
+    }
+
+    public function testFindItemsByProduct()
+    {
+        $findingApi = EbaySDK::inst()->createFindingApi();
+
+        $findingApi
+            ->findItemsByProduct()
+            ->setProductIdType('ReferenceID')
+            ->setProductId(53039031);
+
+        $findingApi->send();
+
+        $this->validateResponse($findingApi->getResponse());
+    }
+
     public function testFindItemsByCategoryRequest()
     {
         $findingApi = EbaySDK::inst()->createFindingApi();
 
-        $findingApi->findItemsByCategory()->setCategoryId(23);
+        $findingApi
+            ->findItemsByCategory()
+            ->setCategoryId(23);
 
         $this->validateResponse($findingApi->send()->getResponse());
     }
@@ -283,7 +323,9 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             foreach ($aspectHistogram as $aspect) {
                 $this->assertInstanceOf(Aspect::class, $aspect, 'When foreach-ing AspectHistogramContainer, every iteration should have '.Aspect::class);
 
-                $this->assertInternalType('string', $aspect->getAspectName(), 'Aspect::getAspectName() should return a string');
+                if ($aspect->getAspectName() !== null) {
+                    $this->assertInternalType('string', $aspect->getAspectName(), 'Aspect::getAspectName() should return a string');
+                }
 
                 foreach ($aspect as $valueHistogram) {
                     $this->assertInstanceOf(ValueHistogram::class, '', 'When foreach-ing Aspect, every interation should return a ValueHistogram');

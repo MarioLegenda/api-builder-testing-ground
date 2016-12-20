@@ -97,4 +97,12 @@ class ResponseProxy implements ResponseInterface
     {
         return $this->response->isErrorResponse();
     }
+
+    /**
+     * @return string
+     */
+    public function getRawResponse() : string
+    {
+        return $this->response->getRawResponse();
+    }
 }

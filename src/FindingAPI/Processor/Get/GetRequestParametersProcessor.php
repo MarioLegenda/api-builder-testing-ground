@@ -37,7 +37,7 @@ class GetRequestParametersProcessor extends AbstractProcessor implements Process
         }
 
         foreach ($specialParameters as $specialParameter) {
-            if ($specialParameter->getValue() !== null) {
+            if ($specialParameter->getValue() !== null and $specialParameter->isEnabled()) {
                 $finalUrl.=$specialParameter->getRepresentation().'='.$specialParameter->getValue().'&';
             }
         }

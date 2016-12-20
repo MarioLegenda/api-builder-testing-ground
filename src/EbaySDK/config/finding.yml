@@ -90,6 +90,24 @@ ebay_sdk:
                 error_message: '%s is obsolete and cannot be used anymore. Represented by %s'
             description_search:
                 representation: descriptionSearch
+                value: true
+                type: [optional]
+                valid: null
+                deprecated: false
+                obsolete: false
+                throws_exception_if_deprecated: false
+                error_message: 'Invalid value for %s and represented as %s'
+            product_id_type:
+                representation: 'productId.@type'
+                value: null
+                type: [optional]
+                valid: [ReferenceID, ISBN, UPC, EAN]
+                deprecated: false
+                obsolete: false
+                throws_exception_if_deprecated: false
+                error_message: 'Invalid value for %s and represented as %s'
+            product_id:
+                representation: productId
                 value: null
                 type: [optional]
                 valid: null
@@ -97,6 +115,16 @@ ebay_sdk:
                 obsolete: false
                 throws_exception_if_deprecated: false
                 error_message: 'Invalid value for %s and represented as %s'
+            store_name:
+                representation: storeName
+                value: null
+                type: [optional]
+                valid: null
+                deprecated: false
+                obsolete: false
+                throws_exception_if_deprecated: false
+                error_message: 'Invalid value for %s and represented as %s'
+
         methods:
             valid_methods: operation_name
             find_items_by_keywords:
@@ -115,3 +143,19 @@ ebay_sdk:
                 name: findCompletedItems
                 object: FindingAPI\Core\Request\Method\FindCompletedItems
                 methods: [keywords, category_id]
+            find_items_by_product:
+                name: findItemsByProduct
+                object: FindingAPI\Core\Request\Method\FindItemsByProduct
+                methods: [product_id_type, product_id]
+            find_items_in_ebay_stores:
+                name: findItemsIneBayStores
+                object: FindingAPI\Core\Request\Method\FindItemsByProduct
+                methods: [store_name]
+            get_histograms:
+                name: getHistograms
+                object: FindingAPI\Core\Request\Method\GetHistograms
+                methods: [category_id]
+            get_search_keywords_recommendations:
+                name: getSearchKeywordsRecommendation
+                object: FindingAPI\Core\Request\Method\GetSearchKeywordsRecommendations
+                methods: [keywords]
