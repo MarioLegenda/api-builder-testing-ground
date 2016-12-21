@@ -19,7 +19,6 @@ use FindingAPI\Core\Listener\PostValidateItemFilters;
 class FindingFactory
 {
     /**
-     * @param string $securityAppname
      * @param RequestParameters $parameters
      * @return Finding
      * @throws SDKException
