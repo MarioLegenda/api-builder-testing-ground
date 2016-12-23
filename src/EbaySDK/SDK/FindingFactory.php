@@ -2,16 +2,16 @@
 
 namespace EbaySDK\SDK;
 
-use FindingAPI\Core\Exception\FindingApiException;
+use EbaySDK\Configuration\FindingConfiguration;
 use FindingAPI\Core\Options\Options;
 use FindingAPI\Core\Request\Method\MethodParameters;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
 use FindingAPI\Core\Request\RequestParameters;
 use EbaySDK\Exception\SDKException;
 use FindingAPI\Finding;
 use FindingAPI\Core\Request\Request;
-use FindingAPI\Core\Request\Parameter;
 use FindingAPI\Core\Options\Option;
 use FindingAPI\Core\Listener\PreValidateItemFilters;
 use FindingAPI\Core\Listener\PostValidateItemFilters;
@@ -25,14 +25,18 @@ class FindingFactory
      */
     public static function create(RequestParameters $parameters = null)
     {
-        $config = Yaml::parse(file_get_contents(__DIR__.'/../config/finding.yml'))['ebay_sdk']['finding'];
+        $config = Yaml::parse(file_get_contents(__DIR__.'/../config/finding.yml'));
+
+        $processor = new Processor();
+
+        $processor->processConfiguration(new FindingConfiguration(), $config);
 
         $request = new Request(
-            new RequestParameters($config['global_parameters']),
-            new RequestParameters($config['special_parameters'])
+            new RequestParameters($config['ebay_sdk']['finding']['global_parameters']),
+            new RequestParameters($config['ebay_sdk']['finding']['special_parameters'])
         );
 
-        $methodParameters = new MethodParameters($config['methods']);
+        $methodParameters = new MethodParameters($config['ebay_sdk']['finding']['methods']);
 
         $options = new Options();
 

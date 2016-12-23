@@ -21,7 +21,7 @@ class MethodParameters
 
         unset($methodParameters['valid_methods']);
 
-        foreach ($methodParameters as $configName => $methodParameter) {
+        foreach ($methodParameters['metadata'] as $configName => $methodParameter) {
             $this->methodParameters[] = new Method($configName, $methodParameter);
         }
     }

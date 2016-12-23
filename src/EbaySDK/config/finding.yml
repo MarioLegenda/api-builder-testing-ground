@@ -127,35 +127,36 @@ ebay_sdk:
 
         methods:
             valid_methods: operation_name
-            find_items_by_keywords:
-                name: findItemsByKeywords
-                object: FindingAPI\Core\Request\Method\FindItemsByKeywords
-                methods: [keywords]
-            find_items_by_category:
-                name: findItemsByCategory
-                object: FindingAPI\Core\Request\Method\FindItemsByCategory
-                methods: [category_id]
-            find_items_advanced:
-                name: findItemsAdvanced
-                object: FindingAPI\Core\Request\Method\FindItemsAdvanced
-                methods: [keywords, category_id, description_search]
-            find_completed_items:
-                name: findCompletedItems
-                object: FindingAPI\Core\Request\Method\FindCompletedItems
-                methods: [keywords, category_id]
-            find_items_by_product:
-                name: findItemsByProduct
-                object: FindingAPI\Core\Request\Method\FindItemsByProduct
-                methods: [product_id_type, product_id]
-            find_items_in_ebay_stores:
-                name: findItemsIneBayStores
-                object: FindingAPI\Core\Request\Method\FindItemsByProduct
-                methods: [store_name]
-            get_histograms:
-                name: getHistograms
-                object: FindingAPI\Core\Request\Method\GetHistograms
-                methods: [category_id]
-            get_search_keywords_recommendations:
-                name: getSearchKeywordsRecommendation
-                object: FindingAPI\Core\Request\Method\GetSearchKeywordsRecommendations
-                methods: [keywords]
+            metadata:
+                find_items_by_keywords:
+                    name: findItemsByKeywords
+                    object: FindingAPI\Core\Request\Method\FindItemsByKeywords
+                    methods: [keywords]
+                find_items_by_category:
+                    name: findItemsByCategory
+                    object: FindingAPI\Core\Request\Method\FindItemsByCategory
+                    methods: [category_id]
+                find_items_advanced:
+                    name: findItemsAdvanced
+                    object: FindingAPI\Core\Request\Method\FindItemsAdvanced
+                    methods: [keywords, category_id, description_search]
+                find_completed_items:
+                    name: findCompletedItems
+                    object: FindingAPI\Core\Request\Method\FindCompletedItems
+                    methods: [keywords, category_id]
+                find_items_by_product:
+                    name: findItemsByProduct
+                    object: FindingAPI\Core\Request\Method\FindItemsByProduct
+                    methods: [product_id_type, product_id]
+                find_items_in_ebay_stores:
+                    name: findItemsIneBayStores
+                    object: FindingAPI\Core\Request\Method\FindItemsByProduct
+                    methods: [store_name]
+                get_histograms:
+                    name: getHistograms
+                    object: FindingAPI\Core\Request\Method\GetHistograms
+                    methods: [category_id]
+                get_search_keywords_recommendations:
+                    name: getSearchKeywordsRecommendation
+                    object: FindingAPI\Core\Request\Method\GetSearchKeywordsRecommendations
+                    methods: [keywords]
