@@ -13,6 +13,7 @@ use FindingAPI\Core\Request\Method\FindItemsByCategory;
 use FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest;
 use FindingAPI\Core\Request\Method\Method;
 use FindingAPI\Core\Request\Method\MethodParameters;
+use FindingAPI\Core\Request\Parameter;
 use FindingAPI\Core\Request\RequestValidator;
 use FindingAPI\Core\Request\Request;
 use FindingAPI\Processor\Factory\ProcessorFactory;
@@ -74,6 +75,20 @@ class Finding
         $this->options = $options;
         $this->eventDispatcher = $eventDispatcher;
         $this->methodParameters = $methodParameters;
+    }
+    /**
+     * @param Method $method
+     * @return Finding
+     */
+    public function addMethod(Method $method) : Finding
+    {
+        $validMethodsParameter = $this->getRequest()->getGlobalParameters()->getParameter($this->methodParameters->getValidMethodsParameter());
+
+        $method->validate($validMethodsParameter);
+
+        $this->methodParameters->addMethod($method);
+
+        return $this;
     }
     /**
      * @param string $option
@@ -215,6 +230,10 @@ class Finding
         $instanceString = $method->getInstanceObjectString();
 
         $object = new $instanceString($this->request->getGlobalParameters(), $this->request->getSpecialParameters());
+
+        if (!$object instanceof Request) {
+            throw new MethodParametersException(get_class($object).' has to extend '.Request::class);
+        }
 
         $objectMethods = $method->getMethods();
 

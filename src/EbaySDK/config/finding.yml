@@ -36,7 +36,7 @@ ebay_sdk:
                 representation: OPERATION-NAME
                 value: null
                 type: [injectable, required]
-                valid: [findItemsByKeywords, findItemsByCategory, findItemsAdvanced, findCompletedItems, findItemsByProduct, findItemsIneBayStores, getHistograms, getSearchKeywordsRecommendation, getVersion]
+                valid: [findItemsByKeywords, findItemsByCategory, findItemsAdvanced, findCompletedItems, findItemsByProduct, findItemsIneBayStores, getHistograms, getSearchKeywordsRecommendation, getVersion, newRequestMethod]
                 deprecated: false
                 throws_exception_if_deprecated: false
                 obsolete: false

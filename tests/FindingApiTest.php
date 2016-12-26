@@ -8,6 +8,7 @@ use EbaySDK\EbaySDK;
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Options\Options;
+use FindingAPI\Core\Request\Method\Method;
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\CategoryHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\Aspect;
@@ -34,6 +35,21 @@ use FindingAPI\Core\Response\ResponseInterface;
 
 class FindingApiTest extends \PHPUnit_Framework_TestCase
 {
+    public function testInjectableParameters()
+    {
+        $method = new Method('new_request_method', array(
+            'name' => 'newRequestMethod',
+            'object' => 'Test\\Method\\NewRequestMethod',
+            'methods' => array('keywords'),
+        ));
+
+        $findingApi = EbaySDK::inst()->createFindingApi();
+
+        $findingApi->addMethod($method);
+
+        $findingApi->newRequestMethod();
+    }
+
     public function testItemFilters()
     {
         $findingApi = EbaySDK::inst()

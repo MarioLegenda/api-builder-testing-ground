@@ -20,10 +20,11 @@ class FindingFactory
 {
     /**
      * @param RequestParameters $parameters
+     * @param MethodParameters $injectableMethodParameters
      * @return Finding
      * @throws SDKException
      */
-    public static function create(RequestParameters $parameters = null)
+    public static function create(RequestParameters $parameters = null, MethodParameters $injectableMethodParameters = null)
     {
         $config = Yaml::parse(file_get_contents(__DIR__.'/../config/finding.yml'));
 

@@ -3,8 +3,8 @@
 namespace EbaySDK;
 
 use EbaySDK\SDK\FindingFactory;
+use FindingAPI\Core\Request\Method\MethodParameters;
 use FindingAPI\Core\Request\RequestParameters;
-use FindingAPI\EbayApiInterface;
 use FindingAPI\Finding;
 
 class EbaySDK
@@ -24,10 +24,6 @@ class EbaySDK
         'finding' => null,
     );
     /**
-     * @var RequestParameters $injectableRequestParameters
-     */
-    private $injectableRequestParameters;
-    /**
      * @return EbaySDK
      */
     public static function inst()
@@ -37,28 +33,19 @@ class EbaySDK
         return self::$instance;
     }
     /**
-     * @param RequestParameters $parameters
-     * @return EbaySDK
-     */
-    public function setParameters(RequestParameters $parameters) : EbaySDK
-    {
-        $this->injectableRequestParameters = $parameters;
-
-        return $this;
-    }
-    /**
      * @param bool $singleton
      * @param RequestParameters|null $parameters
+     * @param MethodParameters|null $methodParameters
      * @return Finding
      */
-    public function createFindingApi(bool $singleton = true, RequestParameters $parameters = null) : Finding
+    public function createFindingApi(bool $singleton = true, RequestParameters $parameters = null, MethodParameters $methodParameters = null) : Finding
     {
         if ($singleton === false) {
-            $this->sdkRepository['finding'] = FindingFactory::create($parameters);
+            $this->sdkRepository['finding'] = FindingFactory::create($parameters, $methodParameters);
         }
 
         if (!$this->sdkRepository['finding'] instanceof Finding) {
-            $this->sdkRepository['finding'] = FindingFactory::create($parameters);
+            $this->sdkRepository['finding'] = FindingFactory::create($parameters, $methodParameters);
         }
 
         return $this->sdkRepository['finding'];
