@@ -1,29 +1,21 @@
 <?php
 
-namespace Test\Method;
+namespace FindingAPI\Core\Request\Method;
 
 use FindingAPI\Core\Request\Request;
 use FindingAPI\Core\Request\RequestParameters;
 
-class NewRequestMethod extends Request
+class GetVersion extends Request
 {
     /**
-     * NewRequestMethod constructor.
+     * GetVersion constructor.
      * @param RequestParameters $globalParameters
      * @param RequestParameters $specialParameters
      */
     public function __construct(RequestParameters $globalParameters, RequestParameters $specialParameters)
     {
         parent::__construct($globalParameters, $specialParameters);
-    }
-    /**
-     * @param string $searchString
-     * @return Request
-     */
-    public function addKeywords(string $searchString) : Request
-    {
-        $this->getSpecialParameters()->getParameter('keywords')->setValue(urlencode($searchString));
 
-        return $this;
+        $this->getGlobalParameters()->getParameter('operation_name')->setValue('getVersion');
     }
 }

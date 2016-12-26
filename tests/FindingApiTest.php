@@ -93,6 +93,15 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
+    public function testGetVersion()
+    {
+        $findingApi = EbaySDK::inst()->createFindingApi();
+
+        $findingApi->getVersion();
+
+        $findingApi->send()->getResponse();
+    }
+
     public function testHistograms()
     {
         $findingApi = EbaySDK::inst()->createFindingApi();

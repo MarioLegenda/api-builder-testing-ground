@@ -160,3 +160,7 @@ ebay_sdk:
                     name: getSearchKeywordsRecommendation
                     object: FindingAPI\Core\Request\Method\GetSearchKeywordsRecommendations
                     methods: [keywords]
+                get_version:
+                    name: getVersion
+                    object: FindingAPI\Core\Request\Method\GetVersion
+                    methods: []
