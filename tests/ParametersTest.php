@@ -39,8 +39,8 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
 
         $this->globalParameters->getParameter('operation_name')->setValue('findItemsByKeywords');
 
-        $this->globalParameters->valid();
-        $this->specialParameters->valid();
+        $this->globalParameters->validate();
+        $this->specialParameters->validate();
 
         $parameter = $this->globalParameters->getParameter('security_appname');
 

@@ -33,6 +33,10 @@ class RequestParameters implements \IteratorAggregate, \ArrayAccess
      */
     private $excluded = array();
     /**
+     * @var null $errors
+     */
+    private $errors = array();
+    /**
      * RequestParameters constructor.
      * @param array|null $parameters
      */
@@ -103,7 +107,9 @@ class RequestParameters implements \IteratorAggregate, \ArrayAccess
         $parameter = $this->getParameter($name);
 
         if ($parameter->isDeprecated()) {
-            throw new DeprecatedException('Request parameter '.$name.' seems to be deprecated. If you which to ignore it, catch DeprecatedException');
+            if ($parameter->shouldThrowExceptionIfDeprecated()) {
+                throw new DeprecatedException('Request parameter '.$name.' seems to be deprecated. If you which to ignore it, catch DeprecatedException');
+            }
         }
 
         if (!$parameter->isValid($value)) {
@@ -113,13 +119,31 @@ class RequestParameters implements \IteratorAggregate, \ArrayAccess
         return true;
     }
     /**
-     * @return bool
+     * @return RequestParameters
      */
-    public function valid()
+    public function validate() : RequestParameters
     {
+        $errorMessages = array();
         foreach ($this->parameters as $parameter) {
-            $parameter->validateParameter();
+            $possibleError = $parameter->validateParameter();
+
+            if (is_array($possibleError)) {
+                $errorMessages[$parameter->getRepresentation()] = $parameter->validateParameter();
+            }
         }
+
+        if (!empty($errorMessages)) {
+            $this->errors = $errorMessages;
+        }
+
+        return $this;
+    }
+    /**
+     * @return array
+     */
+    public function getErrors() : array
+    {
+        return $this->errors;
     }
     /**
      * @void

@@ -59,6 +59,10 @@ class Finding
      */
     private $methodParameters;
     /**
+     * @var array $errors
+     */
+    private $errors = array();
+    /**
      * @var string $processed
      */
     private $processed;
@@ -117,7 +121,11 @@ class Finding
     public function send() : Finding
     {
         if ($this->options->getOption(Options::INDIVIDUAL_ITEM_FILTERS)->getValue() === true) {
-            (new RequestValidator($this->request))->validate();
+            $requestValidator = new RequestValidator($this->request);
+
+            $requestValidator->validate();
+
+            $this->errors = $requestValidator->getErrors();
         }
 
         $this->dispatchListeners();
@@ -277,5 +285,19 @@ class Finding
         }
 
         return $object;
+    }
+    /**
+     * @return bool
+     */
+    public function hasErrors() : bool
+    {
+        return !empty($this->errors);
+    }
+    /**
+     * @return array
+     */
+    public function getErrors() : array
+    {
+        return $this->errors;
     }
 }

@@ -63,6 +63,10 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
         $findingApi->send();
 
+        if ($findingApi->hasErrors()) {
+            $this->assertInternalType('array', $findingApi->getErrors(), 'Call to findItemsByKeywords should return a \'deprecated\' error');
+        }
+
         $itemFilterStorage = $request->getItemFilterStorage();
 
         // single value item filter

@@ -75,7 +75,7 @@ ebay_sdk:
                 value: null
                 type: [optional]
                 valid: null
-                deprecated: false
+                deprecated: true
                 obsolete: false
                 throws_exception_if_deprecated: false
                 error_message: 'Invalid value for %s and represented as %s'

@@ -9,6 +9,7 @@ use FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest;
 
 class RequestValidator
 {
+    private $errors = array();
     /**
      * @var array $itemFilters
      */
@@ -30,8 +31,20 @@ class RequestValidator
         $globalParameters = $this->request->getGlobalParameters();
         $specialParameters = $this->request->getSpecialParameters();
 
-        $globalParameters->valid();
-        $specialParameters->valid();
+        $globalParameters->validate();
+        $specialParameters->validate();
+
+        $globalParamErrors = $globalParameters->getErrors();
+
+        if (!empty($globalParamErrors)) {
+            $this->errors['global_parameters'] = $globalParamErrors;
+        }
+
+        $specialParamErrors = $specialParameters->getErrors();
+
+        if (!empty($specialParamErrors)) {
+            $this->errors['special_parameters'] = $specialParamErrors;
+        }
 
         $domainParameter = $globalParameters[0];
 
@@ -53,5 +66,12 @@ class RequestValidator
                 throw new ItemFilterException((string) $itemFilter);
             }
         }
+    }
+    /**
+     * @return array
+     */
+    public function getErrors() : array
+    {
+        return $this->errors;
     }
 }
