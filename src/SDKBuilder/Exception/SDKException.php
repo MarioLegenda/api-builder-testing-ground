@@ -1,6 +1,6 @@
 <?php
 
-namespace EbaySDK\Exception;
+namespace SDKBuilder\Exception;
 
 class SDKException extends AbstractException
 {

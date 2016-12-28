@@ -1,6 +1,6 @@
 <?php
 
-namespace EbaySDK\Common;
+namespace SDKBuilder\Common;
 
 class Logger
 {

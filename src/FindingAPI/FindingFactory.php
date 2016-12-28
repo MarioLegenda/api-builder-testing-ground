@@ -1,16 +1,15 @@
 <?php
 
-namespace EbaySDK\SDK;
+namespace FindingAPI;
 
-use EbaySDK\Configuration\FindingConfiguration;
+use SDKBuilder\Configuration\FindingConfiguration;
 use FindingAPI\Core\Options\Options;
 use FindingAPI\Core\Request\Method\MethodParameters;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
 use FindingAPI\Core\Request\RequestParameters;
-use EbaySDK\Exception\SDKException;
-use FindingAPI\Finding;
+use SDKBuilder\Exception\SDKException;
 use FindingAPI\Core\Request\Request;
 use FindingAPI\Core\Options\Option;
 use FindingAPI\Core\Listener\PreValidateItemFilters;
@@ -19,14 +18,12 @@ use FindingAPI\Core\Listener\PostValidateItemFilters;
 class FindingFactory
 {
     /**
-     * @param RequestParameters $parameters
-     * @param MethodParameters $injectableMethodParameters
      * @return Finding
      * @throws SDKException
      */
-    public static function create(RequestParameters $parameters = null, MethodParameters $injectableMethodParameters = null)
+    public function create()
     {
-        $config = Yaml::parse(file_get_contents(__DIR__.'/../config/finding.yml'));
+        $config = Yaml::parse(file_get_contents(__DIR__ . '/config/finding.yml'));
 
         $processor = new Processor();
 

@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\Exception;
 
-use EbaySDK\Exception\AbstractException;
+use SDKBuilder\Exception\AbstractException;
 
 class DefinitionException extends AbstractException
 {

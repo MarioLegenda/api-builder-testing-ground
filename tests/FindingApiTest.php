@@ -4,7 +4,9 @@ namespace Test;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use EbaySDK\EbaySDK;
+use FindingAPI\FindingFactory;
+use SDKBuilder\Exception\SDKBuilderException;
+use SDKBuilder\SDKBuilder;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Options\Options;
 use FindingAPI\Core\Request\Method\Method;
@@ -37,6 +39,8 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 {
     public function testInjectableParameters()
     {
+        SDKBuilder::inst()->registerApi('finding', FindingFactory::class);
+
         $method = new Method('new_request_method', array(
             'name' => 'newRequestMethod',
             'object' => 'Test\\Method\\NewRequestMethod',
@@ -54,7 +58,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             'error_message' => 'Invalid value for %s and represented as %s',
         ));
 
-        $findingApi = EbaySDK::inst()->createFindingApi();
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->addParameter('special_parameter', $newParameter)
@@ -65,8 +69,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testItemFilters()
     {
-        $findingApi = EbaySDK::inst()
-            ->createFindingApi();
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi->setOption(Options::OFFLINE_MODE, false);
 
@@ -112,7 +115,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testGetVersion()
     {
-        $findingApi = EbaySDK::inst()->createFindingApi();
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi->getVersion();
 
@@ -121,7 +124,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testHistograms()
     {
-        $findingApi = EbaySDK::inst()->createFindingApi();
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->getHistograms()
@@ -134,7 +137,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSearchKeywordsRecommendations()
     {
-        $findingApi = EbaySDK::inst()->createFindingApi();
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->getSearchKeywordsRecommendation()
@@ -145,7 +148,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByProduct()
     {
-        $findingApi = EbaySDK::inst()->createFindingApi();
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->findItemsByProduct()
@@ -159,7 +162,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByCategoryRequest()
     {
-        $findingApi = EbaySDK::inst()->createFindingApi();
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->findItemsByCategory()
@@ -170,7 +173,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsAdvancedRequest()
     {
-        $findingApi = EbaySDK::inst()->createFindingApi();
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->findItemsAdvanced()
@@ -183,7 +186,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindCompletedItemsRequest()
     {
-        $findingApi = EbaySDK::inst()->createFindingApi();
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->findCompletedItems()
@@ -203,7 +206,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         );
 
         foreach ($queries as $query => $filters) {
-            $findingApi = EbaySDK::inst()->createFindingApi();
+            $findingApi = SDKBuilder::inst()->create('finding');
 
             $request = $findingApi->findItemsByKeywords()->setMethod('get');
 

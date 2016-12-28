@@ -2,15 +2,10 @@
 
 namespace FindingAPI;
 
-use EbaySDK\Common\Logger;
+use SDKBuilder\Common\Logger;
 use FindingAPI\Core\Event\ItemFilterEvent;
-use FindingAPI\Core\Exception\FindingApiException;
 use FindingAPI\Core\Exception\MethodParametersException;
-use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Options\Options;
-use FindingAPI\Core\Request\Method\FindItemsAdvanced;
-use FindingAPI\Core\Request\Method\FindItemsByCategory;
-use FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest;
 use FindingAPI\Core\Request\Method\Method;
 use FindingAPI\Core\Request\Method\MethodParameters;
 use FindingAPI\Core\Request\Parameter;
@@ -25,10 +20,11 @@ use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use GuzzleHttp\Exception\ConnectException;
 use FindingAPI\Core\Exception\ConnectException as FindingConnectException;
+use SDKBuilder\SDK\SDKInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use FindingAPI\Core\Response\FakeGuzzleResponse;
 
-class Finding
+class Finding implements SDKInterface
 {
     /**
      * @var Options[] $options
@@ -133,7 +129,7 @@ class Finding
      * @return Finding
      * @throws FindingConnectException
      */
-    public function send() : Finding
+    public function send() : SDKInterface
     {
         if ($this->options->getOption(Options::INDIVIDUAL_ITEM_FILTERS)->getValue() === true) {
             $requestValidator = new RequestValidator($this->request);
