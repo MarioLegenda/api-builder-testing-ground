@@ -94,6 +94,21 @@ class Finding
 
         return $this;
     }
+
+    public function addParameter(string $parameterType, Parameter $parameter) : Finding
+    {
+        if ($parameterType === 'global_parameter') {
+            $this->getRequest()->getGlobalParameters()->addParameter($parameter);
+
+            return $this;
+        }
+
+        if ($parameterType === 'special_parameter') {
+            $this->getRequest()->getSpecialParameters()->addParameter($parameter);
+        }
+
+        return $this;
+    }
     /**
      * @param string $option
      * @param $value

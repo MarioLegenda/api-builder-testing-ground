@@ -2,7 +2,7 @@
 
 namespace Test;
 
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use EbaySDK\EbaySDK;
 use FindingAPI\Core\Information\OperationName;

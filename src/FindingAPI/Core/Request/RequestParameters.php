@@ -47,6 +47,19 @@ class RequestParameters implements \IteratorAggregate, \ArrayAccess
         }
     }
     /**
+     * @param Parameter $parameter
+     */
+    public function addParameter(Parameter $parameter)
+    {
+        $parameter->validateParameter();
+
+        if ($this->hasParameter($parameter->getName())) {
+            $this->removeParameter($parameter->getName());
+        }
+
+        $this->parameters[] = $parameter;
+    }
+    /**
      * @param string $name
      * @param string $value
      * @return RequestParameters
@@ -87,6 +100,22 @@ class RequestParameters implements \IteratorAggregate, \ArrayAccess
     {
         foreach ($this->parameters as $parameter) {
             if ($parameter->getName() === $name or $parameter->getRepresentation() === $name) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function removeParameter(string $name) : bool
+    {
+        foreach ($this->parameters as $key => $parameter) {
+            if ($parameter->getName() === $name or $parameter->getRepresentation() === $name) {
+                unset($this->parameters[$key]);
+
                 return true;
             }
         }

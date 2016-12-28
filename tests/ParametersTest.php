@@ -51,5 +51,27 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Parameter::class, $parameter);
 
         $parameter->validateParameter();
+
+        $newParameter = new Parameter('new_parameter', array(
+            'representation' => 'newParameter',
+            'value' => 6,
+            'type' => array('required', 'optional'),
+            'valid' => null,
+            'deprecated' => false,
+            'obsolete' => false,
+            'throws_exception_if_deprecated' => false,
+            'error_message' => 'Invalid value for %s and represented as %s',
+        ));
+
+        $newParameter->validateParameter();
+
+        $this->specialParameters->addParameter($newParameter);
+
+        $this->assertTrue($this->specialParameters->hasParameter('new_parameter'), 'new_parameter should have been added but it is not');
+        $this->assertTrue($this->specialParameters->hasParameter('newParameter'), 'new_parameter should also be found as a representation of newParameter');
+
+        $this->specialParameters->removeParameter('new_parameter');
+
+        $this->assertFalse($this->specialParameters->hasParameter('new_parameter'), 'new_parameter should have been removed');
     }
 }
