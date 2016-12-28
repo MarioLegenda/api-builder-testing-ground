@@ -33,7 +33,7 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Category;
 use FindingAPI\Core\Information\Currency as InformationCurrency;
 use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
 use FindingAPI\Core\Response\ResponseInterface;
-use FindingAPI\Core\Request\Parameter;
+use SDKBuilder\Request\Parameter;
 
 class FindingApiTest extends \PHPUnit_Framework_TestCase
 {
@@ -73,7 +73,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
         $findingApi->setOption(Options::OFFLINE_MODE, false);
 
-        $request = $findingApi->findItemsByKeywords()->setMethod('get');
+        $request = $findingApi->findItemsByKeywords();
 
         $request->addKeywords('constantine');
 
@@ -208,7 +208,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         foreach ($queries as $query => $filters) {
             $findingApi = SDKBuilder::inst()->create('finding');
 
-            $request = $findingApi->findItemsByKeywords()->setMethod('get');
+            $request = $findingApi->findItemsByKeywords();
 
             $request
                 ->setOutputSelector(array('StoreInfo', 'CategoryHistogram'))

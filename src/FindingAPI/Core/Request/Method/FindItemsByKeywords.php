@@ -2,10 +2,8 @@
 
 namespace FindingAPI\Core\Request\Method;
 
-use FindingAPI\Core\Exception\FindingApiException;
-use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Request\Request;
-use FindingAPI\Core\Request\RequestParameters;
+use SDKBuilder\Request\RequestParameters;
 
 class FindItemsByKeywords extends Request
 {

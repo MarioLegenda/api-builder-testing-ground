@@ -1,6 +1,6 @@
 <?php
 
-namespace FindingAPI\Core\Request;
+namespace SDKBuilder\Request;
 
 use FindingAPI\Core\Exception\RequestException;
 use FindingAPI\Core\Exception\RequestParametersException;

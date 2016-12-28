@@ -8,7 +8,7 @@ use FindingAPI\Core\Exception\MethodParametersException;
 use FindingAPI\Core\Options\Options;
 use FindingAPI\Core\Request\Method\Method;
 use FindingAPI\Core\Request\Method\MethodParameters;
-use FindingAPI\Core\Request\Parameter;
+use SDKBuilder\Request\Parameter;
 use FindingAPI\Core\Request\RequestValidator;
 use FindingAPI\Core\Request\Request;
 use FindingAPI\Processor\Factory\ProcessorFactory;

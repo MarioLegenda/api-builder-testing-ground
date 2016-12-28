@@ -3,7 +3,7 @@
 namespace FindingAPI\Core\Request\Method;
 
 use FindingAPI\Core\Request\Request;
-use FindingAPI\Core\Request\RequestParameters;
+use SDKBuilder\Request\RequestParameters;
 
 class FindCompletedItems extends Request
 {

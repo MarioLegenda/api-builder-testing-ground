@@ -2,8 +2,8 @@
 
 namespace Test;
 
-use FindingAPI\Core\Request\Parameter;
-use FindingAPI\Core\Request\RequestParameters;
+use SDKBuilder\Request\Parameter;
+use SDKBuilder\Request\RequestParameters;
 use Symfony\Component\Yaml\Yaml;
 
 require __DIR__.'/../vendor/autoload.php';

@@ -8,12 +8,13 @@ use FindingAPI\Core\Request\Method\MethodParameters;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
-use FindingAPI\Core\Request\RequestParameters;
 use SDKBuilder\Exception\SDKException;
 use FindingAPI\Core\Request\Request;
 use FindingAPI\Core\Options\Option;
 use FindingAPI\Core\Listener\PreValidateItemFilters;
 use FindingAPI\Core\Listener\PostValidateItemFilters;
+
+use SDKBuilder\Request\RequestParameters;
 
 class FindingFactory
 {

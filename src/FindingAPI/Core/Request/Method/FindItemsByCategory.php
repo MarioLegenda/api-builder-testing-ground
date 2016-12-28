@@ -4,7 +4,7 @@ namespace FindingAPI\Core\Request\Method;
 
 use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\Request\Request;
-use FindingAPI\Core\Request\RequestParameters;
+use SDKBuilder\Request\RequestParameters;
 
 class FindItemsByCategory extends Request
 {

@@ -3,7 +3,7 @@
 namespace FindingAPI\Core\Request\Method;
 
 use FindingAPI\Core\Exception\MethodParametersException;
-use FindingAPI\Core\Request\Parameter;
+use SDKBuilder\Request\Parameter;
 
 class Method
 {

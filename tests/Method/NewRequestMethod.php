@@ -3,7 +3,7 @@
 namespace Test\Method;
 
 use FindingAPI\Core\Request\Request;
-use FindingAPI\Core\Request\RequestParameters;
+use SDKBuilder\Request\RequestParameters;
 
 class NewRequestMethod extends Request
 {

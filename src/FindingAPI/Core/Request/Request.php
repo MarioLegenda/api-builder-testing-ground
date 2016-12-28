@@ -2,20 +2,16 @@
 
 namespace FindingAPI\Core\Request;
 
-use GuzzleHttp\Client;
 use FindingAPI\Definition\Definition;
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 
-use FindingAPI\Core\Exception\{ RequestException, FindingApiException, ItemFilterException };
+use FindingAPI\Core\Exception\{ FindingApiException, ItemFilterException };
 
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use SDKBuilder\Request\AbstractRequest;
+use SDKBuilder\Request\RequestParameters;
 
-class Request
+class Request extends AbstractRequest
 {
-    /**
-     * @var string $method
-     */
-    private $method = 'get';
     /**
      * @var ItemFilterStorage
      */
@@ -29,54 +25,19 @@ class Request
      */
     protected $definitions = array();
     /**
-     * @var RequestParameters $globalParameters
-     */
-    private $globalParameters;
-    /**
-     * @var RequestParameters $specialParameters
-     */
-    private $specialParameters;
-
-    /**
      * Request constructor.
      * @param RequestParameters $globalParameters
      * @param RequestParameters $specialParameters
      */
     public function __construct(RequestParameters $globalParameters, RequestParameters $specialParameters)
     {
-        $this->globalParameters = $globalParameters;
-        $this->specialParameters = $specialParameters;
-
-        $this->globalParameters->restoreDefaults();
-        $this->specialParameters->restoreDefaults();
+        parent::__construct($globalParameters, $specialParameters);
 
         $this->itemFilterStorage = new ItemFilterStorage();
 
         $this->options = new Options();
 
         Definition::initiate($this->options);
-    }
-    /**
-     * @param string $method
-     * @return Request
-     * @throws RequestException
-     */
-    public function setMethod(string $method) : Request
-    {
-        if ('get' !== strtolower($method) and 'post' !== strtolower($method)) {
-            throw new RequestException('Unknown request method '.$method.'. Only GET and POST are allowed');
-        }
-
-        $this->method = $method;
-
-        return $this;
-    }
-    /**
-     * @return string
-     */
-    public function getMethod() : string
-    {
-        return $this->method;
     }
     /**
      * @param string $buyerPostalCode
@@ -173,33 +134,10 @@ class Request
         return $this->itemFilterStorage;
     }
     /**
-     * @return RequestParameters
-     */
-    public function getGlobalParameters() : RequestParameters
-    {
-        return $this->globalParameters;
-    }
-    /**
-     * @return RequestParameters
-     */
-    public function getSpecialParameters() : RequestParameters
-    {
-        return $this->specialParameters;
-    }
-    /**
      * @return array
      */
     public function getDefinitions()
     {
         return $this->definitions;
-    }
-    /**
-     * @param string $request
-     */
-    public function sendRequest(string $request) : GuzzleResponse
-    {
-        $client = new Client();
-
-        return $client->request($this->getMethod(), $request);
     }
 }
