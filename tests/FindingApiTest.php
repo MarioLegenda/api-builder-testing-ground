@@ -5,7 +5,6 @@ namespace Test;
 require __DIR__ . '/../vendor/autoload.php';
 
 use EbaySDK\EbaySDK;
-use FindingAPI\Core\Information\OperationName;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Options\Options;
 use FindingAPI\Core\Request\Method\Method;
@@ -32,6 +31,7 @@ use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Category;
 use FindingAPI\Core\Information\Currency as InformationCurrency;
 use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
 use FindingAPI\Core\Response\ResponseInterface;
+use FindingAPI\Core\Request\Parameter;
 
 class FindingApiTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,14 +40,27 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         $method = new Method('new_request_method', array(
             'name' => 'newRequestMethod',
             'object' => 'Test\\Method\\NewRequestMethod',
-            'methods' => array('keywords'),
+            'methods' => array('newParameter'),
+        ));
+
+        $newParameter = new Parameter('new_parameter', array(
+            'representation' => 'newParameter',
+            'value' => 6,
+            'type' => array('optional'),
+            'valid' => null,
+            'deprecated' => false,
+            'obsolete' => false,
+            'throws_exception_if_deprecated' => false,
+            'error_message' => 'Invalid value for %s and represented as %s',
         ));
 
         $findingApi = EbaySDK::inst()->createFindingApi();
 
-        $findingApi->addMethod($method);
+        $findingApi
+            ->addParameter('special_parameter', $newParameter)
+            ->addMethod($method);
 
-        $findingApi->newRequestMethod();
+        $findingApi->newRequestMethod()->setNewParameter('kreten');
     }
 
     public function testItemFilters()

@@ -15,14 +15,16 @@ class NewRequestMethod extends Request
     public function __construct(RequestParameters $globalParameters, RequestParameters $specialParameters)
     {
         parent::__construct($globalParameters, $specialParameters);
+
+        $this->getGlobalParameters()->getParameter('operation_name')->setValue('newRequestMethod');
     }
     /**
      * @param string $searchString
      * @return Request
      */
-    public function addKeywords(string $searchString) : Request
+    public function setNewParameter(string $searchString) : Request
     {
-        $this->getSpecialParameters()->getParameter('keywords')->setValue(urlencode($searchString));
+        $this->getSpecialParameters()->getParameter('new_parameter')->setValue(urlencode($searchString));
 
         return $this;
     }
