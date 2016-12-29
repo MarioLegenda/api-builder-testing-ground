@@ -1,13 +1,15 @@
 <?php
 
-namespace FindingAPI\Processor\Factory;
+namespace SDKBuilder\Processor\Factory;
 
-use FindingAPI\Core\Request\Method\FindItemsByKeywordsRequest;
-use FindingAPI\Core\Request\Method\Method;
-use FindingAPI\Core\Request\Request;
+ use FindingAPI\Core\Request\Request;
 
 class ProcessorFactory
 {
+    /**
+     * @var array $processors
+     */
+    private $processors = array();
     /**
      * @var Request $request
      */
@@ -20,6 +22,11 @@ class ProcessorFactory
     {
         $this->request = $request;
     }
+
+    public function registerProcessor() : ProcessorFactory
+    {
+        return $this;
+    }
     /**
      * @return array
      */
@@ -29,7 +36,7 @@ class ProcessorFactory
         $itemFilters = $this->request->getItemFilterStorage();
 
         $processors = array();
-        $mainNamespace = 'FindingAPI\Processor\Get\\';
+        $mainNamespace = 'SDKBuilder\Processor\Get\\';
 
         $requestParametersProcessorClass = $mainNamespace.ucfirst($method).'RequestParametersProcessor';
         $processors['request-parameters-processor'] = new $requestParametersProcessorClass($this->request);

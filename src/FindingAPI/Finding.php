@@ -2,15 +2,15 @@
 
 namespace FindingAPI;
 
+use SDKBuilder\AbstractSDK;
 use SDKBuilder\Common\Logger;
 use FindingAPI\Core\Event\ItemFilterEvent;
 use SDKBuilder\Exception\MethodParametersException;
 use FindingAPI\Core\Options\Options;
-use SDKBuilder\Request\Parameter;
 use FindingAPI\Core\Request\RequestValidator;
 use FindingAPI\Core\Request\Request;
-use FindingAPI\Processor\Factory\ProcessorFactory;
-use FindingAPI\Processor\RequestProducer;
+use SDKBuilder\Processor\Factory\ProcessorFactory;
+use SDKBuilder\Processor\RequestProducer;
 use FindingAPI\Core\Response\ResponseInterface;
 use FindingAPI\Core\Response\ResponseProxy;
 use SDKBuilder\Request\Method\MethodParameters;
@@ -24,7 +24,7 @@ use SDKBuilder\SDK\SDKInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use FindingAPI\Core\Response\FakeGuzzleResponse;
 
-class Finding implements SDKInterface
+class Finding extends AbstractSDK implements SDKInterface
 {
     /**
      * @var Options[] $options
@@ -39,10 +39,6 @@ class Finding implements SDKInterface
      */
     private $responseToParse;
     /**
-     * @var Request $configuration
-     */
-    private $request;
-    /**
      * @var ResponseInterface $response
      */
     private $response;
@@ -50,10 +46,6 @@ class Finding implements SDKInterface
      * @var EventDispatcher
      */
     private $eventDispatcher;
-    /**
-     * @var MethodParameters $methodParameters
-     */
-    private $methodParameters;
     /**
      * @var array $errors
      */
@@ -69,41 +61,12 @@ class Finding implements SDKInterface
      * @param EventDispatcher $eventDispatcher
      * @param MethodParameters $methodParameters
      */
-    public function __construct(Request $request, Options $options, EventDispatcher $eventDispatcher, MethodParameters $methodParameters)
+    public function __construct(Request $request, MethodParameters $methodParameters, Options $options, EventDispatcher $eventDispatcher)
     {
-        $this->request = $request;
+        parent::__construct($request, $methodParameters);
+
         $this->options = $options;
         $this->eventDispatcher = $eventDispatcher;
-        $this->methodParameters = $methodParameters;
-    }
-    /**
-     * @param Method $method
-     * @return Finding
-     */
-    public function addMethod(Method $method) : Finding
-    {
-        $validMethodsParameter = $this->getRequest()->getGlobalParameters()->getParameter($this->methodParameters->getValidMethodsParameter());
-
-        $method->validate($validMethodsParameter);
-
-        $this->methodParameters->addMethod($method);
-
-        return $this;
-    }
-
-    public function addParameter(string $parameterType, Parameter $parameter) : Finding
-    {
-        if ($parameterType === 'global_parameter') {
-            $this->getRequest()->getGlobalParameters()->addParameter($parameter);
-
-            return $this;
-        }
-
-        if ($parameterType === 'special_parameter') {
-            $this->getRequest()->getSpecialParameters()->addParameter($parameter);
-        }
-
-        return $this;
     }
     /**
      * @param string $option
@@ -187,11 +150,6 @@ class Finding implements SDKInterface
         $this->response = $response;
 
         return $this->response;
-    }
-
-    public function getRequest()
-    {
-        return $this->request;
     }
 
     public function __call($methodName, $arguments) : Request

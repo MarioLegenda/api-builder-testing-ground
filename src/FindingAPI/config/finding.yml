@@ -1,4 +1,4 @@
-ebay_sdk:
+sdk:
     finding:
         global_parameters:
             ebay_url:

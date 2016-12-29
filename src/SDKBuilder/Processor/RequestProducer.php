@@ -1,8 +1,8 @@
 <?php
 
-namespace FindingAPI\Processor;
+namespace SDKBuilder\Processor;
 
-use FindingAPI\Core\Exception\FindingApiException;
+use SDKBuilder\Exception\SDKBuilderException;
 
 class RequestProducer
 {
@@ -17,13 +17,13 @@ class RequestProducer
     /**
      * RequestProducer constructor.
      * @param array $processors
-     * @throws FindingApiException
+     * @throws SDKBuilderException
      */
     public function __construct(array $processors)
     {
         foreach ($processors as $key => $processor) {
             if (!$processor instanceof ProcessorInterface) {
-                throw new FindingApiException('Invalid argument supplied to '.get_class($this).'. $processors should be an array of ProcessorInterface objects');
+                throw new SDKBuilderException('Invalid argument supplied to '.get_class($this).'. $processors should be an array of ProcessorInterface objects');
             }
         }
 

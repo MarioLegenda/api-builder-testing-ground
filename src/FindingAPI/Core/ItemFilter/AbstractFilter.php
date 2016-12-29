@@ -3,7 +3,7 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Helper;
-use FindingAPI\Processor\UrlifyInterface;
+use SDKBuilder\Processor\UrlifyInterface;
 
 abstract class AbstractFilter implements UrlifyInterface
 {

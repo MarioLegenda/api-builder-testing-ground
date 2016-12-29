@@ -2,9 +2,12 @@
 
 namespace FindingAPI;
 
+use SDKBuilder\AbstractApiFactory;
+use SDKBuilder\APIFactoryInterface;
 use SDKBuilder\Configuration\FindingConfiguration;
 use FindingAPI\Core\Options\Options;
 use SDKBuilder\Request\Method\MethodParameters;
+use SDKBuilder\SDK\SDKInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
@@ -16,13 +19,13 @@ use FindingAPI\Core\Listener\PostValidateItemFilters;
 
 use SDKBuilder\Request\RequestParameters;
 
-class FindingFactory
+class FindingFactory implements APIFactoryInterface
 {
     /**
      * @return Finding
      * @throws SDKException
      */
-    public function create()
+    public function create() : SDKInterface
     {
         $config = Yaml::parse(file_get_contents(__DIR__ . '/config/finding.yml'));
 
@@ -31,11 +34,11 @@ class FindingFactory
         $processor->processConfiguration(new FindingConfiguration(), $config);
 
         $request = new Request(
-            new RequestParameters($config['ebay_sdk']['finding']['global_parameters']),
-            new RequestParameters($config['ebay_sdk']['finding']['special_parameters'])
+            new RequestParameters($config['sdk']['finding']['global_parameters']),
+            new RequestParameters($config['sdk']['finding']['special_parameters'])
         );
 
-        $methodParameters = new MethodParameters($config['ebay_sdk']['finding']['methods']);
+        $methodParameters = new MethodParameters($config['sdk']['finding']['methods']);
 
         $options = new Options();
 
@@ -48,6 +51,6 @@ class FindingFactory
         $eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
         $eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
 
-        return new Finding($request, $options, $eventDispatcher, $methodParameters);
+        return new Finding($request, $methodParameters, $options, $eventDispatcher);
     }
 }

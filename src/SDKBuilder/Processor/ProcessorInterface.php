@@ -1,6 +1,6 @@
 <?php
 
-namespace FindingAPI\Processor;
+namespace SDKBuilder\Processor;
 
 interface ProcessorInterface
 {

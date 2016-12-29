@@ -1,13 +1,13 @@
 <?php
 
-namespace FindingAPI\Processor\Get;
+namespace SDKBuilder\Processor\Get;
 
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 
-use FindingAPI\Processor\{ AbstractProcessor, ProcessorInterface };
+use SDKBuilder\Processor\{ AbstractProcessor, ProcessorInterface };
 
 use FindingAPI\Core\Request\Request;
-use FindingAPI\Processor\UrlifyInterface;
+use SDKBuilder\Processor\UrlifyInterface;
 
 class GetItemFiltersProcessor extends AbstractProcessor implements ProcessorInterface
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace FindingAPI\Processor\Get;
+namespace SDKBuilder\Processor\Get;
 
-use FindingAPI\Processor\{ AbstractProcessor, ProcessorInterface };
+use SDKBuilder\Processor\{ AbstractProcessor, ProcessorInterface };
 
 class GetRequestParametersProcessor extends AbstractProcessor implements ProcessorInterface
 {

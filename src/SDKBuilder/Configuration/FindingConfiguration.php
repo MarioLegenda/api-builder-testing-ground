@@ -11,7 +11,7 @@ class FindingConfiguration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('ebay_sdk');
+        $rootNode = $treeBuilder->root('sdk');
 
         $rootNode
             ->children()

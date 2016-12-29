@@ -1,6 +1,6 @@
 <?php
 
-namespace FindingAPI\Processor\Factory;
+namespace SDKBuilder\Processor\Factory;
 
 interface DefinitionTypeInterface
 {
