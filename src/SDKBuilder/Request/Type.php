@@ -2,7 +2,7 @@
 
 namespace SDKBuilder\Request;
 
-use FindingAPI\Core\Exception\RequestParametersException;
+use SDKBuilder\Exception\RequestParametersException;
 
 class Type
 {

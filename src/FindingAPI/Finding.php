@@ -4,10 +4,8 @@ namespace FindingAPI;
 
 use SDKBuilder\Common\Logger;
 use FindingAPI\Core\Event\ItemFilterEvent;
-use FindingAPI\Core\Exception\MethodParametersException;
+use SDKBuilder\Exception\MethodParametersException;
 use FindingAPI\Core\Options\Options;
-use FindingAPI\Core\Request\Method\Method;
-use FindingAPI\Core\Request\Method\MethodParameters;
 use SDKBuilder\Request\Parameter;
 use FindingAPI\Core\Request\RequestValidator;
 use FindingAPI\Core\Request\Request;
@@ -15,6 +13,8 @@ use FindingAPI\Processor\Factory\ProcessorFactory;
 use FindingAPI\Processor\RequestProducer;
 use FindingAPI\Core\Response\ResponseInterface;
 use FindingAPI\Core\Response\ResponseProxy;
+use SDKBuilder\Request\Method\MethodParameters;
+use SDKBuilder\Request\Method\Method;
 
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;

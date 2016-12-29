@@ -1,8 +1,8 @@
 <?php
 
-namespace FindingAPI\Core\Request\Method;
+namespace SDKBuilder\Request\Method;
 
-use FindingAPI\Core\Exception\MethodParametersException;
+use SDKBuilder\Exception\MethodParametersException;
 
 class MethodParameters
 {

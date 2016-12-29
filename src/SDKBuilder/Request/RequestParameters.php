@@ -2,28 +2,13 @@
 
 namespace SDKBuilder\Request;
 
-use FindingAPI\Core\Exception\{
-    DeprecatedException, RequestException, RequestParametersException
-};
+use FindingAPI\Core\Exception\{ DeprecatedException };
+
+use SDKBuilder\Exception\RequestException;
+use SDKBuilder\Exception\RequestParametersException;
 
 class RequestParameters implements \IteratorAggregate, \ArrayAccess
 {
-    /**
-     * const string
-     */
-    const REQUEST_METHOD_POST = 'post';
-    /**
-     * const string
-     */
-    const REQUEST_METHOD_GET = 'get';
-    /**
-     * const string
-     */
-    const RESPONSE_DATA_FORMAT_XML = 'xml';
-    /**
-     * const string
-     */
-    const RESPONSE_DATA_FORMAT_JSON = 'json';
     /**
      * @var array $parameters
      */

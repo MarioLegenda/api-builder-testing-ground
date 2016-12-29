@@ -4,7 +4,7 @@ namespace FindingAPI;
 
 use SDKBuilder\Configuration\FindingConfiguration;
 use FindingAPI\Core\Options\Options;
-use FindingAPI\Core\Request\Method\MethodParameters;
+use SDKBuilder\Request\Method\MethodParameters;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;

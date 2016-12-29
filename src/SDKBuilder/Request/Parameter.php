@@ -2,8 +2,8 @@
 
 namespace SDKBuilder\Request;
 
-use FindingAPI\Core\Exception\RequestException;
-use FindingAPI\Core\Exception\RequestParametersException;
+use SDKBuilder\Exception\RequestException;
+use SDKBuilder\Exception\RequestParametersException;
 
 class Parameter
 {

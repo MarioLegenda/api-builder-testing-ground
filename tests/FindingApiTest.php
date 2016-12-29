@@ -5,11 +5,10 @@ namespace Test;
 require __DIR__ . '/../vendor/autoload.php';
 
 use FindingAPI\FindingFactory;
-use SDKBuilder\Exception\SDKBuilderException;
 use SDKBuilder\SDKBuilder;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Options\Options;
-use FindingAPI\Core\Request\Method\Method;
+use SDKBuilder\Request\Method\Method;
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\CategoryHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\Aspect;
