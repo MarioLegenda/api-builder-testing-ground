@@ -3,8 +3,10 @@
 namespace SDKBuilder\Processor\Factory;
 
  use FindingAPI\Core\Request\Request;
+ use SDKBuilder\Exception\SDKBuilderException;
+ use SDKBuilder\Processor\ProcessorInterface;
 
-class ProcessorFactory
+ class ProcessorFactory
 {
     /**
      * @var array $processors
@@ -22,9 +24,39 @@ class ProcessorFactory
     {
         $this->request = $request;
     }
-
-    public function registerProcessor() : ProcessorFactory
+    /**
+     * @param string $method
+     * @param string $processor
+     * @return ProcessorFactory
+     */
+    public function registerProcessor(string $method, string $processor) : ProcessorFactory
     {
+        $this->processors[$method][] = array(
+            'resolver' => $processor,
+        );
+
+        return $this;
+    }
+
+    public function registerCallbackProcessor(string $method, \Closure $callback)
+    {
+        $this->processors[$method][] = array(
+            'resolver' => $callback,
+        );
+    }
+    /**
+     * @param string $method
+     * @param string $processor
+     * @return ProcessorFactory
+     */
+    public function unregisterProcessor(string $method, string $processor) : ProcessorFactory
+    {
+        foreach ($this->processors[$method] as $key => $prc) {
+            if ($prc['namespace'] === $processor) {
+                unset($this->processors[$method][$key]);
+            }
+        }
+
         return $this;
     }
     /**
@@ -33,7 +65,33 @@ class ProcessorFactory
     public function createProcessors() : array
     {
         $method = $this->request->getMethod();
-        $itemFilters = $this->request->getItemFilterStorage();
+
+        $processors = array();
+        foreach ($this->processors[$method] as $key => $processor) {
+            $resolver = $processor['resolver'];
+
+            if ($resolver instanceof \Closure) {
+                $object = $resolver->__invoke($this->request);
+
+                if ($object instanceof ProcessorInterface) {
+                    $processors[] = $object;
+                }
+            }
+
+            if (is_string($resolver) and class_exists($resolver)) {
+                $object = new $resolver($this->request);
+
+                if ($object instanceof ProcessorInterface) {
+                    $processors[] = $object;
+                }
+            }
+        }
+
+        $this->processors[$method] = array();
+
+        return $processors;
+
+/*        $itemFilters = $this->request->getItemFilterStorage();
 
         $processors = array();
         $mainNamespace = 'SDKBuilder\Processor\Get\\';
@@ -47,6 +105,6 @@ class ProcessorFactory
             $processors['item-filters-processor'] = new $itemFiltersProcessorClass($this->request, $itemFilters);
         }
 
-        return $processors;
+        return $processors;*/
     }
 }

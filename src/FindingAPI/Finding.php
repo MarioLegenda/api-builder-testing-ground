@@ -3,41 +3,30 @@
 namespace FindingAPI;
 
 use SDKBuilder\AbstractSDK;
-use SDKBuilder\Common\Logger;
 use FindingAPI\Core\Event\ItemFilterEvent;
 use SDKBuilder\Exception\MethodParametersException;
 use FindingAPI\Core\Options\Options;
 use FindingAPI\Core\Request\RequestValidator;
 use FindingAPI\Core\Request\Request;
-use SDKBuilder\Processor\Factory\ProcessorFactory;
-use SDKBuilder\Processor\RequestProducer;
 use FindingAPI\Core\Response\ResponseInterface;
 use FindingAPI\Core\Response\ResponseProxy;
+use SDKBuilder\Processor\Factory\ProcessorFactory;
+use SDKBuilder\Processor\Get\GetItemFiltersProcessor;
+use SDKBuilder\Request\AbstractRequest;
 use SDKBuilder\Request\Method\MethodParameters;
 use SDKBuilder\Request\Method\Method;
 
-use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
-use GuzzleHttp\Exception\ConnectException;
 use FindingAPI\Core\Exception\ConnectException as FindingConnectException;
 use SDKBuilder\SDK\SDKInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use FindingAPI\Core\Response\FakeGuzzleResponse;
 
-class Finding extends AbstractSDK implements SDKInterface
+class Finding extends AbstractSDK
 {
     /**
      * @var Options[] $options
      */
     private $options;
-    /**
-     * @var GuzzleResponse $guzzleResponse
-     */
-    private $guzzleResponse;
-    /**
-     * @var mixed $responseToParse
-     */
-    private $responseToParse;
     /**
      * @var ResponseInterface $response
      */
@@ -51,19 +40,16 @@ class Finding extends AbstractSDK implements SDKInterface
      */
     private $errors = array();
     /**
-     * @var string $processed
-     */
-    private $processed;
-    /**
      * Finding constructor.
      * @param Request $request
      * @param Options $options
      * @param EventDispatcher $eventDispatcher
      * @param MethodParameters $methodParameters
+     * @param ProcessorFactory $processorFactory
      */
-    public function __construct(Request $request, MethodParameters $methodParameters, Options $options, EventDispatcher $eventDispatcher)
+    public function __construct(Request $request, MethodParameters $methodParameters, ProcessorFactory $processorFactory, Options $options, EventDispatcher $eventDispatcher)
     {
-        parent::__construct($request, $methodParameters);
+        parent::__construct($request, $methodParameters, $processorFactory);
 
         $this->options = $options;
         $this->eventDispatcher = $eventDispatcher;
@@ -82,13 +68,6 @@ class Finding extends AbstractSDK implements SDKInterface
         return $this;
     }
     /**
-     * @return string
-     */
-    public function getProcessedRequestString() : string
-    {
-        return $this->processed;
-    }
-    /**
      * @return Finding
      * @throws FindingConnectException
      */
@@ -104,9 +83,17 @@ class Finding extends AbstractSDK implements SDKInterface
 
         $this->dispatchListeners();
 
-        $this->processRequest();
+        $this->processorFactory->registerCallbackProcessor($this->request->getMethod(), function(AbstractRequest $request) {
+            $itemFilterStorage = $request->getItemFilterStorage();
 
-        $this->sendRequest();
+            $onlyAdded = $itemFilterStorage->filterAddedFilter(array('SortOrder', 'PaginationInput'));
+
+            if (!empty($onlyAdded)) {
+                return new GetItemFiltersProcessor($request, $itemFilters);
+            }
+        });
+
+        parent::send();
 
         return $this;
     }
@@ -174,32 +161,6 @@ class Finding extends AbstractSDK implements SDKInterface
         if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
             $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
         }
-    }
-
-    private function processRequest()
-    {
-        $processors = (new ProcessorFactory($this->request))->createProcessors();
-
-        $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
-
-        if ($this->options->getOption(Options::OFFLINE_MODE)->getValue() === true) {
-            return $this;
-        }
-    }
-
-    private function sendRequest()
-    {
-        try {
-            $this->guzzleResponse = $this->request->sendRequest($this->processed);
-        } catch (ConnectException $e) {
-            throw new FindingConnectException('GuzzleHttp threw a ConnectException. Exception message is '.$e->getMessage());
-        } catch (ServerException $e) {
-            throw new FindingConnectException('GuzzleHttp threw an exception with message: \''.$e->getMessage().'\'');
-        }
-
-        Logger::log($this->processed);
-
-        $this->responseToParse = (string) $this->guzzleResponse->getBody();
     }
 
     private function createMethod(Method $method) : Request

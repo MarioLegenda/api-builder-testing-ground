@@ -40,17 +40,20 @@ class GetItemFiltersProcessor extends AbstractProcessor implements ProcessorInte
 
         $onlyAdded = $this->itemFilterStorage->filterAddedFilter(array('SortOrder', 'PaginationInput'));
 
-        foreach ($onlyAdded as $name => $itemFilterItems) {
-            $itemFilter = $this->itemFilterStorage->getItemFilterInstance($name);
+        if (!empty($onlyAdded)) {
 
-            if ($itemFilter instanceof UrlifyInterface) {
-                $finalProduct.=$itemFilter->urlify($count);
+            foreach ($onlyAdded as $name => $itemFilterItems) {
+                $itemFilter = $this->itemFilterStorage->getItemFilterInstance($name);
+
+                if ($itemFilter instanceof UrlifyInterface) {
+                    $finalProduct.=$itemFilter->urlify($count);
+                }
+
+                $count++;
             }
 
-            $count++;
+            $this->processed = $finalProduct.'&';
         }
-
-        $this->processed = $finalProduct.'&';
 
         return $this;
     }

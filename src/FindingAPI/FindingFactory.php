@@ -6,6 +6,7 @@ use SDKBuilder\AbstractApiFactory;
 use SDKBuilder\APIFactoryInterface;
 use SDKBuilder\Configuration\FindingConfiguration;
 use FindingAPI\Core\Options\Options;
+use SDKBuilder\Processor\Factory\ProcessorFactory;
 use SDKBuilder\Request\Method\MethodParameters;
 use SDKBuilder\SDK\SDKInterface;
 use Symfony\Component\Config\Definition\Processor;
@@ -51,6 +52,6 @@ class FindingFactory implements APIFactoryInterface
         $eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
         $eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
 
-        return new Finding($request, $methodParameters, $options, $eventDispatcher);
+        return new Finding($request, $methodParameters, new ProcessorFactory($request), $options, $eventDispatcher);
     }
 }
