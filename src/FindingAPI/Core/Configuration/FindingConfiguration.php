@@ -1,6 +1,6 @@
 <?php
 
-namespace SDKBuilder\Configuration;
+namespace FindingAPI\Core\Configuration;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -17,6 +17,8 @@ class FindingConfiguration implements ConfigurationInterface
             ->children()
                 ->arrayNode('finding')
                     ->children()
+                        ->scalarNode('request_class')->defaultValue('SDKBuilder\\Request\\Request')->end()
+                        ->scalarNode('api_class')->cannotBeEmpty()->isRequired()->end()
                         ->arrayNode('global_parameters')
                             ->useAttributeAsKey('name')
                             ->prototype('array')

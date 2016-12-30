@@ -17,6 +17,8 @@ use SDKBuilder\Common\Logger;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use SDKBuilder\Processor\RequestProducer;
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
 abstract class AbstractSDK implements SDKInterface
 {
     /**
@@ -44,16 +46,22 @@ abstract class AbstractSDK implements SDKInterface
      */
     protected $processorFactory;
     /**
+     * @var EventDispatcher
+     */
+    protected $eventDispatcher;
+    /**
      * AbstractSDK constructor.
      * @param AbstractRequest $request
      * @param MethodParameters $methodParameters
      * @param ProcessorFactory $processorFactory
+     * @param EventDispatcher $eventDispatcher
      */
-    public function __construct(AbstractRequest $request, MethodParameters $methodParameters, ProcessorFactory $processorFactory)
+    public function __construct(AbstractRequest $request, ProcessorFactory $processorFactory, EventDispatcher $eventDispatcher, MethodParameters $methodParameters = null)
     {
         $this->request = $request;
         $this->methodParameters = $methodParameters;
         $this->processorFactory = $processorFactory;
+        $this->eventDispatcher = $eventDispatcher;
     }
     /**
      * @param Method $method

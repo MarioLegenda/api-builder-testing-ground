@@ -2,6 +2,7 @@
 
 namespace FindingAPI;
 
+use FindingAPI\Core\Event\AddProcessorEvent;
 use SDKBuilder\AbstractSDK;
 use FindingAPI\Core\Event\ItemFilterEvent;
 use SDKBuilder\Exception\MethodParametersException;
@@ -11,8 +12,6 @@ use FindingAPI\Core\Request\Request;
 use FindingAPI\Core\Response\ResponseInterface;
 use FindingAPI\Core\Response\ResponseProxy;
 use SDKBuilder\Processor\Factory\ProcessorFactory;
-use FindingAPI\Core\Processor\Get\GetItemFiltersProcessor;
-use SDKBuilder\Request\AbstractRequest;
 use SDKBuilder\Request\Method\MethodParameters;
 use SDKBuilder\Request\Method\Method;
 
@@ -32,27 +31,18 @@ class Finding extends AbstractSDK
      */
     private $response;
     /**
-     * @var EventDispatcher
-     */
-    private $eventDispatcher;
-    /**
      * @var array $errors
      */
     private $errors = array();
     /**
-     * Finding constructor.
-     * @param Request $request
      * @param Options $options
-     * @param EventDispatcher $eventDispatcher
-     * @param MethodParameters $methodParameters
-     * @param ProcessorFactory $processorFactory
+     * @return Finding
      */
-    public function __construct(Request $request, MethodParameters $methodParameters, ProcessorFactory $processorFactory, Options $options, EventDispatcher $eventDispatcher)
+    public function addOptions(Options $options) : Finding
     {
-        parent::__construct($request, $methodParameters, $processorFactory);
-
         $this->options = $options;
-        $this->eventDispatcher = $eventDispatcher;
+
+        return $this;
     }
     /**
      * @param string $option
@@ -82,16 +72,6 @@ class Finding extends AbstractSDK
         }
 
         $this->dispatchListeners();
-
-        $this->processorFactory->registerCallbackProcessor($this->request->getMethod(), function(AbstractRequest $request) {
-            $itemFilterStorage = $request->getItemFilterStorage();
-
-            if (!empty($itemFilterStorage)) {
-                if ($request->getMethod() === 'get') {
-                    return new GetItemFiltersProcessor($request, $itemFilterStorage);
-                }
-            }
-        });
 
         parent::send();
 
@@ -161,6 +141,8 @@ class Finding extends AbstractSDK
         if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
             $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
         }
+
+        $this->eventDispatcher->dispatch('finding.add_processor', new AddProcessorEvent($this->processorFactory, $this->request));
     }
 
     private function createMethod(Method $method) : Request

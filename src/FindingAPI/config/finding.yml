@@ -1,5 +1,7 @@
 sdk:
     finding:
+        request_class: FindingAPI\Core\Request\Request
+        api_class: FindingAPI\Finding
         global_parameters:
             ebay_url:
                 representation: null

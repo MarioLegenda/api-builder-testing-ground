@@ -2,25 +2,19 @@
 
 namespace FindingAPI;
 
+use FindingAPI\Core\Listener\AddProcessorListener;
 use SDKBuilder\AbstractApiFactory;
-use SDKBuilder\APIFactoryInterface;
-use SDKBuilder\Configuration\FindingConfiguration;
+use FindingAPI\Core\Configuration\FindingConfiguration;
 use FindingAPI\Core\Options\Options;
-use SDKBuilder\Processor\Factory\ProcessorFactory;
-use SDKBuilder\Request\Method\MethodParameters;
 use SDKBuilder\SDK\SDKInterface;
 use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
 use SDKBuilder\Exception\SDKException;
-use FindingAPI\Core\Request\Request;
 use FindingAPI\Core\Options\Option;
 use FindingAPI\Core\Listener\PreValidateItemFilters;
 use FindingAPI\Core\Listener\PostValidateItemFilters;
 
-use SDKBuilder\Request\RequestParameters;
-
-class FindingFactory implements APIFactoryInterface
+class FindingFactory extends AbstractApiFactory
 {
     /**
      * @return Finding
@@ -34,12 +28,7 @@ class FindingFactory implements APIFactoryInterface
 
         $processor->processConfiguration(new FindingConfiguration(), $config);
 
-        $request = new Request(
-            new RequestParameters($config['sdk']['finding']['global_parameters']),
-            new RequestParameters($config['sdk']['finding']['special_parameters'])
-        );
-
-        $methodParameters = new MethodParameters($config['sdk']['finding']['methods']);
+        $api = $this->createApi('finding', $config);
 
         $options = new Options();
 
@@ -47,11 +36,12 @@ class FindingFactory implements APIFactoryInterface
         $options->addOption(new Option(Options::INDIVIDUAL_ITEM_FILTERS, true));
         $options->addOption(new Option(Options::OFFLINE_MODE, false));
 
-        $eventDispatcher = new EventDispatcher();
+        $this->eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
+        $this->eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
+        $this->eventDispatcher->addListener('finding.add_processor', array(new AddProcessorListener(), 'onAddProcessor'));
 
-        $eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
-        $eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
+        $api->addOptions($options);
 
-        return new Finding($request, $methodParameters, new ProcessorFactory($request), $options, $eventDispatcher);
+        return $api;
     }
 }
