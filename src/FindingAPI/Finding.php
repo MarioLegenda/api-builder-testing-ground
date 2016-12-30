@@ -11,7 +11,7 @@ use FindingAPI\Core\Request\Request;
 use FindingAPI\Core\Response\ResponseInterface;
 use FindingAPI\Core\Response\ResponseProxy;
 use SDKBuilder\Processor\Factory\ProcessorFactory;
-use SDKBuilder\Processor\Get\GetItemFiltersProcessor;
+use FindingAPI\Core\Processor\Get\GetItemFiltersProcessor;
 use SDKBuilder\Request\AbstractRequest;
 use SDKBuilder\Request\Method\MethodParameters;
 use SDKBuilder\Request\Method\Method;
@@ -86,10 +86,10 @@ class Finding extends AbstractSDK
         $this->processorFactory->registerCallbackProcessor($this->request->getMethod(), function(AbstractRequest $request) {
             $itemFilterStorage = $request->getItemFilterStorage();
 
-            $onlyAdded = $itemFilterStorage->filterAddedFilter(array('SortOrder', 'PaginationInput'));
-
-            if (!empty($onlyAdded)) {
-                return new GetItemFiltersProcessor($request, $itemFilters);
+            if (!empty($itemFilterStorage)) {
+                if ($request->getMethod() === 'get') {
+                    return new GetItemFiltersProcessor($request, $itemFilterStorage);
+                }
             }
         });
 

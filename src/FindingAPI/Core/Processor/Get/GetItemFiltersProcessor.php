@@ -1,6 +1,6 @@
 <?php
 
-namespace SDKBuilder\Processor\Get;
+namespace FindingAPI\Core\Processor\Get;
 
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 
@@ -41,7 +41,6 @@ class GetItemFiltersProcessor extends AbstractProcessor implements ProcessorInte
         $onlyAdded = $this->itemFilterStorage->filterAddedFilter(array('SortOrder', 'PaginationInput'));
 
         if (!empty($onlyAdded)) {
-
             foreach ($onlyAdded as $name => $itemFilterItems) {
                 $itemFilter = $this->itemFilterStorage->getItemFilterInstance($name);
 
