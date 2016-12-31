@@ -4,9 +4,12 @@ namespace SDKBuilder;
 
 use SDKBuilder\Exception\SDKBuilderException;
 use SDKBuilder\Request\AbstractRequest;
+use SDKBuilder\Request\AbstractValidator;
+use SDKBuilder\Request\BasicRequestValidator;
 use SDKBuilder\Request\Request;
 use SDKBuilder\Request\RequestParameters;
 use SDKBuilder\Request\Method\MethodParameters;
+use SDKBuilder\Request\ValidatorsProcessor;
 use SDKBuilder\SDK\SDKInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use SDKBuilder\Processor\Factory\ProcessorFactory;
@@ -59,15 +62,38 @@ abstract class AbstractApiFactory
 
         $processorFactory = new ProcessorFactory($this->request);
 
+        $validatorProcessor = new ValidatorsProcessor();
+
+        $validatorProcessor->addValidator(new BasicRequestValidator($this->request));
+
+        if (array_key_exists('request_validators', $apiConfig)) {
+            $validators = $apiConfig['request_validators'];
+
+            foreach ($validators as $validator) {
+                if (!class_exists($validator)) {
+                    throw new SDKBuilderException('Invalid validator. Validator '.$validator.' does not exist');
+                }
+
+                $v = new $validator($this->request);
+
+                if (!$v instanceof AbstractValidator) {
+                    throw new SDKBuilderException('Invalid validator. Validator should extend '.AbstractValidator::class);
+                }
+
+                $validatorProcessor->addValidator($v);
+            }
+        }
+
         return new $apiClass(
             $this->request,
             $processorFactory,
             $this->eventDispatcher,
-            ($this->methodParameters instanceof MethodParameters) ? $this->methodParameters : null
+            $this->methodParameters,
+            $validatorProcessor
         );
     }
 
-    private function validateSDK(string $apiKey, array $config)
+    private function validateSDK(string $apiKey, array $config) : void
     {
         if (!array_key_exists('sdk', $config)) {
             throw new SDKBuilderException('\'sdk\' config key not found in configuration');
@@ -88,7 +114,7 @@ abstract class AbstractApiFactory
         return $request;
     }
 
-    private function createMethodParameters(string $apiKey, array $config)
+    private function createMethodParameters(string $apiKey, array $config) : ?MethodParameters
     {
         if (array_key_exists('methods', $config['sdk'][$apiKey])) {
             return new MethodParameters($config['sdk'][$apiKey]['methods']);

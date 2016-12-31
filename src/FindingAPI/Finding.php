@@ -23,10 +23,6 @@ use FindingAPI\Core\Response\FakeGuzzleResponse;
 class Finding extends AbstractSDK
 {
     /**
-     * @var Options[] $options
-     */
-    private $options;
-    /**
      * @var ResponseInterface $response
      */
     private $response;
@@ -35,42 +31,11 @@ class Finding extends AbstractSDK
      */
     private $errors = array();
     /**
-     * @param Options $options
-     * @return Finding
-     */
-    public function addOptions(Options $options) : Finding
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-    /**
-     * @param string $option
-     * @param $value
-     * @return Finding
-     */
-    public function setOption(string $option, $value) : Finding 
-    {
-        if ($this->options->hasOption($option)) {
-            $this->options->modifyOption($option, $value);
-        }
-        
-        return $this;
-    }
-    /**
-     * @return Finding
+     * @return SDKInterface
      * @throws FindingConnectException
      */
     public function send() : SDKInterface
     {
-        if ($this->options->getOption(Options::INDIVIDUAL_ITEM_FILTERS)->getValue() === true) {
-            $requestValidator = new RequestValidator($this->request);
-
-            $requestValidator->validate();
-
-            $this->errors = $requestValidator->getErrors();
-        }
-
         $this->dispatchListeners();
 
         parent::send();
@@ -93,14 +58,6 @@ class Finding extends AbstractSDK
             return $response;
         }
 
-        if (class_exists('EbayOfflineMode\EbayOfflineMode')) {
-            if ($this->options->getOption(Options::OFFLINE_MODE)->getValue() === true) {
-                $offlineMode = new \EbayOfflineMode\EbayOfflineMode($this);
-
-                return $offlineMode->getResponse();
-            }
-        }
-
         if ($this->response instanceof ResponseInterface) {
             return $this->response;
         }
@@ -119,84 +76,12 @@ class Finding extends AbstractSDK
         return $this->response;
     }
 
-    public function __call($methodName, $arguments) : Request
-    {
-        $method = $this->methodParameters->getMethod($methodName);
-
-        $validMethodsParameter = $this->getRequest()->getGlobalParameters()->getParameter($this->methodParameters->getValidMethodsParameter());
-
-        $method->validate($validMethodsParameter);
-
-        $this->request = $this->createMethod($method);
-
-        return $this->request;
-    }
-
     private function dispatchListeners()
     {
-        if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
-            $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
-        }
-
-        if ($this->options->getOption(Options::GLOBAL_ITEM_FILTERS)->getValue() === true) {
-            $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
-        }
+        $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
 
         $this->eventDispatcher->dispatch('finding.add_processor', new AddProcessorEvent($this->processorFactory, $this->request));
-    }
-
-    private function createMethod(Method $method) : Request
-    {
-        $instanceString = $method->getInstanceObjectString();
-
-        $object = new $instanceString($this->request->getGlobalParameters(), $this->request->getSpecialParameters());
-
-        if (!$object instanceof Request) {
-            throw new MethodParametersException(get_class($object).' has to extend '.Request::class);
-        }
-
-        $objectMethods = $method->getMethods();
-
-        $specialParameters = $this->request->getSpecialParameters();
-
-        foreach ($objectMethods as $objectMethod) {
-            if (!$specialParameters->hasParameter($objectMethod)) {
-                throw new MethodParametersException('Cannot create request method because parameter '.$objectMethod.' does not exist for request method '.$method->getName());
-            }
-
-            $parameter = $this->request->getSpecialParameters()->getParameter($objectMethod);
-            $parameter->enable();
-
-            $set = 'set'.preg_replace('#\s#', '', ucwords(preg_replace('#_#', ' ', $parameter->getName())));
-            $add = 'add'.preg_replace('#\s#', '', ucwords(preg_replace('#_#', ' ', $parameter->getName())));
-            $enable = 'enable'.preg_replace('#\s#', '', ucwords(preg_replace('#_#', ' ', $parameter->getName())));
-            $disable = 'disable'.preg_replace('#\s#', '', ucwords(preg_replace('#_#', ' ', $parameter->getName())));
-
-            $possibleMethods = array(
-                $set,
-                $add,
-                $enable,
-                $disable,
-                $objectMethod,
-            );
-
-            $classMethods = get_class_methods($object);
-
-            $methodValidated = false;
-            foreach ($possibleMethods as $possibleMethod) {
-                if (in_array($possibleMethod, $classMethods)) {
-                    $methodValidated = true;
-
-                    break;
-                }
-            }
-
-            if ($methodValidated === false) {
-                throw new MethodParametersException('Possible methods '.implode(', ', $possibleMethods).' for object '.$instanceString.' not found');
-            }
-        }
-
-        return $object;
     }
     /**
      * @return bool

@@ -70,8 +70,6 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
     {
         $findingApi = SDKBuilder::inst()->create('finding');
 
-        $findingApi->setOption(Options::OFFLINE_MODE, false);
-
         $request = $findingApi->findItemsByKeywords();
 
         $request->addKeywords('constantine');

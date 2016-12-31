@@ -19,6 +19,7 @@ class FindingConfiguration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('request_class')->defaultValue('SDKBuilder\\Request\\Request')->end()
                         ->scalarNode('api_class')->cannotBeEmpty()->isRequired()->end()
+                        ->arrayNode('request_validators')->prototype('scalar')->end()->end()
                         ->arrayNode('global_parameters')
                             ->useAttributeAsKey('name')
                             ->prototype('array')

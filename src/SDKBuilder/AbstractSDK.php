@@ -8,6 +8,7 @@ use SDKBuilder\Request\AbstractRequest;
 use SDKBuilder\Request\Method\MethodParameters;
 use SDKBuilder\Request\Method\Method;
 use SDKBuilder\Request\Parameter;
+use SDKBuilder\Request\ValidatorsProcessor;
 use SDKBuilder\SDK\SDKInterface;
 
 use GuzzleHttp\Exception\ServerException;
@@ -18,6 +19,7 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use SDKBuilder\Processor\RequestProducer;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use SDKBuilder\Exception\MethodParametersException;
 
 abstract class AbstractSDK implements SDKInterface
 {
@@ -50,18 +52,24 @@ abstract class AbstractSDK implements SDKInterface
      */
     protected $eventDispatcher;
     /**
+     * @var ValidatorsProcessor
+     */
+    protected $validatorsProcessor;
+    /**
      * AbstractSDK constructor.
      * @param AbstractRequest $request
      * @param MethodParameters $methodParameters
      * @param ProcessorFactory $processorFactory
      * @param EventDispatcher $eventDispatcher
+     * @param ValidatorsProcessor $validatorsProcessor
      */
-    public function __construct(AbstractRequest $request, ProcessorFactory $processorFactory, EventDispatcher $eventDispatcher, MethodParameters $methodParameters = null)
+    public function __construct(AbstractRequest $request, ProcessorFactory $processorFactory, EventDispatcher $eventDispatcher, ?MethodParameters $methodParameters, ValidatorsProcessor $validatorsProcessor)
     {
         $this->request = $request;
         $this->methodParameters = $methodParameters;
         $this->processorFactory = $processorFactory;
         $this->eventDispatcher = $eventDispatcher;
+        $this->validatorsProcessor = $validatorsProcessor;
     }
     /**
      * @param Method $method
@@ -101,6 +109,8 @@ abstract class AbstractSDK implements SDKInterface
      */
     public function send() : SDKInterface
     {
+        $this->validatorsProcessor->validate();
+
         $this->processRequest();
 
         $this->sendRequest();
@@ -121,6 +131,23 @@ abstract class AbstractSDK implements SDKInterface
     {
         return $this->processed;
     }
+    /**
+     * @param $methodName
+     * @param $arguments
+     * @return AbstractRequest
+     */
+    public function __call($methodName, $arguments) : AbstractRequest
+    {
+        $method = $this->methodParameters->getMethod($methodName);
+
+        $validMethodsParameter = $this->getRequest()->getGlobalParameters()->getParameter($this->methodParameters->getValidMethodsParameter());
+
+        $method->validate($validMethodsParameter);
+
+        $this->request = $this->createMethod($method);
+
+        return $this->request;
+    }
 
     private function processRequest()
     {
@@ -131,7 +158,7 @@ abstract class AbstractSDK implements SDKInterface
         $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
     }
 
-    private function sendRequest()
+    private function sendRequest() : void
     {
         try {
             $this->guzzleResponse = $this->request->sendRequest($this->processed);
@@ -144,5 +171,60 @@ abstract class AbstractSDK implements SDKInterface
         Logger::log($this->processed);
 
         $this->responseToParse = (string) $this->guzzleResponse->getBody();
+    }
+
+
+    private function createMethod(Method $method) : AbstractRequest
+    {
+        $instanceString = $method->getInstanceObjectString();
+
+        $object = new $instanceString($this->request->getGlobalParameters(), $this->request->getSpecialParameters());
+
+        if (!$object instanceof AbstractRequest) {
+            throw new MethodParametersException(get_class($object).' has to extend '.AbstractRequest::class);
+        }
+
+        $objectMethods = $method->getMethods();
+
+        $specialParameters = $this->request->getSpecialParameters();
+
+        foreach ($objectMethods as $objectMethod) {
+            if (!$specialParameters->hasParameter($objectMethod)) {
+                throw new MethodParametersException('Cannot create request method because parameter '.$objectMethod.' does not exist for request method '.$method->getName());
+            }
+
+            $parameter = $this->request->getSpecialParameters()->getParameter($objectMethod);
+            $parameter->enable();
+
+            $set = 'set'.preg_replace('#\s#', '', ucwords(preg_replace('#_#', ' ', $parameter->getName())));
+            $add = 'add'.preg_replace('#\s#', '', ucwords(preg_replace('#_#', ' ', $parameter->getName())));
+            $enable = 'enable'.preg_replace('#\s#', '', ucwords(preg_replace('#_#', ' ', $parameter->getName())));
+            $disable = 'disable'.preg_replace('#\s#', '', ucwords(preg_replace('#_#', ' ', $parameter->getName())));
+
+            $possibleMethods = array(
+                $set,
+                $add,
+                $enable,
+                $disable,
+                $objectMethod,
+            );
+
+            $classMethods = get_class_methods($object);
+
+            $methodValidated = false;
+            foreach ($possibleMethods as $possibleMethod) {
+                if (in_array($possibleMethod, $classMethods)) {
+                    $methodValidated = true;
+
+                    break;
+                }
+            }
+
+            if ($methodValidated === false) {
+                throw new MethodParametersException('Possible methods '.implode(', ', $possibleMethods).' for object '.$instanceString.' not found');
+            }
+        }
+
+        return $object;
     }
 }

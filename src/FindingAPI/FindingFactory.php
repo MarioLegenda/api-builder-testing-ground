@@ -30,17 +30,9 @@ class FindingFactory extends AbstractApiFactory
 
         $api = $this->createApi('finding', $config);
 
-        $options = new Options();
-
-        $options->addOption(new Option(Options::GLOBAL_ITEM_FILTERS, true));
-        $options->addOption(new Option(Options::INDIVIDUAL_ITEM_FILTERS, true));
-        $options->addOption(new Option(Options::OFFLINE_MODE, false));
-
         $this->eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
         $this->eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
         $this->eventDispatcher->addListener('finding.add_processor', array(new AddProcessorListener(), 'onAddProcessor'));
-
-        $api->addOptions($options);
 
         return $api;
     }
