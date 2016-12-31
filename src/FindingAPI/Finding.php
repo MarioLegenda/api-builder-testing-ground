@@ -9,6 +9,7 @@ use FindingAPI\Core\Response\ResponseInterface;
 use FindingAPI\Core\Response\ResponseProxy;
 
 use FindingAPI\Core\Exception\ConnectException as FindingConnectException;
+use SDKBuilder\Exception\RequestException;
 use SDKBuilder\SDK\SDKInterface;
 use FindingAPI\Core\Response\FakeGuzzleResponse;
 
@@ -30,6 +31,17 @@ class Finding extends AbstractSDK
 
         return $this;
     }
+
+    public function setResponseFormat(string $responseFormat)
+    {
+        $formats = array('xml', 'json');
+
+        if (in_array($responseFormat, $formats) === false) {
+            throw new RequestException('Invalid format \''.$responseFormat.'\'. Supported formats are '.implode(', ', $formats));
+        }
+
+        $this->request->getGlobalParameters()->getParameter('RESPONSE-DATA-FORMAT')->setValue($responseFormat);
+    }
     /**
      * @param string $inlineResponse
      * @return ResponseInterface
@@ -40,7 +52,7 @@ class Finding extends AbstractSDK
             $response = new ResponseProxy(
                 $inlineResponse,
                 new FakeGuzzleResponse($inlineResponse),
-                $this->request->getRequestParameters()->getParameter('RESPONSE-DATA-FORMAT')->getValue()
+                $this->request->getRequestParameters()->getParameter('response_data_format')->getValue()
             );
 
             return $response;

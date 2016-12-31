@@ -39,4 +39,8 @@ interface SDKInterface
      * @return array
      */
     public function getErrors() : array;
+    /**
+     * @void
+     */
+    public function getResponse();
 }
