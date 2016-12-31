@@ -40,7 +40,15 @@ abstract class AbstractApiFactory
 
         $apiConfig = $config['sdk'][$apiKey];
         $requestClass = 'SDKBuilder\\Request\\Request';
-        $apiClass = $apiConfig['api_class'];
+        $apiClass = 'SDKBuilder\\SDK\\GenericApi';
+
+        if (array_key_exists('api_class', $apiConfig)) {
+            if (!class_exists($apiConfig['api_class'])) {
+                throw new SDKBuilderException('Invalid api_class. Class '.$apiConfig['api_class'].' does not exist');
+            }
+
+            $apiClass = $apiConfig['api_class'];
+        }
 
         if (array_key_exists('request_class', $apiConfig)) {
             $requestClass = $apiConfig['request_class'];
