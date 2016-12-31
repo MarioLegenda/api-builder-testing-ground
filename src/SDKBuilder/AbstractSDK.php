@@ -73,9 +73,9 @@ abstract class AbstractSDK implements SDKInterface
     }
     /**
      * @param Method $method
-     * @return AbstractSDK
+     * @return SDKInterface
      */
-    public function addMethod(Method $method) : AbstractSDK
+    public function addMethod(Method $method) : SDKInterface
     {
         $validMethodsParameter = $this->getRequest()->getGlobalParameters()->getParameter($this->methodParameters->getValidMethodsParameter());
 
@@ -88,9 +88,9 @@ abstract class AbstractSDK implements SDKInterface
     /**
      * @param string $parameterType
      * @param Parameter $parameter
-     * @return AbstractSDK
+     * @return SDKInterface
      */
-    public function addParameter(string $parameterType, Parameter $parameter) : AbstractSDK
+    public function addParameter(string $parameterType, Parameter $parameter) : SDKInterface
     {
         if ($parameterType === 'global_parameter') {
             $this->getRequest()->getGlobalParameters()->addParameter($parameter);
