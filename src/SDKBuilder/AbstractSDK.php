@@ -132,6 +132,20 @@ abstract class AbstractSDK implements SDKInterface
         return $this->processed;
     }
     /**
+     * @return bool
+     */
+    public function hasErrors() : bool
+    {
+        return $this->validatorsProcessor->hasErrors();
+    }
+    /**
+     * @return array
+     */
+    public function getErrors() : array
+    {
+        return $this->validatorsProcessor->getErrors();
+    }
+    /**
      * @param $methodName
      * @param $arguments
      * @return AbstractRequest

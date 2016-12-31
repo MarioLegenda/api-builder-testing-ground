@@ -83,18 +83,4 @@ class Finding extends AbstractSDK
 
         $this->eventDispatcher->dispatch('finding.add_processor', new AddProcessorEvent($this->processorFactory, $this->request));
     }
-    /**
-     * @return bool
-     */
-    public function hasErrors() : bool
-    {
-        return !empty($this->errors);
-    }
-    /**
-     * @return array
-     */
-    public function getErrors() : array
-    {
-        return $this->errors;
-    }
 }

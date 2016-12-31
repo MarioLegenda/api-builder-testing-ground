@@ -7,7 +7,7 @@ class ValidatorsProcessor
     /**
      * @var array $errors
      */
-    private $errors;
+    private $errors = array();
     /**
      * @var array $validators
      */
@@ -31,6 +31,13 @@ class ValidatorsProcessor
         }
 
         return $this;
+    }
+    /**
+     * @return bool
+     */
+    public function hasErrors() : bool
+    {
+        return !empty($this->errors);
     }
     /**
      * @return array
