@@ -5,19 +5,11 @@ namespace FindingAPI;
 use FindingAPI\Core\Event\AddProcessorEvent;
 use SDKBuilder\AbstractSDK;
 use FindingAPI\Core\Event\ItemFilterEvent;
-use SDKBuilder\Exception\MethodParametersException;
-use FindingAPI\Core\Options\Options;
-use FindingAPI\Core\Request\RequestValidator;
-use FindingAPI\Core\Request\Request;
 use FindingAPI\Core\Response\ResponseInterface;
 use FindingAPI\Core\Response\ResponseProxy;
-use SDKBuilder\Processor\Factory\ProcessorFactory;
-use SDKBuilder\Request\Method\MethodParameters;
-use SDKBuilder\Request\Method\Method;
 
 use FindingAPI\Core\Exception\ConnectException as FindingConnectException;
 use SDKBuilder\SDK\SDKInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use FindingAPI\Core\Response\FakeGuzzleResponse;
 
 class Finding extends AbstractSDK
@@ -26,10 +18,6 @@ class Finding extends AbstractSDK
      * @var ResponseInterface $response
      */
     private $response;
-    /**
-     * @var array $errors
-     */
-    private $errors = array();
     /**
      * @return SDKInterface
      * @throws FindingConnectException
