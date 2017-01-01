@@ -3,6 +3,7 @@
 {% block content %}
 
     <div class="content content-appearance content-looks">
+        <p>{{ processed }}</p>
         {% include '_includes/_rootItem.html.twig' with {'rootItem': response.getRoot() } %}
         {% include '_includes/_items.html.twig' with {'items': response.getSearchResults() } %}
     </div>

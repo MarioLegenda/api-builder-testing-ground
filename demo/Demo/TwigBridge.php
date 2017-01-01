@@ -15,7 +15,7 @@ class TwigBridge
     {
         \Twig_Autoloader::register();
 
-        $loader = new \Twig_Loader_Filesystem('/path/to/templates');
+        $loader = new \Twig_Loader_Filesystem(__DIR__.'/templates');
         $twig = new \Twig_Environment($loader, array(
             'cache' => false,
             'strict_variables' => true,

@@ -1,38 +1,33 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once __DIR__.'/../vendor/autoload.php';
 
-use FindingAPI\Finding;
-use FindingAPI\Core\Request\Request;
-
-use FindingAPI\Core\Information\OperationName;
-use FindingAPI\Definition\Definition;
+use SDKBuilder\SDKBuilder;
+use FindingAPI\FindingFactory;
 use FindingAPI\Core\ItemFilter\ItemFilter;
-use FindingAPI\Core\Information\Currency as InformationCurrency;
-use FindingAPI\Core\Options\Options;
+use FindingAPI\Core\Information\Currency;
 use Demo\TwigBridge;
 
-$request = new Request();
+$findingApi = SDKBuilder::inst()
+                ->registerApi('finding', FindingFactory::class)
+                ->create('finding');
 
-$request
-    ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
-    ->setMethod('get')
-    ->setResponseDataFormat('xml')
-    ->setSecurityAppId('Mariokrl-testing-PRD-ee6e68035-e73c8a53')
+$findingApi
+    ->findItemsByKeywords()
+    ->addKeywords('call of duty')
     ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
     ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
-    ->addItemFilter(ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN))
-    ->addSearch(Definition::customDefinition('call of duty'));
+    ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN));
 
-$finder = Finding::getInstance($request);
-
-$finder->setOption(Options::OFFLINE_MODE, true);
-
-$response = $finder->send()->getResponse();
+$response = $findingApi->send()->getResponse();
 
 $twigBridge = new TwigBridge();
 
 echo $twigBridge->getTwig()->render('index.html.twig', array(
     'response' => $response,
-    'processed' => $finder->getProcessed(),
+    'processed' => $findingApi->getProcessedRequestString(),
 ));
