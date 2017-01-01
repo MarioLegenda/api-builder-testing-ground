@@ -1,0 +1,35 @@
+<div class="presentation presentation-appearance presentation-looks generic-position">
+    <h1>Root item</h1>
+
+    <div class="items generic-position">
+        <div class="item">
+            <p class="name">Ack (Status): </p>
+            <p class="value">{{ rootItem.getAck() }}</p>
+        </div>
+
+        <div class="item">
+            <p class="name">Version: </p>
+            <p class="value">{{ rootItem.getVersion() }}</p>
+        </div>
+
+        <div class="item">
+            <p class="name">Timestamp: </p>
+            <p class="value">{{ rootItem.getTimestamp() }}</p>
+        </div>
+
+        <div class="item">
+            <p class="name">Namespace: </p>
+            <p class="value">{{ rootItem.getNamespace() }}</p>
+        </div>
+
+        <div class="item">
+            <p class="name">Name: </p>
+            <p class="value">{{ rootItem.getName() }}</p>
+        </div>
+
+        <div class="item">
+            <p class="name">Search results count: </p>
+            <p class="value">{{ rootItem.getSearchResultsCount() }}</p>
+        </div>
+    </div>
+</div>

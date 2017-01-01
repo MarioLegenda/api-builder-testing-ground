@@ -1,0 +1,185 @@
+<div class="presentation presentation-appearance presentation-looks generic-position">
+    <h1>Items</h1>
+
+    <div class="items generic-position">
+        <div class="individual-item generic-position">
+            {% for item in items %}
+                <a href="#" class="generic-position item-title">{{ item.getTitle() }}</a>
+
+                <div class="show-hide-wrapper generic-position hide">
+                    <div class="item move-right-50 generic-position">
+                        <p class="name">Item ID: </p>
+                        <p class="value">{{ item.getItemId() }}</p>
+                    </div>
+
+                    <div class="item move-right-50 generic-position">
+                        <p class="name">Global ID: </p>
+                        <p class="value">{{ item.getGlobalId() }}</p>
+                    </div>
+
+                    <div class="item move-right-50 generic-position">
+                        <p class="name">Subtitle: </p>
+                        <p class="value {% if item.getSubtitle() is null %}no-value{% endif %}">{{ item.getSubtitle('none') }}</p>
+                    </div>
+
+                    <div class="item move-right-50 generic-position">
+                        <p class="name">Picture URL Super size: </p>
+                        <p class="value {% if item.getPictureURLSuperSize() is null %}no-value{% endif %}">{{ item.getPictureURLSuperSize('none') }}</p>
+                    </div>
+
+                    <div class="item move-right-50 generic-position">
+                        <p class="name">Picture URL Large: </p>
+                        <p class="value {% if item.getPictureURLLarge() is null %}no-value{% endif %}">{{ item.getPictureURLLarge('none') }}</p>
+                    </div>
+
+                    <div class="item move-right-50 generic-position">
+                        <p class="name">Gallery plus picture url: </p>
+                        <p class="value {% if item.getGalleryPlusPictureURL() is null %}no-value{% endif %}">{{ item.getGalleryPlusPictureURL('none') }}</p>
+                    </div>
+
+                    <div class="item move-right-50 generic-position">
+                        <p class="name">Gallery url: </p>
+                        <img class="{% if item.getGalleryUrl() is null %}no-image{% endif %}" src="{{ item.getGalleryUrl() }}" />
+                    </div>
+
+                    <div class="item move-right-50 generic-position">
+                        <p class="name">View item url: </p>
+                        <p class="value">{{ item.getViewItemUrl() }}</p>
+                    </div>
+
+                    {% if item.getProductId() != null %}
+                        <div class="item move-right-50 generic-position">
+                            <h2>PRODUCT ID</h2>
+
+                            <div class="item move-right-50 generic-position">
+                                <p class="name">Type: </p>
+                                <p class="value">{{ item.getProductId()['type'] }}</p>
+                            </div>
+
+                            <div class="item move-right-50 generic-position">
+                                <p class="name">Type: </p>
+                                <p class="value">{{ item.getProductId()['productId'] }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if item.getGalleryContainer is null %}
+                        {% for gallery in item.getGalleryContainer() %}
+                            <div class="item move-right-{{ loop.index * 10 + 50 }} generic-position">
+                                <p class="name">{{ gallery.getSize() }}</p>
+                                <p class="value">{{ gallery.getUrl() }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="item move-right-50 generic-position">
+                        <p class="name">Eek Status: </p>
+                        <p class="value {% if item.getEekStatus() is null %}no-value{% endif %}">{{ item.getEekStatus('none') }}</p>
+                    </div>
+
+                    <div class="item move-right-50 generic-position">
+                        <p class="name">Distance: </p>
+                        <p class="value {% if item.getDistance() is null %}no-value{% endif %}">{{ item.getDistance('none') }}</p>
+                    </div>
+
+                    <div class="item move-right-80 generic-position">
+                        <a href="#" class="generic-position item-title">PRIMARY CATEGORY</a>
+                        <div class="show-hide-wrapper generic-position hide">
+                            <div class="item move-right-100 generic-position">
+                                <p class="name">Category ID: </p>
+                                <p class="value">{{ item.getPrimaryCategory().getCategoryId() }}</p>
+                            </div>
+
+                            <div class="item move-right-100 generic-position">
+                                <p class="name">Category name:</p>
+                                <p class="value">{{ item.getPrimaryCategory().getCategoryName() }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if item.getSecondaryCategory != null %}
+                        <div class="item move-right-80 generic-position">
+                            <a href="#" class="item-title">SECONDARY CATEGORY</a>
+
+                            <div class="show-hide-wrapper generic-position hide">
+                                <div class="item move-right-100 generic-position">
+                                    <p class="name">Category ID: </p>
+                                    <p class="value">{{ item.getSecondaryCategory().getCategoryId() }}</p>
+                                </div>
+
+                                <div class="item move-right-100 generic-position">
+                                    <p class="name">Category name:</p>
+                                    <p class="value">{{ item.getSecondaryCategory().getCategoryName() }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if item.getShippingInfo() != null %}
+                        <div class="item move-right-80 generic-position">
+                            <a href="#" class="item-title">SHIPPING INFO</a>
+
+                            <div class="show-hide-wrapper generic-position hide">
+                                <div class="item move-right-90 generic-position">
+                                    <h2>SHIPPING SERVICE COST: </h2>
+                                    {% set shippingInfo = item.getShippingInfo() %}
+
+                                    {% if shippingInfo.getShippingServiceCost() != null %}
+                                        <div class="item move-right-100 generic-position">
+                                            <p class="name">Currency</p>
+                                            <p class="value">{{ shippingInfo.getShippingServiceCost()['currencyId'] }}</p>
+                                        </div>
+
+                                        <div class="item move-right-100 generic-position">
+                                            <p class="name">Amount</p>
+                                            <p class="value">{{ shippingInfo.getShippingServiceCost()['amount'] }}</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+
+                                {% if shippingInfo.getExpeditedShipping() != null %}
+                                    <div class="item move-right-80 generic-position">
+                                        <p class="name">Expedited shipping</p>
+                                        <p class="value">{% if shippingInfo.getExpeditedShipping() == 1 %}yes{% else %}no{% endif %}</p>
+                                    </div>
+                                {% endif %}
+
+                                {% if shippingInfo.getHandlingTime() != null %}
+                                    <div class="item move-right-80 generic-position">
+                                        <p class="name">Handling time</p>
+                                        <p class="value">{{ shippingInfo.getHandlingTime('none') }}</p>
+                                    </div>
+                                {% endif %}
+
+                                {% if shippingInfo.getOneDayShippingAvailable() != null %}
+                                    <div class="item move-right-80 generic-position">
+                                        <p class="name">One day shipping available</p>
+                                        <p class="value">{% if shippingInfo.getOneDayShippingAvailable() == 1 %}yes{% else %}no{% endif %}</p>
+                                    </div>
+                                {% endif %}
+
+                                {% if shippingInfo.getShippingType() != null %}
+                                    <div class="item move-right-80 generic-position">
+                                        <p class="name">Shipping type</p>
+                                        <p class="value">{{ shippingInfo.getShippingType() }}</p>
+                                    </div>
+                                {% endif %}
+
+                                {% if shippingInfo.getShipToLocations() != null %}
+                                    {% set locations = shippingInfo.getShipToLocations() %}
+
+                                    <div class="item move-right-80 generic-position">
+                                        <p class="name">Locations: </p>
+                                        <p class="value">{{ locations|join(', ') }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+</div>
