@@ -26,17 +26,13 @@ use SDKBuilder\Exception\MethodParametersException;
 abstract class AbstractSDK implements SDKInterface
 {
     /**
-     * @var string $responseToParse
-     */
-    protected $responseToParse;
-    /**
      * @var string $processed
      */
     private $processed;
     /**
-     * @var GuzzleResponse $guzzleResponse
+     * @var bool $isCompiled
      */
-    protected $guzzleResponse;
+    private $isCompiled = false;
     /**
      * @var AbstractRequest $request
      */
@@ -44,23 +40,27 @@ abstract class AbstractSDK implements SDKInterface
     /**
      * @var MethodParameters $methodParameters
      */
-    protected $methodParameters;
+    private $methodParameters;
     /**
      * @var ProcessorFactory $processorFactory
      */
-    protected $processorFactory;
+    private $processorFactory;
     /**
      * @var EventDispatcher
      */
     private $eventDispatcher;
     /**
+     * @var GuzzleResponse $guzzleResponse
+     */
+    protected $guzzleResponse;
+    /**
      * @var ValidatorsProcessor
      */
     protected $validatorsProcessor;
     /**
-     * @var bool $isCompiled
+     * @var string $responseToParse
      */
-    private $isCompiled = false;
+    protected $responseToParse;
     /**
      * AbstractSDK constructor.
      * @param AbstractRequest $request
@@ -199,6 +199,13 @@ abstract class AbstractSDK implements SDKInterface
         $this->isCompiled = true;
 
         return $this;
+    }
+    /**
+     * @return ProcessorFactory
+     */
+    public function getProcessorFactory() : ProcessorFactory
+    {
+        return $this->processorFactory;
     }
 
     private function processRequest()
