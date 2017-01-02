@@ -5,6 +5,7 @@ namespace SDKBuilder\Processor\Factory;
  use FindingAPI\Core\Request\Request;
  use SDKBuilder\Exception\SDKBuilderException;
  use SDKBuilder\Processor\ProcessorInterface;
+ use SDKBuilder\Request\AbstractRequest;
 
  class ProcessorFactory
 {
@@ -12,18 +13,6 @@ namespace SDKBuilder\Processor\Factory;
      * @var array $processors
      */
     private $processors = array();
-    /**
-     * @var Request $request
-     */
-    private $request;
-    /**
-     * ProcessorFactory constructor.
-     * @param Request $request
-     */
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
     /**
      * @param string $method
      * @param string $processor
@@ -60,18 +49,19 @@ namespace SDKBuilder\Processor\Factory;
         return $this;
     }
     /**
+     * @param AbstractRequest $request
      * @return array
      */
-    public function createProcessors() : array
+    public function createProcessors(AbstractRequest $request) : array
     {
-        $method = $this->request->getMethod();
+        $method = $request->getMethod();
 
         $processors = array();
         foreach ($this->processors[$method] as $key => $processor) {
             $resolver = $processor['resolver'];
 
             if ($resolver instanceof \Closure) {
-                $object = $resolver->__invoke($this->request);
+                $object = $resolver->__invoke($request);
 
                 if ($object instanceof ProcessorInterface) {
                     $processors[] = $object;
@@ -79,7 +69,7 @@ namespace SDKBuilder\Processor\Factory;
             }
 
             if (is_string($resolver) and class_exists($resolver)) {
-                $object = new $resolver($this->request);
+                $object = new $resolver($request);
 
                 if ($object instanceof ProcessorInterface) {
                     $processors[] = $object;

@@ -23,7 +23,10 @@ $findingApi
     ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
     ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN));
 
-$response = $findingApi->send()->getResponse();
+$response = $findingApi
+                ->compile()
+                ->send()
+                ->getResponse();
 
 $twigBridge = new TwigBridge();
 

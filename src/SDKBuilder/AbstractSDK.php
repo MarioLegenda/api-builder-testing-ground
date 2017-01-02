@@ -2,6 +2,7 @@
 
 namespace SDKBuilder;
 
+use SDKBuilder\Exception\SDKException;
 use SDKBuilder\Processor\Factory\ProcessorFactory;
 use SDKBuilder\Processor\Get\GetRequestParametersProcessor;
 use SDKBuilder\Request\AbstractRequest;
@@ -55,6 +56,10 @@ abstract class AbstractSDK implements SDKInterface
      * @var ValidatorsProcessor
      */
     protected $validatorsProcessor;
+    /**
+     * @var bool $isCompiled
+     */
+    private $isCompiled = false;
     /**
      * AbstractSDK constructor.
      * @param AbstractRequest $request
@@ -169,12 +174,25 @@ abstract class AbstractSDK implements SDKInterface
 
         return $this->request;
     }
-
-    private function processRequest()
+    /**
+     * @return SDKInterface
+     */
+    public function compile() : SDKInterface
     {
         $this->processorFactory->registerProcessor($this->getRequest()->getMethod(), GetRequestParametersProcessor::class);
 
-        $processors = $this->processorFactory->createProcessors();
+        $this->isCompiled = true;
+
+        return $this;
+    }
+
+    private function processRequest()
+    {
+        if (!$this->isCompiled) {
+            throw new SDKException('Api is not compiled. If you extended the AbstractSDK::compile() method, you need to call parent::compile() in your extended method');
+        }
+        
+        $processors = $this->processorFactory->createProcessors($this->request);
 
         $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
     }

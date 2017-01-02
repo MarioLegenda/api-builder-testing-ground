@@ -43,4 +43,8 @@ interface SDKInterface
      * @void
      */
     public function getResponse();
+    /**
+     * @return SDKInterface
+     */
+    public function compile() : SDKInterface;
 }

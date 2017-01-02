@@ -19,19 +19,19 @@ class Finding extends AbstractSDK
      * @var ResponseInterface $response
      */
     private $response;
-    /**
-     * @return SDKInterface
-     * @throws FindingConnectException
-     */
-    public function send() : SDKInterface
-    {
-        $this->dispatchListeners();
 
-        parent::send();
+    public function compile() : SDKInterface
+    {
+        parent::compile();
+
+        $this->dispatchListeners();
 
         return $this;
     }
-
+    /**
+     * @param string $responseFormat
+     * @throws RequestException
+     */
     public function setResponseFormat(string $responseFormat)
     {
         $formats = array('xml', 'json');

@@ -68,7 +68,7 @@ abstract class AbstractApiFactory
 
         $this->eventDispatcher = new EventDispatcher();
 
-        $processorFactory = new ProcessorFactory($this->request);
+        $processorFactory = new ProcessorFactory();
 
         $validatorProcessor = new ValidatorsProcessor();
 
