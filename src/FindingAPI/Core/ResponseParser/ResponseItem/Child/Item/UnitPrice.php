@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 
-class UnitPrice extends AbstractItem
+class UnitPrice extends AbstractItem implements ArrayConvertableInterface
 {
     /**
      * @var float $quantity
@@ -49,6 +50,16 @@ class UnitPrice extends AbstractItem
         }
 
         return $this->type;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'quantity' => $this->getQuantity(),
+            'type' => $this->getType(),
+        );
     }
 
     private function setQuantity(float $quantity) : UnitPrice

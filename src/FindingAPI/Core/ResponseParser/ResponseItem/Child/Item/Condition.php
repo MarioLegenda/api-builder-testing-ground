@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 
-class Condition extends AbstractItem
+class Condition extends AbstractItem implements ArrayConvertableInterface
 {
     /**
      * @var int $conditionId
@@ -49,6 +50,16 @@ class Condition extends AbstractItem
         }
 
         return $this->conditionDisplayName;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'conditionId' => $this->getConditionId(),
+            'conditionDisplayName' => $this->getConditionDisplayName(),
+        );
     }
 
     private function setConditionId(int $conditionId) : Condition

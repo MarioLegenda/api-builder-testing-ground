@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 
-class GalleryUrl extends AbstractItem
+class GalleryUrl extends AbstractItem implements ArrayConvertableInterface
 {
     /**
      * @var string $size
@@ -45,6 +46,16 @@ class GalleryUrl extends AbstractItem
         }
 
         return $this->url;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'size' => $this->getSize(),
+            'url' => $this->getUrl(),
+        );
     }
 
     private function setUrl(string $url)

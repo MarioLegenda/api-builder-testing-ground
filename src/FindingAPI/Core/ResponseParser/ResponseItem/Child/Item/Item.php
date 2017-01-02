@@ -2,12 +2,13 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\{
     Attribute, Condition, DiscountPriceInfo, ShippingInfo, ListingInfo, SellingStatus, Category
 };
 
-class Item extends AbstractItemIterator
+class Item extends AbstractItemIterator implements ArrayConvertableInterface
 {
     /**
      * @var UnitPrice $unitPrice
@@ -90,7 +91,7 @@ class Item extends AbstractItemIterator
      */
     private $sellingStatus;
     /**
-     * @var $shippingInfo
+     * @var ShippingInfo $shippingInfo
      */
     private $shippingInfo;
     /**
@@ -745,7 +746,81 @@ class Item extends AbstractItemIterator
 
         return $this->discountPriceInfo;
     }
-    
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $toArray = array(
+            'itemId' => $this->getItemId(),
+            'title' => $this->getTitle(),
+            'subtitle' => $this->getSubtitle(),
+            'storeInfo' => ($this->getStoreInfo() instanceof StoreInfo) ?
+                            $this->getStoreInfo()->toArray() :
+                            null,
+            'unitPrice' => ($this->getUnitPrice() instanceof UnitPrice) ?
+                            $this->getUnitPrice()->toArray() :
+                            null,
+            'sellerInfo' => ($this->getSellerInfo() instanceof SellerInfo) ?
+                            $this->getSellerInfo()->toArray() :
+                            null,
+            'pictureUrlSuperSize' => $this->getPictureURLSuperSize(),
+            'galleryPlusPictureUrl' => $this->getGalleryPlusPictureURL(),
+            'pictureUrlLarge' => $this->getPictureURLLarge(),
+            'galleryInfoContainer' => ($this->getGalleryContainer() instanceof GalleryInfoContainer) ?
+                                        $this->getGalleryContainer()->toArray() :
+                                        null,
+            'eekStatus' => $this->getEekStatus(),
+            'distance' => $this->getDistance(),
+            'discountPriceInfo' => ($this->getDiscountPriceInfo() instanceof DiscountPriceInfo) ?
+                                    $this->getDiscountPriceInfo()->toArray() :
+                                    null,
+            'compatibility' => $this->getCompatibility(),
+            'charityId' => $this->getCharityId(),
+            'primaryCategory' => ($this->getPrimaryCategory() instanceof Category) ?
+                                    $this->getPrimaryCategory()->toArray() :
+                                    null,
+            'secondaryCategory' => ($this->getSecondaryCategory() instanceof Category) ?
+                                    $this->getSecondaryCategory()->toArray() :
+                                    null,
+            'condition' => ($this->getCondition() instanceof Condition) ?
+                            $this->getCondition()->toArray() :
+                            null,
+            'topRatedListing' => $this->getTopRatedListing(),
+            'multiVariationListing' => $this->getIsMultiVariationListing(),
+            'returnsAccepted' => $this->getReturnsAccepted(),
+            'listingInfo' => ($this->getListingInfo() instanceof ListingInfo) ?
+                                $this->getListingInfo()->toArray() :
+                                null,
+            'sellingStatus' => ($this->getSellingStatus() instanceof SellingStatus) ?
+                                $this->getSellingStatus()->toArray() :
+                                null,
+            'shippingInfo' => ($this->getShippingInfo() instanceof ShippingInfo) ?
+                                $this->getShippingInfo()->toArray() :
+                                null,
+            'country' => $this->getCountry(),
+            'location' => $this->getLocation(),
+            'postalCode' => $this->getPostalCode(),
+            'autoPay' => $this->getAutoPay(),
+            'paymentMethods' => $this->getPaymentMethod(),
+            'productId' => $this->getProductId(),
+            'viewItemUrl' => $this->getViewItemUrl(),
+            'galleryUrl' => $this->getGalleryUrl(),
+            'globalId' => $this->getGlobalId(),
+        );
+
+        $toArray['attributes'] = array();
+        $attributes = $this->getAttributes();
+
+        if (is_array($attributes)) {
+            foreach ($attributes as $attribute) {
+                $toArray['attributes'][] = $attribute->toArray();
+            }
+        }
+
+        return $toArray;
+    }
+
     private function setDiscountPriceInfo(DiscountPriceInfo $discountPriceInfo) : Item 
     {
         $this->discountPriceInfo = $discountPriceInfo;

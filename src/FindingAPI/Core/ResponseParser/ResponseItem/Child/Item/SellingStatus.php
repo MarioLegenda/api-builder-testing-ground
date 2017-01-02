@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 
-class SellingStatus extends AbstractItem
+class SellingStatus extends AbstractItem implements ArrayConvertableInterface
 {
     /**
      * @var int $bidCount
@@ -26,7 +27,6 @@ class SellingStatus extends AbstractItem
      * @var int $timeLeft
      */
     private $timeLeft;
-
     /**
      * @param
      * @return int|null
@@ -66,7 +66,7 @@ class SellingStatus extends AbstractItem
 
     /**
      * @param mixed $default
-     * @return float|null
+     * @return mixed
      */
     public function getCurrentPrice($default = null)
     {
@@ -118,6 +118,19 @@ class SellingStatus extends AbstractItem
         }
 
         return $this->timeLeft;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'currentPrice' => $this->getCurrentPrice(),
+            'bidCount' => $this->getBidCount(),
+            'convertedCurrentPrice' => $this->getConvertedCurrentPrice(),
+            'sellingState' => $this->getSellingState(),
+            'timeLeft' => $this->getTimeLeft(),
+        );
     }
 
     private function setTimeLeft($timeLeft) : SellingStatus

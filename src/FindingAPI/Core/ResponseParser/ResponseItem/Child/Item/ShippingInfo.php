@@ -2,13 +2,11 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
-class ShippingInfo
-{
-    /**
-     * @var \SimpleXMLElement $simpleXml
-     */
-    private $simpleXml;
+use FindingAPI\Core\Response\ArrayConvertableInterface;
+use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 
+class ShippingInfo extends AbstractItem implements ArrayConvertableInterface
+{
     /**
      * @var array $shippingServiceCost
      */
@@ -33,14 +31,6 @@ class ShippingInfo
      * @var array $shipToLocations
      */
     private $shipToLocations;
-    /**
-     * ShippingInfo constructor.
-     * @param \SimpleXMLElement $simpleXml
-     */
-    public function __construct(\SimpleXMLElement $simpleXml)
-    {
-        $this->simpleXml = $simpleXml;
-    }
     /**
      * @param mixed $default
      * @return array
@@ -152,6 +142,20 @@ class ShippingInfo
         }
 
         return $this->shipToLocations;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'shippingServiceCost' => $this->getShippingServiceCost(),
+            'shipToLocations' => $this->getShipToLocations(),
+            'expeditedShipping' => $this->getExpeditedShipping(),
+            'handlingTime' => $this->getHandlingTime(),
+            'oneDayShippingAvailable' => $this->getOneDayShippingAvailable(),
+            'shippingType' => $this->getShippingType(),
+        );
     }
 
     private function setShipToLocations($locations) : ShippingInfo

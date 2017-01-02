@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 
-class ListingInfo extends AbstractItem
+class ListingInfo extends AbstractItem implements ArrayConvertableInterface
 {
     /**
      * @var bool $bestOfferEnabled
@@ -183,6 +184,22 @@ class ListingInfo extends AbstractItem
         }
 
         return $this->startTime;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'bestOfferEnabled' => $this->getBestOfferEnabled(),
+            'buyItNowPrice' => $this->getBuyItNowPrice(),
+            'convertedBuyItNowPrice' => $this->getConvertedBuyItNowPrice(),
+            'buyItNowAvailable' => $this->getBuyItNowAvailable(),
+            'endTime' => $this->getEndTime(),
+            'gift' => $this->getGift(),
+            'listingType' => $this->getListingType(),
+            'startTime' => $this->getStartTime(),
+        );
     }
 
     private function setStartTime(string $startTime) : ListingInfo

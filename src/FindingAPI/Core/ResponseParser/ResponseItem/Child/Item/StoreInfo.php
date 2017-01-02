@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 
-class StoreInfo extends AbstractItem
+class StoreInfo extends AbstractItem implements ArrayConvertableInterface
 {
     /**
      * @var string $storeName
@@ -49,6 +50,16 @@ class StoreInfo extends AbstractItem
         }
 
         return $this->storeName;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'storeName' => $this->getStoreName(),
+            'storeUrl' => $this->getStoreURL(),
+        );
     }
 
     private function setStoreURL(string $storeUrl) : StoreInfo

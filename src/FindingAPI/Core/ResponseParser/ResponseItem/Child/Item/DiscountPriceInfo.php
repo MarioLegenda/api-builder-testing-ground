@@ -2,10 +2,11 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
-class DiscountPriceInfo extends AbstractItem
+class DiscountPriceInfo extends AbstractItem implements ArrayConvertableInterface
 {
     /**
      * @var array $originalRetailPrice
@@ -117,8 +118,21 @@ class DiscountPriceInfo extends AbstractItem
 
         return $this->soldOnEbay;
     }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'originalRetailPrice' => $this->getOriginalRetailPrice(),
+            'pricingTreatment' => $this->getPricingTreatment(),
+            'soldOffEbay' => $this->getSoldOffEbay(),
+            'soldOnEbay' => $this->getSoldOnEbay(),
+            'minimumAdvertisedPriceExposure' => $this->getMinimumAdvertisedPriceExposure(),
+        );
+    }
 
-    private function setMinimumAdvertisedPriceExposure(string $minimumAdvertisedPriceExposure) : Item
+    private function setMinimumAdvertisedPriceExposure(string $minimumAdvertisedPriceExposure) : DiscountPriceInfo
     {
         $this->minimumAdvertisedPriceExposure = $minimumAdvertisedPriceExposure;
 

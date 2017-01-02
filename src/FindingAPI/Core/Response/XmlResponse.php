@@ -231,10 +231,10 @@ class XmlResponse implements ResponseInterface, ArrayConvertableInterface, \Json
             'aspectHistogramContainer' => ($this->getAspectHistogramContainer() instanceof AspectHistogramContainer) ?
                                             $this->getAspectHistogramContainer()->toArray() :
                                             null,
+            'searchResultsContainer' => ($this->getSearchResults() instanceof SearchResultsContainer) ?
+                                            $this->getSearchResults()->toArray() :
+                                            null,
         );
-
-        var_dump($toArray);
-        die();
 
         return $toArray;
     }

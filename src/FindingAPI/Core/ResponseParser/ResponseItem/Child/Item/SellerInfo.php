@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 
-class SellerInfo extends AbstractItem
+class SellerInfo extends AbstractItem implements ArrayConvertableInterface
 {
     /**
      * @var string $feedbackRatingStar
@@ -115,6 +116,19 @@ class SellerInfo extends AbstractItem
         }
 
         return $this->topRatedSeller;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'topRatedSeller' => $this->getTopRatedSeller(),
+            'sellerUsername' => $this->getSellerUsername(),
+            'feedbackScore' => $this->getFeedbackScore(),
+            'positiveFeedbackPercent' => $this->getPositiveFeedbackPercent(),
+            'feedbackRatingStar' => $this->getFeedbackRatingStar(),
+        );
     }
 
     private function setSellerUsername(string $sellerUsername) : SellerInfo

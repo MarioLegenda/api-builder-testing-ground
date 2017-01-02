@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 
-class Attribute extends AbstractItem
+class Attribute extends AbstractItem implements ArrayConvertableInterface
 {
     /**
      * @var string $attributeName
@@ -49,6 +50,16 @@ class Attribute extends AbstractItem
         }
 
         return $this->attributeValue;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'attributeName' => $this->getAttributeName(),
+            'attributeValue' => $this->getAttributeValue(),
+        );
     }
 
     private function setAttributeValue(string $attributeValue) : Attribute

@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Item;
 
-class SearchResultsContainer extends AbstractItemIterator
+class SearchResultsContainer extends AbstractItemIterator implements ArrayConvertableInterface
 {
     /**
      * SearchResultsContainer constructor.
@@ -41,6 +42,17 @@ class SearchResultsContainer extends AbstractItemIterator
         }
 
         return null;
+    }
+
+    public function toArray(): array
+    {
+        $toArray = array();
+
+        foreach ($this->items as $item) {
+            $toArray[] = $item->toArray();
+        }
+
+        return $toArray;
     }
 
     private function loadItems(\SimpleXMLElement $simpleXml)
