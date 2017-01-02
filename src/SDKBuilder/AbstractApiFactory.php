@@ -36,7 +36,7 @@ abstract class AbstractApiFactory
      */
     protected function createApi(string $apiKey, array $config) : SDKInterface
     {
-        $this->validateSDK($apiKey, $config);
+        $config = $this->validateSDK($apiKey, $config);
 
         $apiConfig = $config['sdk'][$apiKey];
         $requestClass = 'SDKBuilder\\Request\\Request';
@@ -101,7 +101,7 @@ abstract class AbstractApiFactory
         );
     }
 
-    private function validateSDK(string $apiKey, array $config) : void
+    private function validateSDK(string $apiKey, array $config) : array
     {
         if (!array_key_exists('sdk', $config)) {
             throw new SDKBuilderException('\'sdk\' config key not found in configuration');
@@ -110,6 +110,8 @@ abstract class AbstractApiFactory
         if (!array_key_exists($apiKey, $config['sdk'])) {
             throw new SDKBuilderException('\''.$apiKey.'\' not found under \'sdk\' configuration key');
         }
+
+        return $this->addDefaults($apiKey, $config);
     }
 
     private function createRequest(string $requestClass, string $apiKey, array $config) : AbstractRequest
@@ -129,5 +131,34 @@ abstract class AbstractApiFactory
         }
 
         return null;
+    }
+
+    private function addDefaults(string $apiKey, array $config) : array
+    {
+        $sdkGlobalParameters = $config['sdk'][$apiKey];
+
+        $params = array('global_parameters', 'special_parameters');
+
+        foreach ($params as $param) {
+            foreach ($sdkGlobalParameters[$param] as $paramName => $sdk) {
+                if (!array_key_exists('deprecated', $sdk)) {
+                    $config['sdk'][$apiKey][$param][$paramName]['deprecated'] = false;
+                }
+
+                if (!array_key_exists('throws_exception_if_deprecated', $sdk)) {
+                    $config['sdk'][$apiKey][$param][$paramName]['throws_exception_if_deprecated'] = false;
+                }
+
+                if (!array_key_exists('obsolete', $sdk)) {
+                    $config['sdk'][$apiKey][$param][$paramName]['obsolete'] = false;
+                }
+
+                if (!array_key_exists('error_message', $sdk)) {
+                    $config['sdk'][$apiKey][$param][$paramName]['error_message'] = 'Invalid value for %s and represented as %s';
+                }
+            }
+        }
+
+        return $config;
     }
 }
