@@ -29,12 +29,12 @@ class JsonResponse implements ResponseInterface
     );
     /**
      * JsonResponse constructor.
-     * @param array $json
+     * @param ArrayConvertableInterface $xmlResponse
      * @param GuzzleResponse $response
      */
-    public function __construct(array $json, GuzzleResponse $response)
+    public function __construct(ArrayConvertableInterface $xmlResponse, GuzzleResponse $response)
     {
-        $this->jsonResponse = $json;
+        $this->jsonResponse = $xmlResponse->toArray();
         $this->guzzleResponse = $response;
     }
 
@@ -91,5 +91,12 @@ class JsonResponse implements ResponseInterface
      */
     public function isErrorResponse() : bool
     {
+    }
+    /**
+     * @return string
+     */
+    public function getRawResponse(): string
+    {
+        return json_encode($this->jsonResponse);
     }
 }

@@ -7,6 +7,7 @@ use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 
 use FindingAPI\Core\Exception\{ FindingApiException, ItemFilterException };
 
+use SDKBuilder\Exception\RequestException;
 use SDKBuilder\Request\AbstractRequest;
 use SDKBuilder\Request\RequestParameters;
 
@@ -20,6 +21,10 @@ class Request extends AbstractRequest
      * @var Options $options
      */
     private $options;
+    /**
+     * @var string $responseFormat
+     */
+    private $responseFormat = 'xml';
     /**
      * @var array $definitions
      */
@@ -38,6 +43,27 @@ class Request extends AbstractRequest
         $this->options = new Options();
 
         Definition::initiate($this->options);
+    }
+    /**
+     * @param string $responseFormat
+     * @throws RequestException
+     */
+    public function setResponseFormat(string $responseFormat)
+    {
+        $validFormats = array('xml', 'json');
+
+        if (in_array($responseFormat, $validFormats) === false) {
+            throw new RequestException('Invalid response format. Valid formats are '.implode(', ', $validFormats).'. \''.$responseFormat.'\' given');
+        }
+
+        $this->responseFormat = $responseFormat;
+    }
+    /**
+     * @return string
+     */
+    public function getResponseFormat() : string
+    {
+        return $this->responseFormat;
     }
     /**
      * @param string $buyerPostalCode

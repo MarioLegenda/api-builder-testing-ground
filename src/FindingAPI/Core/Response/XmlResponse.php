@@ -14,7 +14,7 @@ use FindingAPI\Core\ResponseParser\ResponseItem\{
 
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
-class XmlResponse implements ResponseInterface
+class XmlResponse implements ResponseInterface, ArrayConvertableInterface, \JsonSerializable
 {
     /**
      * @var string $xmlString
@@ -218,6 +218,26 @@ class XmlResponse implements ResponseInterface
     public function getRawResponse() : string
     {
         return $this->xmlString;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $toArray = array();
+
+        $toArray['response'] = array(
+            'rootItem' => $this->getRoot()->toArray()
+        );
+
+        return $toArray;
+    }
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 
     private function lazyLoadSimpleXml($xmlString)

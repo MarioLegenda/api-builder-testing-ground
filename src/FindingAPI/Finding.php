@@ -21,8 +21,6 @@ class Finding extends AbstractSDK
      */
     private $response;
 
-    private $responseFormat;
-
     public function compile() : SDKInterface
     {
         parent::compile();
@@ -30,20 +28,6 @@ class Finding extends AbstractSDK
         $this->dispatchListeners();
 
         return $this;
-    }
-    /**
-     * @param string $responseFormat
-     * @throws RequestException
-     */
-    public function setResponseFormat(string $responseFormat)
-    {
-        $validFormats = array('xml', 'json');
-
-        if (in_array($responseFormat, $validFormats) === false) {
-            throw new SDKException('Invalid response format. Valid formats are '.implode(', ', $validFormats).'. \''.$responseFormat.'\' given');
-        }
-
-        $this->responseFormat = $responseFormat;
     }
     /**
      * @param string $inlineResponse
@@ -55,7 +39,7 @@ class Finding extends AbstractSDK
             $response = new ResponseProxy(
                 $inlineResponse,
                 new FakeGuzzleResponse($inlineResponse),
-                $this->responseFormat
+                $this->getRequest()->getResponseFormat()
             );
 
             return $response;
@@ -68,7 +52,7 @@ class Finding extends AbstractSDK
         $response = new ResponseProxy(
             $this->responseToParse,
             $this->guzzleResponse,
-            $this->responseFormat
+            $this->getRequest()->getResponseFormat()
         );
 
         unset($this->responseToParse);

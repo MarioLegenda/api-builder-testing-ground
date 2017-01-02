@@ -2,7 +2,9 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem;
 
-class RootItem extends AbstractItem implements ResponseItemInterface
+use FindingAPI\Core\Response\ArrayConvertableInterface;
+
+class RootItem extends AbstractItem implements ResponseItemInterface, ArrayConvertableInterface
 {
     /**
      * @var string $searchResultsCount
@@ -80,6 +82,19 @@ class RootItem extends AbstractItem implements ResponseItemInterface
         }
 
         return $this->searchResultsCount;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'ack' => $this->getAck(),
+            'namespace' => $this->getNamespace(),
+            'searchResultsCount' => $this->getSearchResultsCount(),
+            'version' => $this->getVersion(),
+            'timestamp' => $this->getTimestamp(),
+        );
     }
 
     private function setAck(string $ack) : RootItem

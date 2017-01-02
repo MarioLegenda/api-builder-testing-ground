@@ -5,7 +5,7 @@ namespace FindingAPI\Core\Response;
 use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
-class ResponseProxy implements ResponseInterface
+class ResponseProxy implements ResponseInterface, ArrayConvertableInterface, \JsonSerializable
 {
     /**
      * @var ResponseInterface $response
@@ -25,7 +25,7 @@ class ResponseProxy implements ResponseInterface
 
                 break;
             case 'json':
-                $this->response = new JsonResponse($responseToParse, $guzzleResponse);
+                $this->response = new JsonResponse(new XmlResponse($responseToParse), $guzzleResponse);
         }
     }
     /**
@@ -97,12 +97,25 @@ class ResponseProxy implements ResponseInterface
     {
         return $this->response->isErrorResponse();
     }
-
     /**
      * @return string
      */
     public function getRawResponse() : string
     {
         return $this->response->getRawResponse();
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->response->toArray();
+    }
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 }

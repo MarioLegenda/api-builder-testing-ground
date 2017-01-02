@@ -64,12 +64,16 @@ class SDKBuilder
 
         $api = $this->sdkRepository[$apiKey];
 
-        if ($api instanceof SDKInterface) {
-            return $api;
+        if (!class_exists($api)) {
+            throw new SDKBuilderException('Api factory class \''.$this->sdkRepository[$apiKey].'\' does not exist');
         }
 
-        $this->sdkRepository[$apiKey] = (new $api())->create();
+        $api = new $api();
 
-        return $this->sdkRepository[$apiKey];
+        if (!$api instanceof AbstractApiFactory) {
+            throw new SDKBuilderException('\''.$this->sdkRepository[$apiKey].'\' factory class has to implement '.AbstractApiFactory::class);
+        }
+
+        return $api->create();
     }
 }

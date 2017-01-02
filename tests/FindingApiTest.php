@@ -189,7 +189,8 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->findItemsAdvanced()
             ->setCategoryId(23)
             ->addKeywords('baseball')
-            ->enableDescriptionSearch();
+            ->enableDescriptionSearch()
+            ->setResponseFormat('json');
 
         $this->validateResponse($findingApi->compile()->send()->getResponse());
     }
