@@ -74,7 +74,9 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
         $request->addKeywords('constantine');
 
-        $findingApi->send();
+        $findingApi
+            ->compile()
+            ->send();
 
         if ($findingApi->hasErrors()) {
             $this->assertInternalType('array', $findingApi->getErrors(), 'Call to findItemsByKeywords should return a \'deprecated\' error');
@@ -116,7 +118,10 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
         $findingApi->getVersion();
 
-        $findingApi->send()->getResponse();
+        $findingApi
+            ->compile()
+            ->send()
+            ->getResponse();
     }
 
     public function testHistograms()
@@ -127,7 +132,10 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->getHistograms()
             ->setCategoryId(23);
 
-        $response = $findingApi->send()->getResponse();
+        $response = $findingApi
+            ->compile()
+            ->send()
+            ->getResponse();
 
         $this->validateResponse($response);
     }
@@ -140,7 +148,10 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->getSearchKeywordsRecommendation()
             ->addKeywords('baseball');
 
-        $response = $findingApi->send()->getResponse();
+        $response = $findingApi
+            ->compile()
+            ->send()
+            ->getResponse();
     }
 
     public function testFindItemsByProduct()
@@ -152,7 +163,9 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->setProductIdType('ReferenceID')
             ->setProductId(53039031);
 
-        $findingApi->send();
+        $findingApi
+            ->compile()
+            ->send();
 
         $this->validateResponse($findingApi->getResponse());
     }
@@ -165,7 +178,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->findItemsByCategory()
             ->setCategoryId(23);
 
-        $this->validateResponse($findingApi->send()->getResponse());
+        $this->validateResponse($findingApi->compile()->send()->getResponse());
     }
 
     public function testFindItemsAdvancedRequest()
@@ -178,7 +191,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->addKeywords('baseball')
             ->enableDescriptionSearch();
 
-        $this->validateResponse($findingApi->send()->getResponse());
+        $this->validateResponse($findingApi->compile()->send()->getResponse());
     }
 
     public function testFindCompletedItemsRequest()
@@ -190,7 +203,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->setCategoryId(23)
             ->addKeywords('baseball');
 
-        $this->validateResponse($findingApi->send()->getResponse());
+        $this->validateResponse($findingApi->compile()->send()->getResponse());
     }
 
     public function testFindItemsByKeywordsRequest()
@@ -217,7 +230,10 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
                 }
             }
 
-            $response = $findingApi->send()->getResponse();
+            $response = $findingApi
+                ->compile()
+                ->send()
+                ->getResponse();
 
 
             //var_dump($processed);
