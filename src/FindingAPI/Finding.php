@@ -10,6 +10,7 @@ use FindingAPI\Core\Response\ResponseProxy;
 
 use FindingAPI\Core\Exception\ConnectException as FindingConnectException;
 use SDKBuilder\Exception\RequestException;
+use SDKBuilder\Exception\SDKException;
 use SDKBuilder\SDK\SDKInterface;
 use FindingAPI\Core\Response\FakeGuzzleResponse;
 
@@ -19,6 +20,8 @@ class Finding extends AbstractSDK
      * @var ResponseInterface $response
      */
     private $response;
+
+    private $responseFormat;
 
     public function compile() : SDKInterface
     {
@@ -34,13 +37,13 @@ class Finding extends AbstractSDK
      */
     public function setResponseFormat(string $responseFormat)
     {
-        $formats = array('xml', 'json');
+        $validFormats = array('xml', 'json');
 
-        if (in_array($responseFormat, $formats) === false) {
-            throw new RequestException('Invalid format \''.$responseFormat.'\'. Supported formats are '.implode(', ', $formats));
+        if (in_array($responseFormat, $validFormats) === false) {
+            throw new SDKException('Invalid response format. Valid formats are '.implode(', ', $validFormats).'. \''.$responseFormat.'\' given');
         }
 
-        $this->getRequest()->getGlobalParameters()->getParameter('RESPONSE-DATA-FORMAT')->setValue($responseFormat);
+        $this->responseFormat = $responseFormat;
     }
     /**
      * @param string $inlineResponse
@@ -52,7 +55,7 @@ class Finding extends AbstractSDK
             $response = new ResponseProxy(
                 $inlineResponse,
                 new FakeGuzzleResponse($inlineResponse),
-                $this->getRequest()->getRequestParameters()->getParameter('response_data_format')->getValue()
+                $this->responseFormat
             );
 
             return $response;
@@ -65,7 +68,7 @@ class Finding extends AbstractSDK
         $response = new ResponseProxy(
             $this->responseToParse,
             $this->guzzleResponse,
-            $this->getRequest()->getGlobalParameters()->getParameter('response_data_format')->getValue()
+            $this->responseFormat
         );
 
         unset($this->responseToParse);
