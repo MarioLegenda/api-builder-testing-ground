@@ -78,9 +78,9 @@ class Finding extends AbstractSDK
 
     private function dispatchListeners()
     {
-        $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->getRequest()->getItemFilterStorage()));
-        $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->getRequest()->getItemFilterStorage()));
+        $this->getEventDispatcher()->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->getRequest()->getItemFilterStorage()));
+        $this->getEventDispatcher()->dispatch('item_filter.post_validate', new ItemFilterEvent($this->getRequest()->getItemFilterStorage()));
 
-        $this->eventDispatcher->dispatch('finding.add_processor', new AddProcessorEvent($this->processorFactory, $this->getRequest()));
+        $this->getEventDispatcher()->dispatch('finding.add_processor', new AddProcessorEvent($this->processorFactory, $this->getRequest()));
     }
 }

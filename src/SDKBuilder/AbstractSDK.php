@@ -19,6 +19,7 @@ use SDKBuilder\Common\Logger;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use SDKBuilder\Processor\RequestProducer;
 
+use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use SDKBuilder\Exception\MethodParametersException;
 
@@ -31,7 +32,7 @@ abstract class AbstractSDK implements SDKInterface
     /**
      * @var string $processed
      */
-    protected $processed;
+    private $processed;
     /**
      * @var GuzzleResponse $guzzleResponse
      */
@@ -51,7 +52,7 @@ abstract class AbstractSDK implements SDKInterface
     /**
      * @var EventDispatcher
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
     /**
      * @var ValidatorsProcessor
      */
@@ -163,6 +164,13 @@ abstract class AbstractSDK implements SDKInterface
     public function getResponse()
     {
         return $this->responseToParse;
+    }
+    /**
+     * @return EventDispatcher
+     */
+    public function getEventDispatcher() : EventDispatcher
+    {
+        return $this->eventDispatcher;
     }
     /**
      * @param $methodName
