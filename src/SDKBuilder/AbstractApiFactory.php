@@ -13,6 +13,8 @@ use SDKBuilder\Request\ValidatorsProcessor;
 use SDKBuilder\SDK\SDKInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use SDKBuilder\Processor\Factory\ProcessorFactory;
+use Symfony\Component\Config\Definition\Processor;
+use SDKBuilder\Configuration\Configuration;
 
 abstract class AbstractApiFactory
 {
@@ -29,16 +31,33 @@ abstract class AbstractApiFactory
      */
     protected $eventDispatcher;
     /**
+     * @var string $apiKey
+     */
+    protected $apiKey;
+    /**
+     * AbstractApiFactory constructor.
+     * @param string $apiKey
+     */
+    public function __construct(string $apiKey)
+    {
+        $this->apiKey = $apiKey;
+    }
+    /**
      * @param string $apiKey
      * @param array $config
      * @throws SDKBuilderException
      * @return SDKInterface
      */
-    protected function createApi(string $apiKey, array $config) : SDKInterface
-    {
-        $config = $this->validateSDK($apiKey, $config);
 
-        $apiConfig = $config['sdk'][$apiKey];
+    protected function createApi(array $config) : SDKInterface
+    {
+        $processor = new Processor();
+
+        $processor->processConfiguration(new Configuration($this->apiKey), $config);
+
+        $config = $this->validateSDK($this->apiKey, $config);
+
+        $apiConfig = $config['sdk'][$this->apiKey];
         $requestClass = 'SDKBuilder\\Request\\Request';
         $apiClass = 'SDKBuilder\\SDK\\GenericApi';
 
@@ -62,9 +81,9 @@ abstract class AbstractApiFactory
             throw new SDKBuilderException('Api class '.$apiClass.' does not exist');
         }
 
-        $this->request = $this->createRequest($requestClass, $apiKey, $config);
+        $this->request = $this->createRequest($requestClass, $this->apiKey, $config);
 
-        $this->methodParameters = $this->createMethodParameters($apiKey, $config);
+        $this->methodParameters = $this->createMethodParameters($this->apiKey, $config);
 
         $this->eventDispatcher = new EventDispatcher();
 

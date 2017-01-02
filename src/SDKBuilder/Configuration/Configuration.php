@@ -1,13 +1,28 @@
 <?php
 
-namespace FindingAPI\Core\Configuration;
+namespace SDKBuilder\Configuration;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 
-class FindingConfiguration implements ConfigurationInterface
+class Configuration implements ConfigurationInterface
 {
+    /**
+     * @var string $apiKey
+     */
+    private $apiKey;
+    /**
+     * FindingConfiguration constructor.
+     * @param string $apiKey
+     */
+    public function __construct(string $apiKey)
+    {
+        $this->apiKey = $apiKey;
+    }
+    /**
+     * @return TreeBuilder
+     */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
@@ -15,7 +30,7 @@ class FindingConfiguration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->arrayNode('finding')
+                ->arrayNode($this->apiKey)
                     ->children()
                         ->scalarNode('request_class')->defaultValue('SDKBuilder\\Request\\Request')->end()
                         ->scalarNode('api_class')->cannotBeEmpty()->end()

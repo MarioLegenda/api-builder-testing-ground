@@ -24,11 +24,7 @@ class FindingFactory extends AbstractApiFactory
     {
         $config = Yaml::parse(file_get_contents(__DIR__ . '/config/finding.yml'));
 
-        $processor = new Processor();
-
-        $processor->processConfiguration(new FindingConfiguration(), $config);
-
-        $api = $this->createApi('finding', $config);
+        $api = $this->createApi($config);
 
         $this->eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
         $this->eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));

@@ -62,18 +62,18 @@ class SDKBuilder
             throw new SDKBuilderException('SDK with name \''.$apiKey.'\' not found');
         }
 
-        $api = $this->sdkRepository[$apiKey];
+        $apiFactory = $this->sdkRepository[$apiKey];
 
-        if (!class_exists($api)) {
+        if (!class_exists($apiFactory)) {
             throw new SDKBuilderException('Api factory class \''.$this->sdkRepository[$apiKey].'\' does not exist');
         }
 
-        $api = new $api();
+        $apiFactory = new $apiFactory($apiKey);
 
-        if (!$api instanceof AbstractApiFactory) {
+        if (!$apiFactory instanceof AbstractApiFactory) {
             throw new SDKBuilderException('\''.$this->sdkRepository[$apiKey].'\' factory class has to implement '.AbstractApiFactory::class);
         }
 
-        return $api->create();
+        return $apiFactory->create();
     }
 }
