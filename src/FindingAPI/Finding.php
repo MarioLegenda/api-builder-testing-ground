@@ -40,7 +40,7 @@ class Finding extends AbstractSDK
             throw new RequestException('Invalid format \''.$responseFormat.'\'. Supported formats are '.implode(', ', $formats));
         }
 
-        $this->request->getGlobalParameters()->getParameter('RESPONSE-DATA-FORMAT')->setValue($responseFormat);
+        $this->getRequest()->getGlobalParameters()->getParameter('RESPONSE-DATA-FORMAT')->setValue($responseFormat);
     }
     /**
      * @param string $inlineResponse
@@ -52,7 +52,7 @@ class Finding extends AbstractSDK
             $response = new ResponseProxy(
                 $inlineResponse,
                 new FakeGuzzleResponse($inlineResponse),
-                $this->request->getRequestParameters()->getParameter('response_data_format')->getValue()
+                $this->getRequest()->getRequestParameters()->getParameter('response_data_format')->getValue()
             );
 
             return $response;
@@ -65,7 +65,7 @@ class Finding extends AbstractSDK
         $response = new ResponseProxy(
             $this->responseToParse,
             $this->guzzleResponse,
-            $this->request->getGlobalParameters()->getParameter('response_data_format')->getValue()
+            $this->getRequest()->getGlobalParameters()->getParameter('response_data_format')->getValue()
         );
 
         unset($this->responseToParse);
@@ -78,9 +78,9 @@ class Finding extends AbstractSDK
 
     private function dispatchListeners()
     {
-        $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
-        $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->request->getItemFilterStorage()));
+        $this->eventDispatcher->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->getRequest()->getItemFilterStorage()));
+        $this->eventDispatcher->dispatch('item_filter.post_validate', new ItemFilterEvent($this->getRequest()->getItemFilterStorage()));
 
-        $this->eventDispatcher->dispatch('finding.add_processor', new AddProcessorEvent($this->processorFactory, $this->request));
+        $this->eventDispatcher->dispatch('finding.add_processor', new AddProcessorEvent($this->processorFactory, $this->getRequest()));
     }
 }

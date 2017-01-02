@@ -39,7 +39,7 @@ abstract class AbstractSDK implements SDKInterface
     /**
      * @var AbstractRequest $request
      */
-    protected $request;
+    private $request;
     /**
      * @var MethodParameters $methodParameters
      */
@@ -129,6 +129,13 @@ abstract class AbstractSDK implements SDKInterface
     {
         return $this->request;
     }
+
+    public function setRequest(AbstractRequest $request) : SDKInterface
+    {
+        $this->request = $request;
+
+        return $this;
+    }
     /**
      * @return string
      */
@@ -170,9 +177,9 @@ abstract class AbstractSDK implements SDKInterface
 
         $method->validate($validMethodsParameter);
 
-        $this->request = $this->createMethod($method);
+        $this->setRequest($this->createMethod($method));
 
-        return $this->request;
+        return $this->getRequest();
     }
     /**
      * @return SDKInterface
@@ -191,8 +198,8 @@ abstract class AbstractSDK implements SDKInterface
         if (!$this->isCompiled) {
             throw new SDKException('Api is not compiled. If you extended the AbstractSDK::compile() method, you need to call parent::compile() in your extended method');
         }
-        
-        $processors = $this->processorFactory->createProcessors($this->request);
+
+        $processors = $this->processorFactory->createProcessors($this->getRequest());
 
         $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
     }
@@ -200,7 +207,7 @@ abstract class AbstractSDK implements SDKInterface
     private function sendRequest() : void
     {
         try {
-            $this->guzzleResponse = $this->request->sendRequest($this->processed);
+            $this->guzzleResponse = $this->getRequest()->sendRequest($this->processed);
         } catch (ConnectException $e) {
             throw new ConnectException('GuzzleHttp threw a ConnectException. Exception message is '.$e->getMessage());
         } catch (ServerException $e) {
@@ -217,7 +224,7 @@ abstract class AbstractSDK implements SDKInterface
     {
         $instanceString = $method->getInstanceObjectString();
 
-        $object = new $instanceString($this->request->getGlobalParameters(), $this->request->getSpecialParameters());
+        $object = new $instanceString($this->getRequest()->getGlobalParameters(), $this->getRequest()->getSpecialParameters());
 
         if (!$object instanceof AbstractRequest) {
             throw new MethodParametersException(get_class($object).' has to extend '.AbstractRequest::class);
@@ -225,14 +232,14 @@ abstract class AbstractSDK implements SDKInterface
 
         $objectMethods = $method->getMethods();
 
-        $specialParameters = $this->request->getSpecialParameters();
+        $specialParameters = $this->getRequest()->getSpecialParameters();
 
         foreach ($objectMethods as $objectMethod) {
             if (!$specialParameters->hasParameter($objectMethod)) {
                 throw new MethodParametersException('Cannot create request method because parameter '.$objectMethod.' does not exist for request method '.$method->getName());
             }
 
-            $parameter = $this->request->getSpecialParameters()->getParameter($objectMethod);
+            $parameter = $this->getRequest()->getSpecialParameters()->getParameter($objectMethod);
             $parameter->enable();
 
             $set = 'set'.preg_replace('#\s#', '', ucwords(preg_replace('#_#', ' ', $parameter->getName())));
