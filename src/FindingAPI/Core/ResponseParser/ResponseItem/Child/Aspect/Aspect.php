@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
 
-class Aspect extends AbstractItemIterator
+class Aspect extends AbstractItemIterator implements ArrayConvertableInterface
 {
     /**
      * @var string $aspectName
@@ -28,6 +29,24 @@ class Aspect extends AbstractItemIterator
 
         return $this->aspectName;
     }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $toArray = array();
+
+        $toArray['aspectName'] = $this->getAspectName();
+
+        $toArray['valueHistograms'] = array();
+
+        foreach ($this->items as $item) {
+            $toArray['valueHistograms'][] = $item->toArray();
+        }
+
+        return $toArray;
+    }
+
     /**
      * @param null|mixed $default
      */

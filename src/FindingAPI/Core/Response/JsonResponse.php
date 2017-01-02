@@ -43,6 +43,13 @@ class JsonResponse implements ResponseInterface
      */
     public function getRoot() : RootItem
     {
+        if ($this->responseItems['rootItem'] instanceof RootItem) {
+            return $this->responseItems['rootItem'];
+        }
+
+        $this->responseItems['rootItem'] = new RootItem($this->simpleXmlBase);
+
+        return $this->responseItems['rootItem'];
     }
     /**
      * @param null $default

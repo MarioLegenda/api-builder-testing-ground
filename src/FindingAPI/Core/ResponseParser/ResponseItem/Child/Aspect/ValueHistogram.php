@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 
-class ValueHistogram extends AbstractItem
+class ValueHistogram extends AbstractItem implements ArrayConvertableInterface
 {
     /**
      * @var string $valueName
@@ -49,6 +50,16 @@ class ValueHistogram extends AbstractItem
         }
 
         return $this->count;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'valueName' => $this->getValueName(),
+            'count' => $this->getCount(),
+        );
     }
 
     private function setCount(int $count) : ValueHistogram

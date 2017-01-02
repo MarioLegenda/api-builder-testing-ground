@@ -227,8 +227,14 @@ class XmlResponse implements ResponseInterface, ArrayConvertableInterface, \Json
         $toArray = array();
 
         $toArray['response'] = array(
-            'rootItem' => $this->getRoot()->toArray()
+            'rootItem' => $this->getRoot()->toArray(),
+            'aspectHistogramContainer' => ($this->getAspectHistogramContainer() instanceof AspectHistogramContainer) ?
+                                            $this->getAspectHistogramContainer()->toArray() :
+                                            null,
         );
+
+        var_dump($toArray);
+        die();
 
         return $toArray;
     }
