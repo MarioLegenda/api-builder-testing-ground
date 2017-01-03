@@ -243,6 +243,9 @@ class XmlResponse implements ResponseInterface, ArrayConvertableInterface, \Json
             'categoryHistogramContainer' => ($this->getCategoryHistogramContainer() instanceof CategoryHistogramContainer) ?
                                                 $this->getCategoryHistogramContainer()->toArray() :
                                                 null,
+            'errors' => ($this->getErrors() instanceof ErrorContainer) ?
+                            $this->getErrors()->toArray() :
+                            null,
         );
 
         return $toArray;

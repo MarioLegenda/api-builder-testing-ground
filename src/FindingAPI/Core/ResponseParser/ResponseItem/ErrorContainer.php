@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Error\ErrorMessage;
 
-class ErrorContainer extends AbstractItemIterator
+class ErrorContainer extends AbstractItemIterator implements ArrayConvertableInterface
 {
     /**
      * ErrorContainer constructor.
@@ -16,6 +17,20 @@ class ErrorContainer extends AbstractItemIterator
 
         $this->loadErrors($simpleXML);
     }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $toArray = array();
+
+        foreach ($this->items as $item) {
+            $toArray[] = $item->toArray();
+        }
+
+        return $toArray;
+    }
+
     /**
      * @param \SimpleXMLElement $simpleXml
      */

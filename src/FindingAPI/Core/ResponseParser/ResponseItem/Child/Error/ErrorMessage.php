@@ -2,14 +2,11 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\Error;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
 
-class ErrorMessage extends AbstractItemIterator
+class ErrorMessage extends AbstractItemIterator implements ArrayConvertableInterface
 {
-    /**
-     * @var Parameter[] $parameters
-     */
-    private $parameters;
     /**
      * @var string $subdomain
      */
@@ -173,6 +170,21 @@ class ErrorMessage extends AbstractItemIterator
         }
 
         return $this->subdomain;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'category' => $this->getCategory(),
+            'domain' => $this->getDomain(),
+            'errorId' => $this->getErrorId(),
+            'exceptionId' => $this->getExceptionId(),
+            'message' => $this->getMessage(),
+            'severity' => $this->getSeverity(),
+            'subdomain' => $this->getSubdomain(),
+        );
     }
 
     private function loadParameters(\SimpleXMLElement $simpleXml)
