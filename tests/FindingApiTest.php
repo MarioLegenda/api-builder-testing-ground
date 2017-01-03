@@ -334,6 +334,26 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('int', $rootItem['searchResultsCount']);
         $this->assertInternalType('string', $rootItem['version']);
         $this->assertInternalType('string', $rootItem['timestamp']);
+
+        if (array_key_exists('errors', $jsonArray)) {
+            $errors = $jsonArray['errors'];
+
+            if (is_array($errors)) {
+                foreach ($errors as $error) {
+                    $this->assertInternalType('string', $error['subdomain']);
+                    $this->assertInternalType('string', $error['severity']);
+                    $this->assertInternalType('string', $error['message']);
+
+                    if (array_key_exists('exceptionId', $error)) {
+                        $this->assertInternalType('string', $error['exceptionId']);
+                    }
+
+                    $this->assertInternalType('int', $error['errorId']);
+                    $this->assertInternalType('string', $error['domain']);
+                    $this->assertInternalType('string', $error['category']);
+                }
+            }
+        }
     }
 
     private function validateXmlResponse(ResponseInterface $response)
@@ -364,14 +384,6 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
                 $this->assertInternalType('int', $errorMessage->getErrorId(), 'ErrorMessage::getErrorId() has to return an int');
                 $this->assertInternalType('string', $errorMessage->getDomain(), 'ErrorMessage::getDomain() has to return an string');
                 $this->assertInternalType('string', $errorMessage->getCategory(), 'ErrorMessage::getDomain() has to return an string');
-
-                foreach ($errorMessage as $parameter) {
-                    if ($parameter->getParameterName() !== null) {
-                        $this->assertInternalType('string', $parameter->getName(), 'Parameter::getName() should return a string');
-                    }
-
-                    $this->assertInternalType('string', $parameter->getParameter());
-                }
             }
         }
 
