@@ -2,6 +2,7 @@
 
 namespace FindingAPI\Core\Response;
 
+use FindingAPI\Core\Exception\ResponseException;
 use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
@@ -37,70 +38,73 @@ class JsonResponse implements ResponseInterface, ArrayConvertableInterface
         $this->jsonResponse = $xmlResponse->toArray();
         $this->guzzleResponse = $response;
     }
-
     /**
-     * @return \FindingAPI\Core\ResponseParser\ResponseItem\RootItem
+     * @throws ResponseException
      */
     public function getRoot() : RootItem
     {
-        if ($this->responseItems['rootItem'] instanceof RootItem) {
-            return $this->responseItems['rootItem'];
-        }
-
-        $this->responseItems['rootItem'] = new RootItem($this->simpleXmlBase);
-
-        return $this->responseItems['rootItem'];
+        throw new ResponseException('You cannot use '.ResponseInterface::class.' methods with '.JsonResponse::class.'. You can only convert it to json');
     }
     /**
      * @param null $default
-     * @return \FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer|null
+     * @throws ResponseException
      */
     public function getAspectHistogramContainer($default = null)
     {
+        throw new ResponseException('You cannot use '.ResponseInterface::class.' methods with '.JsonResponse::class.'. You can only convert it to json');
     }
     /**
      * @param null $default
-     * @return \FindingAPI\Core\ResponseParser\ResponseItem\SearchResultsContainer
+     * @throws ResponseException
      */
     public function getSearchResults($default = null)
     {
+        throw new ResponseException('You cannot use '.ResponseInterface::class.' methods with '.JsonResponse::class.'. You can only convert it to json');
     }
     /**
      * @param null $default
-     * @return mixed
+     * @throws ResponseException
      */
     public function getConditionHistogramContainer($default = null)
     {
+        throw new ResponseException('You cannot use '.ResponseInterface::class.' methods with '.JsonResponse::class.'. You can only convert it to json');
     }
     /**
      * @param null $default
-     * @return mixed|null
+     * @throws ResponseException
      */
     public function getPaginationOutput($default = null)
     {
+        throw new ResponseException('You cannot use '.ResponseInterface::class.' methods with '.JsonResponse::class.'. You can only convert it to json');
     }
     /**
      * @param null $default
      * @return mixed|null
+     * @throws ResponseException
      */
     public function getCategoryHistogramContainer($default = null)
     {
+        throw new ResponseException('You cannot use '.ResponseInterface::class.' methods with '.JsonResponse::class.'. You can only convert it to json');
     }
     /**
      * @param null $default
      * @return mixed|null
+     * @throws ResponseException
      */
     public function getErrors($default = null)
     {
+        throw new ResponseException('You cannot use '.ResponseInterface::class.' methods with '.JsonResponse::class.'. You can only convert it to json');
     }
     /**
      * @return bool
+     * @throws ResponseException
      */
     public function isErrorResponse() : bool
     {
+        throw new ResponseException('You cannot use '.ResponseInterface::class.' methods with '.JsonResponse::class.'. You can only use ResponseInterface::getRawResponse() or convert it to json');
     }
     /**
-     * @return array
+     * @return string
      */
     public function getRawResponse() : string
     {

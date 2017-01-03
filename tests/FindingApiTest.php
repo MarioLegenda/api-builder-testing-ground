@@ -301,6 +301,11 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->addItemFilter(ItemFilter::WORLD_OF_GOOD_ONLY, array(false));*/
     }
 
+    public function validateJsonResponse(ResponseInterface $response)
+    {
+
+    }
+
     private function validateResponse(ResponseInterface $response)
     {
         $this->assertInternalType('string', $response->getRoot()->getName(), 'RootItem name should be ebay method name, for instance findItemByKeywordsResponse');
