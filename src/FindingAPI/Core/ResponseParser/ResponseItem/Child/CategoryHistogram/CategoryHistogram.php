@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\CategoryHistogram;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItemIterator;
 
-class CategoryHistogram extends AbstractItemIterator
+class CategoryHistogram extends AbstractItemIterator implements ArrayConvertableInterface
 {
     /**
      * @var int $depth
@@ -111,6 +112,26 @@ class CategoryHistogram extends AbstractItemIterator
     public function getDepth()
     {
         return $this->depth;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $toArray['categoryId'] = $this->getCategoryId();
+        $toArray['categoryName'] = $this->getCategoryName();
+        $toArray['count'] = $this->getCount();
+        $toArray['depth'] = $this->getDepth();
+
+        $toArray['children'] = array();
+
+        if (!$this->isEmpty()) {
+            foreach ($this->items as $item) {
+                $toArray['children'][] = $item->toArray();
+            }
+        }
+
+        return $toArray;
     }
 
     private function setCount(int $count) : CategoryHistogram

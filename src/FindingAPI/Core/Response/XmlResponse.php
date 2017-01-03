@@ -240,10 +240,10 @@ class XmlResponse implements ResponseInterface, ArrayConvertableInterface, \Json
             'paginationOutput' => ($this->getPaginationOutput() instanceof PaginationOutput) ?
                                     $this->getPaginationOutput()->toArray() :
                                     null,
+            'categoryHistogramContainer' => ($this->getCategoryHistogramContainer() instanceof CategoryHistogramContainer) ?
+                                                $this->getCategoryHistogramContainer()->toArray() :
+                                                null,
         );
-
-        var_dump($toArray);
-        die();
 
         return $toArray;
     }
