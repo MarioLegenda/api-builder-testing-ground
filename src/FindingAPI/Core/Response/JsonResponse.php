@@ -102,9 +102,9 @@ class JsonResponse implements ResponseInterface, \JsonSerializable
     /**
      * @return array
      */
-    public function getRawResponse(): array
+    public function getRawResponse() : string
     {
-        return $this->jsonResponse;
+        return json_encode($this->jsonResponse);
     }
     /**
      * @return string
