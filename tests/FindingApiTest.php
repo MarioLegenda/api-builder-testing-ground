@@ -361,6 +361,19 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('int', $paginationOutput['pageNumber']);
         $this->assertInternalType('int', $paginationOutput['totalEntries']);
         $this->assertInternalType('int', $paginationOutput['totalPages']);
+
+        $searchResults = $jsonArray['searchResultsContainer'];
+
+        foreach ($searchResults as $searchResult) {
+            if (array_key_exists('unitPrice', $searchResult)) {
+                $unitPrice = $searchResult['unitPrice'];
+
+                if (is_array($unitPrice)) {
+                    $this->assertInternalType('float', $unitPrice['quantity']);
+                    $this->assertInternalType('string', $unitPrice['type']);
+                }
+            }
+        }
     }
 
     private function validateXmlResponse(ResponseInterface $response)
