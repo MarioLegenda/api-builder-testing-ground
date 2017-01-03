@@ -354,6 +354,13 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
                 }
             }
         }
+
+        $paginationOutput = $jsonArray['paginationOutput'];
+
+        $this->assertInternalType('int', $paginationOutput['entriesPerPage']);
+        $this->assertInternalType('int', $paginationOutput['pageNumber']);
+        $this->assertInternalType('int', $paginationOutput['totalEntries']);
+        $this->assertInternalType('int', $paginationOutput['totalPages']);
     }
 
     private function validateXmlResponse(ResponseInterface $response)
