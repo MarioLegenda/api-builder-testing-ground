@@ -5,7 +5,7 @@ namespace FindingAPI\Core\Response;
 use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
-class JsonResponse implements ResponseInterface, \JsonSerializable
+class JsonResponse implements ResponseInterface, ArrayConvertableInterface
 {
     /**
      * @var GuzzleResponse $response
@@ -107,10 +107,10 @@ class JsonResponse implements ResponseInterface, \JsonSerializable
         return json_encode($this->jsonResponse);
     }
     /**
-     * @return string
+     * @return array
      */
-    public function jsonSerialize()
+    public function toArray(): array
     {
-        return json_encode($this->jsonResponse);
+        return $this->jsonResponse;
     }
 }

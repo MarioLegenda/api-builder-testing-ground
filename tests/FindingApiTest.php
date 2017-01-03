@@ -192,7 +192,12 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->enableDescriptionSearch()
             ->setResponseFormat('json');
 
-        $this->validateResponse($findingApi->compile()->send()->getResponse());
+        $response = $findingApi
+            ->compile()
+            ->send()
+            ->getResponse();
+
+        $this->assertInternalType('string', json_encode($response));
     }
 
     public function testFindCompletedItemsRequest()
