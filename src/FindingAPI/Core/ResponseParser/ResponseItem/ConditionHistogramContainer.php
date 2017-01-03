@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\ConditionHistogram\ConditionHistogram;
 
-class ConditionHistogramContainer extends AbstractItemIterator
+class ConditionHistogramContainer extends AbstractItemIterator implements ArrayConvertableInterface
 {
     /**
      * ConditionHistogramContainer constructor.
@@ -15,6 +16,19 @@ class ConditionHistogramContainer extends AbstractItemIterator
         parent::__construct($simpleXML);
 
         $this->loadContainer($simpleXML);
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $toArray = array();
+
+        foreach ($this->items as $item) {
+            $toArray[] = $item->toArray();
+        }
+
+        return $toArray;
     }
 
     private function loadContainer(\SimpleXMLElement $simpleXMLElement)

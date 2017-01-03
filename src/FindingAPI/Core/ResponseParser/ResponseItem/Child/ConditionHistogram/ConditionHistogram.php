@@ -2,9 +2,10 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem\Child\ConditionHistogram;
 
+use FindingAPI\Core\Response\ArrayConvertableInterface;
 use FindingAPI\Core\ResponseParser\ResponseItem\AbstractItem;
 
-class ConditionHistogram extends AbstractItem
+class ConditionHistogram extends AbstractItem implements ArrayConvertableInterface
 {
     /**
      * @var string $conditionDisplayName
@@ -38,7 +39,7 @@ class ConditionHistogram extends AbstractItem
     }
     /**
      * @param null $default
-     * @return $this|int|null
+     * @return int
      */
     public function getConditionId($default = null)
     {
@@ -49,7 +50,7 @@ class ConditionHistogram extends AbstractItem
         }
 
         if ($this->conditionId === null and $default !== null) {
-            return $this;
+            return $default;
         }
 
         return $this->conditionId;
@@ -71,6 +72,17 @@ class ConditionHistogram extends AbstractItem
         }
 
         return $this->count;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'conditionId' => $this->getConditionId(),
+            'conditionDisplayName' => $this->getConditionDisplayName(),
+            'count' => $this->getCount(),
+        );
     }
 
     private function setCount(int $count) : ConditionHistogram

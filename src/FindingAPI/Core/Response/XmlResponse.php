@@ -234,6 +234,9 @@ class XmlResponse implements ResponseInterface, ArrayConvertableInterface, \Json
             'searchResultsContainer' => ($this->getSearchResults() instanceof SearchResultsContainer) ?
                                             $this->getSearchResults()->toArray() :
                                             null,
+            'conditionHistogramContainer' => ($this->getConditionHistogramContainer() instanceof ConditionHistogramContainer) ?
+                                                $this->getConditionHistogramContainer()->toArray() :
+                                                null,
         );
 
         return $toArray;
