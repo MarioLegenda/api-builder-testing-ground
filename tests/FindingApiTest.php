@@ -137,7 +137,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->send()
             ->getResponse();
 
-        $this->validateResponse($response);
+        $this->validateXmlResponse($response);
     }
 
     public function testGetSearchKeywordsRecommendations()
@@ -167,7 +167,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->compile()
             ->send();
 
-        $this->validateResponse($findingApi->getResponse());
+        $this->validateXmlResponse($findingApi->getResponse());
     }
 
     public function testFindItemsByCategoryRequest()
@@ -178,7 +178,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->findItemsByCategory()
             ->setCategoryId(23);
 
-        $this->validateResponse($findingApi->compile()->send()->getResponse());
+        $this->validateXmlResponse($findingApi->compile()->send()->getResponse());
     }
 
     public function testFindItemsAdvancedRequest()
@@ -209,7 +209,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->setCategoryId(23)
             ->addKeywords('baseball');
 
-        $this->validateResponse($findingApi->compile()->send()->getResponse());
+        $this->validateXmlResponse($findingApi->compile()->send()->getResponse());
     }
 
     public function testFindItemsByKeywordsRequest()
@@ -246,7 +246,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
             //var_dump((string) $response->getGuzzleResponse()->getBody());
 
-            $this->validateResponse($response);
+            $this->validateXmlResponse($response);
         }
  //           ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
             //->specialFeature()->findLocalItems(31000)
@@ -306,7 +306,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    private function validateResponse(ResponseInterface $response)
+    private function validateXmlResponse(ResponseInterface $response)
     {
         $this->assertInternalType('string', $response->getRoot()->getName(), 'RootItem name should be ebay method name, for instance findItemByKeywordsResponse');
         $this->assertEquals('http://www.ebay.com/marketplace/search/v1/services', $response->getRoot()->getNamespace(), 'Invalid ebay api url, not a string');
