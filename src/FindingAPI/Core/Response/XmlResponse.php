@@ -237,7 +237,13 @@ class XmlResponse implements ResponseInterface, ArrayConvertableInterface, \Json
             'conditionHistogramContainer' => ($this->getConditionHistogramContainer() instanceof ConditionHistogramContainer) ?
                                                 $this->getConditionHistogramContainer()->toArray() :
                                                 null,
+            'paginationOutput' => ($this->getPaginationOutput() instanceof PaginationOutput) ?
+                                    $this->getPaginationOutput()->toArray() :
+                                    null,
         );
+
+        var_dump($toArray);
+        die();
 
         return $toArray;
     }

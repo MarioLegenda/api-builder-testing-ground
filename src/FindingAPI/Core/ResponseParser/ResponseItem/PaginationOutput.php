@@ -2,7 +2,9 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem;
 
-class PaginationOutput extends AbstractItem
+use FindingAPI\Core\Response\ArrayConvertableInterface;
+
+class PaginationOutput extends AbstractItem implements ArrayConvertableInterface
 {
     /**
      * @var int $entriesPerPage
@@ -92,6 +94,18 @@ class PaginationOutput extends AbstractItem
         }
 
         return $this->totalPages;
+    }
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'entriesPerPage' => $this->getEntriesPerPage(),
+            'pageNumber' => $this->getPageNumber(),
+            'totalEntries' => $this->getTotalEntries(),
+            'totalPages' => $this->getTotalPages(),
+        );
     }
 
     private function setTotalEntries(int $totalEntries) : PaginationOutput
