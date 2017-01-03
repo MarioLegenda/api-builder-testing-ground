@@ -9,6 +9,7 @@ use SDKBuilder\SDKBuilder;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Options\Options;
 use SDKBuilder\Request\Method\Method;
+use FindingAPI\Core\Information\Currency;
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\CategoryHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\Aspect;
@@ -187,17 +188,18 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
         $findingApi
             ->findItemsAdvanced()
+            ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
             ->setCategoryId(23)
             ->addKeywords('baseball')
             ->enableDescriptionSearch()
-            ->setResponseFormat('json');
+            ->setResponseFormat('xml');
 
         $response = $findingApi
             ->compile()
             ->send()
             ->getResponse();
 
-        $this->assertInternalType('string', json_encode($response));
+        $this->validateXmlResponse($response);
     }
 
     public function testFindCompletedItemsRequest()
@@ -210,6 +212,26 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->addKeywords('baseball');
 
         $this->validateXmlResponse($findingApi->compile()->send()->getResponse());
+    }
+
+    public function testFindItemsByKeywordsJsonRequest()
+    {
+        $findingApi = SDKBuilder::inst()->create('finding');
+
+        $findingApi
+            ->findItemsByKeywords()
+            ->addKeywords('call of duty')
+            ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
+            ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
+            ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN))
+            ->setResponseFormat('json');
+
+        $response = $findingApi
+            ->compile()
+            ->send()
+            ->getResponse();
+
+        $this->validateJsonResponse($response);
     }
 
     public function testFindItemsByKeywordsRequest()
@@ -303,7 +325,15 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function validateJsonResponse(ResponseInterface $response)
     {
+        $jsonArray = $response->toArray()['response'];
 
+        $rootItem = $jsonArray['rootItem'];
+
+        $this->assertInternalType('string', $rootItem['ack']);
+        $this->assertInternalType('string', $rootItem['namespace']);
+        $this->assertInternalType('int', $rootItem['searchResultsCount']);
+        $this->assertInternalType('string', $rootItem['version']);
+        $this->assertInternalType('string', $rootItem['timestamp']);
     }
 
     private function validateXmlResponse(ResponseInterface $response)
