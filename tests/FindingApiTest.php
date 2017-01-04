@@ -363,7 +363,9 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         $aspectHistogramContainer = $jsonArray['aspectHistogramContainer'];
 
         if (!empty($aspectHistogramContainer)) {
-            foreach ($aspectHistogramContainer as $aspect) {
+            $this->assertInternalType('string', $aspectHistogramContainer['domainDisplayName']);
+
+            foreach ($aspectHistogramContainer['aspects'] as $aspect) {
                 $this->assertInternalType('string', $aspect['aspectName']);
 
                 $valueHistograms = $aspect['valueHistograms'];
