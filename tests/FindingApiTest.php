@@ -114,7 +114,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testGetVersion()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi->getVersion();
 
@@ -126,7 +126,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testHistograms()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->getHistograms()
@@ -142,7 +142,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSearchKeywordsRecommendations()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->getSearchKeywordsRecommendation()
@@ -156,7 +156,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByProduct()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->findItemsByProduct()
@@ -172,7 +172,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByCategoryRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->findItemsByCategory()
@@ -183,7 +183,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsAdvancedRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->findItemsAdvanced()
@@ -203,7 +203,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindCompletedItemsRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->findCompletedItems()
@@ -215,7 +215,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByKeywordsJsonRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->findItemsByKeywords()
@@ -243,7 +243,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         );
 
         foreach ($queries as $query => $filters) {
-            $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+            $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
             $request = $findingApi->findItemsByKeywords();
 
@@ -548,6 +548,90 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
                 $this->assertInternalType('string', $listingInfo['startTime']);
                 $this->assertInternalType('string', $listingInfo['listingType']);
             }
+
+            if (!empty($searchResult['sellingStatus'])) {
+                $sellingStatus = $searchResult['sellingStatus'];
+
+                if (!empty($sellingStatus['bidCount'])) {
+                    $this->assertInternalType('int', $sellingStatus['bidCount']);
+                }
+
+                $convertedCurrentPrice = $sellingStatus['convertedCurrentPrice'];
+
+                if (!empty($convertedCurrentPrice)) {
+                    $this->assertInternalType('string', $convertedCurrentPrice['currencyId']);
+                    $this->assertInternalType('float', $convertedCurrentPrice['convertedCurrentPrice']);
+                }
+
+                $currentPrice = $sellingStatus['currentPrice'];
+
+                if (!empty($currentPrice)) {
+                    $this->assertInternalType('string', $currentPrice['currencyId']);
+                    $this->assertInternalType('float', $currentPrice['currentPrice']);
+                }
+
+                $this->assertInternalType('string', $sellingStatus['sellingState']);
+                $this->assertInternalType('string', $sellingStatus['timeLeft']);
+            }
+
+            if (!empty($searchResult['shippingInfo'])) {
+                $shippingInfo = $searchResult['shippingInfo'];
+
+                $shippingServiceCost = $shippingInfo['shippingServiceCost'];
+
+                if (!empty($shippingServiceCost)) {
+                    $this->assertInternalType('string', $shippingServiceCost['currencyId']);
+                    $this->assertInternalType('float', $shippingServiceCost['amount']);
+                }
+
+                $this->assertInternalType('bool', $shippingInfo['expeditedShipping']);
+
+                if (!empty($shippingInfo['handlingTime'])) {
+                    $this->assertInternalType('int', $shippingInfo['handlingTime']);
+                }
+
+                if (!empty($shippingInfo['oneDayShippingAvailable'])) {
+                    $this->assertInternalType('bool', (bool) $shippingInfo['oneDayShippingAvailable']);
+                }
+
+                $this->assertInternalType('string', $shippingInfo['shippingType']);
+
+                $shipToLocations = $shippingInfo['shipToLocations'];
+
+                if (!empty($shipToLocations)) {
+                    foreach ($shipToLocations as $location) {
+                        $this->assertInternalType('string', $location);
+                    }
+                }
+            }
+
+            $this->assertInternalType('string', $searchResult['country']);
+            $this->assertInternalType('string', $searchResult['location']);
+
+            if (!empty($searchResult['postalCode'])) {
+                $this->assertInternalType('int', $searchResult['postalCode']);
+            }
+
+            $this->assertInternalType('bool', $searchResult['autoPay']);
+
+            $paymentMethods = $searchResult['paymentMethods'];
+
+            if (is_array($paginationOutput)) {
+                foreach ($paymentMethods as $paymentMethod) {
+                    $this->assertInternalType('string', $paymentMethod);
+                }
+            }
+
+            $productId = $searchResult['productId'];
+
+            if (!empty($productId)) {
+                $this->assertInternalType('string', $productId['type']);
+                $this->assertInternalType('int', $productId['productId']);
+            }
+
+            $this->assertInternalType('string', $searchResult['viewItemUrl']);
+            $this->assertInternalType('string', $searchResult['galleryUrl']);
+            $this->assertInternalType('string', $searchResult['globalId']);
         }
     }
 

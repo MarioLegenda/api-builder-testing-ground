@@ -24,7 +24,7 @@ class SellingStatus extends AbstractItem implements ArrayConvertableInterface
      */
     private $sellingState;
     /**
-     * @var int $timeLeft
+     * @var string $timeLeft
      */
     private $timeLeft;
     /**
@@ -147,11 +147,11 @@ class SellingStatus extends AbstractItem implements ArrayConvertableInterface
         return $this;
     }
 
-    private function setCurrentPrice($currencyId, $currentPrice) : SellingStatus
+    private function setCurrentPrice(string $currencyId, float $currentPrice) : SellingStatus
     {
         $this->currentPrice = array(
             'currencyId' => $currencyId,
-            'currenctPrice' => $currentPrice,
+            'currentPrice' => $currentPrice,
         );
 
         return $this;
