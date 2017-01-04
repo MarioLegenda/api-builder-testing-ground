@@ -266,7 +266,6 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             //var_dump($processed);
 
             //var_dump((string) $response->getGuzzleResponse()->getBody());
-
             $this->validateXmlResponse($response);
         }
  //           ->setOperationName(OperationName::FIND_ITEMS_BY_KEYWORDS)
@@ -385,6 +384,16 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
                 $this->assertInternalType('string', $conditionHistogram['conditionDisplayName']);
                 $this->assertInternalType('int', $conditionHistogram['conditionId']);
                 $this->assertInternalType('int', $conditionHistogram['count']);
+            }
+        }
+
+        $categoryHistogramContainer = $jsonArray['categoryHistogramContainer'];
+
+        if (!empty($categoryHistogramContainer)) {
+            foreach ($categoryHistogramContainer as $categoryHistogram) {
+                $this->assertInternalType('string', $categoryHistogram['categoryId']);
+                $this->assertInternalType('string', $categoryHistogram['categoryName']);
+                $this->assertInternalType('int', $categoryHistogram['count']);
             }
         }
 
@@ -658,8 +667,11 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
                 }
 
                 $this->assertInternalType('string', $searchResult['viewItemUrl']);
-                $this->assertInternalType('string', $searchResult['galleryUrl']);
-                $this->assertInternalType('string', $searchResult['globalId']);
+
+                if (!empty($searchResult['galleryUrl'])) {
+                    $this->assertInternalType('string', $searchResult['galleryUrl']);
+                    $this->assertInternalType('string', $searchResult['globalId']);
+                }
             }
         }
     }

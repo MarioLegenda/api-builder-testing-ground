@@ -2,6 +2,7 @@
 
 namespace SDKBuilder;
 
+use FindingAPI\Core\Event\AddProcessorEvent;
 use SDKBuilder\Exception\SDKException;
 use SDKBuilder\Processor\Factory\ProcessorFactory;
 use SDKBuilder\Processor\Get\GetRequestParametersProcessor;
@@ -132,6 +133,32 @@ abstract class AbstractSDK implements SDKInterface
     /**
      * @return SDKInterface
      */
+    public function compile() : SDKInterface
+    {
+        $this->processorFactory->registerProcessor($this->getRequest()->getMethod(), GetRequestParametersProcessor::class);
+
+        if ($this->eventDispatcher->hasListeners('sdk.pre_compile')) {
+            $this->eventDispatcher->dispatch('sdk.pre_compile', new AddProcessorEvent(
+                $this->getProcessorFactory(),
+                $this->getRequest()
+            ));
+        }
+
+        $this->processRequest();
+
+        if ($this->offlineModeSwitch === true) {
+            if (!$this->offlineMode instanceof \SDKOfflineMode\SDKOfflineMode and class_exists('SDKOfflineMode\\SDKOfflineMode')) {
+                $this->offlineMode = new \SDKOfflineMode\SDKOfflineMode($this);
+            }
+        }
+
+        $this->isCompiled = true;
+
+        return $this;
+    }
+    /**
+     * @return SDKInterface
+     */
     public function send() : SDKInterface
     {
         $this->validatorsProcessor->validate();
@@ -213,25 +240,6 @@ abstract class AbstractSDK implements SDKInterface
         $this->setRequest($this->createMethod($method));
 
         return $this->getRequest();
-    }
-    /**
-     * @return SDKInterface
-     */
-    public function compile() : SDKInterface
-    {
-        $this->processorFactory->registerProcessor($this->getRequest()->getMethod(), GetRequestParametersProcessor::class);
-
-        $this->processRequest();
-
-        if ($this->offlineModeSwitch === true) {
-            if (!$this->offlineMode instanceof \SDKOfflineMode\SDKOfflineMode and class_exists('SDKOfflineMode\\SDKOfflineMode')) {
-                $this->offlineMode = new \SDKOfflineMode\SDKOfflineMode($this);
-            }
-        }
-
-        $this->isCompiled = true;
-
-        return $this;
     }
     /**
      * @return ProcessorFactory

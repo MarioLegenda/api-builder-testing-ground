@@ -6,8 +6,10 @@ use FindingAPI\Core\Listener\AddProcessorListener;
 use SDKBuilder\AbstractApiFactory;
 use FindingAPI\Core\Configuration\FindingConfiguration;
 use FindingAPI\Core\Options\Options;
+use SDKBuilder\Event\CompileTimeEvent;
 use SDKBuilder\SDK\SDKInterface;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Yaml\Yaml;
 use SDKBuilder\Exception\SDKException;
 use FindingAPI\Core\Options\Option;
@@ -28,7 +30,7 @@ class FindingFactory extends AbstractApiFactory
 
         $this->eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
         $this->eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
-        $this->eventDispatcher->addListener('finding.add_processor', array(new AddProcessorListener(), 'onAddProcessor'));
+        $this->eventDispatcher->addListener('sdk.pre_compile', array(new AddProcessorListener(), 'onAddProcessor'));
 
         return $api;
     }

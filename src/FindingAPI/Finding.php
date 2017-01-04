@@ -12,6 +12,9 @@ use SDKBuilder\SDK\SDKInterface;
 use FindingAPI\Core\Response\FakeGuzzleResponse;
 use SDKOfflineMode\SDKOfflineMode;
 
+use SDKBuilder\Request\AbstractRequest;
+use FindingAPI\Core\Processor\Get\GetItemFiltersProcessor;
+
 class Finding extends AbstractSDK
 {
     /**
@@ -22,8 +25,6 @@ class Finding extends AbstractSDK
     public function compile() : SDKInterface
     {
         parent::compile();
-
-        $this->dispatchListeners();
 
         return $this;
     }

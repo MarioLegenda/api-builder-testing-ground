@@ -18,8 +18,8 @@ class Aspect extends AbstractItemIterator implements ArrayConvertableInterface
     public function getAspectName($default = null)
     {
         if ($this->aspectName === null) {
-            if (!empty($this->simpleXml->aspect['name'])) {
-                $this->setAspectName($this->simpleXml->aspect['name']);
+            if (!empty($this->simpleXml['name'])) {
+                $this->setAspectName((string) $this->simpleXml['name']);
             }
         }
 
@@ -29,24 +29,6 @@ class Aspect extends AbstractItemIterator implements ArrayConvertableInterface
 
         return $this->aspectName;
     }
-    /**
-     * @return array
-     */
-    public function toArray(): array
-    {
-        $toArray = array();
-
-        $toArray['aspectName'] = $this->getAspectName();
-
-        $toArray['valueHistograms'] = array();
-
-        foreach ($this->items as $item) {
-            $toArray['valueHistograms'][] = $item->toArray();
-        }
-
-        return $toArray;
-    }
-
     /**
      * @param null|mixed $default
      */
@@ -64,6 +46,27 @@ class Aspect extends AbstractItemIterator implements ArrayConvertableInterface
             return $this->items;
         }
     }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $toArray = array();
+
+        $toArray['aspectName'] = $this->getAspectName();
+
+        $toArray['valueHistograms'] = array();
+
+        $this->getValuesHistograms();
+
+        foreach ($this->items as $item) {
+            $toArray['valueHistograms'][] = $item->toArray();
+        }
+
+        return $toArray;
+    }
+
 
     private function loadValueHistograms(\SimpleXMLElement $simpleXml)
     {
