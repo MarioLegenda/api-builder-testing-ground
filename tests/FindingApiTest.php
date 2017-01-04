@@ -7,7 +7,6 @@ require __DIR__ . '/../vendor/autoload.php';
 use FindingAPI\FindingFactory;
 use SDKBuilder\SDKBuilder;
 use FindingAPI\Core\ItemFilter\ItemFilter;
-use FindingAPI\Core\Options\Options;
 use SDKBuilder\Request\Method\Method;
 use FindingAPI\Core\Information\Currency;
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
@@ -115,7 +114,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testGetVersion()
     {
-        $findingApi = SDKBuilder::inst()->create('finding');
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
 
         $findingApi->getVersion();
 
@@ -127,7 +126,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testHistograms()
     {
-        $findingApi = SDKBuilder::inst()->create('finding');
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
 
         $findingApi
             ->getHistograms()
@@ -143,11 +142,11 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSearchKeywordsRecommendations()
     {
-        $findingApi = SDKBuilder::inst()->create('finding');
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
 
         $findingApi
             ->getSearchKeywordsRecommendation()
-            ->addKeywords('baseball');
+            ->addKeywords('football');
 
         $response = $findingApi
             ->compile()
@@ -157,7 +156,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByProduct()
     {
-        $findingApi = SDKBuilder::inst()->create('finding');
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
 
         $findingApi
             ->findItemsByProduct()
@@ -173,7 +172,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByCategoryRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding');
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
 
         $findingApi
             ->findItemsByCategory()
@@ -184,7 +183,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsAdvancedRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding');
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
 
         $findingApi
             ->findItemsAdvanced()
@@ -204,7 +203,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindCompletedItemsRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding');
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
 
         $findingApi
             ->findCompletedItems()
@@ -216,7 +215,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByKeywordsJsonRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding');
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
 
         $findingApi
             ->findItemsByKeywords()
@@ -244,7 +243,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         );
 
         foreach ($queries as $query => $filters) {
-            $findingApi = SDKBuilder::inst()->create('finding');
+            $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
 
             $request = $findingApi->findItemsByKeywords();
 
@@ -483,8 +482,14 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
                 $this->assertInternalType('string', $discountPriceInfo['minimumAdvertisedPriceExposure']);
                 $this->assertInternalType('string', $discountPriceInfo['pricingTreatment']);
-                $this->assertInternalType('bool', $discountPriceInfo['soldOnEbay']);
-                $this->assertInternalType('bool', $discountPriceInfo['soldOffEbay']);
+
+                if (!empty($discountPriceInfo['soldOnEbay'])) {
+                    $this->assertInternalType('bool', $discountPriceInfo['soldOnEbay']);
+                }
+
+                if (!empty($discountPriceInfo['soldOffEbay'])) {
+                    $this->assertInternalType('bool', $discountPriceInfo['soldOffEbay']);
+                }
             }
 
             if (!empty($searchResult['compatibility'])) {

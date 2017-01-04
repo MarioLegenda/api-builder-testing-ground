@@ -8,11 +8,9 @@ use FindingAPI\Core\Event\ItemFilterEvent;
 use FindingAPI\Core\Response\ResponseInterface;
 use FindingAPI\Core\Response\ResponseProxy;
 
-use FindingAPI\Core\Exception\ConnectException as FindingConnectException;
-use SDKBuilder\Exception\RequestException;
-use SDKBuilder\Exception\SDKException;
 use SDKBuilder\SDK\SDKInterface;
 use FindingAPI\Core\Response\FakeGuzzleResponse;
+use SDKOfflineMode\SDKOfflineMode;
 
 class Finding extends AbstractSDK
 {
@@ -42,7 +40,15 @@ class Finding extends AbstractSDK
                 $this->getRequest()->getResponseFormat()
             );
 
-            return $response;
+            $this->response = $response;
+
+            return $this->response;
+        }
+
+        if ($this->offlineModeSwitch === true) {
+            if ($this->offlineMode instanceof SDKOfflineMode) {
+                return $this->offlineMode->getResponse();
+            }
         }
 
         if ($this->response instanceof ResponseInterface) {

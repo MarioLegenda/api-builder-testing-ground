@@ -14,14 +14,14 @@
         "symfony/yaml": "^3.1",
         "guzzlehttp/guzzle": "~6.0",
         "symfony/event-dispatcher": "^3.1",
-        "symfony/config": "^3.2"
+        "symfony/config": "^3.2",
+        "mario-legenda/sdk-offline-mode": "dev-master"
     },
 
     "require-dev": {
         "phpunit/phpunit": "4.8.*",
         "raveren/kint": "^1.0",
-        "twig/twig": "~1.0",
-        "mario-legenda/ebay-offline-mode": "dev-master"
+        "twig/twig": "~1.0"
     },
 
     "autoload": {

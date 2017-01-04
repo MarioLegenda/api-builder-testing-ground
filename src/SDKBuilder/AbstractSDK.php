@@ -19,6 +19,7 @@ use SDKBuilder\Common\Logger;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use SDKBuilder\Processor\RequestProducer;
 
+use SDKOfflineMode\SDKOfflineMode;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use SDKBuilder\Exception\MethodParametersException;
@@ -62,6 +63,14 @@ abstract class AbstractSDK implements SDKInterface
      */
     protected $responseToParse;
     /**
+     * @var SDKOfflineMode\SDKOfflineMode
+     */
+    protected $offlineMode;
+    /**
+     * @var bool $offlineModeSwitch
+     */
+    protected $offlineModeSwitch = true;
+    /**
      * AbstractSDK constructor.
      * @param AbstractRequest $request
      * @param MethodParameters $methodParameters
@@ -76,6 +85,16 @@ abstract class AbstractSDK implements SDKInterface
         $this->processorFactory = $processorFactory;
         $this->eventDispatcher = $eventDispatcher;
         $this->validatorsProcessor = $validatorsProcessor;
+    }
+    /**
+     * @param bool $switch
+     * @return SDKInterface
+     */
+    public function switchOfflineMode(bool $switch) : SDKInterface
+    {
+        $this->offlineModeSwitch = $switch;
+
+        return $this;
     }
     /**
      * @param Method $method
@@ -117,7 +136,13 @@ abstract class AbstractSDK implements SDKInterface
     {
         $this->validatorsProcessor->validate();
 
-        $this->processRequest();
+        if ($this->offlineModeSwitch === true) {
+            if ($this->offlineMode instanceof \SDKOfflineMode\SDKOfflineMode) {
+                if ($this->offlineMode->isResponseStored($this->getProcessedRequestString())) {
+                    return $this;
+                }
+            }
+        }
 
         $this->sendRequest();
 
@@ -196,6 +221,14 @@ abstract class AbstractSDK implements SDKInterface
     {
         $this->processorFactory->registerProcessor($this->getRequest()->getMethod(), GetRequestParametersProcessor::class);
 
+        $this->processRequest();
+
+        if ($this->offlineModeSwitch === true) {
+            if (!$this->offlineMode instanceof \SDKOfflineMode\SDKOfflineMode and class_exists('SDKOfflineMode\\SDKOfflineMode')) {
+                $this->offlineMode = new \SDKOfflineMode\SDKOfflineMode($this);
+            }
+        }
+
         $this->isCompiled = true;
 
         return $this;
@@ -210,10 +243,6 @@ abstract class AbstractSDK implements SDKInterface
 
     private function processRequest()
     {
-        if (!$this->isCompiled) {
-            throw new SDKException('Api is not compiled. If you extended the AbstractSDK::compile() method, you need to call parent::compile() in your extended method');
-        }
-
         $processors = $this->processorFactory->createProcessors($this->getRequest());
 
         $this->processed = (new RequestProducer($processors))->produce()->getFinalProduct();
@@ -221,6 +250,10 @@ abstract class AbstractSDK implements SDKInterface
 
     private function sendRequest() : void
     {
+        if (!$this->isCompiled) {
+            throw new SDKException('Api is not compiled. If you extended the AbstractSDK::compile() method, you need to call parent::compile() in your extended method');
+        }
+
         try {
             $this->guzzleResponse = $this->getRequest()->sendRequest($this->processed);
         } catch (ConnectException $e) {

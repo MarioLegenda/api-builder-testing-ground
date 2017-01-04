@@ -17,23 +17,11 @@ class JsonResponse implements ResponseInterface, ArrayConvertableInterface
      */
     private $jsonResponse;
     /**
-     * @var array $responseItems
-     */
-    private $responseItems = array(
-        'rootItem' => null,
-        'aspectHistogram' => null,
-        'searchResult' => null,
-        'conditionHistogramContainer' => null,
-        'errorContainer' => null,
-        'paginationOutput' => null,
-        'categoryHistogram' => null,
-    );
-    /**
      * JsonResponse constructor.
      * @param ArrayConvertableInterface $xmlResponse
      * @param GuzzleResponse $response
      */
-    public function __construct(ArrayConvertableInterface $xmlResponse, GuzzleResponse $response)
+    public function __construct(ArrayConvertableInterface $xmlResponse, $response)
     {
         $this->jsonResponse = $xmlResponse->toArray();
         $this->guzzleResponse = $response;
