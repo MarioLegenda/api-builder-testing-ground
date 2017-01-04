@@ -361,277 +361,296 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('int', $paginationOutput['totalEntries']);
         $this->assertInternalType('int', $paginationOutput['totalPages']);
 
-        $searchResults = $jsonArray['searchResultsContainer'];
+        $aspectHistogramContainer = $jsonArray['aspectHistogramContainer'];
 
-        foreach ($searchResults as $searchResult) {
-            $validKeys = array(
-                'itemId',
-                'title',
-                'subtitle',
-                'storeInfo',
-                'unitPrice',
-                'sellerInfo',
-                'pictureUrlSuperSize',
-                'galleryPlusPictureUrl',
-                'pictureUrlLarge',
-                'galleryInfoContainer',
-                'eekStatus',
-                'distance',
-                'discountPriceInfo',
-                'compatibility',
-                'charityId',
-                'primaryCategory',
-                'secondaryCategory',
-                'condition',
-                'topRatedListing',
-                'multiVariationListing',
-                'returnsAccepted',
-                'listingInfo',
-                'sellingStatus',
-                'shippingInfo',
-                'country',
-                'location',
-                'postalCode',
-                'autoPay',
-                'paymentMethods',
-                'productId',
-                'viewItemUrl',
-                'galleryUrl',
-                'globalId',
-            );
+        if (!empty($aspectHistogramContainer)) {
+            foreach ($aspectHistogramContainer as $aspect) {
+                $this->assertInternalType('string', $aspect['aspectName']);
 
-            foreach ($validKeys as $validKey) {
-                $this->assertArrayHasKey($validKey, $searchResult, 'Key '.$validKey.' not found in search result in json response');
-            }
+                $valueHistograms = $aspect['valueHistograms'];
 
-            $this->assertInternalType('string', $searchResult['title']);
-
-            if (!is_null($searchResult['subtitle'])) {
-                $this->assertInternalType('string', $searchResult['subtitle']);
-            }
-
-            $this->assertInternalType('string', $searchResult['itemId']);
-
-            if (array_key_exists('unitPrice', $searchResult)) {
-                $unitPrice = $searchResult['unitPrice'];
-
-                if (is_array($unitPrice)) {
-                    $this->assertInternalType('float', $unitPrice['quantity']);
-                    $this->assertInternalType('string', $unitPrice['type']);
-                }
-            }
-
-            if (!empty($searchResult['storeInfo'])) {
-                $storeInfo = $searchResult['storeInfo'];
-
-                $this->assertInternalType('string', $storeInfo['storeName']);
-                $this->assertInternalType('string', $storeInfo['storeUrl']);
-            }
-
-            if (!empty($searchResult['sellerInfo'])) {
-                $sellerInfo = $searchResult['sellerInfo'];
-
-                $this->assertInternalType('string', $sellerInfo['feedbackRatingStar']);
-                $this->assertInternalType('int', $sellerInfo['feedbackScore']);
-                $this->assertInternalType('float', $sellerInfo['positiveFeedbackPercent']);
-                $this->assertInternalType('string', $sellerInfo['sellerUsername']);
-                $this->assertInternalType('bool', $sellerInfo['topRatedSeller']);
-            }
-
-            if (!is_null($searchResult['pictureUrlLarge'])) {
-                $this->assertInternalType('string', $searchResult['pictureUrlLarge']);
-            }
-
-            if (!is_null($searchResult['pictureUrlSuperSize'])) {
-                $this->assertInternalType('string', $searchResult['pictureUrlSuperSize']);
-            }
-
-            if (!is_null($searchResult['galleryPlusPictureUrl'])) {
-                $this->assertInternalType('string', $searchResult['galleryPlusPictureUrl']);
-            }
-
-            if (!empty($searchResult['galleryInfoContainer'])) {
-                foreach ($searchResult['galleryInfoContainer'] as $gallery) {
-                    $this->assertInternalType('string', $gallery['size']);
-                    $this->assertInternalType('url', $gallery['url']);
-                }
-            }
-
-            if (!empty($searchResult['eekStatus'])) {
-                foreach ($searchResult['eekStatus'] as $eekStatus) {
-                    $this->assertInternalType('string', $eekStatus);
-                }
-            }
-
-            if (!empty($searchResult['distance'])) {
-                $distance = $searchResult['distance'];
-
-                $this->assertInternalType('float', $distance['distance']);
-                $this->assertInternalType('string', $distance['unit']);
-            }
-
-            if (!empty($searchResult['discountPriceInfo'])) {
-                $discountPriceInfo = $searchResult['discountPriceInfo'];
-
-                if (is_array($discountPriceInfo['originalRetailPrice'])) {
-                    $originalRetailPrice = $discountPriceInfo['originalRetailPrice'];
-
-                    $this->assertInternalType('string', $originalRetailPrice['currencyId']);
-                    $this->assertInternalType('float', $originalRetailPrice['amount']);
-                }
-
-                $this->assertInternalType('string', $discountPriceInfo['minimumAdvertisedPriceExposure']);
-                $this->assertInternalType('string', $discountPriceInfo['pricingTreatment']);
-
-                if (!empty($discountPriceInfo['soldOnEbay'])) {
-                    $this->assertInternalType('bool', $discountPriceInfo['soldOnEbay']);
-                }
-
-                if (!empty($discountPriceInfo['soldOffEbay'])) {
-                    $this->assertInternalType('bool', $discountPriceInfo['soldOffEbay']);
-                }
-            }
-
-            if (!empty($searchResult['compatibility'])) {
-                $this->assertInternalType('string', $searchResult['compatibility']);
-            }
-
-            if (!empty($searchResult['charityId'])) {
-                $this->assertInternalType('string', $searchResult['charityId']);
-            }
-
-            if (!empty($searchResult['attributes'])) {
-                $attributes = $searchResult['attributes'];
-
-                foreach ($attributes as $attribute) {
-                    $this->assertInternalType('string', $attribute['attributeName']);
-                    $this->assertInternalType('string', $attribute['attributeValue']);
-                }
-            }
-
-            if (!empty($searchResult['condition'])) {
-                $condition = $searchResult['condition'];
-
-                $this->assertInternalType('int', $condition['conditionId']);
-
-                if (!is_null($condition['conditionDisplayName'])) {
-                    $this->assertInternalType('string', $condition['conditionDisplayName']);
-                }
-            }
-
-            $this->assertInternalType('bool', $searchResult['topRatedListing']);
-            $this->assertInternalType('bool', $searchResult['multiVariationListing']);
-            $this->assertInternalType('bool', $searchResult['returnsAccepted']);
-
-            if (!empty($searchResult['listingInfo'])) {
-                $listingInfo = $searchResult['listingInfo'];
-
-                $this->assertInternalType('bool', $listingInfo['bestOfferEnabled']);
-                $this->assertInternalType('bool', $listingInfo['buyItNowAvailable']);
-                $this->assertInternalType('bool', $listingInfo['gift']);
-
-                $buyItNowPrice = $listingInfo['buyItNowPrice'];
-
-                if (!empty($buyItNowPrice)) {
-                    $this->assertInternalType('string', $buyItNowPrice['currencyId']);
-                    $this->assertInternalType('float', $buyItNowPrice['amount']);
-                }
-
-                $convertedBuyItNowPrice = $listingInfo['convertedBuyItNowPrice'];
-
-                if (!empty($convertedBuyItNowPrice)) {
-                    $this->assertInternalType('string', $convertedBuyItNowPrice['currencyId']);
-                    $this->assertInternalType('float', $convertedBuyItNowPrice['amount']);
-                }
-
-                $this->assertInternalType('string', $listingInfo['endTime']);
-                $this->assertInternalType('string', $listingInfo['startTime']);
-                $this->assertInternalType('string', $listingInfo['listingType']);
-            }
-
-            if (!empty($searchResult['sellingStatus'])) {
-                $sellingStatus = $searchResult['sellingStatus'];
-
-                if (!empty($sellingStatus['bidCount'])) {
-                    $this->assertInternalType('int', $sellingStatus['bidCount']);
-                }
-
-                $convertedCurrentPrice = $sellingStatus['convertedCurrentPrice'];
-
-                if (!empty($convertedCurrentPrice)) {
-                    $this->assertInternalType('string', $convertedCurrentPrice['currencyId']);
-                    $this->assertInternalType('float', $convertedCurrentPrice['convertedCurrentPrice']);
-                }
-
-                $currentPrice = $sellingStatus['currentPrice'];
-
-                if (!empty($currentPrice)) {
-                    $this->assertInternalType('string', $currentPrice['currencyId']);
-                    $this->assertInternalType('float', $currentPrice['currentPrice']);
-                }
-
-                $this->assertInternalType('string', $sellingStatus['sellingState']);
-                $this->assertInternalType('string', $sellingStatus['timeLeft']);
-            }
-
-            if (!empty($searchResult['shippingInfo'])) {
-                $shippingInfo = $searchResult['shippingInfo'];
-
-                $shippingServiceCost = $shippingInfo['shippingServiceCost'];
-
-                if (!empty($shippingServiceCost)) {
-                    $this->assertInternalType('string', $shippingServiceCost['currencyId']);
-                    $this->assertInternalType('float', $shippingServiceCost['amount']);
-                }
-
-                $this->assertInternalType('bool', $shippingInfo['expeditedShipping']);
-
-                if (!empty($shippingInfo['handlingTime'])) {
-                    $this->assertInternalType('int', $shippingInfo['handlingTime']);
-                }
-
-                if (!empty($shippingInfo['oneDayShippingAvailable'])) {
-                    $this->assertInternalType('bool', (bool) $shippingInfo['oneDayShippingAvailable']);
-                }
-
-                $this->assertInternalType('string', $shippingInfo['shippingType']);
-
-                $shipToLocations = $shippingInfo['shipToLocations'];
-
-                if (!empty($shipToLocations)) {
-                    foreach ($shipToLocations as $location) {
-                        $this->assertInternalType('string', $location);
+                if (!empty($valueHistograms)) {
+                    foreach ($valueHistograms as $valueHistogram) {
+                        $this->assertInternalType('string', $valueHistogram['valueName']);
+                        $this->assertInternalType('int', $valueHistogram['count']);
                     }
                 }
             }
+        }
 
-            $this->assertInternalType('string', $searchResult['country']);
-            $this->assertInternalType('string', $searchResult['location']);
+        $searchResults = $jsonArray['searchResultsContainer'];
 
-            if (!empty($searchResult['postalCode'])) {
-                $this->assertInternalType('int', $searchResult['postalCode']);
-            }
+        if (!empty($searchResults)) {
+            foreach ($searchResults as $searchResult) {
+                $validKeys = array(
+                    'itemId',
+                    'title',
+                    'subtitle',
+                    'storeInfo',
+                    'unitPrice',
+                    'sellerInfo',
+                    'pictureUrlSuperSize',
+                    'galleryPlusPictureUrl',
+                    'pictureUrlLarge',
+                    'galleryInfoContainer',
+                    'eekStatus',
+                    'distance',
+                    'discountPriceInfo',
+                    'compatibility',
+                    'charityId',
+                    'primaryCategory',
+                    'secondaryCategory',
+                    'condition',
+                    'topRatedListing',
+                    'multiVariationListing',
+                    'returnsAccepted',
+                    'listingInfo',
+                    'sellingStatus',
+                    'shippingInfo',
+                    'country',
+                    'location',
+                    'postalCode',
+                    'autoPay',
+                    'paymentMethods',
+                    'productId',
+                    'viewItemUrl',
+                    'galleryUrl',
+                    'globalId',
+                );
 
-            $this->assertInternalType('bool', $searchResult['autoPay']);
-
-            $paymentMethods = $searchResult['paymentMethods'];
-
-            if (is_array($paginationOutput)) {
-                foreach ($paymentMethods as $paymentMethod) {
-                    $this->assertInternalType('string', $paymentMethod);
+                foreach ($validKeys as $validKey) {
+                    $this->assertArrayHasKey($validKey, $searchResult, 'Key '.$validKey.' not found in search result in json response');
                 }
+
+                $this->assertInternalType('string', $searchResult['title']);
+
+                if (!is_null($searchResult['subtitle'])) {
+                    $this->assertInternalType('string', $searchResult['subtitle']);
+                }
+
+                $this->assertInternalType('string', $searchResult['itemId']);
+
+                if (array_key_exists('unitPrice', $searchResult)) {
+                    $unitPrice = $searchResult['unitPrice'];
+
+                    if (is_array($unitPrice)) {
+                        $this->assertInternalType('float', $unitPrice['quantity']);
+                        $this->assertInternalType('string', $unitPrice['type']);
+                    }
+                }
+
+                if (!empty($searchResult['storeInfo'])) {
+                    $storeInfo = $searchResult['storeInfo'];
+
+                    $this->assertInternalType('string', $storeInfo['storeName']);
+                    $this->assertInternalType('string', $storeInfo['storeUrl']);
+                }
+
+                if (!empty($searchResult['sellerInfo'])) {
+                    $sellerInfo = $searchResult['sellerInfo'];
+
+                    $this->assertInternalType('string', $sellerInfo['feedbackRatingStar']);
+                    $this->assertInternalType('int', $sellerInfo['feedbackScore']);
+                    $this->assertInternalType('float', $sellerInfo['positiveFeedbackPercent']);
+                    $this->assertInternalType('string', $sellerInfo['sellerUsername']);
+                    $this->assertInternalType('bool', $sellerInfo['topRatedSeller']);
+                }
+
+                if (!is_null($searchResult['pictureUrlLarge'])) {
+                    $this->assertInternalType('string', $searchResult['pictureUrlLarge']);
+                }
+
+                if (!is_null($searchResult['pictureUrlSuperSize'])) {
+                    $this->assertInternalType('string', $searchResult['pictureUrlSuperSize']);
+                }
+
+                if (!is_null($searchResult['galleryPlusPictureUrl'])) {
+                    $this->assertInternalType('string', $searchResult['galleryPlusPictureUrl']);
+                }
+
+                if (!empty($searchResult['galleryInfoContainer'])) {
+                    foreach ($searchResult['galleryInfoContainer'] as $gallery) {
+                        $this->assertInternalType('string', $gallery['size']);
+                        $this->assertInternalType('url', $gallery['url']);
+                    }
+                }
+
+                if (!empty($searchResult['eekStatus'])) {
+                    foreach ($searchResult['eekStatus'] as $eekStatus) {
+                        $this->assertInternalType('string', $eekStatus);
+                    }
+                }
+
+                if (!empty($searchResult['distance'])) {
+                    $distance = $searchResult['distance'];
+
+                    $this->assertInternalType('float', $distance['distance']);
+                    $this->assertInternalType('string', $distance['unit']);
+                }
+
+                if (!empty($searchResult['discountPriceInfo'])) {
+                    $discountPriceInfo = $searchResult['discountPriceInfo'];
+
+                    if (is_array($discountPriceInfo['originalRetailPrice'])) {
+                        $originalRetailPrice = $discountPriceInfo['originalRetailPrice'];
+
+                        $this->assertInternalType('string', $originalRetailPrice['currencyId']);
+                        $this->assertInternalType('float', $originalRetailPrice['amount']);
+                    }
+
+                    $this->assertInternalType('string', $discountPriceInfo['minimumAdvertisedPriceExposure']);
+                    $this->assertInternalType('string', $discountPriceInfo['pricingTreatment']);
+
+                    if (!empty($discountPriceInfo['soldOnEbay'])) {
+                        $this->assertInternalType('bool', $discountPriceInfo['soldOnEbay']);
+                    }
+
+                    if (!empty($discountPriceInfo['soldOffEbay'])) {
+                        $this->assertInternalType('bool', $discountPriceInfo['soldOffEbay']);
+                    }
+                }
+
+                if (!empty($searchResult['compatibility'])) {
+                    $this->assertInternalType('string', $searchResult['compatibility']);
+                }
+
+                if (!empty($searchResult['charityId'])) {
+                    $this->assertInternalType('string', $searchResult['charityId']);
+                }
+
+                if (!empty($searchResult['attributes'])) {
+                    $attributes = $searchResult['attributes'];
+
+                    foreach ($attributes as $attribute) {
+                        $this->assertInternalType('string', $attribute['attributeName']);
+                        $this->assertInternalType('string', $attribute['attributeValue']);
+                    }
+                }
+
+                if (!empty($searchResult['condition'])) {
+                    $condition = $searchResult['condition'];
+
+                    $this->assertInternalType('int', $condition['conditionId']);
+
+                    if (!is_null($condition['conditionDisplayName'])) {
+                        $this->assertInternalType('string', $condition['conditionDisplayName']);
+                    }
+                }
+
+                $this->assertInternalType('bool', $searchResult['topRatedListing']);
+                $this->assertInternalType('bool', $searchResult['multiVariationListing']);
+                $this->assertInternalType('bool', $searchResult['returnsAccepted']);
+
+                if (!empty($searchResult['listingInfo'])) {
+                    $listingInfo = $searchResult['listingInfo'];
+
+                    $this->assertInternalType('bool', $listingInfo['bestOfferEnabled']);
+                    $this->assertInternalType('bool', $listingInfo['buyItNowAvailable']);
+                    $this->assertInternalType('bool', $listingInfo['gift']);
+
+                    $buyItNowPrice = $listingInfo['buyItNowPrice'];
+
+                    if (!empty($buyItNowPrice)) {
+                        $this->assertInternalType('string', $buyItNowPrice['currencyId']);
+                        $this->assertInternalType('float', $buyItNowPrice['amount']);
+                    }
+
+                    $convertedBuyItNowPrice = $listingInfo['convertedBuyItNowPrice'];
+
+                    if (!empty($convertedBuyItNowPrice)) {
+                        $this->assertInternalType('string', $convertedBuyItNowPrice['currencyId']);
+                        $this->assertInternalType('float', $convertedBuyItNowPrice['amount']);
+                    }
+
+                    $this->assertInternalType('string', $listingInfo['endTime']);
+                    $this->assertInternalType('string', $listingInfo['startTime']);
+                    $this->assertInternalType('string', $listingInfo['listingType']);
+                }
+
+                if (!empty($searchResult['sellingStatus'])) {
+                    $sellingStatus = $searchResult['sellingStatus'];
+
+                    if (!empty($sellingStatus['bidCount'])) {
+                        $this->assertInternalType('int', $sellingStatus['bidCount']);
+                    }
+
+                    $convertedCurrentPrice = $sellingStatus['convertedCurrentPrice'];
+
+                    if (!empty($convertedCurrentPrice)) {
+                        $this->assertInternalType('string', $convertedCurrentPrice['currencyId']);
+                        $this->assertInternalType('float', $convertedCurrentPrice['convertedCurrentPrice']);
+                    }
+
+                    $currentPrice = $sellingStatus['currentPrice'];
+
+                    if (!empty($currentPrice)) {
+                        $this->assertInternalType('string', $currentPrice['currencyId']);
+                        $this->assertInternalType('float', $currentPrice['currentPrice']);
+                    }
+
+                    $this->assertInternalType('string', $sellingStatus['sellingState']);
+                    $this->assertInternalType('string', $sellingStatus['timeLeft']);
+                }
+
+                if (!empty($searchResult['shippingInfo'])) {
+                    $shippingInfo = $searchResult['shippingInfo'];
+
+                    $shippingServiceCost = $shippingInfo['shippingServiceCost'];
+
+                    if (!empty($shippingServiceCost)) {
+                        $this->assertInternalType('string', $shippingServiceCost['currencyId']);
+                        $this->assertInternalType('float', $shippingServiceCost['amount']);
+                    }
+
+                    $this->assertInternalType('bool', $shippingInfo['expeditedShipping']);
+
+                    if (!empty($shippingInfo['handlingTime'])) {
+                        $this->assertInternalType('int', $shippingInfo['handlingTime']);
+                    }
+
+                    if (!empty($shippingInfo['oneDayShippingAvailable'])) {
+                        $this->assertInternalType('bool', (bool) $shippingInfo['oneDayShippingAvailable']);
+                    }
+
+                    $this->assertInternalType('string', $shippingInfo['shippingType']);
+
+                    $shipToLocations = $shippingInfo['shipToLocations'];
+
+                    if (!empty($shipToLocations)) {
+                        foreach ($shipToLocations as $location) {
+                            $this->assertInternalType('string', $location);
+                        }
+                    }
+                }
+
+                $this->assertInternalType('string', $searchResult['country']);
+                $this->assertInternalType('string', $searchResult['location']);
+
+                if (!empty($searchResult['postalCode'])) {
+                    $this->assertInternalType('int', $searchResult['postalCode']);
+                }
+
+                $this->assertInternalType('bool', $searchResult['autoPay']);
+
+                $paymentMethods = $searchResult['paymentMethods'];
+
+                if (is_array($paginationOutput)) {
+                    foreach ($paymentMethods as $paymentMethod) {
+                        $this->assertInternalType('string', $paymentMethod);
+                    }
+                }
+
+                $productId = $searchResult['productId'];
+
+                if (!empty($productId)) {
+                    $this->assertInternalType('string', $productId['type']);
+                    $this->assertInternalType('int', $productId['productId']);
+                }
+
+                $this->assertInternalType('string', $searchResult['viewItemUrl']);
+                $this->assertInternalType('string', $searchResult['galleryUrl']);
+                $this->assertInternalType('string', $searchResult['globalId']);
             }
-
-            $productId = $searchResult['productId'];
-
-            if (!empty($productId)) {
-                $this->assertInternalType('string', $productId['type']);
-                $this->assertInternalType('int', $productId['productId']);
-            }
-
-            $this->assertInternalType('string', $searchResult['viewItemUrl']);
-            $this->assertInternalType('string', $searchResult['galleryUrl']);
-            $this->assertInternalType('string', $searchResult['globalId']);
         }
     }
 
