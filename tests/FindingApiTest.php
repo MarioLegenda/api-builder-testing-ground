@@ -378,6 +378,16 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             }
         }
 
+        $conditionHistogramContainer = $jsonArray['conditionHistogramContainer'];
+
+        if (!empty($conditionHistogramContainer)) {
+            foreach ($conditionHistogramContainer as $conditionHistogram) {
+                $this->assertInternalType('string', $conditionHistogram['conditionDisplayName']);
+                $this->assertInternalType('int', $conditionHistogram['conditionId']);
+                $this->assertInternalType('int', $conditionHistogram['count']);
+            }
+        }
+
         $searchResults = $jsonArray['searchResultsContainer'];
 
         if (!empty($searchResults)) {
