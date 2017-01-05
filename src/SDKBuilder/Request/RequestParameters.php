@@ -4,6 +4,7 @@ namespace SDKBuilder\Request;
 
 use FindingAPI\Core\Exception\{ DeprecatedException };
 
+use GuzzleHttp\Psr7\Request;
 use SDKBuilder\Exception\RequestException;
 use SDKBuilder\Exception\RequestParametersException;
 
@@ -177,6 +178,59 @@ class RequestParameters implements \IteratorAggregate, \ArrayAccess
     public function excludeFromLoopByKey(array $toExclude)
     {
         $this->excluded = $toExclude;
+    }
+    /**
+     * @param array $keyValueArray
+     * @param RequestParameters $globalParameters
+     * @param RequestParameters $specialParameters
+     * @return array
+     */
+    public static function map(array $keyValueArray, RequestParameters $globalParameters, RequestParameters $specialParameters) : array
+    {
+        $findValueObject = new class($globalParameters, $specialParameters) {
+            /**
+             * @var RequestParameters $globalParameters
+             */
+            private $globalParameters;
+            /**
+             * @var RequestParameters $specialParameters
+             */
+            private $specialParameters;
+            /**
+             *  constructor.
+             * @param RequestParameters $globalParameters
+             * @param RequestParameters $specialParameters
+             */
+            public function __construct(RequestParameters $globalParameters, RequestParameters $specialParameters)
+            {
+                $this->globalParameters = $globalParameters;
+                $this->specialParameters = $specialParameters;
+            }
+            /**
+             * @param string $key
+             * @return string
+             * @throws RequestParametersException
+             */
+            public function findValue(string $key)
+            {
+                if ($this->globalParameters->hasParameter($key)) {
+                    return $this->globalParameters->getParameter($key)->getValue();
+                }
+
+                if ($this->specialParameters->hasParameter($key)) {
+                    return $this->specialParameters->getParameter($key)->getValue();
+                }
+
+                throw new RequestParametersException('RequestParameters::map() did not find the request value for key \''.$key.'\'');
+            }
+        };
+
+        $newKeyValuePair = array();
+        foreach ($keyValueArray as $key => $value) {
+            $newKeyValuePair[$key] = $findValueObject->findValue($value);
+        }
+
+        return $newKeyValuePair;
     }
     /**
      * @return \ArrayIterator

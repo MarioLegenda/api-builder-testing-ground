@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\Listener;
 
-use FindingAPI\Core\Event\AddProcessorEvent;
+use SDKBuilder\Event\AddProcessorEvent;
 use SDKBuilder\Request\AbstractRequest;
 use FindingAPI\Core\Processor\Get\GetItemFiltersProcessor;
 

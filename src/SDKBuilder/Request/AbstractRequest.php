@@ -22,6 +22,10 @@ abstract class AbstractRequest
      */
     private $globalParameters;
     /**
+     * @var mixed $client
+     */
+    private $client;
+    /**
      * AbstractRequest constructor.
      * @param RequestParameters $globalParameters
      * @param RequestParameters $specialParameters
@@ -40,6 +44,36 @@ abstract class AbstractRequest
     public function getMethod() : string
     {
         return $this->method;
+    }
+    /**
+     * @param string $method
+     * @return AbstractRequest
+     * @throws RequestException
+     */
+    public function setMethod(string $method) : AbstractRequest
+    {
+        $validMethods = array('get', 'post');
+
+        if (in_array(strtolower($method), $validMethods) === false) {
+            throw new RequestException('Invalid method. Valid methods are \''.implode(', ', $validMethods).'\'. \''.$method.'\' given');
+        }
+
+        $this->method = $method;
+    }
+    /**
+     * @param $client
+     * @return AbstractRequest
+     */
+    public function setClient($client) : AbstractRequest
+    {
+        $this->client = $client;
+    }
+    /**
+     * @return mixed
+     */
+    public function getClient()
+    {
+        return $this->client;
     }
     /**
      * @param string $name
@@ -89,12 +123,19 @@ abstract class AbstractRequest
     }
     /**
      * @param string $request
+     * @param mixed $client
      * @return Response
      */
-    public function sendRequest(string $request) : Response
+    public function sendRequest(string $request, $client = null) : Response
     {
-        $client = new Client();
+        if (is_object($client)) {
+            $this->client = $client;
+        }
 
-        return $client->request($this->getMethod(), $request);
+        if (!is_object($this->client)) {
+            $this->client = new Client();
+        }
+
+        return $this->client->request($this->getMethod(), $request);
     }
 }

@@ -3,6 +3,10 @@
 namespace SDKBuilder;
 
 use SDKBuilder\Event\AddProcessorEvent;
+use SDKBuilder\Event\PostProcessRequestEvent;
+use SDKBuilder\Event\PreProcessRequestEvent;
+use SDKBuilder\Event\RequestEvent;
+use SDKBuilder\Event\SDKEvent;
 use SDKBuilder\Exception\SDKException;
 use SDKBuilder\Processor\Factory\ProcessorFactory;
 use SDKBuilder\Processor\Get\GetRequestParametersProcessor;
@@ -20,8 +24,6 @@ use SDKBuilder\Common\Logger;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use SDKBuilder\Processor\RequestProducer;
 
-use SDKOfflineMode\SDKOfflineMode;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use SDKBuilder\Exception\MethodParametersException;
 
@@ -79,7 +81,12 @@ abstract class AbstractSDK implements SDKInterface
      * @param EventDispatcher $eventDispatcher
      * @param ValidatorsProcessor $validatorsProcessor
      */
-    public function __construct(AbstractRequest $request, ProcessorFactory $processorFactory, EventDispatcher $eventDispatcher, ?MethodParameters $methodParameters, ValidatorsProcessor $validatorsProcessor)
+    public function __construct(
+        AbstractRequest $request,
+        ProcessorFactory $processorFactory,
+        EventDispatcher $eventDispatcher,
+        ?MethodParameters $methodParameters,
+        ValidatorsProcessor $validatorsProcessor)
     {
         $this->request = $request;
         $this->methodParameters = $methodParameters;
@@ -144,7 +151,15 @@ abstract class AbstractSDK implements SDKInterface
             ));
         }
 
+        if ($this->eventDispatcher->hasListeners(SDKEvent::PRE_PROCESS_REQUEST_EVENT)) {
+            $this->eventDispatcher->dispatch(SDKEvent::PRE_PROCESS_REQUEST_EVENT, new PreProcessRequestEvent($this->getRequest()));
+        }
+
         $this->processRequest();
+
+        if ($this->eventDispatcher->hasListeners(SDKEvent::POST_PROCESS_REQUEST_EVENT)) {
+            $this->eventDispatcher->dispatch(SDKEvent::POST_PROCESS_REQUEST_EVENT, new PostProcessRequestEvent($this->getRequest()));
+        }
 
         if ($this->offlineModeSwitch === true) {
             if (!$this->offlineMode instanceof \SDKOfflineMode\SDKOfflineMode and class_exists('SDKOfflineMode\\SDKOfflineMode')) {
@@ -262,12 +277,20 @@ abstract class AbstractSDK implements SDKInterface
             throw new SDKException('Api is not compiled. If you extended the AbstractSDK::compile() method, you need to call parent::compile() in your extended method');
         }
 
+        if ($this->eventDispatcher->hasListeners(SDKEvent::PRE_SEND_REQUEST_EVENT)) {
+            $this->eventDispatcher->dispatch(SDKEvent::PRE_SEND_REQUEST_EVENT, new RequestEvent($this->getRequest()));
+        }
+
         try {
             $this->guzzleResponse = $this->getRequest()->sendRequest($this->processed);
         } catch (ConnectException $e) {
             throw new ConnectException('GuzzleHttp threw a ConnectException. Exception message is '.$e->getMessage());
         } catch (ServerException $e) {
             throw new ConnectException('GuzzleHttp threw an exception with message: \''.$e->getMessage().'\'');
+        }
+
+        if ($this->eventDispatcher->hasListeners(SDKEvent::POST_SEND_REQUEST_EVENT)) {
+            $this->eventDispatcher->dispatch(SDKEvent::POST_SEND_REQUEST_EVENT, new RequestEvent($this->getRequest()));
         }
 
         Logger::log($this->processed);

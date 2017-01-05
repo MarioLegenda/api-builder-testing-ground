@@ -2,6 +2,7 @@
 
 namespace SDKBuilder;
 
+use SDKBuilder\Event\SDKEvent;
 use SDKBuilder\Exception\SDKBuilderException;
 use SDKBuilder\Request\AbstractRequest;
 use SDKBuilder\Request\AbstractValidator;
@@ -87,6 +88,8 @@ abstract class AbstractApiFactory
 
         $this->eventDispatcher = new EventDispatcher();
 
+        $this->addListeners($this->eventDispatcher, $apiConfig);
+
         $processorFactory = new ProcessorFactory();
 
         $validatorProcessor = new ValidatorsProcessor();
@@ -150,6 +153,35 @@ abstract class AbstractApiFactory
         }
 
         return null;
+    }
+
+    private function addListeners(EventDispatcher $eventDispatcher, array $config)
+    {
+        if (!array_key_exists('listeners', $config)) {
+            return null;
+        }
+
+        $listeners = $config['listeners'];
+
+        $validListeners = array(
+            'request_pre_process' => SDKEvent::PRE_PROCESS_REQUEST_EVENT,
+            'request_post_process' => SDKEvent::POST_PROCESS_REQUEST_EVENT,
+            'add_processor' => SDKEvent::ADD_PROCESSORS_EVENT,
+            'pre_send_request' => SDKEvent::PRE_SEND_REQUEST_EVENT,
+            'post_send_request' => SDKEvent::POST_SEND_REQUEST_EVENT,
+        );
+
+        foreach ($validListeners as $configKey => $listener) {
+            if (array_key_exists($configKey, $listeners)) {
+                $metadata = $listeners[$configKey];
+
+                if (!class_exists($metadata['class'])) {
+                    throw new SDKBuilderException('Class \''.$metadata['class'].'\'for listener \''.$configKey.'\' does not exist');
+                }
+
+                $eventDispatcher->addListener($listener, array(new $metadata['class'], $metadata['method']));
+            }
+        }
     }
 
     private function addDefaults(string $apiKey, array $config) : array

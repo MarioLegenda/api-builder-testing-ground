@@ -2,18 +2,17 @@
 
 namespace FindingAPI\Core\Listener;
 
-use FindingAPI\Core\Event\ItemFilterEvent;
 use FindingAPI\Core\Exception\ItemFilterException;
+use SDKBuilder\Event\PreProcessRequestEvent;
 
-class PreValidateItemFilters
+class ValidateItemFiltersListener
 {
     /**
-     * @param ItemFilterEvent $event
-     * @throws ItemFilterException
+     * @param PreProcessRequestEvent $event
      */
-    public function onPreValidate(ItemFilterEvent $event)
+    public function onPreProcessRequest(PreProcessRequestEvent $event)
     {
-        $itemFilterStorage = $event->getItemFilterStorage();
+        $itemFilterStorage = $event->getRequest()->getItemFilterStorage();
 
         $foundFilters = $itemFilterStorage->getItemFiltersInBulk(array('ExcludeSeller', 'Seller', 'TopRatedSellerOnly'), true);
 
@@ -49,6 +48,33 @@ class PreValidateItemFilters
                 if ($buyerPostalCode['value'] === null) {
                     throw new ItemFilterException('MaxDistance item filter has to be used together with buyerPostalCode');
                 }
+            }
+        }
+
+        if ($itemFilterStorage->hasItemFilter('FeedbackScoreMin') and $itemFilterStorage->hasItemFilter('FeedbackScoreMax')) {
+            $feedbackScoreMax = $itemFilterStorage->getItemFilter('FeedbackScoreMax');
+            $feedbackScoreMin = $itemFilterStorage->getItemFilter('FeedbackScoreMin');
+
+            if ($feedbackScoreMax['value'] < $feedbackScoreMin['value']) {
+                throw new ItemFilterException('If provided, FeedbackScoreMax has to larger or equal than FeedbackScoreMin');
+            }
+        }
+
+        if ($itemFilterStorage->hasItemFilter('MaxBids') and $itemFilterStorage->hasItemFilter('MinBids')) {
+            $maxBids = $itemFilterStorage->getItemFilter('MaxBids');
+            $minBids = $itemFilterStorage->getItemFilter('MinBids');
+
+            if ($maxBids['value'] < $minBids['value']) {
+                throw new ItemFilterException('If provided, MaxBids has to larger or equal than MinBids');
+            }
+        }
+
+        if ($itemFilterStorage->hasItemFilter('MaxQuantity') and $itemFilterStorage->hasItemFilter('MinQuantity')) {
+            $maxQuantity = $itemFilterStorage->getItemFilter('MaxQuantity');
+            $minQuantity = $itemFilterStorage->getItemFilter('MinQuantity');
+
+            if ($maxQuantity['value'] < $minQuantity['value']) {
+                throw new ItemFilterException('If provided, MaxQuantity has to larger or equal than MinQuantity');
             }
         }
     }

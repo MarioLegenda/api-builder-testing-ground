@@ -21,7 +21,9 @@ class Finding extends AbstractSDK
      * @var ResponseInterface $response
      */
     private $response;
-
+    /**
+     * @return SDKInterface
+     */
     public function compile() : SDKInterface
     {
         parent::compile();
