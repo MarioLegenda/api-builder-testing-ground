@@ -2,7 +2,7 @@
 
 namespace SDKBuilder;
 
-use FindingAPI\Core\Event\AddProcessorEvent;
+use SDKBuilder\Event\AddProcessorEvent;
 use SDKBuilder\Exception\SDKException;
 use SDKBuilder\Processor\Factory\ProcessorFactory;
 use SDKBuilder\Processor\Get\GetRequestParametersProcessor;
@@ -137,8 +137,8 @@ abstract class AbstractSDK implements SDKInterface
     {
         $this->processorFactory->registerProcessor($this->getRequest()->getMethod(), GetRequestParametersProcessor::class);
 
-        if ($this->eventDispatcher->hasListeners('sdk.pre_compile')) {
-            $this->eventDispatcher->dispatch('sdk.pre_compile', new AddProcessorEvent(
+        if ($this->eventDispatcher->hasListeners('sdk.add_processors')) {
+            $this->eventDispatcher->dispatch('sdk.add_processors', new AddProcessorEvent(
                 $this->getProcessorFactory(),
                 $this->getRequest()
             ));

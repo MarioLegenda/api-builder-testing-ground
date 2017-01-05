@@ -30,7 +30,7 @@ class FindingFactory extends AbstractApiFactory
 
         $this->eventDispatcher->addListener('item_filter.pre_validate', array(new PreValidateItemFilters(), 'onPreValidate'));
         $this->eventDispatcher->addListener('item_filter.post_validate', array(new PostValidateItemFilters(), 'onPostValidate'));
-        $this->eventDispatcher->addListener('sdk.pre_compile', array(new AddProcessorListener(), 'onAddProcessor'));
+        $this->eventDispatcher->addListener('sdk.add_processors', array(new AddProcessorListener(), 'onAddProcessor'));
 
         return $api;
     }

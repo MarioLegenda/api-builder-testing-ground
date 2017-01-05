@@ -1,6 +1,6 @@
 <?php
 
-namespace FindingAPI\Core\Event;
+namespace SDKBuilder\Event;
 
 use SDKBuilder\Processor\Factory\ProcessorFactory;
 use SDKBuilder\Request\AbstractRequest;
