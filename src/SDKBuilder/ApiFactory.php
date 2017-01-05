@@ -17,7 +17,7 @@ use SDKBuilder\Processor\Factory\ProcessorFactory;
 use Symfony\Component\Config\Definition\Processor;
 use SDKBuilder\Configuration\Configuration;
 
-abstract class AbstractApiFactory
+class ApiFactory
 {
     /**
      * @var Request $request
@@ -50,7 +50,7 @@ abstract class AbstractApiFactory
      * @return SDKInterface
      */
 
-    protected function createApi(array $config) : SDKInterface
+    public function createApi(array $config) : SDKInterface
     {
         $processor = new Processor();
 

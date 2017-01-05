@@ -1,15 +1,24 @@
-ebay_sdk:
+sdk:
     finding:
+        request_class: FindingAPI\Core\Request\Request
+        api_class: FindingAPI\Finding
+        request_validators: [FindingAPI\Core\Request\ItemFiltersValidator]
+        listeners:
+            request_pre_process:
+                class: FindingAPI\Core\Listener\ValidateItemFiltersListener
+                method: onPreProcessRequest
+            add_processor:
+                class: FindingAPI\Core\Listener\AddProcessorListener
+                method: onAddProcessor
+            pre_send_request:
+                class: FindingAPI\Core\Listener\PreSendRequestListener
+                method: onPreSendRequest
         global_parameters:
             ebay_url:
                 representation: null
                 value: http://svcs.ebay.com/services/search/FindingService/v1
                 type: [required, standalone]
                 valid: null
-                deprecated: false
-                obsolete: false
-                throws_exception_if_deprecated: false
-                error_message: 'Invalid value for %s: %s'
             # string that will be saved as the name of the parameter
             security_appname:
                 # string that will be in the url
@@ -37,37 +46,21 @@ ebay_sdk:
                 value: null
                 type: [injectable, required]
                 valid: [findItemsByKeywords, findItemsByCategory, findItemsAdvanced, findCompletedItems, findItemsByProduct, findItemsIneBayStores, getHistograms, getSearchKeywordsRecommendation, getVersion, newRequestMethod]
-                deprecated: false
-                throws_exception_if_deprecated: false
-                obsolete: false
-                error_message: 'Invalid value for %s and represented as %s'
             service_version:
                 representation: SERVICE-VERSION
                 value: 1.0.0
                 type: [injectable, required]
                 valid: [1.0.0]
-                deprecated: false
-                obsolete: false
-                throws_exception_if_deprecated: false
-                error_message: 'Invalid value for %s and represented as %s'
             response_data_format:
                 representation: RESPONSE-DATA-FORMAT
                 value: xml
                 valid: [xml, json]
                 type: [required]
-                deprecated: false
-                obsolete: false
-                throws_exception_if_deprecated: false
-                error_message: 'Invalid value for %s and represented as %s'
             global_id:
                 representation: GLOBAL-ID
                 value: EBAY-US
                 type: [injectable, required]
                 valid: [EBAY-US, EBAY-ENCA, EBAY-GB, EBAY-AU, EBAY-AT, EBAY-FRBE, EBAY-FR, EBAY-DE, EBAY-MOTOR, EBAY-IT, EBAY-NLBE, EBAY-NL, EBAY-ES, EBAY-CH, EBAY-HK, EBAY-IN, EBAY-IE, EBAY-MY, EBAY-FRCA, EBAY-PH, EBAY-PL, EBAY-SG]
-                deprecated: false
-                obsolete: false
-                throws_exception_if_deprecated: false
-                error_message: 'Invalid value for %s and represented as %s'
 
         special_parameters:
             keywords:
@@ -75,55 +68,32 @@ ebay_sdk:
                 value: null
                 type: [optional]
                 valid: null
-                deprecated: false
-                obsolete: false
-                throws_exception_if_deprecated: false
-                error_message: 'Invalid value for %s and represented as %s'
             category_id:
                 representation: categoryId
                 value: null
                 type: [optional]
                 valid: null
-                deprecated: false
-                obsolete: false
-                throws_exception_if_deprecated: false
                 error_message: '%s is obsolete and cannot be used anymore. Represented by %s'
             description_search:
                 representation: descriptionSearch
                 value: true
                 type: [optional]
                 valid: null
-                deprecated: false
-                obsolete: false
-                throws_exception_if_deprecated: false
-                error_message: 'Invalid value for %s and represented as %s'
             product_id_type:
                 representation: 'productId.@type'
                 value: null
                 type: [optional]
                 valid: [ReferenceID, ISBN, UPC, EAN]
-                deprecated: false
-                obsolete: false
-                throws_exception_if_deprecated: false
-                error_message: 'Invalid value for %s and represented as %s'
             product_id:
                 representation: productId
                 value: null
                 type: [optional]
                 valid: null
-                deprecated: false
-                obsolete: false
-                throws_exception_if_deprecated: false
-                error_message: 'Invalid value for %s and represented as %s'
             store_name:
                 representation: storeName
                 value: null
                 type: [optional]
                 valid: null
-                deprecated: false
-                obsolete: false
-                throws_exception_if_deprecated: false
-                error_message: 'Invalid value for %s and represented as %s'
 
         methods:
             valid_methods: operation_name
@@ -160,3 +130,7 @@ ebay_sdk:
                     name: getSearchKeywordsRecommendation
                     object: FindingAPI\Core\Request\Method\GetSearchKeywordsRecommendations
                     methods: [keywords]
+                get_version:
+                    name: getVersion
+                    object: FindingAPI\Core\Request\Method\GetVersion
+                    methods: []

@@ -76,13 +76,15 @@ class Parameter
             $this->setRepresentation($representation);
         }
 
-        $this->deprecated = ($parameter['deprecated'] === true) ? true : false;
+        $this->deprecated = (array_key_exists('deprecated', $parameter) and $parameter['deprecated'] === true) ? true : false;
 
-        $this->obsolete = ($parameter['obsolete'] === true) ? true : false;
+        $this->obsolete = (array_key_exists('obsolete', $parameter) and $parameter['obsolete'] === true) ? true : false;
 
-        $this->throwExceptionMessageIfDeprecated = ($parameter['throws_exception_if_deprecated'] === true) ? true : false;
+        $this->throwExceptionMessageIfDeprecated = (array_key_exists('throws_exception_if_deprecated', $parameter) and $parameter['throws_exception_if_deprecated'] === true) ? true : false;
 
-        $this->setErrorMessage($parameter['error_message']);
+        if (array_key_exists('error_message', $parameter)) {
+            $this->setErrorMessage($parameter['error_message']);
+        }
     }
     /**
      * @void

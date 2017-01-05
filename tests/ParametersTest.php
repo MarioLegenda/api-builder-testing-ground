@@ -25,7 +25,7 @@ class ParametersTest extends \PHPUnit_Framework_TestCase
 
     public function initiate()
     {
-        $this->config = Yaml::parse(file_get_contents(__DIR__.'/finding.yml'))['ebay_sdk']['finding'];
+        $this->config = Yaml::parse(file_get_contents(__DIR__.'/finding.yml'))['sdk']['finding'];
         $globalConfig = $this->config['global_parameters'];
         $specialConfig = $this->config['special_parameters'];
 

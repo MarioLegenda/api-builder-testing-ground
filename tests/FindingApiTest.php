@@ -38,7 +38,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 {
     public function testInjectableParameters()
     {
-        SDKBuilder::inst()->registerApi('finding', FindingFactory::class);
+        SDKBuilder::inst()->registerApi('finding', __DIR__.'/finding.yml');
 
         $method = new Method('new_request_method', array(
             'name' => 'newRequestMethod',

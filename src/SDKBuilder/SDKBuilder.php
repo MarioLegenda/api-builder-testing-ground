@@ -4,6 +4,7 @@ namespace SDKBuilder;
 
 use SDKBuilder\Exception\SDKBuilderException;
 use SDKBuilder\SDK\SDKInterface;
+use Symfony\Component\Yaml\Yaml;
 
 class SDKBuilder
 {
@@ -26,21 +27,21 @@ class SDKBuilder
     }
     /**
      * @param string $apiKey
-     * @param string $objectString
+     * @param string $configFile
      * @return SDKBuilder
      * @throws SDKBuilderException
      */
-    public function registerApi(string $apiKey, string $objectString) : SDKBuilder
+    public function registerApi(string $apiKey, string $configFile) : SDKBuilder
     {
         if ($this->isRegisteredApi($apiKey)) {
             throw new SDKBuilderException('There is already a registered api with name \''.$apiKey.'\'');
         }
 
-        if (!class_exists($objectString)) {
-            throw new SDKBuilderException('Class \''.$objectString.'\' does not exist and cannot be instantiated');
+        if (!file_exists($configFile)) {
+            throw new SDKBuilderException('Configuration file \''.$configFile.'\' for registering \''.$apiKey.'\' does not exist');
         }
 
-        $this->sdkRepository[$apiKey] = $objectString;
+        $this->sdkRepository[$apiKey] = $configFile;
 
         return $this;
     }
@@ -62,18 +63,10 @@ class SDKBuilder
             throw new SDKBuilderException('SDK with name \''.$apiKey.'\' not found');
         }
 
-        $apiFactory = $this->sdkRepository[$apiKey];
+        $configuration = $this->sdkRepository[$apiKey];
 
-        if (!class_exists($apiFactory)) {
-            throw new SDKBuilderException('Api factory class \''.$this->sdkRepository[$apiKey].'\' does not exist');
-        }
+        $apiFactory = new ApiFactory($apiKey);
 
-        $apiFactory = new $apiFactory($apiKey);
-
-        if (!$apiFactory instanceof AbstractApiFactory) {
-            throw new SDKBuilderException('\''.$this->sdkRepository[$apiKey].'\' factory class has to implement '.AbstractApiFactory::class);
-        }
-
-        return $apiFactory->create();
+        return $apiFactory->createApi(Yaml::parse(file_get_contents($configuration)));
     }
 }
