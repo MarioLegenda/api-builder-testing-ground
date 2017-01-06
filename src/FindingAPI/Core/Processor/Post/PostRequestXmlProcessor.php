@@ -14,6 +14,8 @@ class PostRequestXmlProcessor extends AbstractProcessor implements ProcessorInte
 
     public function getProcessed(): string
     {
-        return '';
+        return '<findItemsByKeywordsRequest xmlns="http://www.ebay.com/marketplace/search/v1/services">
+   <keywords>harry potter phoenix</keywords>
+</findItemsByKeywordsRequest>';
     }
 }

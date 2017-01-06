@@ -14,16 +14,20 @@ class AddProcessorListener
         $processorFactory = $event->getProcessorFactory();
         $request = $event->getRequest();
 
-        $processorFactory->registerCallbackProcessor($request->getMethod(), function(AbstractRequest $request) {
-            $itemFilterStorage = $request->getItemFilterStorage();
+        if ($request->getMethod() === 'get') {
+            $processorFactory->registerCallbackProcessor($request->getMethod(), function(AbstractRequest $request) {
+                $itemFilterStorage = $request->getItemFilterStorage();
 
-            if (!empty($itemFilterStorage)) {
-                if ($request->getMethod() === 'get') {
-                    return new GetItemFiltersProcessor($request, $itemFilterStorage);
+                if (!empty($itemFilterStorage)) {
+                    if ($request->getMethod() === 'get') {
+                        return new GetItemFiltersProcessor($request, $itemFilterStorage);
+                    }
                 }
-            }
-        });
+            });
+        }
 
-        $processorFactory->registerProcessor($request->getMethod(), PostRequestXmlProcessor::class);
+        if ($request->getMethod() === 'post') {
+            $processorFactory->registerProcessor($request->getMethod(), PostRequestXmlProcessor::class);
+        }
     }
 }

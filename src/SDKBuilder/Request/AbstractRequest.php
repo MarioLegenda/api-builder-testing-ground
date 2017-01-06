@@ -2,8 +2,6 @@
 
 namespace SDKBuilder\Request;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response;
 use SDKBuilder\Exception\RequestException;
 use SDKBuilder\Exception\RequestParametersException;
 
@@ -37,6 +35,8 @@ abstract class AbstractRequest
 
         $this->globalParameters->restoreDefaults();
         $this->specialParameters->restoreDefaults();
+
+        $this->client = new RequestClient();
     }
     /**
      * @return string
@@ -58,7 +58,7 @@ abstract class AbstractRequest
             throw new RequestException('Invalid method. Valid methods are \''.implode(', ', $validMethods).'\'. \''.$method.'\' given');
         }
 
-        $this->method = $method;
+        $this->method = strtolower($method);
 
         return $this;
     }
@@ -66,7 +66,7 @@ abstract class AbstractRequest
      * @param $client
      * @return AbstractRequest
      */
-    public function setClient($client) : AbstractRequest
+    public function setClient(RequestClient $client) : AbstractRequest
     {
         $this->client = $client;
 
@@ -75,7 +75,7 @@ abstract class AbstractRequest
     /**
      * @return mixed
      */
-    public function getClient()
+    public function getClient() : RequestClient
     {
         return $this->client;
     }
@@ -127,19 +127,25 @@ abstract class AbstractRequest
     }
     /**
      * @param string $request
-     * @param mixed $client
-     * @return Response
+     * @return mixed
      */
-    public function sendRequest(string $request, $client = null) : Response
+    public function sendRequest(string $request)
     {
-        if (is_object($client)) {
-            $this->client = $client;
+        if ($this->getMethod() === 'get') {
+            return $this->client
+                ->setUri($request)
+                ->setMethod($this->getMethod())
+                ->send()
+                ->getResponse();
         }
 
-        if (!is_object($this->client)) {
-            $this->client = new Client();
+        if ($this->getMethod() === 'post') {
+            return $this->client
+                ->setUri($this->getGlobalParameters()[0]->getValue())
+                ->setMethod($this->getMethod())
+                ->setData($request)
+                ->send()
+                ->getResponse();
         }
-
-        return $this->client->request($this->getMethod(), $request);
     }
 }

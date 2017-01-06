@@ -22,15 +22,6 @@ class Finding extends AbstractSDK
      */
     private $response;
     /**
-     * @return SDKInterface
-     */
-    public function compile() : SDKInterface
-    {
-        parent::compile();
-
-        return $this;
-    }
-    /**
      * @param string $inlineResponse
      * @return ResponseInterface
      */
@@ -70,13 +61,5 @@ class Finding extends AbstractSDK
         $this->response = $response;
 
         return $this->response;
-    }
-
-    private function dispatchListeners()
-    {
-        $this->getEventDispatcher()->dispatch('item_filter.pre_validate', new ItemFilterEvent($this->getRequest()->getItemFilterStorage()));
-        $this->getEventDispatcher()->dispatch('item_filter.post_validate', new ItemFilterEvent($this->getRequest()->getItemFilterStorage()));
-
-        $this->getEventDispatcher()->dispatch('finding.add_processor', new AddProcessorEvent($this->getProcessorFactory(), $this->getRequest()));
     }
 }

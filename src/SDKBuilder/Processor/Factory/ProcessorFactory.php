@@ -57,6 +57,7 @@ namespace SDKBuilder\Processor\Factory;
         $method = $request->getMethod();
 
         $processors = array();
+
         foreach ($this->processors[$method] as $key => $processor) {
             $resolver = $processor['resolver'];
 
@@ -80,21 +81,5 @@ namespace SDKBuilder\Processor\Factory;
         $this->processors[$method] = array();
 
         return $processors;
-
-/*        $itemFilters = $this->request->getItemFilterStorage();
-
-        $processors = array();
-        $mainNamespace = 'SDKBuilder\Processor\Get\\';
-
-        $requestParametersProcessorClass = $mainNamespace.ucfirst($method).'RequestParametersProcessor';
-        $processors['request-parameters-processor'] = new $requestParametersProcessorClass($this->request);
-
-        if (!empty($itemFilters)) {
-            $itemFiltersProcessorClass = $mainNamespace.ucfirst($method).'ItemFiltersProcessor';
-
-            $processors['item-filters-processor'] = new $itemFiltersProcessorClass($this->request, $itemFilters);
-        }
-
-        return $processors;*/
     }
 }

@@ -17,7 +17,7 @@ class PreSendRequestListener
         if ($request->getMethod() === 'post') {
             $headers = array(
                 'X-EBAY-SOA-SERVICE-NAME' => 'FindingService',
-                'X-EBAY-SOA-REQUEST-DATA-FORMAT' => 'XML',
+                'X-EBAY-SOA-RESPONSE-DATA-FORMAT' => $request->getGlobalParameters()->getParameter('response_data_format')->getValue(),
             );
 
             $mappedHeaders = RequestParameters::map(array(
@@ -29,9 +29,11 @@ class PreSendRequestListener
 
             $headers = array_merge($headers, $mappedHeaders);
 
-            $request->setClient('POST', array(
-                'headers' => $headers,
-            ));
+            $client = $request->getClient();
+
+            $client->setHeaders($headers);
+            $client->setMethod($request->getMethod());
+            $client->setUri($request->getGlobalParameters()->getParameter('ebay_url')->getValue());
         }
     }
 }

@@ -141,7 +141,9 @@ abstract class AbstractSDK implements SDKInterface
      */
     public function compile() : SDKInterface
     {
-        $this->processorFactory->registerProcessor($this->getRequest()->getMethod(), GetRequestParametersProcessor::class);
+        if ($this->getRequest()->getMethod() === 'get') {
+            $this->processorFactory->registerProcessor($this->getRequest()->getMethod(), GetRequestParametersProcessor::class);
+        }
 
         if ($this->eventDispatcher->hasListeners('sdk.add_processors')) {
             $this->eventDispatcher->dispatch('sdk.add_processors', new AddProcessorEvent(
@@ -286,6 +288,8 @@ abstract class AbstractSDK implements SDKInterface
             throw new ConnectException('GuzzleHttp threw a ConnectException. Exception message is '.$e->getMessage());
         } catch (ServerException $e) {
             throw new ConnectException('GuzzleHttp threw an exception with message: \''.$e->getMessage().'\'');
+        } catch (\Exception $e) {
+            echo 'Generic exception caught with message: \''.$e->getMessage().'\'';
         }
 
         if ($this->eventDispatcher->hasListeners(SDKEvent::POST_SEND_REQUEST_EVENT)) {

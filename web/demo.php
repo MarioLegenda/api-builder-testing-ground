@@ -13,11 +13,13 @@ use FindingAPI\Core\Information\Currency;
 use Demo\TwigBridge;
 
 $findingApi = SDKBuilder::inst()
-                ->registerApi('finding', FindingFactory::class)
-                ->create('finding');
+                ->registerApi('finding', __DIR__.'/../tests/finding.yml')
+                ->create('finding')
+                ->switchOfflineMode(false);
 
 $findingApi
     ->findItemsByKeywords()
+    ->setMethod('post')
     ->addKeywords('harry potter')
     ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
     ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))

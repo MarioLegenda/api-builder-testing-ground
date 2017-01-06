@@ -9,8 +9,10 @@ use FindingAPI\Core\Information\Currency;
 
 
 $findingApi = SDKBuilder::inst()
-    ->registerApi('finding', FindingFactory::class)
+    ->registerApi('finding', __DIR__.'/../tests/finding.yml')
     ->create('finding');
+
+$findingApi->switchOfflineMode(false);
 
 $findingApi
     ->findItemsByKeywords()
