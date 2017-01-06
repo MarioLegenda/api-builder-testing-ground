@@ -59,6 +59,8 @@ abstract class AbstractRequest
         }
 
         $this->method = $method;
+
+        return $this;
     }
     /**
      * @param $client
@@ -67,6 +69,8 @@ abstract class AbstractRequest
     public function setClient($client) : AbstractRequest
     {
         $this->client = $client;
+
+        return $this;
     }
     /**
      * @return mixed

@@ -293,8 +293,6 @@ abstract class AbstractSDK implements SDKInterface
             $this->eventDispatcher->dispatch(SDKEvent::POST_SEND_REQUEST_EVENT, new RequestEvent($this->getRequest()));
         }
 
-        Logger::log($this->processed);
-
         $this->responseToParse = (string) $this->guzzleResponse->getBody();
     }
 
