@@ -219,7 +219,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
         $findingApi
             ->findItemsByKeywords()
-            ->setMethod('post')
+            ->setMethod('get')
             ->addKeywords('call of duty')
             ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
             ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))

@@ -9,11 +9,11 @@ class PostRequestXmlProcessor extends AbstractProcessor implements ProcessorInte
 {
     public function process(): ProcessorInterface
     {
-        die("kreten");
+        return $this;
     }
 
     public function getProcessed(): string
     {
-        // TODO: Implement getProcessed() method.
+        return '';
     }
 }
