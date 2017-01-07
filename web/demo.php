@@ -7,10 +7,10 @@ error_reporting(E_ALL);
 require_once __DIR__.'/../vendor/autoload.php';
 
 use SDKBuilder\SDKBuilder;
-use FindingAPI\FindingFactory;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Information\Currency;
 use Demo\TwigBridge;
+use FindingAPI\Core\Information\SortOrder;
 
 $findingApi = SDKBuilder::inst()
                 ->registerApi('finding', __DIR__.'/../tests/finding.yml')
@@ -25,6 +25,7 @@ $findingApi
         'entriesPerPage' => 2,
         'pageNumber' => 3,
     ))
+    ->setSortOrder(SortOrder::COUNTRY_ASCENDING)
     ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
     ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
     ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN));

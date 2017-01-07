@@ -27,4 +27,12 @@ class SortOrder extends AbstractFilter implements FilterInterface
 
         return true;
     }
+    /**
+     * @param int $counter
+     * @return string
+     */
+    public function urlify(int $counter): string
+    {
+        return 'sortOrder='.$this->filter[0].'&';
+    }
 }
