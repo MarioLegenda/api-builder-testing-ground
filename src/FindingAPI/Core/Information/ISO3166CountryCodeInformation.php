@@ -6,18 +6,18 @@ use FindingAPI\Core\Cache\CacheProxy;
 use FindingAPI\Core\Exception\ItemFilterException;
 use Symfony\Component\Yaml\Yaml;
 
-class ISO3166CountryCode
+class ISO3166CountryCodeInformation
 {
     /**
      * @var array $countryCodes
      */
     private $countryCodes = array();
     /**
-     * @var GlobalId $instance
+     * @var ISO3166CountryCodeInformation $instance
      */
     private static $instance;
     /**
-     * @return GlobalId
+     * @return ISO3166CountryCodeInformation
      */
     public static function instance()
     {
@@ -75,10 +75,10 @@ class ISO3166CountryCode
     }
     /**
      * @param array $values
-     * @return ISO3166CountryCode
+     * @return ISO3166CountryCodeInformation
      * @throws ItemFilterException
      */
-    public function add(array $values) : ISO3166CountryCode
+    public function add(array $values) : ISO3166CountryCodeInformation
     {
         if (!array_key_exists('alpha2', $values)) {
             throw new ItemFilterException('ISO 3166 country code has to contain at least a two character string that represents a country called \'alpha2\'. Please, refer to https://www.iso.org/obp/ui/#search');

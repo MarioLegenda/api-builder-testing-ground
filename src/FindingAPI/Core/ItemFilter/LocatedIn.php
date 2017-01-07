@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\Information\ISO3166CountryCode;
+use FindingAPI\Core\Information\ISO3166CountryCodeInformation;
 
 class LocatedIn extends AbstractFilter implements FilterInterface
 {
@@ -18,7 +18,7 @@ class LocatedIn extends AbstractFilter implements FilterInterface
         }
 
         foreach ($this->filter as $code) {
-            if (!ISO3166CountryCode::instance()->has($code)) {
+            if (!ISO3166CountryCodeInformation::instance()->has($code)) {
                 $this->exceptionMessages[] = 'Unknown ISO31566 country code '.$code.'. Please, refere to https://www.iso.org/obp/ui/#search';
 
                 return false;
