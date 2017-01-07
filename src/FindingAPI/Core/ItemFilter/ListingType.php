@@ -10,7 +10,7 @@ class ListingType extends AbstractFilter implements FilterInterface
     public function validateFilter() : bool
     {
         $filter = $this->filter[0];
-        $validFilters = array('All', 'AuctionWithBIN', 'Classified', 'FixedPrice', 'StoreInventory');
+        $validFilters = \FindingAPI\Core\Information\ListingType::instance()->getAll();
 
         if (in_array($filter, $validFilters) === false) {
             $this->exceptionMessages[] = $this->name.' accepts only '.implode(', ', $validFilters).' values';

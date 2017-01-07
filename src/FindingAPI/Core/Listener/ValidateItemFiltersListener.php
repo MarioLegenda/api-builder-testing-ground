@@ -4,7 +4,9 @@ namespace FindingAPI\Core\Listener;
 
 use FindingAPI\Core\Exception\ItemFilterException;
 use FindingAPI\Core\Information\GlobalId;
+use FindingAPI\Core\Information\ListingType;
 use FindingAPI\Core\Information\OutputSelector;
+use FindingAPI\Core\Information\SortOrder;
 use SDKBuilder\Event\PreProcessRequestEvent;
 
 class ValidateItemFiltersListener
@@ -28,7 +30,7 @@ class ValidateItemFiltersListener
             throw new ItemFilterException('AvailableTo item filter cannot be used together with LocatedIn item filter and vice versa');
         }
 
-        if ($itemFilterStorage->hasItemFilter('LocalSearchOnly')) {
+        if ($itemFilterStorage->hasItemFilter('LocalSearchOnly') and $itemFilterStorage->isItemFilterInRequest('LocalSearchOnly')) {
             $localSearchOnly = $itemFilterStorage->getItemFilter('LocalSearchOnly');
 
             if ($localSearchOnly['value'] !== null) {
@@ -41,7 +43,7 @@ class ValidateItemFiltersListener
             }
         }
 
-        if ($itemFilterStorage->hasItemFilter('MaxDistance')) {
+        if ($itemFilterStorage->hasItemFilter('MaxDistance') and $itemFilterStorage->isItemFilterInRequest('MaxDistance')) {
             $maxDistance = $itemFilterStorage->getItemFilter('MaxDistance');
 
             if ($maxDistance['value'] !== null) {
@@ -53,7 +55,12 @@ class ValidateItemFiltersListener
             }
         }
 
-        if ($itemFilterStorage->hasItemFilter('FeedbackScoreMin') and $itemFilterStorage->hasItemFilter('FeedbackScoreMax')) {
+        if ($itemFilterStorage->hasItemFilter('FeedbackScoreMin') and
+            $itemFilterStorage->hasItemFilter('FeedbackScoreMax') and
+            $itemFilterStorage->isItemFilterInRequest('FeedbackScoreMin') and
+            $itemFilterStorage->isItemFilterInRequest('FeedbackScoreMax')
+        )
+        {
             $feedbackScoreMax = $itemFilterStorage->getItemFilter('FeedbackScoreMax');
             $feedbackScoreMin = $itemFilterStorage->getItemFilter('FeedbackScoreMin');
 
@@ -62,7 +69,11 @@ class ValidateItemFiltersListener
             }
         }
 
-        if ($itemFilterStorage->hasItemFilter('MaxBids') and $itemFilterStorage->hasItemFilter('MinBids')) {
+        if ($itemFilterStorage->hasItemFilter('MaxBids') and
+            $itemFilterStorage->hasItemFilter('MinBids') and
+            $itemFilterStorage->isItemFilterInRequest('MaxBids') and
+            $itemFilterStorage->isItemFilterInRequest('MinBids')
+        ) {
             $maxBids = $itemFilterStorage->getItemFilter('MaxBids');
             $minBids = $itemFilterStorage->getItemFilter('MinBids');
 
@@ -80,7 +91,7 @@ class ValidateItemFiltersListener
             }
         }
 
-        if ($itemFilterStorage->hasItemFilter('OutputSelector')) {
+        if ($itemFilterStorage->hasItemFilter('OutputSelector') and $itemFilterStorage->isItemFilterInRequest('OutputSelector')) {
             $outputSelector = $itemFilterStorage->getItemFilter('OutputSelector');
 
             foreach ($outputSelector['value'] as $selector) {
@@ -101,6 +112,20 @@ class ValidateItemFiltersListener
 
                 if (in_array($globalId, $validGlobalIds) === true) {
                     throw new ItemFilterException('ConditionHistogram is supported for all eBay sites except US eBay Motors, India (IN), Malaysia (MY) and Philippines (PH)');
+                }
+            }
+        }
+
+        if ($itemFilterStorage->hasItemFilter('SortOrder') and $itemFilterStorage->isItemFilterInRequest('SortOrder')) {
+            $sortOrder = $itemFilterStorage->getItemFilter('SortOrder');
+
+            if (is_array($sortOrder['value'])) {
+                $sortOrderValue = $sortOrder['value'][0];
+
+                if ($sortOrderValue === SortOrder::BID_COUNT_FEWEST or $sortOrderValue === SortOrder::BID_COUNT_MOST) {
+                    if (!$itemFilterStorage->hasItemFilter('ListingType') or !$itemFilterStorage->isItemFilterInRequest('ListingType')) {
+                        throw new ItemFilterException('To sort by bid count, you must specify a listing type filter to limit results to auction listings only (such as, & itemFilter.name=ListingType&itemFilter.value=Auction)');
+                    }
                 }
             }
         }

@@ -2,6 +2,8 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
+use FindingAPI\Core\Information\OutputSelector as InformationOutputSelector;
+
 class OutputSelector extends AbstractFilter implements FilterInterface
 {
     /**
@@ -9,16 +11,7 @@ class OutputSelector extends AbstractFilter implements FilterInterface
      */
     public function validateFilter() : bool
     {
-        $validSelectors = array(
-            'SellerInfo',
-            'StoreInfo',
-            'AspectHistogram',
-            'CategoryHistogram',
-            'GalleryInfo',
-            'PictureURLLarge',
-            'PictureURLSuperSize',
-            'UnitPriceInfo',
-        );
+        $validSelectors = InformationOutputSelector::instance()->getAll();
 
         foreach ($this->filter as $filter) {
             if (in_array($filter, $validSelectors) === false) {
@@ -27,8 +20,6 @@ class OutputSelector extends AbstractFilter implements FilterInterface
                 return false;
             }
         }
-
-
 
         return true;
     }

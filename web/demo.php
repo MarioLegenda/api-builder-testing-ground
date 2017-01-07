@@ -12,6 +12,7 @@ use FindingAPI\Core\Information\Currency;
 use Demo\TwigBridge;
 use FindingAPI\Core\Information\SortOrder;
 use FindingAPI\Core\Information\OutputSelector;
+use FindingAPI\Core\Information\ListingType as InformationListingType;
 
 $findingApi = SDKBuilder::inst()
                 ->registerApi('finding', __DIR__.'/../tests/finding.yml')
@@ -26,7 +27,7 @@ $findingApi
         'entriesPerPage' => 2,
         'pageNumber' => 3,
     ))
-    ->setSortOrder(SortOrder::COUNTRY_ASCENDING)
+    ->setSortOrder(SortOrder::BID_COUNT_FEWEST)
     ->setOutputSelector(array(
         OutputSelector::ASPECT_HISTOGRAM,
         OutputSelector::CATEGORY_HISTOGRAM,
@@ -38,6 +39,7 @@ $findingApi
         OutputSelector::UNIT_PRICE_INFO,
     ))
     ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
+    ->addItemFilter(ItemFilter::LISTING_TYPE, array(InformationListingType::AUCTION_WITH_BIN, InformationListingType::STORE_INVENTORY, InformationListingType::AUCTION))
     ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN));
 
 $response = $findingApi
