@@ -5,6 +5,7 @@ namespace Test;
 require __DIR__ . '/../vendor/autoload.php';
 
 use FindingAPI\Core\Information\GlobalId;
+use FindingAPI\Core\Information\OutputSelector;
 use Symfony\Component\Yaml\Yaml;
 use FindingAPI\Core\Information\ISO3166CountryCode;
 use FindingAPI\Core\Information\SortOrder;

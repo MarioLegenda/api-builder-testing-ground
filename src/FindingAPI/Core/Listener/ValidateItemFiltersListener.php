@@ -3,6 +3,8 @@
 namespace FindingAPI\Core\Listener;
 
 use FindingAPI\Core\Exception\ItemFilterException;
+use FindingAPI\Core\Information\GlobalId;
+use FindingAPI\Core\Information\OutputSelector;
 use SDKBuilder\Event\PreProcessRequestEvent;
 
 class ValidateItemFiltersListener
@@ -75,6 +77,31 @@ class ValidateItemFiltersListener
 
             if ($maxQuantity['value'] < $minQuantity['value']) {
                 throw new ItemFilterException('If provided, MaxQuantity has to larger or equal than MinQuantity');
+            }
+        }
+
+        if ($itemFilterStorage->hasItemFilter('OutputSelector')) {
+            $outputSelector = $itemFilterStorage->getItemFilter('OutputSelector');
+
+            foreach ($outputSelector['value'] as $selector) {
+                if (!OutputSelector::instance()->has($selector)) {
+                    throw new ItemFilterException('outputSelector \''.$selector.'\' is not supported by this version of FindingAPI. If ebay added it, add it manually in '.OutputSelector::class);
+                }
+            }
+
+            if (in_array('ConditionHistogram', $outputSelector['value']) === true) {
+                $globalId = strtolower($event->getRequest()->getGlobalParameters()->getParameter('global_id')->getValue());
+
+                $validGlobalIds = array(
+                    GlobalId::EBAY_MOTOR,
+                    GlobalId::EBAY_IN,
+                    GlobalId::EBAY_MY,
+                    GlobalId::EBAY_PH,
+                );
+
+                if (in_array($globalId, $validGlobalIds) === true) {
+                    throw new ItemFilterException('ConditionHistogram is supported for all eBay sites except US eBay Motors, India (IN), Malaysia (MY) and Philippines (PH)');
+                }
             }
         }
     }

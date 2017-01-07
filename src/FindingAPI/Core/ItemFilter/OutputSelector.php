@@ -28,6 +28,8 @@ class OutputSelector extends AbstractFilter implements FilterInterface
             }
         }
 
+
+
         return true;
     }
     /**

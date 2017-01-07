@@ -19,6 +19,8 @@ class PaginationInput extends AbstractFilter implements FilterInterface
         foreach ($filter as $key => $f) {
             if (in_array($key, $validValues) === false) {
                 $this->exceptionMessages[] = 'Invalid paginationInput entry \''.$key.'\'. Valid entries are '.implode(', ', $validValues);
+
+                return false;
             }
         }
 
