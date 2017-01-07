@@ -8,7 +8,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 use SDKBuilder\SDKBuilder;
 use FindingAPI\Core\ItemFilter\ItemFilter;
-use FindingAPI\Core\Information\Currency;
+use FindingAPI\Core\Information\CurrencyInformation;
 use Demo\TwigBridge;
 use FindingAPI\Core\Information\SortOrder;
 use FindingAPI\Core\Information\OutputSelector;
@@ -40,7 +40,7 @@ $findingApi
     ))
     ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
     ->addItemFilter(ItemFilter::LISTING_TYPE, array(InformationListingType::AUCTION_WITH_BIN, InformationListingType::STORE_INVENTORY, InformationListingType::AUCTION))
-    ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN));
+    ->addItemFilter(ItemFilter::CURRENCY, array(CurrencyInformation::AUSTRALIAN));
 
 $response = $findingApi
                 ->compile()

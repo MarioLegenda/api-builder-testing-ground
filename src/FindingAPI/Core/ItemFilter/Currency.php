@@ -2,6 +2,8 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
+use FindingAPI\Core\Information\CurrencyInformation;
+
 class Currency extends AbstractFilter implements FilterInterface
 {
     /**
@@ -13,25 +15,9 @@ class Currency extends AbstractFilter implements FilterInterface
             return false;
         }
 
-        $allowedCurrencies = array(
-            'aud',
-            'cad',
-            'chf',
-            'cny',
-            'eur',
-            'gbp',
-            'hkd',
-            'inr',
-            'myr',
-            'php',
-            'pln',
-            'sek',
-            'sgd',
-            'twd',
-            'usd',
-        );
+        $allowedCurrencies = CurrencyInformation::instance()->getAll();
 
-        $currency = strtolower($this->filter[0]);
+        $currency = strtoupper($this->filter[0]);
 
         if (in_array($currency, $allowedCurrencies) === false) {
             $this->exceptionMessages[] = 'Invalid Currency item filter value supplied. Allowed currencies are '.implode(',', $allowedCurrencies);

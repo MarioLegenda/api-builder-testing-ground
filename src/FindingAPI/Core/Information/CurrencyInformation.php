@@ -4,7 +4,7 @@ namespace FindingAPI\Core\Information;
 
 use FindingAPI\Core\Exception\ItemFilterException;
 
-class Currency
+class CurrencyInformation
 {
     const AUSTRALIAN = 'AUD';
     const CANADIAN = 'CAD';
@@ -40,11 +40,11 @@ class Currency
         'USD',
     );
     /**
-     * @var GlobalId $instance
+     * @var CurrencyInformation $instance
      */
     private static $instance;
     /**
-     * @return GlobalId
+     * @return CurrencyInformation
      */
     public static function instance()
     {
@@ -62,7 +62,7 @@ class Currency
     }
     /**
      * @param $currency
-     * @return GlobalId
+     * @return CurrencyInformation
      * @throws ItemFilterException
      */
     public function add(string $currency)
