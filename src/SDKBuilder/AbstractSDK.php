@@ -164,6 +164,10 @@ abstract class AbstractSDK implements SDKInterface
 
         if ($this->offlineModeSwitch === true) {
             if (!$this->offlineMode instanceof \SDKOfflineMode\SDKOfflineMode and class_exists('SDKOfflineMode\\SDKOfflineMode')) {
+                if ($this->getRequest()->getMethod() !== 'get') {
+                    throw new SDKException('If this is your development environment and you are using SDKOfflineMode tool, you can only use it with \'get\' requests. If you are on a production server, it is advised to turn SDKOfflineMode of with AbstractSDK::switchOfflineMode(false)');
+                }
+
                 $this->offlineMode = new \SDKOfflineMode\SDKOfflineMode($this);
             }
         }

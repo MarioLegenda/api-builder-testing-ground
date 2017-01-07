@@ -45,6 +45,21 @@ class Request extends AbstractRequest
         Definition::initiate($this->options);
     }
     /**
+     * @param string $method
+     * @return AbstractRequest
+     * @throws RequestException
+     */
+    public function setMethod(string $method) : AbstractRequest
+    {
+        parent::setMethod($method);
+
+        if ($this->getMethod() === 'post') {
+            throw new RequestException('For FindingAPI, method can only be \'get\' because no other is needed');
+        }
+
+        return $this;
+    }
+    /**
      * @param string $responseFormat
      * @throws RequestException
      */
@@ -64,6 +79,32 @@ class Request extends AbstractRequest
     public function getResponseFormat() : string
     {
         return $this->responseFormat;
+    }
+    /**
+     * @param string $serviceVersion
+     * @return AbstractRequest
+     * @throws RequestException
+     */
+    public function setServiceVersion(string $serviceVersion) : AbstractRequest
+    {
+        $globalParameters = $this->getGlobalParameters();
+
+        if (!$globalParameters->hasParameter('service_version')) {
+            throw new RequestException('\'service_version\' parameter not found');
+        }
+
+        $globalParameters->getParameter('service_version')->setValue($serviceVersion);
+
+        return $this;
+    }
+
+    public function getServiceVersion() : string
+    {
+        if (!$this->getGlobalParameters()->getParameter('service_version')->getValue()) {
+            throw new RequestException('\'service_version\' global_parameter not found');
+        }
+
+        return $this->getGlobalParameters()->getParameter('service_version')->getValue();
     }
     /**
      * @param string $buyerPostalCode

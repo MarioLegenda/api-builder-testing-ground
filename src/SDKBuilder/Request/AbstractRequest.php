@@ -43,7 +43,7 @@ abstract class AbstractRequest
      */
     public function getMethod() : string
     {
-        return $this->method;
+        return strtolower($this->method);
     }
     /**
      * @param string $method
