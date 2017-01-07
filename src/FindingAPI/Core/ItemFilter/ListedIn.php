@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\Information\GlobalId;
+use FindingAPI\Core\Information\GlobalIdInformation;
 
 class ListedIn extends AbstractFilter implements FilterInterface
 {
@@ -17,7 +17,7 @@ class ListedIn extends AbstractFilter implements FilterInterface
 
         $filter = $this->filter[0];
 
-        if (!GlobalId::instance()->has($filter)) {
+        if (!GlobalIdInformation::instance()->has($filter)) {
             $this->exceptionMessages[] = $this->name.' has to have a valid global id. Please, refer to http://developer.ebay.com/devzone/finding/callref/Enums/GlobalIdList.html or use FindingAPI\Core\ItemFilter\GlobalId object';
 
             return false;

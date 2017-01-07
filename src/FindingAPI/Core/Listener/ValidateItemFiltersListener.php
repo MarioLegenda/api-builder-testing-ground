@@ -3,8 +3,7 @@
 namespace FindingAPI\Core\Listener;
 
 use FindingAPI\Core\Exception\ItemFilterException;
-use FindingAPI\Core\Information\GlobalId;
-use FindingAPI\Core\Information\ListingType;
+use FindingAPI\Core\Information\GlobalIdInformation;
 use FindingAPI\Core\Information\OutputSelector;
 use FindingAPI\Core\Information\SortOrder;
 use SDKBuilder\Event\PreProcessRequestEvent;
@@ -104,10 +103,10 @@ class ValidateItemFiltersListener
                 $globalId = strtolower($event->getRequest()->getGlobalParameters()->getParameter('global_id')->getValue());
 
                 $validGlobalIds = array(
-                    GlobalId::EBAY_MOTOR,
-                    GlobalId::EBAY_IN,
-                    GlobalId::EBAY_MY,
-                    GlobalId::EBAY_PH,
+                    GlobalIdInformation::EBAY_MOTOR,
+                    GlobalIdInformation::EBAY_IN,
+                    GlobalIdInformation::EBAY_MY,
+                    GlobalIdInformation::EBAY_PH,
                 );
 
                 if (in_array($globalId, $validGlobalIds) === true) {

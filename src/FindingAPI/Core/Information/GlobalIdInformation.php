@@ -4,7 +4,7 @@ namespace FindingAPI\Core\Information;
 
 use FindingAPI\Core\Exception\ItemFilterException;
 
-class GlobalId
+class GlobalIdInformation
 {
     const EBAY_AT = 'ebay-at';
     const EBAY_AU = 'ebay-au';

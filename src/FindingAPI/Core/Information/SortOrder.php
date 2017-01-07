@@ -32,11 +32,11 @@ class SortOrder
         'StartTimeNewest',
     );
     /**
-     * @var GlobalId $instance
+     * @var SortOrder $instance
      */
     private static $instance;
     /**
-     * @return GlobalId
+     * @return SortOrder
      */
     public static function instance()
     {
@@ -45,7 +45,7 @@ class SortOrder
         return self::$instance;
     }
     /**
-     * @param string $id
+     * @param string $sort
      * @return mixed
      */
     public function has(string $sort) : bool
@@ -53,9 +53,8 @@ class SortOrder
         return in_array($sort, $this->sortOrders) !== false;
     }
     /**
-     * @param string $name
-     * @param array $values
-     * @return GlobalId
+     * @param string $sort
+     * @return SortOrder
      */
     public function add(string $sort)
     {

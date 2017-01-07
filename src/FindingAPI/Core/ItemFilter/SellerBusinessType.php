@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\Information\GlobalId;
+use FindingAPI\Core\Information\GlobalIdInformation;
 
 class SellerBusinessType extends AbstractFilter implements FilterInterface
 {
@@ -32,14 +32,14 @@ class SellerBusinessType extends AbstractFilter implements FilterInterface
         $filter = $this->filter[0];
         $siteId = $this->filter[1];
 
-        if (!GlobalId::instance()->has($siteId)) {
+        if (!GlobalIdInformation::instance()->has($siteId)) {
             $this->exceptionMessages[] = $this->name.' item filter can be used only on '.implode(', ', $validSites).' ebay sites. '.$siteId.' given';
 
             return false;
         }
 
         foreach ($validSites as $validSiteId) {
-            if (!GlobalId::instance()->has($validSiteId)) {
+            if (!GlobalIdInformation::instance()->has($validSiteId)) {
                 $this->exceptionMessages[] = $this->name.' item filter can be used only on '.implode(', ', $validSites).' ebay sites. '.$validSiteId.' given';
 
                 return false;
