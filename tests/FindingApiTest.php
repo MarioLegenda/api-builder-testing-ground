@@ -221,6 +221,8 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->compile()
             ->send()
             ->getResponse();
+
+        $this->validateXmlResponse($response);
     }
 
     public function testFindItemsByProduct()

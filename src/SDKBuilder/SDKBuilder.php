@@ -41,7 +41,12 @@ class SDKBuilder
             throw new SDKBuilderException('Configuration file \''.$configFile.'\' for registering \''.$apiKey.'\' does not exist');
         }
 
-        $this->sdkRepository[$apiKey] = $configFile;
+        $this->sdkRepository[$apiKey] = array(
+            'config_file' => $configFile,
+            'instance' => null,
+        );
+
+        $this->sdkRepository[$apiKey]['config_file'] = $configFile;
 
         return $this;
     }
@@ -55,29 +60,44 @@ class SDKBuilder
     }
     /**
      * @param string $apiKey
+     * @param $singleton
      * @return SDKInterface
      * @throws SDKBuilderException
      */
-    public function create(string $apiKey) : SDKInterface
+    public function create(string $apiKey, bool $singleton = true) : SDKInterface
     {
         if (!$this->isRegisteredApi($apiKey)) {
             throw new SDKBuilderException('SDK with name \''.$apiKey.'\' not found');
         }
 
-        if ($this->sdkRepository[$apiKey] instanceof SDKInterface) {
-            $this->sdkRepository[$apiKey]->restoreDefaults();
+        if ($singleton === false) {
+            $api = $this->createApi($apiKey);
 
-            return $this->sdkRepository[$apiKey];
+            $this->sdkRepository[$apiKey]['instance'] = $api;
+
+            return $api;
         }
 
-        $configuration = $this->sdkRepository[$apiKey];
+        if ($this->sdkRepository[$apiKey]['instance'] instanceof SDKInterface) {
+            $this->sdkRepository[$apiKey]['instance']->restoreDefaults();
+
+            return $this->sdkRepository[$apiKey]['instance'];
+        }
+
+        $api = $this->createApi($apiKey);
+
+        $this->sdkRepository[$apiKey]['instance'] = $api;
+
+        return $api;
+    }
+
+    private function createApi(string $apiKey) : SDKInterface
+    {
+
+        $configuration = $this->sdkRepository[$apiKey]['config_file'];
 
         $apiFactory = new ApiFactory($apiKey);
 
-        $api = $apiFactory->createApi(Yaml::parse(file_get_contents($configuration)));
-
-        $this->sdkRepository[$apiKey] = $api;
-
-        return $api;
+        return $apiFactory->createApi(Yaml::parse(file_get_contents($configuration)));
     }
 }
