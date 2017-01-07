@@ -45,7 +45,7 @@ sdk:
                 representation: OPERATION-NAME
                 value: null
                 type: [injectable, required]
-                valid: [findItemsByKeywords, findItemsByCategory, findItemsAdvanced, findCompletedItems, findItemsByProduct, findItemsIneBayStores, getHistograms, getSearchKeywordsRecommendation, getVersion, newRequestMethod]
+                valid: [findItemsByKeywords, findItemsByCategory, findItemsAdvanced, findCompletedItems, findItemsByProduct, findItemsIneBayStores, getHistograms, getSearchKeywordsRecommendation, getVersion]
             service_version:
                 representation: SERVICE-VERSION
                 value: 1.3.0
