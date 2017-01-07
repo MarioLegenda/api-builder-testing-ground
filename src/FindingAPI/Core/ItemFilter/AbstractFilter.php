@@ -24,7 +24,7 @@ abstract class AbstractFilter implements UrlifyInterface
      */
     protected $exceptionMessages = array();
     /**
-     * @oaran string $name
+     * @param string $name
      * @param array $filter
      * @param array $configuration
      */

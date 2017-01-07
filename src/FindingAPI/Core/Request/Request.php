@@ -137,18 +137,17 @@ class Request extends AbstractRequest
         return $this;
     }
     /**
-     * @param int $pagination
-     * @param string $paginationType
+     * @param array $pagination
      * @return Request
      * @throws FindingApiException
      */
-    public function setPaginationInput(int $pagination, string $paginationType) : Request
+    public function setPaginationInput(array $pagination) : Request
     {
         if (!$this->itemFilterStorage->hasItemFilter('PaginationInput')) {
             throw new FindingApiException('Item filter PaginationInput does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
         }
 
-        $this->itemFilterStorage->updateItemFilterValue('PaginationInput', array($paginationType));
+        $this->itemFilterStorage->updateItemFilterValue('PaginationInput', array($pagination));
 
         return $this;
     }

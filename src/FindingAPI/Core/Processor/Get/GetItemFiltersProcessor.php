@@ -38,7 +38,7 @@ class GetItemFiltersProcessor extends AbstractProcessor implements ProcessorInte
         $finalProduct = '';
         $count = 0;
 
-        $onlyAdded = $this->itemFilterStorage->filterAddedFilter(array('SortOrder', 'PaginationInput'));
+        $onlyAdded = $this->itemFilterStorage->filterAddedFilter(array('SortOrder'));
 
         if (!empty($onlyAdded)) {
             foreach ($onlyAdded as $name => $itemFilterItems) {

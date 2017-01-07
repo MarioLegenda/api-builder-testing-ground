@@ -16,13 +16,26 @@ class PaginationInput extends AbstractFilter implements FilterInterface
         $validValues = array('entriesPerPage', 'pageNumber');
 
         $filter = $this->filter[0];
-
-        if (in_array($filter, $validValues) === false) {
-            $this->exceptionMessages[] = 'PaginationInput can be only '.implode(', ', $validValues);
-
-            return false;
+        foreach ($filter as $key => $f) {
+            if (in_array($key, $validValues) === false) {
+                $this->exceptionMessages[] = 'Invalid paginationInput entry \''.$key.'\'. Valid entries are '.implode(', ', $validValues);
+            }
         }
 
         return true;
+    }
+    /**
+     * @param int $counter
+     * @return string
+     */
+    public function urlify(int $counter): string
+    {
+        $finalEntry = '';
+
+        foreach ($this->filter[0] as $key => $f) {
+            $finalEntry.='paginationInput.'.$key.'='.$f.'&';
+        }
+
+        return $finalEntry;
     }
 }
