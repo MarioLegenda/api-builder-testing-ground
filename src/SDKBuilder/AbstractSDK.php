@@ -57,6 +57,10 @@ abstract class AbstractSDK implements SDKInterface
      */
     protected $guzzleResponse;
     /**
+     * @var $responseObject
+     */
+    protected $responseObject;
+    /**
      * @var ValidatorsProcessor
      */
     protected $validatorsProcessor;
@@ -71,7 +75,7 @@ abstract class AbstractSDK implements SDKInterface
     /**
      * @var bool $offlineModeSwitch
      */
-    protected $offlineModeSwitch = true;
+    protected $offlineModeSwitch = false;
     /**
      * AbstractSDK constructor.
      * @param AbstractRequest $request
@@ -268,6 +272,23 @@ abstract class AbstractSDK implements SDKInterface
     {
         return $this->processorFactory;
     }
+    /**
+     * @void
+     */
+    public function restoreDefaults() : void
+    {
+        $objectProperties = get_object_vars($this);
+
+        foreach ($objectProperties as $objectProperty) {
+            if ($objectProperty instanceof RestoreDefaultsInterface) {
+                $objectProperty->restoreDefaults();
+            }
+        }
+
+        $this->responseObject = null;
+        $this->offlineMode = null;
+        $this->isCompiled = false;
+    }
 
     private function processRequest()
     {
@@ -301,6 +322,8 @@ abstract class AbstractSDK implements SDKInterface
         }
 
         $this->responseToParse = (string) $this->guzzleResponse->getBody();
+
+        $this->restoreDefaults();
     }
 
 

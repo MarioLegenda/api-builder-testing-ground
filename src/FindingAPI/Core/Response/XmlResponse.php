@@ -265,7 +265,5 @@ class XmlResponse implements ResponseInterface, ArrayConvertableInterface, \Json
         }
 
         $this->simpleXmlBase = simplexml_load_string($xmlString);
-
-        $this->xmlString = null;
     }
 }

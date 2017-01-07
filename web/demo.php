@@ -20,7 +20,7 @@ $findingApi = SDKBuilder::inst()
 $findingApi
     ->findItemsByKeywords()
     ->setMethod('get')
-    ->addKeywords('harry potter')
+    ->addKeywords('warcraft')
     ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
     ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
     ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN));

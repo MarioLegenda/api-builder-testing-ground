@@ -6,8 +6,9 @@ namespace SDKBuilder\Processor\Factory;
  use SDKBuilder\Exception\SDKBuilderException;
  use SDKBuilder\Processor\ProcessorInterface;
  use SDKBuilder\Request\AbstractRequest;
+ use SDKBuilder\RestoreDefaultsInterface;
 
- class ProcessorFactory
+ class ProcessorFactory implements RestoreDefaultsInterface
 {
     /**
      * @var array $processors
@@ -81,5 +82,10 @@ namespace SDKBuilder\Processor\Factory;
         $this->processors[$method] = array();
 
         return $processors;
+    }
+
+    public function restoreDefaults() : void
+    {
+        $this->processors = array();
     }
 }

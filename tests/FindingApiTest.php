@@ -4,7 +4,7 @@ namespace Test;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use FindingAPI\FindingFactory;
+use FindingAPI\Core\Response\ResponseProxy;
 use SDKBuilder\SDKBuilder;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use SDKBuilder\Request\Method\Method;
@@ -74,14 +74,6 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
         $request->addKeywords('constantine');
 
-        $findingApi
-            ->compile()
-            ->send();
-
-        if ($findingApi->hasErrors()) {
-            $this->assertInternalType('array', $findingApi->getErrors(), 'Call to findItemsByKeywords should return a \'deprecated\' error');
-        }
-
         $itemFilterStorage = $request->getItemFilterStorage();
 
         // single value item filter
@@ -112,21 +104,98 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-    public function testGetVersion()
+    public function testSingletonApi()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApiFirst = SDKBuilder::inst()->create('finding');
 
-        $findingApi->getVersion();
+        $findingApiFirst->getVersion();
 
-        $findingApi
+        $versionResponse = $findingApiFirst
             ->compile()
             ->send()
             ->getResponse();
+
+        $this->validateXmlResponse($versionResponse);
+
+        $findingApiSecond = SDKBuilder::inst()->create('finding');
+
+        $findingApiSecond
+            ->getHistograms()
+            ->setCategoryId(23);
+
+        $histogramResponse = $findingApiSecond
+            ->compile()
+            ->send()
+            ->getResponse();
+
+        $this->validateXmlResponse($histogramResponse);
+
+        if ($findingApiFirst->getResponse() !== $findingApiSecond->getResponse()) {
+            $this->fail('Every created api should create a new '.ResponseProxy::class.' every time a request is sent');
+        }
+
+        $this->assertInstanceOf(ResponseProxy::class, $versionResponse, '$versionResponse should be an instance of '.ResponseProxy::class);
+        $this->assertInstanceOf(ResponseProxy::class, $histogramResponse, '$histogramResponse should be an instance of '.ResponseProxy::class);
+
+        $histogramRawResponse = $histogramResponse->getRawResponse();
+        $versionRawResponse = $versionResponse->getRawResponse();
+
+        $this->assertXmlStringNotEqualsXmlString($histogramRawResponse, $versionRawResponse, 'Version raw response and histogram raw response cannot be equal');
+
+        if ($findingApiFirst !== $findingApiSecond) {
+            $this->fail('testSingeltonApi() $findingApiFirst and $findingApiSecond should be same references');
+        }
+
+        $findingApiThird = SDKBuilder::inst()->create('finding');
+
+        $versionResponse = $findingApiThird
+            ->compile()
+            ->send()
+            ->getResponse();
+
+        $this->validateXmlResponse($versionResponse);
+
+        $findingApiThirdVersionRawResponse = $versionResponse->getRawResponse();
+
+        $findingApiThird->restoreDefaults();
+
+        $findingApiSecond
+            ->getHistograms()
+            ->setCategoryId(23);
+
+        $histogramResponse = $findingApiSecond
+            ->compile()
+            ->send()
+            ->getResponse();
+
+        $this->validateXmlResponse($histogramResponse);
+
+        $findingApiThirdHistogramRawResponse = $histogramResponse->getRawResponse();
+
+        $this->assertXmlStringNotEqualsXmlString(
+            $findingApiThirdVersionRawResponse,
+            $findingApiThirdHistogramRawResponse,
+            '$findingApiThird raw responses should not be equal'
+        );
+    }
+
+    public function testGetVersion()
+    {
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
+
+        $findingApi->getVersion();
+
+        $response = $findingApi
+            ->compile()
+            ->send()
+            ->getResponse();
+
+        $this->validateXmlResponse($response);
     }
 
     public function testHistograms()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->getHistograms()
@@ -142,7 +211,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSearchKeywordsRecommendations()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->getSearchKeywordsRecommendation()
@@ -156,7 +225,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByProduct()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->findItemsByProduct()
@@ -172,7 +241,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByCategoryRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->findItemsByCategory()
@@ -183,7 +252,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsAdvancedRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->findItemsAdvanced()
@@ -203,7 +272,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindCompletedItemsRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->findCompletedItems()
@@ -215,7 +284,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByKeywordsJsonRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->findItemsByKeywords()
@@ -244,7 +313,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         );
 
         foreach ($queries as $query => $filters) {
-            $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(false);
+            $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
             $request = $findingApi->findItemsByKeywords();
 

@@ -12,7 +12,6 @@
 
     "require": {
         "symfony/yaml": "^3.1",
-        "guzzlehttp/guzzle": "~6.0",
         "symfony/event-dispatcher": "^3.1",
         "symfony/config": "^3.2",
         "mario-legenda/sdk-offline-mode": "dev-master"

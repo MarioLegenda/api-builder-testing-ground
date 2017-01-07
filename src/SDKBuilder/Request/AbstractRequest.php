@@ -4,8 +4,9 @@ namespace SDKBuilder\Request;
 
 use SDKBuilder\Exception\RequestException;
 use SDKBuilder\Exception\RequestParametersException;
+use SDKBuilder\RestoreDefaultsInterface;
 
-abstract class AbstractRequest
+abstract class AbstractRequest implements RestoreDefaultsInterface
 {
     /**
      * @var string $method
@@ -33,8 +34,7 @@ abstract class AbstractRequest
         $this->specialParameters = $specialParameters;
         $this->globalParameters = $globalParameters;
 
-        $this->globalParameters->restoreDefaults();
-        $this->specialParameters->restoreDefaults();
+        $this->restoreDefaults();
 
         $this->client = new RequestClient();
     }
@@ -126,28 +126,23 @@ abstract class AbstractRequest
         return $this->specialParameters;
     }
     /**
+     * @void
+     */
+    public function restoreDefaults() : void
+    {
+        $this->globalParameters->restoreDefaults();
+        $this->specialParameters->restoreDefaults();
+    }
+    /**
      * @param string $request
      * @return mixed
      */
     public function sendRequest(string $request)
     {
-        if ($this->getMethod() === 'get') {
-            return $this->client
-                ->setUri($request)
-                ->setMethod($this->getMethod())
-                ->send()
-                ->getResponse();
-        }
-
-        if ($this->getMethod() === 'post') {
-            $response = $this->client
-                ->setUri($this->getGlobalParameters()[0]->getValue())
-                ->setMethod($this->getMethod())
-                ->setData($request)
-                ->send()
-                ->getResponse();
-
-            return $response;
-        }
+        return $this->client
+            ->setUri($request)
+            ->setMethod($this->getMethod())
+            ->send()
+            ->getResponse();
     }
 }

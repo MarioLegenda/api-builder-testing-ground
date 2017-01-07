@@ -4,8 +4,9 @@ namespace SDKBuilder\Request;
 
 use SDKBuilder\Exception\RequestException;
 use SDKBuilder\Response\ResponseClient;
+use SDKBuilder\RestoreDefaultsInterface;
 
-class RequestClient
+class RequestClient implements RestoreDefaultsInterface
 {
     /**
      * @var ResponseClient $responseClient
@@ -26,7 +27,17 @@ class RequestClient
     /**
      * @var array $headers
      */
-    private $headers;
+    private $headers = array();
+    /**
+     * @void
+     */
+    public function restoreDefaults(): void
+    {
+        $this->responseClient = null;
+        $this->method = null;
+        $this->uri = null;
+        $this->headers = array();
+    }
     /**
      * @param string $method
      * @return RequestClient

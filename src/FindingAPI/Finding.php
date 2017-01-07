@@ -18,10 +18,6 @@ use FindingAPI\Core\Processor\Get\GetItemFiltersProcessor;
 class Finding extends AbstractSDK
 {
     /**
-     * @var ResponseInterface $response
-     */
-    private $response;
-    /**
      * @param string $inlineResponse
      * @return ResponseInterface
      */
@@ -34,9 +30,9 @@ class Finding extends AbstractSDK
                 $this->getRequest()->getResponseFormat()
             );
 
-            $this->response = $response;
+            $this->responseObject = $response;
 
-            return $this->response;
+            return $this->responseObject;
         }
 
         if ($this->offlineModeSwitch === true) {
@@ -45,8 +41,8 @@ class Finding extends AbstractSDK
             }
         }
 
-        if ($this->response instanceof ResponseInterface) {
-            return $this->response;
+        if ($this->responseObject instanceof ResponseInterface) {
+            return $this->responseObject;
         }
 
         $response = new ResponseProxy(
@@ -55,11 +51,10 @@ class Finding extends AbstractSDK
             $this->getRequest()->getResponseFormat()
         );
 
-        unset($this->responseToParse);
         unset($this->guzzleResponse);
 
-        $this->response = $response;
+        $this->responseObject = $response;
 
-        return $this->response;
+        return $this->responseObject;
     }
 }

@@ -76,7 +76,7 @@ sdk:
                 error_message: '%s is obsolete and cannot be used anymore. Represented by %s'
             description_search:
                 representation: descriptionSearch
-                value: true
+                value: null
                 type: [optional]
                 valid: null
             product_id_type:

@@ -56,6 +56,7 @@ class SDKBuilder
     /**
      * @param string $apiKey
      * @return SDKInterface
+     * @throws SDKBuilderException
      */
     public function create(string $apiKey) : SDKInterface
     {
@@ -63,10 +64,20 @@ class SDKBuilder
             throw new SDKBuilderException('SDK with name \''.$apiKey.'\' not found');
         }
 
+        if ($this->sdkRepository[$apiKey] instanceof SDKInterface) {
+            $this->sdkRepository[$apiKey]->restoreDefaults();
+
+            return $this->sdkRepository[$apiKey];
+        }
+
         $configuration = $this->sdkRepository[$apiKey];
 
         $apiFactory = new ApiFactory($apiKey);
 
-        return $apiFactory->createApi(Yaml::parse(file_get_contents($configuration)));
+        $api = $apiFactory->createApi(Yaml::parse(file_get_contents($configuration)));
+
+        $this->sdkRepository[$apiKey] = $api;
+
+        return $api;
     }
 }
