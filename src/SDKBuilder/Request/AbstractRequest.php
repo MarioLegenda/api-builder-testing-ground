@@ -140,12 +140,14 @@ abstract class AbstractRequest
         }
 
         if ($this->getMethod() === 'post') {
-            return $this->client
+            $response = $this->client
                 ->setUri($this->getGlobalParameters()[0]->getValue())
                 ->setMethod($this->getMethod())
                 ->setData($request)
                 ->send()
                 ->getResponse();
+
+            return $response;
         }
     }
 }

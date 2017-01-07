@@ -249,7 +249,8 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
             $request
                 ->setOutputSelector(array('StoreInfo', 'CategoryHistogram'))
-                ->addKeywords($query);
+                ->addKeywords($query)
+                ->setMethod('get');
 
             if ($filters !== null) {
                 foreach ($filters as $filter) {
@@ -350,6 +351,8 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
                     $this->assertInternalType('string', $error['domain']);
                     $this->assertInternalType('string', $error['category']);
                 }
+
+                throw new \Exception('The response validated but Ebay Finding api response was an error');
             }
         }
 

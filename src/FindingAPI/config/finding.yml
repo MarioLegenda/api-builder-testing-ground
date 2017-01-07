@@ -48,9 +48,9 @@ sdk:
                 valid: [findItemsByKeywords, findItemsByCategory, findItemsAdvanced, findCompletedItems, findItemsByProduct, findItemsIneBayStores, getHistograms, getSearchKeywordsRecommendation, getVersion, newRequestMethod]
             service_version:
                 representation: SERVICE-VERSION
-                value: 1.0.0
+                value: 1.3.0
                 type: [injectable, required]
-                valid: [1.0.0]
+                valid: [1.3.0]
             response_data_format:
                 representation: RESPONSE-DATA-FORMAT
                 value: xml
@@ -76,7 +76,7 @@ sdk:
                 error_message: '%s is obsolete and cannot be used anymore. Represented by %s'
             description_search:
                 representation: descriptionSearch
-                value: true
+                value: null
                 type: [optional]
                 valid: null
             product_id_type:

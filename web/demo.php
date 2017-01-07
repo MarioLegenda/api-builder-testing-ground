@@ -19,7 +19,7 @@ $findingApi = SDKBuilder::inst()
 
 $findingApi
     ->findItemsByKeywords()
-    ->setMethod('post')
+    ->setMethod('get')
     ->addKeywords('harry potter')
     ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
     ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))

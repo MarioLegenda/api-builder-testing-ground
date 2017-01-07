@@ -16,8 +16,8 @@ class PreSendRequestListener
 
         if ($request->getMethod() === 'post') {
             $headers = array(
-                'X-EBAY-SOA-SERVICE-NAME' => 'FindingService',
-                'X-EBAY-SOA-RESPONSE-DATA-FORMAT' => $request->getGlobalParameters()->getParameter('response_data_format')->getValue(),
+                'X-EBAY-SOA-REQUEST-DATA-FORMAT : '.$request->getGlobalParameters()->getParameter('response_data_format')->getValue(),
+                'Content-Type : text/xml;charset=utf-8',
             );
 
             $mappedHeaders = RequestParameters::map(array(

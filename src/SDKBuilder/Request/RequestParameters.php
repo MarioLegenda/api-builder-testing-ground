@@ -227,7 +227,7 @@ class RequestParameters implements \IteratorAggregate, \ArrayAccess
 
         $newKeyValuePair = array();
         foreach ($keyValueArray as $key => $value) {
-            $newKeyValuePair[$key] = $findValueObject->findValue($value);
+            $newKeyValuePair[] = $key.' : '.$findValueObject->findValue($value);
         }
 
         return $newKeyValuePair;
