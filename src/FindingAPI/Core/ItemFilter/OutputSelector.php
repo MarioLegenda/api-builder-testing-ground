@@ -9,7 +9,16 @@ class OutputSelector extends AbstractFilter implements FilterInterface
      */
     public function validateFilter() : bool
     {
-        $validSelectors = array('SellerInfo', 'StoreInfo', 'AspectHistogram', 'CategoryHistogram');
+        $validSelectors = array(
+            'SellerInfo',
+            'StoreInfo',
+            'AspectHistogram',
+            'CategoryHistogram',
+            'GalleryInfo',
+            'PictureURLLarge',
+            'PictureURLSuperSize',
+            'UnitPriceInfo',
+        );
 
         foreach ($this->filter as $filter) {
             if (in_array($filter, $validSelectors) === false) {

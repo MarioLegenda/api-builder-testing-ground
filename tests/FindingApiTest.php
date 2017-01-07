@@ -320,7 +320,16 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             $request = $findingApi->findItemsByKeywords();
 
             $request
-                ->setOutputSelector(array('StoreInfo', 'CategoryHistogram'))
+                ->setOutputSelector(array(
+                    'SellerInfo',
+                    'StoreInfo',
+                    'AspectHistogram',
+                    'CategoryHistogram',
+                    'GalleryInfo',
+                    'PictureURLLarge',
+                    'PictureURLSuperSize',
+                    'UnitPriceInfo',
+                ))
                 ->addKeywords($query)
                 ->setMethod('get');
 
