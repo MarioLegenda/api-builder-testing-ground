@@ -2,13 +2,13 @@
 
 namespace FindingAPI\Core\Information;
 
-class PaymentMethod
+class PaymentMethodInformation
 {
     const PAY_PAL = 'PayPal';
     const PAISA_PAL = 'PaisaPal';
     const PAISA_PAY_EMI = 'PaisaPayEmi';
     /**
-     * @var array $sortOrders
+     * @var array $paymentMethods
      */
     private $paymentMethods = array(
         'PayPal',
@@ -16,11 +16,11 @@ class PaymentMethod
         'PaisaPayEMI',
     );
     /**
-     * @var PaymentMethod $instance
+     * @var PaymentMethodInformation $instance
      */
     private static $instance;
     /**
-     * @return PaymentMethod
+     * @return PaymentMethodInformation
      */
     public static function instance()
     {
@@ -38,7 +38,7 @@ class PaymentMethod
     }
     /**
      * @param string $method
-     * @return PaymentMethod
+     * @return PaymentMethodInformation
      */
     public function add(string $method)
     {

@@ -250,10 +250,10 @@ class GlobalIdInformation
     /**
      * @param string $name
      * @param array $values
-     * @return GlobalId
+     * @return GlobalIdInformation
      * @throws ItemFilterException
      */
-    public function add(string $name, array $values) : GlobalId
+    public function add(string $name, array $values) : GlobalIdInformation
     {
         if (!array_key_exists('global-id', $values) and !empty($values['global-id'])) {
             throw new ItemFilterException('GlobalId values has to be an array with \'global-id\' key and a non empty \'global-id\' value');

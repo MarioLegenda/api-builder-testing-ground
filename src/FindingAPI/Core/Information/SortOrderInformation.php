@@ -2,7 +2,9 @@
 
 namespace FindingAPI\Core\Information;
 
-class SortOrder
+use FindingAPI\Core\ItemFilter\SortOrder;
+
+class SortOrderInformation
 {
     const BEST_MATCH = 'BestMatch';
     const BID_COUNT_FEWEST = 'BidCountFewest';
@@ -32,11 +34,11 @@ class SortOrder
         'StartTimeNewest',
     );
     /**
-     * @var SortOrder $instance
+     * @var SortOrderInformation $instance
      */
     private static $instance;
     /**
-     * @return SortOrder
+     * @return SortOrderInformation
      */
     public static function instance()
     {
@@ -54,7 +56,7 @@ class SortOrder
     }
     /**
      * @param string $sort
-     * @return SortOrder
+     * @return SortOrderInformation
      */
     public function add(string $sort)
     {

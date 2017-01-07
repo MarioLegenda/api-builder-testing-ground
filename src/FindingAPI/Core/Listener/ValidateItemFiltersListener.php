@@ -4,8 +4,8 @@ namespace FindingAPI\Core\Listener;
 
 use FindingAPI\Core\Exception\ItemFilterException;
 use FindingAPI\Core\Information\GlobalIdInformation;
-use FindingAPI\Core\Information\OutputSelector;
-use FindingAPI\Core\Information\SortOrder;
+use FindingAPI\Core\Information\OutputSelectorInformation;
+use FindingAPI\Core\Information\SortOrderInformation;
 use SDKBuilder\Event\PreProcessRequestEvent;
 
 class ValidateItemFiltersListener
@@ -94,7 +94,7 @@ class ValidateItemFiltersListener
             $outputSelector = $itemFilterStorage->getItemFilter('OutputSelector');
 
             foreach ($outputSelector['value'] as $selector) {
-                if (!OutputSelector::instance()->has($selector)) {
+                if (!OutputSelectorInformation::instance()->has($selector)) {
                     throw new ItemFilterException('outputSelector \''.$selector.'\' is not supported by this version of FindingAPI. If ebay added it, add it manually in '.OutputSelector::class);
                 }
             }
@@ -121,7 +121,7 @@ class ValidateItemFiltersListener
             if (is_array($sortOrder['value'])) {
                 $sortOrderValue = $sortOrder['value'][0];
 
-                if ($sortOrderValue === SortOrder::BID_COUNT_FEWEST or $sortOrderValue === SortOrder::BID_COUNT_MOST) {
+                if ($sortOrderValue === SortOrderInformation::BID_COUNT_FEWEST or $sortOrderValue === SortOrderInformation::BID_COUNT_MOST) {
                     if (!$itemFilterStorage->hasItemFilter('ListingType') or !$itemFilterStorage->isItemFilterInRequest('ListingType')) {
                         throw new ItemFilterException('To sort by bid count, you must specify a listing type filter to limit results to auction listings only (such as, & itemFilter.name=ListingType&itemFilter.value=Auction)');
                     }

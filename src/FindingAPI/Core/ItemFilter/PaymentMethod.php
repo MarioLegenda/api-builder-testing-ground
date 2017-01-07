@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\Information\PaymentMethod as PaymentMethodInformation;
+use FindingAPI\Core\Information\PaymentMethodInformation;
 
 class PaymentMethod extends AbstractFilter implements FilterInterface
 {

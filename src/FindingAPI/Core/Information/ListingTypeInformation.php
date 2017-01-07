@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\Information;
 
-class ListingType
+class ListingTypeInformation
 {
     const ALL = 'All';
     const AUCTION = 'Auction';
@@ -22,11 +22,11 @@ class ListingType
         'StoreInventory'
     );
     /**
-     * @var ListingType $instance
+     * @var ListingTypeInformation $instance
      */
     private static $instance;
     /**
-     * @return ListingType
+     * @return ListingTypeInformation
      */
     public static function instance()
     {
@@ -44,7 +44,7 @@ class ListingType
     }
     /**
      * @param string $method
-     * @return ListingType
+     * @return ListingTypeInformation
      */
     public function add(string $method)
     {

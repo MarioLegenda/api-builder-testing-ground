@@ -4,13 +4,13 @@ namespace Test;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use FindingAPI\Core\Information\GlobalId;
-use FindingAPI\Core\Information\OutputSelector;
+use FindingAPI\Core\Information\GlobalIdInformation;
+use FindingAPI\Core\Information\OutputSelectorInformation;
+use FindingAPI\Core\Information\ISO3166CountryCodeInformation;
+use FindingAPI\Core\Information\SortOrderInformation;
+use FindingAPI\Core\Information\CurrencyInformation;
+use FindingAPI\Core\Information\PaymentMethodInformation;
 use Symfony\Component\Yaml\Yaml;
-use FindingAPI\Core\Information\ISO3166CountryCode;
-use FindingAPI\Core\Information\SortOrder;
-use FindingAPI\Core\Information\Currency;
-use FindingAPI\Core\Information\PaymentMethod;
 
 class SingeltonsTest extends \PHPUnit_Framework_TestCase
 {
@@ -174,18 +174,18 @@ class SingeltonsTest extends \PHPUnit_Framework_TestCase
         );
 
         foreach ($globalIds as $key => $values) {
-            $this->assertTrue(GlobalId::instance()->has($key));
+            $this->assertTrue(GlobalIdInformation::instance()->has($key));
 
-            $id = GlobalId::instance()->get($key);
+            $id = GlobalIdInformation::instance()->get($key);
             $this->assertEquals($id, strtoupper($key), $id.' and '.$key.' are not equal');
 
-            GlobalId::instance()->remove($key);
+            GlobalIdInformation::instance()->remove($key);
 
-            $this->assertFalse(GlobalId::instance()->has($key), 'GlobalId::hasId() for key '.$key.' should return false');
+            $this->assertFalse(GlobalIdInformation::instance()->has($key), 'GlobalId::hasId() for key '.$key.' should return false');
 
-            GlobalId::instance()->add($key, $values);
+            GlobalIdInformation::instance()->add($key, $values);
 
-            $id = GlobalId::instance()->get($key);
+            $id = GlobalIdInformation::instance()->get($key);
             $this->assertEquals($id, strtoupper($key), $id.' and '.$key.' are not equal after removal');
         }
     }
@@ -196,7 +196,7 @@ class SingeltonsTest extends \PHPUnit_Framework_TestCase
 
         foreach ($countryCodes as $codes) {
             foreach ($codes as $key => $codeInLoop) {
-                $this->assertTrue(ISO3166CountryCode::instance()->has($codeInLoop), 'Failed asserting that '.$codeInLoop.' is valid');
+                $this->assertTrue(ISO3166CountryCodeInformation::instance()->has($codeInLoop), 'Failed asserting that '.$codeInLoop.' is valid');
             }
 
             $countryName = $codes['name'];
@@ -204,38 +204,38 @@ class SingeltonsTest extends \PHPUnit_Framework_TestCase
             $alpha3 = $codes['alpha3'];
             $number = $codes['number'];
 
-            $code = ISO3166CountryCode::instance()->get($countryName);
+            $code = ISO3166CountryCodeInformation::instance()->get($countryName);
             $this->assertEquals($code['name'], $countryName, $countryName.' and '.$code['name'].' are not equal');
 
-            $code = ISO3166CountryCode::instance()->get($alpha2);
+            $code = ISO3166CountryCodeInformation::instance()->get($alpha2);
             $this->assertEquals($code['alpha2'], $alpha2, $alpha2.' and '.$code['alpha2'].' are not equal');
 
-            $code = ISO3166CountryCode::instance()->get($alpha3);
+            $code = ISO3166CountryCodeInformation::instance()->get($alpha3);
             $this->assertEquals($code['alpha3'], $alpha3, $alpha3.' and '.$code['alpha3'].' are not equal');
 
-            $code = ISO3166CountryCode::instance()->get($countryName);
+            $code = ISO3166CountryCodeInformation::instance()->get($countryName);
             $this->assertEquals($code['number'], $number, $number.' and '.$code['number'].' are not equal');
         }
 
-        ISO3166CountryCode::instance()->add(array(
+        ISO3166CountryCodeInformation::instance()->add(array(
             'name' => 'Mile',
             'alpha2' => 'HGOS',
         ));
 
-        $this->assertTrue(ISO3166CountryCode::instance()->has('HGOS'), 'Failed asserting that HGOS exists as a country code');
+        $this->assertTrue(ISO3166CountryCodeInformation::instance()->has('HGOS'), 'Failed asserting that HGOS exists as a country code');
 
-        $this->assertTrue(ISO3166CountryCode::instance()->remove('HGOS'), 'Failed asserting that HGOS has been deleted');
+        $this->assertTrue(ISO3166CountryCodeInformation::instance()->remove('HGOS'), 'Failed asserting that HGOS has been deleted');
 
-        $this->assertFalse(ISO3166CountryCode::instance()->has('HGOS'), 'Failed asserting that HGOS does not exist as a country code');
+        $this->assertFalse(ISO3166CountryCodeInformation::instance()->has('HGOS'), 'Failed asserting that HGOS does not exist as a country code');
 
-        $this->assertTrue(ISO3166CountryCode::instance()->has('HGOS', true), 'Failed asserting that HGOS exists but has be removed as a country code');
+        $this->assertTrue(ISO3166CountryCodeInformation::instance()->has('HGOS', true), 'Failed asserting that HGOS exists but has be removed as a country code');
 
-        ISO3166CountryCode::instance()->add(array(
+        ISO3166CountryCodeInformation::instance()->add(array(
             'name' => 'Mile',
             'alpha2' => 'HGOS',
         ));
 
-        $this->assertTrue(ISO3166CountryCode::instance()->has('HGOS'), 'Failed asserting that HGOS exists as a country code after deleting and adding again');
+        $this->assertTrue(ISO3166CountryCodeInformation::instance()->has('HGOS'), 'Failed asserting that HGOS exists as a country code after deleting and adding again');
     }
 
     public function testOtherInformationSingeltons()
@@ -255,12 +255,12 @@ class SingeltonsTest extends \PHPUnit_Framework_TestCase
         );
 
         foreach ($sortOrders as $sort) {
-            $this->assertTrue(SortOrder::instance()->has($sort), $sort.' does not exist in '.get_class(SortOrder::instance()));
+            $this->assertTrue(SortOrderInformation::instance()->has($sort), $sort.' does not exist in '.get_class(SortOrderInformation::instance()));
         }
 
-        $this->assertNotNull(SortOrder::instance()->add('SomeNewSortOrder'), 'Could not add new sort order SomeNewSortOrder');
+        $this->assertNotNull(SortOrderInformation::instance()->add('SomeNewSortOrder'), 'Could not add new sort order SomeNewSortOrder');
 
-        $this->assertTrue(SortOrder::instance()->has('SomeNewSortOrder'), 'SomeNewSortOrder does not exist in '.get_class(SortOrder::instance()));
+        $this->assertTrue(SortOrderInformation::instance()->has('SomeNewSortOrder'), 'SomeNewSortOrder does not exist in '.get_class(SortOrderInformation::instance()));
 
         $currencies = array(
             'AUD',
@@ -280,12 +280,12 @@ class SingeltonsTest extends \PHPUnit_Framework_TestCase
         );
 
         foreach ($currencies as $currency) {
-            $this->assertTrue(Currency::instance()->has($currency), $currency.' does not exist in '.get_class(Currency::instance()));
+            $this->assertTrue(CurrencyInformation::instance()->has($currency), $currency.' does not exist in '.get_class(CurrencyInformation::instance()));
         }
 
-        $this->assertNotNull(Currency::instance()->add('SomeNewCurrency'), 'Could not add new currency SomeNewCurrency');
+        $this->assertNotNull(CurrencyInformation::instance()->add('SomeNewCurrency'), 'Could not add new currency SomeNewCurrency');
 
-        $this->assertTrue(Currency::instance()->has('SomeNewCurrency'), 'SomeNewCurrency does not exist in '.get_class(Currency::instance()));
+        $this->assertTrue(CurrencyInformation::instance()->has('SomeNewCurrency'), 'SomeNewCurrency does not exist in '.get_class(CurrencyInformation::instance()));
 
         $paymentMethods = array(
             'PayPal',
@@ -295,11 +295,11 @@ class SingeltonsTest extends \PHPUnit_Framework_TestCase
 
 
         foreach ($paymentMethods as $method) {
-            $this->assertTrue(PaymentMethod::instance()->has($method), $method.' does not exist in '.get_class(PaymentMethod::instance()));
+            $this->assertTrue(PaymentMethodInformation::instance()->has($method), $method.' does not exist in '.get_class(PaymentMethodInformation::instance()));
         }
 
-        $this->assertNotNull(PaymentMethod::instance()->add('Visa'), 'Could not add new payment method Visa');
+        $this->assertNotNull(PaymentMethodInformation::instance()->add('Visa'), 'Could not add new payment method Visa');
 
-        $this->assertTrue(PaymentMethod::instance()->has('Visa'), 'Visa does not exist in '.get_class(PaymentMethod::instance()));
+        $this->assertTrue(PaymentMethodInformation::instance()->has('Visa'), 'Visa does not exist in '.get_class(PaymentMethodInformation::instance()));
     }
 }

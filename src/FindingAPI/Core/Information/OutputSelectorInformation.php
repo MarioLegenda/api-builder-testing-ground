@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\Information;
 
-class OutputSelector
+class OutputSelectorInformation
 {
     const ASPECT_HISTOGRAM = 'AspectHistogram';
     const CATEGORY_HISTOGRAM = 'CategoryHistogram';
@@ -29,11 +29,11 @@ class OutputSelector
         'UnitPriceInfo',
     );
     /**
-     * @var PaymentMethod $instance
+     * @var OutputSelectorInformation $instance
      */
     private static $instance;
     /**
-     * @return PaymentMethod
+     * @return OutputSelectorInformation
      */
     public static function instance()
     {
@@ -51,7 +51,7 @@ class OutputSelector
     }
     /**
      * @param string $method
-     * @return OutputSelector
+     * @return OutputSelectorInformation
      */
     public function add(string $method)
     {

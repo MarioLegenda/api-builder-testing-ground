@@ -8,7 +8,7 @@ use FindingAPI\Core\Response\ResponseProxy;
 use SDKBuilder\SDKBuilder;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use SDKBuilder\Request\Method\Method;
-use FindingAPI\Core\Information\Currency;
+use FindingAPI\Core\Information\CurrencyInformation;
 use FindingAPI\Core\ResponseParser\ResponseItem\AspectHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\CategoryHistogramContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Aspect\Aspect;
@@ -29,7 +29,6 @@ use FindingAPI\Core\ResponseParser\ResponseItem\SearchResultsContainer;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Condition;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\DiscountPriceInfo;
 use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item\Category;
-use FindingAPI\Core\Information\Currency as InformationCurrency;
 use FindingAPI\Core\ResponseParser\ResponseItem\ConditionHistogramContainer;
 use FindingAPI\Core\Response\ResponseInterface;
 use SDKBuilder\Request\Parameter;
@@ -294,7 +293,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->addKeywords('call of duty')
             ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
             ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
-            ->addItemFilter(ItemFilter::CURRENCY, array(Currency::AUSTRALIAN))
+            ->addItemFilter(ItemFilter::CURRENCY, array(CurrencyInformation::AUSTRALIAN))
             ->setResponseFormat('json');
 
         $response = $findingApi
@@ -310,7 +309,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         $queries = array(
             'harry potter' => array(
                 array (ItemFilter::BEST_OFFER_ONLY, array(true)),
-                array (ItemFilter::CURRENCY, array(InformationCurrency::AUSTRALIAN)),
+                array (ItemFilter::CURRENCY, array(CurrencyInformation::AUSTRALIAN)),
             ),
         );
 

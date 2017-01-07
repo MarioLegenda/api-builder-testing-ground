@@ -10,9 +10,9 @@ use SDKBuilder\SDKBuilder;
 use FindingAPI\Core\ItemFilter\ItemFilter;
 use FindingAPI\Core\Information\CurrencyInformation;
 use Demo\TwigBridge;
-use FindingAPI\Core\Information\SortOrder;
-use FindingAPI\Core\Information\OutputSelector;
-use FindingAPI\Core\Information\ListingType as InformationListingType;
+use FindingAPI\Core\Information\OutputSelectorInformation;
+use FindingAPI\Core\Information\ListingTypeInformation;
+use FindingAPI\Core\Information\SortOrderInformation;
 
 $findingApi = SDKBuilder::inst()
                 ->registerApi('finding', __DIR__.'/../tests/finding.yml')
@@ -27,19 +27,19 @@ $findingApi
         'entriesPerPage' => 2,
         'pageNumber' => 3,
     ))
-    ->setSortOrder(SortOrder::BID_COUNT_FEWEST)
+    ->setSortOrder(SortOrderInformation::BID_COUNT_FEWEST)
     ->setOutputSelector(array(
-        OutputSelector::ASPECT_HISTOGRAM,
-        OutputSelector::CATEGORY_HISTOGRAM,
-        OutputSelector::CONDITION_HISTOGRAM,
-        OutputSelector::PICTURE_URL_LARGE,
-        OutputSelector::PICTURE_URL_SUPER_SIZE,
-        OutputSelector::SELLER_INFO,
-        OutputSelector::STORE_INFO,
-        OutputSelector::UNIT_PRICE_INFO,
+        OutputSelectorInformation::ASPECT_HISTOGRAM,
+        OutputSelectorInformation::CATEGORY_HISTOGRAM,
+        OutputSelectorInformation::CONDITION_HISTOGRAM,
+        OutputSelectorInformation::PICTURE_URL_LARGE,
+        OutputSelectorInformation::PICTURE_URL_SUPER_SIZE,
+        OutputSelectorInformation::SELLER_INFO,
+        OutputSelectorInformation::STORE_INFO,
+        OutputSelectorInformation::UNIT_PRICE_INFO,
     ))
     ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
-    ->addItemFilter(ItemFilter::LISTING_TYPE, array(InformationListingType::AUCTION_WITH_BIN, InformationListingType::STORE_INVENTORY, InformationListingType::AUCTION))
+    ->addItemFilter(ItemFilter::LISTING_TYPE, array(ListingTypeInformation::AUCTION_WITH_BIN, ListingTypeInformation::STORE_INVENTORY, ListingTypeInformation::AUCTION))
     ->addItemFilter(ItemFilter::CURRENCY, array(CurrencyInformation::AUSTRALIAN));
 
 $response = $findingApi

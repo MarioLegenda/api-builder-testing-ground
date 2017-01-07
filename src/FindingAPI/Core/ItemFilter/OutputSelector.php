@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\Information\OutputSelector as InformationOutputSelector;
+use FindingAPI\Core\Information\OutputSelectorInformation;
 
 class OutputSelector extends AbstractFilter implements FilterInterface
 {
@@ -11,7 +11,7 @@ class OutputSelector extends AbstractFilter implements FilterInterface
      */
     public function validateFilter() : bool
     {
-        $validSelectors = InformationOutputSelector::instance()->getAll();
+        $validSelectors = OutputSelectorInformation::instance()->getAll();
 
         foreach ($this->filter as $filter) {
             if (in_array($filter, $validSelectors) === false) {
