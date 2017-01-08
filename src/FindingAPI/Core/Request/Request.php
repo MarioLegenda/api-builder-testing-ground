@@ -9,6 +9,7 @@ use FindingAPI\Core\Exception\{ FindingApiException, ItemFilterException };
 
 use SDKBuilder\Exception\RequestException;
 use SDKBuilder\Request\AbstractRequest;
+use SDKBuilder\Request\RequestInterface;
 use SDKBuilder\Request\RequestParameters;
 
 class Request extends AbstractRequest
@@ -46,10 +47,10 @@ class Request extends AbstractRequest
     }
     /**
      * @param string $method
-     * @return AbstractRequest
+     * @return RequestInterface
      * @throws RequestException
      */
-    public function setMethod(string $method) : AbstractRequest
+    public function setMethod(string $method) : RequestInterface
     {
         parent::setMethod($method);
 
@@ -82,10 +83,10 @@ class Request extends AbstractRequest
     }
     /**
      * @param string $serviceVersion
-     * @return AbstractRequest
+     * @return Request
      * @throws RequestException
      */
-    public function setServiceVersion(string $serviceVersion) : AbstractRequest
+    public function setServiceVersion(string $serviceVersion) : Request
     {
         $globalParameters = $this->getGlobalParameters();
 

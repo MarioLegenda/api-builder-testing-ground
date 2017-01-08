@@ -180,7 +180,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testGetVersion()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi->getVersion();
 
@@ -194,7 +194,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testHistograms()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->getHistograms()
@@ -210,7 +210,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSearchKeywordsRecommendations()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->getSearchKeywordsRecommendation()
@@ -226,7 +226,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByProduct()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->findItemsByProduct()
@@ -242,7 +242,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByCategoryRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->findItemsByCategory()
@@ -253,7 +253,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsAdvancedRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->findItemsAdvanced()
@@ -273,7 +273,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindCompletedItemsRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->findCompletedItems()
@@ -285,7 +285,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
     public function testFindItemsByKeywordsJsonRequest()
     {
-        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
+        $findingApi = SDKBuilder::inst()->create('finding');
 
         $findingApi
             ->findItemsByKeywords()
@@ -314,7 +314,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         );
 
         foreach ($queries as $query => $filters) {
-            $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
+            $findingApi = SDKBuilder::inst()->create('finding');
 
             $request = $findingApi->findItemsByKeywords();
 

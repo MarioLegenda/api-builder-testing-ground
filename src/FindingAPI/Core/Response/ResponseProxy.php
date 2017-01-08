@@ -15,18 +15,17 @@ class ResponseProxy implements ResponseInterface, ArrayConvertableInterface, \Js
     /**
      * ResponseProxy constructor.
      * @param $responseToParse
-     * @param GuzzleResponse $guzzleResponse
      * @param string $responseDataFormat
      */
-    public function __construct($responseToParse, $guzzleResponse = null, string $responseDataFormat)
+    public function __construct($responseToParse, string $responseDataFormat)
     {
         switch ($responseDataFormat) {
             case 'xml':
-                $this->response = new XmlResponse($responseToParse, $guzzleResponse);
+                $this->response = new XmlResponse($responseToParse);
 
                 break;
             case 'json':
-                $this->response = new JsonResponse(new XmlResponse($responseToParse), $guzzleResponse);
+                $this->response = new JsonResponse(new XmlResponse($responseToParse));
         }
     }
     /**
