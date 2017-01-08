@@ -4,6 +4,7 @@ namespace SDKBuilder;
 
 use SDKBuilder\Event\AddProcessorEvent;
 use SDKBuilder\Event\PostProcessRequestEvent;
+use SDKBuilder\Event\PostSendRequestEvent;
 use SDKBuilder\Event\PreProcessRequestEvent;
 use SDKBuilder\Event\RequestEvent;
 use SDKBuilder\Event\SDKEvent;
@@ -53,13 +54,13 @@ abstract class AbstractSDK implements SDKInterface
      */
     private $eventDispatcher;
     /**
-     * @var GuzzleResponse $guzzleResponse
+     * @var mixed $responseClient
      */
-    protected $guzzleResponse;
+    protected $responseClient;
     /**
      * @var $responseObject
      */
-    protected $responseObject;
+    private $responseObject;
     /**
      * @var ValidatorsProcessor
      */
@@ -206,7 +207,10 @@ abstract class AbstractSDK implements SDKInterface
     {
         return $this->request;
     }
-
+    /**
+     * @param AbstractRequest $request
+     * @return SDKInterface
+     */
     public function setRequest(AbstractRequest $request) : SDKInterface
     {
         $this->request = $request;
@@ -235,9 +239,43 @@ abstract class AbstractSDK implements SDKInterface
         return $this->validatorsProcessor->getErrors();
     }
     /**
-     * @return string
+     * @param $responseObject
+     * @return SDKInterface
+     * @throws SDKException
+     */
+    public function setResponseObject($responseObject) : SDKInterface
+    {
+        if (!is_object($responseObject)) {
+            throw new SDKException('Invalid argument to '.SDKInterface::class.'::setResponseObject(). Argument 1 has to be an object. '.gettype($responseObject).' given');
+        }
+
+        $this->responseObject = $responseObject;
+
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getResponseObject()
+    {
+        return $this->responseObject;
+    }
+    /**
+     * @return mixed
+     * @throws SDKException
      */
     public function getResponse()
+    {
+        if (!is_object($this->responseObject)) {
+            throw new SDKException('When using '.SDKInterface::class.'::getResponse(), the method has to return an object. If you which to get unparsed response, use '.SDKInterface::class.'::getUnparsedResponse');
+        }
+
+        return $this->responseObject;
+    }
+    /**
+     * @return null|string
+     */
+    public function getUnparsedResponse() : ?string
     {
         return $this->responseToParse;
     }
@@ -247,6 +285,13 @@ abstract class AbstractSDK implements SDKInterface
     public function getEventDispatcher() : EventDispatcher
     {
         return $this->eventDispatcher;
+    }
+    /**
+     * @return mixed
+     */
+    public function getResponseClient()
+    {
+        return $this->responseClient;
     }
     /**
      * @param $methodName
@@ -308,22 +353,21 @@ abstract class AbstractSDK implements SDKInterface
         }
 
         try {
-            $this->guzzleResponse = $this->getRequest()->sendRequest($this->processed);
+            $this->responseClient = $this->getRequest()->sendRequest($this->processed);
+            $this->responseToParse = $this->responseClient->getBody();
+
         } catch (ConnectException $e) {
             throw new ConnectException('GuzzleHttp threw a ConnectException. Exception message is '.$e->getMessage());
         } catch (ServerException $e) {
             throw new ConnectException('GuzzleHttp threw an exception with message: \''.$e->getMessage().'\'');
         } catch (\Exception $e) {
             echo 'Generic exception caught with message: \''.$e->getMessage().'\'';
+            die();
         }
 
         if ($this->eventDispatcher->hasListeners(SDKEvent::POST_SEND_REQUEST_EVENT)) {
-            $this->eventDispatcher->dispatch(SDKEvent::POST_SEND_REQUEST_EVENT, new RequestEvent($this->getRequest()));
+            $this->eventDispatcher->dispatch(SDKEvent::POST_SEND_REQUEST_EVENT, new PostSendRequestEvent($this, $this->getRequest()));
         }
-
-        $this->responseToParse = (string) $this->guzzleResponse->getBody();
-
-        $this->restoreDefaults();
     }
 
 

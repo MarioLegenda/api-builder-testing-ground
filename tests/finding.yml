@@ -1,7 +1,6 @@
 sdk:
     finding:
         request_class: FindingAPI\Core\Request\Request
-        api_class: FindingAPI\Finding
         request_validators: [FindingAPI\Core\Request\ItemFiltersValidator]
         listeners:
             request_pre_process:
@@ -13,6 +12,9 @@ sdk:
             pre_send_request:
                 class: FindingAPI\Core\Listener\PreSendRequestListener
                 method: onPreSendRequest
+            post_send_request:
+                class: FindingAPI\Core\Listener\PostRequestSentListener
+                method: onRequestSent
         global_parameters:
             ebay_url:
                 representation: null
