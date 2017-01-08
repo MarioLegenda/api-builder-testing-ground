@@ -1,0 +1,3 @@
+[submodule "src/api-builder"]
+	path = src/api-builder
+	url = https://github.com/MarioLegenda/api-builder

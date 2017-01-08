@@ -26,7 +26,7 @@
     "autoload": {
         "psr-0": {
             "FindingAPI": "src/",
-            "SDKBuilder": "src/",
+            "SDKBuilder": "src/api-builder/src",
             "Test": "tests/",
             "Demo": "demo/"
         }
