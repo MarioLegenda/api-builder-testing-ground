@@ -12,10 +12,10 @@ use SDKBuilder\Event\SendRequestEvent;
 use SDKBuilder\Exception\SDKException;
 use SDKBuilder\Processor\Factory\ProcessorFactory;
 use SDKBuilder\Processor\Get\GetRequestParametersProcessor;
-use SDKBuilder\Request\AbstractRequest;
 use SDKBuilder\Request\Method\MethodParameters;
 use SDKBuilder\Request\Method\Method;
 use SDKBuilder\Request\Parameter;
+use SDKBuilder\Request\RequestInterface;
 use SDKBuilder\Request\ValidatorsProcessor;
 use SDKBuilder\SDK\SDKInterface;
 
@@ -35,7 +35,7 @@ abstract class AbstractSDK implements SDKInterface
      */
     private $isCompiled = false;
     /**
-     * @var AbstractRequest $request
+     * @var RequestInterface $request
      */
     private $request;
     /**
@@ -72,14 +72,14 @@ abstract class AbstractSDK implements SDKInterface
     private $offlineModeSwitch = false;
     /**
      * AbstractSDK constructor.
-     * @param AbstractRequest $request
+     * @param RequestInterface $request
      * @param MethodParameters $methodParameters
      * @param ProcessorFactory $processorFactory
      * @param EventDispatcher $eventDispatcher
      * @param ValidatorsProcessor $validatorsProcessor
      */
     public function __construct(
-        AbstractRequest $request,
+        RequestInterface $request,
         ProcessorFactory $processorFactory,
         EventDispatcher $eventDispatcher,
         ?MethodParameters $methodParameters,
@@ -194,17 +194,17 @@ abstract class AbstractSDK implements SDKInterface
         return $this;
     }
     /**
-     * @return AbstractRequest
+     * @return RequestInterface
      */
-    public function getRequest() : AbstractRequest
+    public function getRequest() : RequestInterface
     {
         return $this->request;
     }
     /**
-     * @param AbstractRequest $request
+     * @param RequestInterface $request
      * @return SDKInterface
      */
-    public function setRequest(AbstractRequest $request) : SDKInterface
+    public function setRequest(RequestInterface $request) : SDKInterface
     {
         $this->request = $request;
 
@@ -242,9 +242,9 @@ abstract class AbstractSDK implements SDKInterface
     /**
      * @param $methodName
      * @param $arguments
-     * @return AbstractRequest
+     * @return RequestInterface
      */
-    public function __call($methodName, $arguments) : AbstractRequest
+    public function __call($methodName, $arguments) : RequestInterface
     {
         $method = $this->methodParameters->getMethod($methodName);
 
@@ -314,14 +314,14 @@ abstract class AbstractSDK implements SDKInterface
     }
 
 
-    private function createMethod(Method $method) : AbstractRequest
+    private function createMethod(Method $method) : RequestInterface
     {
         $instanceString = $method->getInstanceObjectString();
 
         $object = new $instanceString($this->getRequest()->getGlobalParameters(), $this->getRequest()->getSpecialParameters());
 
-        if (!$object instanceof AbstractRequest) {
-            throw new MethodParametersException(get_class($object).' has to extend '.AbstractRequest::class);
+        if (!$object instanceof RequestInterface) {
+            throw new MethodParametersException(get_class($object).' has to extend '.RequestInterface::class);
         }
 
         $objectMethods = $method->getMethods();

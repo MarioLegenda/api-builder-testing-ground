@@ -2,10 +2,9 @@
 
 namespace SDKBuilder\SDK;
 
-use SDKBuilder\Request\AbstractRequest;
 use SDKBuilder\Request\Method\Method;
 use SDKBuilder\Request\Parameter;
-use SDKBuilder\Response\ResponseClientInterface;
+use SDKBuilder\Request\RequestInterface;
 
 interface SDKInterface
 {
@@ -14,9 +13,9 @@ interface SDKInterface
      */
     public function send() : SDKInterface;
     /**
-     * @return AbstractRequest
+     * @return RequestInterface
      */
-    public function getRequest() : AbstractRequest;
+    public function getRequest() : RequestInterface;
     /**
      * @param Method $method
      * @return SDKInterface

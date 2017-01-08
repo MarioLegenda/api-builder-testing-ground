@@ -4,8 +4,8 @@ namespace FindingAPI\Core\Listener;
 
 use FindingAPI\Core\Processor\Post\PostRequestXmlProcessor;
 use SDKBuilder\Event\AddProcessorEvent;
-use SDKBuilder\Request\AbstractRequest;
 use FindingAPI\Core\Processor\Get\GetItemFiltersProcessor;
+use SDKBuilder\Request\RequestInterface;
 
 class AddProcessorListener
 {
@@ -15,7 +15,7 @@ class AddProcessorListener
         $request = $event->getRequest();
 
         if ($request->getMethod() === 'get') {
-            $processorFactory->registerCallbackProcessor($request->getMethod(), function(AbstractRequest $request) {
+            $processorFactory->registerCallbackProcessor($request->getMethod(), function(RequestInterface $request) {
                 $itemFilterStorage = $request->getItemFilterStorage();
 
                 if (!empty($itemFilterStorage)) {
