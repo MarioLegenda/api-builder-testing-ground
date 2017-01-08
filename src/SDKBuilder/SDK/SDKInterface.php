@@ -5,6 +5,7 @@ namespace SDKBuilder\SDK;
 use SDKBuilder\Request\AbstractRequest;
 use SDKBuilder\Request\Method\Method;
 use SDKBuilder\Request\Parameter;
+use SDKBuilder\Response\ResponseClientInterface;
 
 interface SDKInterface
 {
@@ -42,18 +43,9 @@ interface SDKInterface
     /**
      * @return object
      */
-    public function getResponse();
+    public function getResponseBody();
     /**
      * @return SDKInterface
      */
     public function compile() : SDKInterface;
-    /**
-     * @param object $responseObject
-     * @return SDKInterface
-     */
-    public function setResponseObject($responseObject) : SDKInterface;
-    /**
-     * @return object
-     */
-    public function getResponseObject();
 }

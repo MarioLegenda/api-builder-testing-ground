@@ -2,6 +2,7 @@ sdk:
     finding:
         request_class: FindingAPI\Core\Request\Request
         request_validators: [FindingAPI\Core\Request\ItemFiltersValidator]
+        api_class: FindingAPI\FindingAPI
         listeners:
             request_pre_process:
                 class: FindingAPI\Core\Listener\ValidateItemFiltersListener

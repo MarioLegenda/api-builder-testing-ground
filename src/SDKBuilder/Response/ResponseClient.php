@@ -2,7 +2,7 @@
 
 namespace SDKBuilder\Response;
 
-class ResponseClient
+class ResponseClient implements ResponseClientInterface
 {
     /**
      * @var string $body

@@ -18,9 +18,6 @@ use SDKBuilder\Request\Parameter;
 use SDKBuilder\Request\ValidatorsProcessor;
 use SDKBuilder\SDK\SDKInterface;
 
-use GuzzleHttp\Exception\ServerException;
-use FindingAPI\Core\Exception\ConnectException;
-
 use SDKBuilder\Processor\RequestProducer;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -56,10 +53,6 @@ abstract class AbstractSDK implements SDKInterface
      * @var mixed $responseClient
      */
     protected $responseClient;
-    /**
-     * @var $responseObject
-     */
-    private $responseObject;
     /**
      * @var ValidatorsProcessor
      */
@@ -238,52 +231,12 @@ abstract class AbstractSDK implements SDKInterface
         return $this->validatorsProcessor->getErrors();
     }
     /**
-     * @param $responseObject
-     * @return SDKInterface
-     * @throws SDKException
-     */
-    public function setResponseObject($responseObject) : SDKInterface
-    {
-        if (!is_object($responseObject)) {
-            throw new SDKException('Invalid argument to '.SDKInterface::class.'::setResponseObject(). Argument 1 has to be an object. '.gettype($responseObject).' given');
-        }
-
-        $this->responseObject = $responseObject;
-
-        return $this;
-    }
-    /**
-     * @return mixed
-     */
-    public function getResponseObject()
-    {
-        return $this->responseObject;
-    }
-    /**
      * @return mixed
      * @throws SDKException
      */
-    public function getResponse()
-    {
-        if (!is_object($this->responseObject)) {
-            throw new SDKException('When using '.SDKInterface::class.'::getResponse(), the method has to return an object. If you which to get unparsed response, use '.SDKInterface::class.'::getUnparsedResponse');
-        }
-
-        return $this->responseObject;
-    }
-    /**
-     * @return null|string
-     */
-    public function getUnparsedResponse() : ?string
+    public final function getResponseBody()
     {
         return $this->responseToParse;
-    }
-    /**
-     * @return mixed
-     */
-    public function getResponseClient()
-    {
-        return $this->responseClient;
     }
     /**
      * @param $methodName
@@ -322,7 +275,6 @@ abstract class AbstractSDK implements SDKInterface
             }
         }
 
-        $this->responseObject = null;
         $this->offlineMode = null;
         $this->isCompiled = false;
     }
@@ -345,13 +297,7 @@ abstract class AbstractSDK implements SDKInterface
         }
 
         try {
-            $this->responseClient = $this->getRequest()->sendRequest($this->processed);
-            $this->responseToParse = $this->responseClient->getBody();
-
-        } catch (ConnectException $e) {
-            throw new ConnectException('GuzzleHttp threw a ConnectException. Exception message is '.$e->getMessage());
-        } catch (ServerException $e) {
-            throw new ConnectException('GuzzleHttp threw an exception with message: \''.$e->getMessage().'\'');
+            $this->responseToParse = $this->getRequest()->sendRequest($this->processed)->getBody();
         } catch (\Exception $e) {
             echo 'Generic exception caught with message: \''.$e->getMessage().'\'';
             die();

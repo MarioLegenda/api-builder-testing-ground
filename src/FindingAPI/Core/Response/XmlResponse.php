@@ -12,8 +12,6 @@ use FindingAPI\Core\ResponseParser\ResponseItem\{
     SearchResultsContainer
 };
 
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
-
 class XmlResponse implements ResponseInterface, ArrayConvertableInterface, \JsonSerializable
 {
     /**
@@ -37,25 +35,12 @@ class XmlResponse implements ResponseInterface, ArrayConvertableInterface, \Json
         'categoryHistogram' => null,
     );
     /**
-     * @var GuzzleResponse
-     */
-    private $guzzleResponse;
-    /**
      * Response constructor.
-     * @param GuzzleResponse $guzzleResponse
      * @param string $xmlString
      */
-    public function __construct(string $xmlString, $guzzleResponse = null)
+    public function __construct(string $xmlString)
     {
         $this->xmlString = $xmlString;
-        $this->guzzleResponse = $guzzleResponse;
-    }
-    /**
-     * @return GuzzleResponse
-     */
-    public function getGuzzleResponse()
-    {
-        return $this->guzzleResponse;
     }
     /**
      * @return RootItem

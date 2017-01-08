@@ -9,22 +9,16 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
 class JsonResponse implements ResponseInterface, ArrayConvertableInterface
 {
     /**
-     * @var GuzzleResponse $response
-     */
-    private $guzzleResponse;
-    /**
      * @var array $jsonResponse
      */
     private $jsonResponse;
     /**
      * JsonResponse constructor.
      * @param ArrayConvertableInterface $xmlResponse
-     * @param GuzzleResponse $response
      */
-    public function __construct(ArrayConvertableInterface $xmlResponse, $response)
+    public function __construct(ArrayConvertableInterface $xmlResponse)
     {
         $this->jsonResponse = $xmlResponse->toArray();
-        $this->guzzleResponse = $response;
     }
     /**
      * @throws ResponseException
