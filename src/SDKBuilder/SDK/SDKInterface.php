@@ -40,11 +40,20 @@ interface SDKInterface
      */
     public function getErrors() : array;
     /**
-     * @void
+     * @return object
      */
     public function getResponse();
     /**
      * @return SDKInterface
      */
     public function compile() : SDKInterface;
+    /**
+     * @param object $responseObject
+     * @return SDKInterface
+     */
+    public function setResponseObject($responseObject) : SDKInterface;
+    /**
+     * @return object
+     */
+    public function getResponseObject();
 }

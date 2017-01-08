@@ -21,7 +21,6 @@ use SDKBuilder\SDK\SDKInterface;
 use GuzzleHttp\Exception\ServerException;
 use FindingAPI\Core\Exception\ConnectException;
 
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use SDKBuilder\Processor\RequestProducer;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -278,13 +277,6 @@ abstract class AbstractSDK implements SDKInterface
     public function getUnparsedResponse() : ?string
     {
         return $this->responseToParse;
-    }
-    /**
-     * @return EventDispatcher
-     */
-    public function getEventDispatcher() : EventDispatcher
-    {
-        return $this->eventDispatcher;
     }
     /**
      * @return mixed
