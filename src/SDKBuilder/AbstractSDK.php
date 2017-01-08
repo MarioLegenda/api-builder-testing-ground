@@ -8,6 +8,7 @@ use SDKBuilder\Event\PostSendRequestEvent;
 use SDKBuilder\Event\PreProcessRequestEvent;
 use SDKBuilder\Event\RequestEvent;
 use SDKBuilder\Event\SDKEvent;
+use SDKBuilder\Event\SendRequestEvent;
 use SDKBuilder\Exception\SDKException;
 use SDKBuilder\Processor\Factory\ProcessorFactory;
 use SDKBuilder\Processor\Get\GetRequestParametersProcessor;
@@ -56,19 +57,19 @@ abstract class AbstractSDK implements SDKInterface
     /**
      * @var ValidatorsProcessor
      */
-    protected $validatorsProcessor;
+    private $validatorsProcessor;
     /**
      * @var string $responseToParse
      */
-    protected $responseToParse;
+    private $responseToParse;
     /**
      * @var SDKOfflineMode\SDKOfflineMode
      */
-    protected $offlineMode;
+    private $offlineMode;
     /**
      * @var bool $offlineModeSwitch
      */
-    protected $offlineModeSwitch = false;
+    private $offlineModeSwitch = false;
     /**
      * AbstractSDK constructor.
      * @param AbstractRequest $request
@@ -297,7 +298,11 @@ abstract class AbstractSDK implements SDKInterface
         }
 
         try {
-            $this->responseToParse = $this->getRequest()->sendRequest($this->processed)->getBody();
+            if ($this->eventDispatcher->hasListeners(SDKEvent::SEND_REQUEST_EVENT)) {
+                $this->eventDispatcher->dispatch(new SendRequestEvent($this, $this->getRequest()));
+            } else {
+                $this->responseToParse = $this->getRequest()->sendRequest($this->processed)->getBody();
+            }
         } catch (\Exception $e) {
             echo 'Generic exception caught with message: \''.$e->getMessage().'\'';
             die();
