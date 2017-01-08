@@ -1,3 +1,4 @@
 .idea
 vendor
 src/SDKBuilder/log/requests.log
+src/api-builder
