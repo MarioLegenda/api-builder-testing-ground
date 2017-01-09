@@ -2,7 +2,6 @@
 
 namespace FindingAPI\Core\Information;
 
-use FindingAPI\Core\Cache\CacheProxy;
 use FindingAPI\Core\Exception\ItemFilterException;
 use Symfony\Component\Yaml\Yaml;
 

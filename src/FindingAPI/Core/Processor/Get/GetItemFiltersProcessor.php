@@ -7,7 +7,6 @@ use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 use SDKBuilder\Dynamic\DynamicStorage;
 use SDKBuilder\Processor\{ AbstractProcessor, ProcessorInterface };
 
-use FindingAPI\Core\Request\Request;
 use SDKBuilder\Processor\UrlifyInterface;
 use SDKBuilder\Request\RequestInterface;
 

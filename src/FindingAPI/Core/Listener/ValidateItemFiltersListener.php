@@ -3,9 +3,9 @@
 namespace FindingAPI\Core\Listener;
 
 use FindingAPI\Core\Exception\ItemFilterException;
-use FindingAPI\Core\Information\GlobalIdInformation;
-use FindingAPI\Core\Information\OutputSelectorInformation;
-use FindingAPI\Core\Information\SortOrderInformation;
+
+use FindingAPI\Core\Information\ { GlobalIdInformation, OutputSelectorInformation, SortOrderInformation };
+
 use SDKBuilder\Event\PreProcessRequestEvent;
 
 class ValidateItemFiltersListener

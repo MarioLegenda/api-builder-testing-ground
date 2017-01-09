@@ -3,15 +3,13 @@
 namespace FindingAPI\Core\Request;
 
 use FindingAPI\Definition\Definition;
-use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 
 use FindingAPI\Core\Exception\{ FindingApiException, ItemFilterException };
 
 use SDKBuilder\Dynamic\DynamicStorage;
 use SDKBuilder\Exception\RequestException;
-use SDKBuilder\Request\AbstractRequest;
-use SDKBuilder\Request\RequestInterface;
-use SDKBuilder\Request\RequestParameters;
+
+use SDKBuilder\Request\ { AbstractRequest, RequestInterface, RequestParameters };
 
 class Request extends AbstractRequest
 {

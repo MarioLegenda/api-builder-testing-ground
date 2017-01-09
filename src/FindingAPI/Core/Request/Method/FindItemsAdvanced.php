@@ -3,7 +3,6 @@
 namespace FindingAPI\Core\Request\Method;
 
 use FindingAPI\Core\Request\Request;
-use FindingAPI\Core\Information\OperationName;
 use SDKBuilder\Dynamic\DynamicStorage;
 use SDKBuilder\Request\RequestParameters;
 

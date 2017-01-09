@@ -4,8 +4,6 @@ namespace FindingAPI\Core\Listener;
 
 use FindingAPI\Core\Processor\Post\PostRequestXmlProcessor;
 use SDKBuilder\Event\AddProcessorEvent;
-use FindingAPI\Core\Processor\Get\GetItemFiltersProcessor;
-use SDKBuilder\Request\RequestInterface;
 
 class AddProcessorListener
 {

@@ -2,8 +2,7 @@
 
 namespace FindingAPI\Core\Request;
 
-use FindingAPI\Core\Exception\{
-    FindingApiException, ItemFilterException };
+use FindingAPI\Core\Exception\{ FindingApiException, ItemFilterException };
 
 use SDKBuilder\Exception\RequestParametersException;
 
