@@ -76,7 +76,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         $itemFilterStorage = $request->getItemFilterStorage();
 
         // single value item filter
-        $itemFilterStorage->addItemFilter(array(
+        $itemFilterStorage->addDynamic(array(
             'SingleValueItemFilter' => array(
                 'object' => 'Test\ItemFilter\SingleValueItemFilter',
                 'value' => null,
@@ -85,15 +85,15 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ),
         ));
 
-        $this->assertTrue($itemFilterStorage->hasItemFilter('SingleValueItemFilter'));
+        $this->assertTrue($itemFilterStorage->hasDynamic('SingleValueItemFilter'));
 
-        $itemFilterStorage->removeItemFilter('SingleValueItemFilter');
+        $itemFilterStorage->removeDynamic('SingleValueItemFilter');
 
-        $this->assertFalse($itemFilterStorage->hasItemFilter('SingleValueItemFilter'));
+        $this->assertFalse($itemFilterStorage->hasDynamic('SingleValueItemFilter'));
 
         // multiple value item filter
 
-        $itemFilterStorage->addItemFilter(array(
+        $itemFilterStorage->addDynamic(array(
             'MultipleValueItemFilter' => array(
                 'object' => 'Test\ItemFilter\MultipleValueItemFilter',
                 'value' => null,
@@ -292,8 +292,8 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->setMethod('get')
             ->addKeywords('call of duty')
             ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
-            ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
-            ->addItemFilter(ItemFilter::CURRENCY, array(CurrencyInformation::AUSTRALIAN))
+            ->addDynamic(ItemFilter::BEST_OFFER_ONLY, array(true))
+            ->addDynamic(ItemFilter::CURRENCY, array(CurrencyInformation::AUSTRALIAN))
             ->setResponseFormat('json');
 
         $response = $findingApi
@@ -334,7 +334,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
             if ($filters !== null) {
                 foreach ($filters as $filter) {
-                    $request->addItemFilter($filter[0], $filter[1]);
+                    $request->addDynamic($filter[0], $filter[1]);
                 }
             }
 

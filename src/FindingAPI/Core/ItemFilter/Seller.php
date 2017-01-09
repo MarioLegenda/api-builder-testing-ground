@@ -2,18 +2,21 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class Seller extends AbstractFilter implements FilterInterface
+use SDKBuilder\Dynamic\AbstractDynamic;
+use SDKBuilder\Dynamic\DynamicInterface;
+
+class Seller extends AbstractDynamic implements DynamicInterface
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter)) {
+        if (!$this->genericValidation($this->dynamicValue)) {
             return false;
         }
 
-        if (count($this->filter) > 100) {
+        if (count($this->dynamicValue) > 100) {
             $this->exceptionMessages[] = $this->name.' has to be a valid seller name. Up to a 100 sellers can be specified';
 
             return false;

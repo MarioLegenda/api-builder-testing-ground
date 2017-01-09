@@ -2,17 +2,20 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class HideDuplicateItems extends AbstractFilter implements FilterInterface
+use SDKBuilder\Dynamic\AbstractDynamic;
+use SDKBuilder\Dynamic\DynamicInterface;
+
+class HideDuplicateItems extends AbstractDynamic implements DynamicInterface
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter, 1)) {
+        if (!$this->genericValidation($this->dynamicValue, 1)) {
             return false;
         }
 
-        return parent::checkBoolean($this->filter[0]);
+        return parent::checkBoolean($this->dynamicValue[0]);
     }
 }

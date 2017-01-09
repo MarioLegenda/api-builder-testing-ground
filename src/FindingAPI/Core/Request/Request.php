@@ -7,6 +7,7 @@ use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 
 use FindingAPI\Core\Exception\{ FindingApiException, ItemFilterException };
 
+use SDKBuilder\Dynamic\DynamicStorage;
 use SDKBuilder\Exception\RequestException;
 use SDKBuilder\Request\AbstractRequest;
 use SDKBuilder\Request\RequestInterface;
@@ -15,7 +16,7 @@ use SDKBuilder\Request\RequestParameters;
 class Request extends AbstractRequest
 {
     /**
-     * @var ItemFilterStorage
+     * @var DynamicStorage
      */
     private $itemFilterStorage;
     /**
@@ -39,7 +40,7 @@ class Request extends AbstractRequest
     {
         parent::__construct($globalParameters, $specialParameters);
 
-        $this->itemFilterStorage = new ItemFilterStorage();
+        $this->itemFilterStorage = new DynamicStorage();
 
         $this->options = new Options();
 
@@ -114,11 +115,11 @@ class Request extends AbstractRequest
      */
     public function setBuyerPostalCode(string $buyerPostalCode) : Request
     {
-        if (!$this->itemFilterStorage->hasItemFilter('BuyerPostalCode')) {
+        if (!$this->itemFilterStorage->hasDynamic('BuyerPostalCode')) {
             throw new FindingApiException('Item filter BuyerPostalCode does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
         }
 
-        $this->itemFilterStorage->updateItemFilterValue('BuyerPostalCode', array($buyerPostalCode));
+        $this->itemFilterStorage->updateDynamicValue('BuyerPostalCode', array($buyerPostalCode));
 
         return $this;
     }
@@ -129,11 +130,11 @@ class Request extends AbstractRequest
      */
     public function setSortOrder(string $sortOrder) : Request
     {
-        if (!$this->itemFilterStorage->hasItemFilter('SortOrder')) {
+        if (!$this->itemFilterStorage->hasDynamic('SortOrder')) {
             throw new FindingApiException('Item filter SortOrder does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
         }
 
-        $this->itemFilterStorage->updateItemFilterValue('SortOrder', array($sortOrder));
+        $this->itemFilterStorage->updateDynamicValue('SortOrder', array($sortOrder));
 
         return $this;
     }
@@ -144,11 +145,11 @@ class Request extends AbstractRequest
      */
     public function setPaginationInput(array $pagination) : Request
     {
-        if (!$this->itemFilterStorage->hasItemFilter('PaginationInput')) {
+        if (!$this->itemFilterStorage->hasDynamic('PaginationInput')) {
             throw new FindingApiException('Item filter PaginationInput does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
         }
 
-        $this->itemFilterStorage->updateItemFilterValue('PaginationInput', array($pagination));
+        $this->itemFilterStorage->updateDynamicValue('PaginationInput', array($pagination));
 
         return $this;
     }
@@ -159,27 +160,27 @@ class Request extends AbstractRequest
      */
     public function setOutputSelector(array $outputSelector) : Request
     {
-        if (!$this->itemFilterStorage->hasItemFilter('OutputSelector')) {
+        if (!$this->itemFilterStorage->hasDynamic('OutputSelector')) {
             throw new ItemFilterException('Item filter OutputSelector does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
         }
 
-        $this->itemFilterStorage->updateItemFilterValue('OutputSelector', $outputSelector);
+        $this->itemFilterStorage->updateDynamicValue('OutputSelector', $outputSelector);
 
         return $this;
     }
     /**
-     * @param string $itemFilter
+     * @param string $dynamicName
      * @param array $value
      * @return Request
      * @throws ItemFilterException
      */
-    public function addItemFilter(string $itemFilterName, array $value) : Request
+    public function addDynamic(string $dynamicName, array $value) : Request
     {
-        if (!$this->itemFilterStorage->hasItemFilter($itemFilterName)) {
-            throw new ItemFilterException('Item filter '.$itemFilterName.' does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
+        if (!$this->itemFilterStorage->hasDynamic($dynamicName)) {
+            throw new ItemFilterException('Item filter '.$dynamicName.' does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
         }
 
-        $this->itemFilterStorage->updateItemFilterValue($itemFilterName, $value);
+        $this->itemFilterStorage->updateDynamicValue($dynamicName, $value);
 
         return $this;
     }
@@ -194,9 +195,9 @@ class Request extends AbstractRequest
         return $this;
     }
     /**
-     * @return ItemFilterStorage
+     * @return DynamicStorage
      */
-    public function getItemFilterStorage() : ItemFilterStorage
+    public function getItemFilterStorage() : DynamicStorage
     {
         return $this->itemFilterStorage;
     }

@@ -2,26 +2,29 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class ExpeditedShippingType extends AbstractFilter implements FilterInterface
+use SDKBuilder\Dynamic\AbstractDynamic;
+use SDKBuilder\Dynamic\DynamicInterface;
+
+class ExpeditedShippingType extends AbstractDynamic implements DynamicInterface
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter, 1)) {
+        if (!$this->genericValidation($this->dynamicValue, 1)) {
             return false;
         }
 
         $validValues = array('Expedited', 'OneDayShipping');
 
-        if (count($this->filter) > 1) {
+        if (count($this->dynamicValue) > 1) {
             $this->exceptionMessages[] = $this->name.' can have an array with only one argument: '.implode(', ', $validValues);
 
             return false;
         }
 
-        $value = $this->filter[0];
+        $value = $this->dynamicValue[0];
 
         if (in_array($value, $validValues) === false) {
             $this->exceptionMessages[] = $this->name.' can only accept values '.implode(', ', $validValues);

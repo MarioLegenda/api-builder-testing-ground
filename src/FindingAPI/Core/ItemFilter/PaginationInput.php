@@ -2,20 +2,23 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class PaginationInput extends AbstractFilter implements FilterInterface
+use SDKBuilder\Dynamic\AbstractDynamic;
+use SDKBuilder\Dynamic\DynamicInterface;
+
+class PaginationInput extends AbstractDynamic implements DynamicInterface
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter, 1)) {
+        if (!$this->genericValidation($this->dynamicValue, 1)) {
             return false;
         }
 
         $validValues = array('entriesPerPage', 'pageNumber');
 
-        $filter = $this->filter[0];
+        $filter = $this->dynamicValue[0];
         foreach ($filter as $key => $f) {
             if (in_array($key, $validValues) === false) {
                 $this->exceptionMessages[] = 'Invalid paginationInput entry \''.$key.'\'. Valid entries are '.implode(', ', $validValues);
@@ -34,7 +37,7 @@ class PaginationInput extends AbstractFilter implements FilterInterface
     {
         $finalEntry = '';
 
-        foreach ($this->filter[0] as $key => $f) {
+        foreach ($this->dynamicValue[0] as $key => $f) {
             $finalEntry.='paginationInput.'.$key.'='.$f.'&';
         }
 

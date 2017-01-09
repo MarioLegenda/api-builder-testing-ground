@@ -2,18 +2,21 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class AuthorizedSellerOnly extends AbstractFilter implements FilterInterface
+use SDKBuilder\Dynamic\AbstractDynamic;
+use SDKBuilder\Dynamic\DynamicInterface;
+
+class AuthorizedSellerOnly extends AbstractDynamic implements DynamicInterface
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter, 1)) {
+        if (!$this->genericValidation($this->dynamicValue, 1)) {
             return false;
         }
 
-        if (parent::checkBoolean($this->filter[0]) === false) {
+        if (parent::checkBoolean($this->dynamicValue[0]) === false) {
             return false;
         }
 

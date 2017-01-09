@@ -3,15 +3,17 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Information\GlobalIdInformation;
+use SDKBuilder\Dynamic\AbstractDynamic;
+use SDKBuilder\Dynamic\DynamicInterface;
 
-class SellerBusinessType extends AbstractFilter implements FilterInterface
+class SellerBusinessType extends AbstractDynamic implements DynamicInterface
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter, 2)) {
+        if (!$this->genericValidation($this->dynamicValue, 2)) {
             return false;
         }
 
@@ -29,8 +31,8 @@ class SellerBusinessType extends AbstractFilter implements FilterInterface
             'EBAY-GB',
         );
 
-        $filter = $this->filter[0];
-        $siteId = $this->filter[1];
+        $filter = $this->dynamicValue[0];
+        $siteId = $this->dynamicValue[1];
 
         if (!GlobalIdInformation::instance()->has($siteId)) {
             $this->exceptionMessages[] = $this->name.' item filter can be used only on '.implode(', ', $validSites).' ebay sites. '.$siteId.' given';
@@ -54,7 +56,7 @@ class SellerBusinessType extends AbstractFilter implements FilterInterface
             return false;
         }
 
-        $this->filter = array($this->filter[0]);
+        $this->dynamicValue = array($this->dynamicValue[0]);
 
         return true;
 

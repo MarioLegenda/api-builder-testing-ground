@@ -3,19 +3,21 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Information\GlobalIdInformation;
+use SDKBuilder\Dynamic\AbstractDynamic;
+use SDKBuilder\Dynamic\DynamicInterface;
 
-class ListedIn extends AbstractFilter implements FilterInterface
+class ListedIn extends AbstractDynamic implements DynamicInterface
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter, 1)) {
+        if (!$this->genericValidation($this->dynamicValue, 1)) {
             return false;
         }
 
-        $filter = $this->filter[0];
+        $filter = $this->dynamicValue[0];
 
         if (!GlobalIdInformation::instance()->has($filter)) {
             $this->exceptionMessages[] = $this->name.' has to have a valid global id. Please, refer to http://developer.ebay.com/devzone/finding/callref/Enums/GlobalIdList.html or use FindingAPI\Core\ItemFilter\GlobalId object';

@@ -3,19 +3,21 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Information\PaymentMethodInformation;
+use SDKBuilder\Dynamic\AbstractDynamic;
+use SDKBuilder\Dynamic\DynamicInterface;
 
-class PaymentMethod extends AbstractFilter implements FilterInterface
+class PaymentMethod extends AbstractDynamic implements DynamicInterface
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter, 1)) {
+        if (!$this->genericValidation($this->dynamicValue, 1)) {
             return false;
         }
 
-        $filter = $this->filter[0];
+        $filter = $this->dynamicValue[0];
 
         if (!PaymentMethodInformation::instance()->has($filter)) {
             $this->exceptionMessages[] = $this->name.' has no payment method '.$filter.'. Allowed payment methods are '.implode(', ', PaymentMethodInformation::instance()->getAll());

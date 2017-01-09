@@ -2,15 +2,18 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class Condition extends AbstractFilter implements FilterInterface
+use SDKBuilder\Dynamic\AbstractDynamic;
+use SDKBuilder\Dynamic\DynamicInterface;
+
+class Condition extends AbstractDynamic implements DynamicInterface
 {
     protected $filter;
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter)) {
+        if (!$this->genericValidation($this->dynamicValue)) {
             return false;
         }
 
@@ -29,7 +32,7 @@ class Condition extends AbstractFilter implements FilterInterface
             }
         }
 
-        $this->filter = $uniques;
+        $this->dynamicValue = $uniques;
 
         return true;
     }

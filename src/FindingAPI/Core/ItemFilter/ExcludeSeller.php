@@ -2,22 +2,23 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\Exception\ItemFilterException;
+use SDKBuilder\Dynamic\AbstractDynamic;
+use SDKBuilder\Dynamic\DynamicInterface;
 
-class ExcludeSeller extends AbstractFilter implements FilterInterface
+class ExcludeSeller extends AbstractDynamic implements DynamicInterface
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (count($this->filter) > 100) {
+        if (count($this->dynamicValue) > 100) {
             $this->exceptionMessages[] = 'ExcludeSeller item filter can accept up to 100 seller names';
 
             return false;
         }
 
-        foreach ($this->filter as $value) {
+        foreach ($this->dynamicValue as $value) {
             if (!is_string($value)) {
                 $this->exceptionMessages[] = 'ExcludeSeller accepts an array of seller names as a string';
 

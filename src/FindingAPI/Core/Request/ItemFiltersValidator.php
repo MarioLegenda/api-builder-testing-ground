@@ -11,15 +11,15 @@ class ItemFiltersValidator extends AbstractValidator
     {
         $itemFilterStorage = $this->getRequest()->getItemFilterStorage();
 
-        $addedItemFilters = $itemFilterStorage->filterAddedFilter();
+        $addedItemFilters = $itemFilterStorage->filterAddedDynamics();
 
         foreach ($addedItemFilters as $name => $value) {
-            $itemFilterData = $itemFilterStorage->getItemFilter($name);
+            $itemFilterData = $itemFilterStorage->getDynamic($name);
 
-            $itemFilter = $itemFilterStorage->getItemFilterInstance($name);
+            $itemFilter = $itemFilterStorage->getDynamicInstance($name);
             $itemFilterValue = $itemFilterData['value'];
 
-            if ($itemFilter->validateFilter($itemFilterValue) !== true) {
+            if ($itemFilter->validateDynamic($itemFilterValue) !== true) {
                 throw new ItemFilterException((string) $itemFilter);
             }
         }

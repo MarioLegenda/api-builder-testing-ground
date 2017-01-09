@@ -18,24 +18,24 @@ class ValidateItemFiltersListener
     {
         $itemFilterStorage = $event->getRequest()->getItemFilterStorage();
 
-        $foundFilters = $itemFilterStorage->getItemFiltersInBulk(array('ExcludeSeller', 'Seller', 'TopRatedSellerOnly'), true);
+        $foundFilters = $itemFilterStorage->getDynamicsInBulk(array('ExcludeSeller', 'Seller', 'TopRatedSellerOnly'), true);
 
         if (count($foundFilters) > 1) {
             throw new ItemFilterException('The ExcludeSeller item filter cannot be used together with either the Seller or TopRatedSellerOnly item filters or vice versa');
         }
 
-        $foundFilters = $itemFilterStorage->getItemFiltersInBulk(array('AvailableTo', 'LocatedIn'), true);
+        $foundFilters = $itemFilterStorage->getDynamicsInBulk(array('AvailableTo', 'LocatedIn'), true);
 
         if (count($foundFilters) > 1) {
             throw new ItemFilterException('AvailableTo item filter cannot be used together with LocatedIn item filter and vice versa');
         }
 
-        if ($itemFilterStorage->hasItemFilter('LocalSearchOnly') and $itemFilterStorage->isItemFilterInRequest('LocalSearchOnly')) {
-            $localSearchOnly = $itemFilterStorage->getItemFilter('LocalSearchOnly');
+        if ($itemFilterStorage->hasDynamic('LocalSearchOnly') and $itemFilterStorage->isDynamicInRequest('LocalSearchOnly')) {
+            $localSearchOnly = $itemFilterStorage->getDynamic('LocalSearchOnly');
 
             if ($localSearchOnly['value'] !== null) {
-                $maxDistance = $itemFilterStorage->getItemFilter('MaxDistance');
-                $buyerPostalCode = $itemFilterStorage->getItemFilter('BuyerPostalCode');
+                $maxDistance = $itemFilterStorage->getDynamic('MaxDistance');
+                $buyerPostalCode = $itemFilterStorage->getDynamic('BuyerPostalCode');
 
                 if ($maxDistance['value'] === null or $buyerPostalCode['value'] === null) {
                     throw new ItemFilterException('LocalSearchOnly item filter has to be used together with MaxDistance item filter and buyerPostalCode');
@@ -43,11 +43,11 @@ class ValidateItemFiltersListener
             }
         }
 
-        if ($itemFilterStorage->hasItemFilter('MaxDistance') and $itemFilterStorage->isItemFilterInRequest('MaxDistance')) {
-            $maxDistance = $itemFilterStorage->getItemFilter('MaxDistance');
+        if ($itemFilterStorage->hasDynamic('MaxDistance') and $itemFilterStorage->isDynamicInRequest('MaxDistance')) {
+            $maxDistance = $itemFilterStorage->getDynamic('MaxDistance');
 
             if ($maxDistance['value'] !== null) {
-                $buyerPostalCode = $itemFilterStorage->getItemFilter('BuyerPostalCode');
+                $buyerPostalCode = $itemFilterStorage->getDynamic('BuyerPostalCode');
 
                 if ($buyerPostalCode['value'] === null) {
                     throw new ItemFilterException('MaxDistance item filter has to be used together with buyerPostalCode');
@@ -55,48 +55,48 @@ class ValidateItemFiltersListener
             }
         }
 
-        if ($itemFilterStorage->hasItemFilter('FeedbackScoreMin') and
-            $itemFilterStorage->hasItemFilter('FeedbackScoreMax') and
-            $itemFilterStorage->isItemFilterInRequest('FeedbackScoreMin') and
-            $itemFilterStorage->isItemFilterInRequest('FeedbackScoreMax')
+        if ($itemFilterStorage->hasDynamic('FeedbackScoreMin') and
+            $itemFilterStorage->hasDynamic('FeedbackScoreMax') and
+            $itemFilterStorage->isDynamicInRequest('FeedbackScoreMin') and
+            $itemFilterStorage->isDynamicInRequest('FeedbackScoreMax')
         )
         {
-            $feedbackScoreMax = $itemFilterStorage->getItemFilter('FeedbackScoreMax');
-            $feedbackScoreMin = $itemFilterStorage->getItemFilter('FeedbackScoreMin');
+            $feedbackScoreMax = $itemFilterStorage->getDynamic('FeedbackScoreMax');
+            $feedbackScoreMin = $itemFilterStorage->getDynamic('FeedbackScoreMin');
 
             if ($feedbackScoreMax['value'] < $feedbackScoreMin['value']) {
                 throw new ItemFilterException('If provided, FeedbackScoreMax has to larger or equal than FeedbackScoreMin');
             }
         }
 
-        if ($itemFilterStorage->hasItemFilter('MaxBids') and
-            $itemFilterStorage->hasItemFilter('MinBids') and
-            $itemFilterStorage->isItemFilterInRequest('MaxBids') and
-            $itemFilterStorage->isItemFilterInRequest('MinBids')
+        if ($itemFilterStorage->hasDynamic('MaxBids') and
+            $itemFilterStorage->hasDynamic('MinBids') and
+            $itemFilterStorage->isDynamicInRequest('MaxBids') and
+            $itemFilterStorage->isDynamicInRequest('MinBids')
         ) {
-            $maxBids = $itemFilterStorage->getItemFilter('MaxBids');
-            $minBids = $itemFilterStorage->getItemFilter('MinBids');
+            $maxBids = $itemFilterStorage->getDynamic('MaxBids');
+            $minBids = $itemFilterStorage->getDynamic('MinBids');
 
             if ($maxBids['value'] < $minBids['value']) {
                 throw new ItemFilterException('If provided, MaxBids has to larger or equal than MinBids');
             }
         }
 
-        if ($itemFilterStorage->hasItemFilter('MaxQuantity') and $itemFilterStorage->hasItemFilter('MinQuantity')) {
-            $maxQuantity = $itemFilterStorage->getItemFilter('MaxQuantity');
-            $minQuantity = $itemFilterStorage->getItemFilter('MinQuantity');
+        if ($itemFilterStorage->hasDynamic('MaxQuantity') and $itemFilterStorage->hasDynamic('MinQuantity')) {
+            $maxQuantity = $itemFilterStorage->getDynamic('MaxQuantity');
+            $minQuantity = $itemFilterStorage->getDynamic('MinQuantity');
 
             if ($maxQuantity['value'] < $minQuantity['value']) {
                 throw new ItemFilterException('If provided, MaxQuantity has to larger or equal than MinQuantity');
             }
         }
 
-        if ($itemFilterStorage->hasItemFilter('OutputSelector') and $itemFilterStorage->isItemFilterInRequest('OutputSelector')) {
-            $outputSelector = $itemFilterStorage->getItemFilter('OutputSelector');
+        if ($itemFilterStorage->hasDynamic('OutputSelector') and $itemFilterStorage->isDynamicInRequest('OutputSelector')) {
+            $outputSelector = $itemFilterStorage->getDynamic('OutputSelector');
 
             foreach ($outputSelector['value'] as $selector) {
                 if (!OutputSelectorInformation::instance()->has($selector)) {
-                    throw new ItemFilterException('outputSelector \''.$selector.'\' is not supported by this version of FindingAPI. If ebay added it, add it manually in '.OutputSelector::class);
+                    throw new ItemFilterException('outputSelector \''.$selector.'\' is not supported by this version of FindingAPI. If ebay added it, add it manually in '.OutputSelectorInformation::class);
                 }
             }
 
@@ -116,14 +116,14 @@ class ValidateItemFiltersListener
             }
         }
 
-        if ($itemFilterStorage->hasItemFilter('SortOrder') and $itemFilterStorage->isItemFilterInRequest('SortOrder')) {
-            $sortOrder = $itemFilterStorage->getItemFilter('SortOrder');
+        if ($itemFilterStorage->hasDynamic('SortOrder') and $itemFilterStorage->isDynamicInRequest('SortOrder')) {
+            $sortOrder = $itemFilterStorage->getDynamic('SortOrder');
 
             if (is_array($sortOrder['value'])) {
                 $sortOrderValue = $sortOrder['value'][0];
 
                 if ($sortOrderValue === SortOrderInformation::BID_COUNT_FEWEST or $sortOrderValue === SortOrderInformation::BID_COUNT_MOST) {
-                    if (!$itemFilterStorage->hasItemFilter('ListingType') or !$itemFilterStorage->isItemFilterInRequest('ListingType')) {
+                    if (!$itemFilterStorage->hasDynamic('ListingType') or !$itemFilterStorage->isDynamicInRequest('ListingType')) {
                         throw new ItemFilterException('To sort by bid count, you must specify a listing type filter to limit results to auction listings only (such as, & itemFilter.name=ListingType&itemFilter.value=Auction)');
                     }
                 }
