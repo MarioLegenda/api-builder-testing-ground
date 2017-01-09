@@ -4,7 +4,7 @@ namespace FindingAPI\Core\Information;
 
 use FindingAPI\Core\Exception\ItemFilterException;
 
-class GlobalIdInformation
+class GlobalIdInformation implements InformationInterface
 {
     const EBAY_AT = 'ebay-at';
     const EBAY_AU = 'ebay-au';
@@ -210,11 +210,11 @@ class GlobalIdInformation
         ),
     );
     /**
-     * @var GlobalId $instance
+     * @var GlobalIdInformation $instance
      */
     private static $instance;
     /**
-     * @return GlobalId
+     * @return GlobalIdInformation
      */
     public static function instance()
     {
@@ -302,7 +302,7 @@ class GlobalIdInformation
     /**
      * @return array
      */
-    public function getAll()
+    public function getAll() : array
     {
         return $this->globalIds;
     }

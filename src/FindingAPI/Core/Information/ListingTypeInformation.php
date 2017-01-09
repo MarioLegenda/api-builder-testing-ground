@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\Information;
 
-class ListingTypeInformation
+class ListingTypeInformation implements InformationInterface
 {
     const ALL = 'All';
     const AUCTION = 'Auction';
@@ -57,9 +57,25 @@ class ListingTypeInformation
         return $this;
     }
     /**
+     * @param string $entry
+     * @return bool
+     */
+    public function remove(string $entry): bool
+    {
+        $position = array_search($entry, $this->listingTypes);
+
+        if (array_key_exists($position, $this->listingTypes)) {
+            unset($this->listingTypes[$position]);
+
+            return true;
+        }
+
+        return false;
+    }
+    /**
      * @return array
      */
-    public function getAll()
+    public function getAll() : array
     {
         return $this->listingTypes;
     }

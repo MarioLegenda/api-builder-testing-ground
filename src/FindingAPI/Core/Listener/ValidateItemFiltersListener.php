@@ -12,6 +12,7 @@ class ValidateItemFiltersListener
 {
     /**
      * @param PreProcessRequestEvent $event
+     * @throws ItemFilterException
      */
     public function onPreProcessRequest(PreProcessRequestEvent $event)
     {
