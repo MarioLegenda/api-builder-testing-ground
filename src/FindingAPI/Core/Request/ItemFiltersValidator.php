@@ -11,7 +11,7 @@ class ItemFiltersValidator extends AbstractValidator
     {
         $itemFilterStorage = $this->getRequest()->getItemFilterStorage();
 
-        $addedItemFilters = $itemFilterStorage->filterAddedFilter(array('SortOrder', 'PaginationInput'));
+        $addedItemFilters = $itemFilterStorage->filterAddedFilter();
 
         foreach ($addedItemFilters as $name => $value) {
             $itemFilterData = $itemFilterStorage->getItemFilter($name);
