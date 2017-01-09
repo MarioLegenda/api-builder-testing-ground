@@ -73,7 +73,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
         $request->addKeywords('constantine');
 
-        $itemFilterStorage = $request->getItemFilterStorage();
+        $itemFilterStorage = $request->getDynamicStorage();
 
         // single value item filter
         $itemFilterStorage->addDynamic(array(

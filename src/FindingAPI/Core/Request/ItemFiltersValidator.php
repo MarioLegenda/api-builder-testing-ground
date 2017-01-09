@@ -9,7 +9,7 @@ class ItemFiltersValidator extends AbstractValidator
 {
     public function validate(): void
     {
-        $itemFilterStorage = $this->getRequest()->getItemFilterStorage();
+        $itemFilterStorage = $this->getRequest()->getDynamicStorage();
 
         $addedItemFilters = $itemFilterStorage->filterAddedDynamics();
 

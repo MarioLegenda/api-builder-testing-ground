@@ -16,7 +16,7 @@ class ValidateItemFiltersListener
      */
     public function onPreProcessRequest(PreProcessRequestEvent $event)
     {
-        $itemFilterStorage = $event->getRequest()->getItemFilterStorage();
+        $itemFilterStorage = $event->getRequest()->getDynamicStorage();
 
         $foundFilters = $itemFilterStorage->getDynamicsInBulk(array('ExcludeSeller', 'Seller', 'TopRatedSellerOnly'), true);
 

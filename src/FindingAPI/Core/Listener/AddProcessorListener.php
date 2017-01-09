@@ -16,7 +16,7 @@ class AddProcessorListener
 
         if ($request->getMethod() === 'get') {
             $processorFactory->registerCallbackProcessor($request->getMethod(), function(RequestInterface $request) {
-                $itemFilterStorage = $request->getItemFilterStorage();
+                $itemFilterStorage = $request->getDynamicStorage();
 
                 if (!empty($itemFilterStorage)) {
                     if ($request->getMethod() === 'get') {
