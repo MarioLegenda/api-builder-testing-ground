@@ -77,12 +77,11 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
         // single value item filter
         $itemFilterStorage->addDynamic(array(
-            'SingleValueItemFilter' => array(
-                'object' => 'Test\ItemFilter\SingleValueItemFilter',
-                'value' => null,
-                'multiple_values' => false,
-                'date_time' => false,
-            ),
+            'name' => 'SingleValueItemFilter',
+            'object' => 'Test\ItemFilter\SingleValueItemFilter',
+            'value' => null,
+            'multiple_values' => false,
+            'date_time' => false,
         ));
 
         $this->assertTrue($itemFilterStorage->hasDynamic('SingleValueItemFilter'));
@@ -94,12 +93,11 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         // multiple value item filter
 
         $itemFilterStorage->addDynamic(array(
-            'MultipleValueItemFilter' => array(
-                'object' => 'Test\ItemFilter\MultipleValueItemFilter',
-                'value' => null,
-                'multiple_values' => true,
-                'date_time' => false,
-            ),
+            'name' => 'MultipleValueItemFilter',
+            'object' => 'Test\ItemFilter\MultipleValueItemFilter',
+            'value' => null,
+            'multiple_values' => true,
+            'date_time' => false,
         ));
     }
 
