@@ -2,20 +2,14 @@
 
 namespace Test\ItemFilter;
 
-use FindingAPI\Core\ItemFilter\AbstractFilter;
-use FindingAPI\Core\ItemFilter\FilterInterface;
-use StrongType\ArrayType;
+use SDKBuilder\Dynamic\AbstractDynamic;
+use SDKBuilder\Dynamic\DynamicInterface;
 
-class MultipleValueItemFilter extends AbstractFilter implements FilterInterface
+class MultipleValueItemFilter extends AbstractDynamic implements DynamicInterface
 {
-    protected $filter;
-    /**
-     * @param array $filter
-     * @return bool
-     */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter)) {
+        if (!$this->genericValidation($this->dynamicValue)) {
             return false;
         }
 
@@ -24,7 +18,7 @@ class MultipleValueItemFilter extends AbstractFilter implements FilterInterface
             'id-values' => array(1000, 1500, 1750, 2000, 2500, 3000, 4000, 5000, 6000, 7000),
         ));
 
-        $uniques = array_unique($this->filter);
+        $uniques = array_unique($this->dynamicValue);
 
         foreach ($uniques as $val) {
             if (!$allowedValues->inArray($val, 'text-values') and !$allowedValues->inArray($val, 'id-values')) {
@@ -34,7 +28,7 @@ class MultipleValueItemFilter extends AbstractFilter implements FilterInterface
             }
         }
 
-        $this->filter = $uniques;
+        $this->dynamicValue = $uniques;
 
         return true;
     }
@@ -48,7 +42,7 @@ class MultipleValueItemFilter extends AbstractFilter implements FilterInterface
         $toBeAppended = 'itemFilter('.$counter.').name='.$this->name;
 
         $internalCounter = 0;
-        foreach ($this->filter as $filter) {
+        foreach ($this->dynamicValue as $filter) {
             $toBeAppended.='&itemFilter('.$counter.').value('.$internalCounter.')='.$filter;
 
             $internalCounter++;

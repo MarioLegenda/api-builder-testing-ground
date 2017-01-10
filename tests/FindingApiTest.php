@@ -56,7 +56,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             'error_message' => 'Invalid value for %s and represented as %s',
         ));
 
-        $findingApi = SDKBuilder::inst()->create('finding');
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
         $findingApi
             ->addParameter('special_parameter', $newParameter)

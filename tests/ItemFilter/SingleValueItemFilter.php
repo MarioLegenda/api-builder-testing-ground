@@ -4,20 +4,21 @@ namespace Test\ItemFilter;
 
 use FindingAPI\Core\ItemFilter\AbstractFilter;
 use FindingAPI\Core\ItemFilter\FilterInterface;
+use SDKBuilder\Dynamic\AbstractDynamic;
+use SDKBuilder\Dynamic\DynamicInterface;
 
-class SingleValueItemFilter extends AbstractFilter implements FilterInterface
+class SingleValueItemFilter extends AbstractDynamic implements DynamicInterface
 {
     /**
-     * @param array $filter
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter, 1)) {
+        if (!$this->genericValidation($this->dynamicValue, 1)) {
             return false;
         }
 
-        if (parent::checkBoolean($this->filter[0]) === false) {
+        if (parent::checkBoolean($this->dynamicValue[0]) === false) {
             return false;
         }
 
