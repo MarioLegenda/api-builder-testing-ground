@@ -6,7 +6,7 @@ use FindingAPI\Core\Exception\ItemFilterException;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class EndTimeFrom extends AbstractDynamic implements DynamicInterface
+class EndTimeFrom extends AbstractDynamic
 {
     /**
      * @throws ItemFilterException

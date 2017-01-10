@@ -6,7 +6,7 @@ use FindingAPI\Core\Information\SortOrderInformation;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class SortOrder extends AbstractDynamic implements DynamicInterface
+class SortOrder extends AbstractDynamic
 {
     /**
      * @return bool

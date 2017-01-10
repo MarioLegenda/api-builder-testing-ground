@@ -5,7 +5,7 @@ namespace FindingAPI\Core\ItemFilter;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class MaxHandlingTime extends AbstractDynamic implements DynamicInterface
+class MaxHandlingTime extends AbstractDynamic
 {
     /**
      * @return bool

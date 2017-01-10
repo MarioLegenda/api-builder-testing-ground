@@ -6,7 +6,7 @@ use FindingAPI\Core\Helper;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class MinPrice extends AbstractDynamic implements DynamicInterface
+class MinPrice extends AbstractDynamic
 {
     /**
      * @return bool

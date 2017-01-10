@@ -143,7 +143,7 @@ class Request extends AbstractRequest
     public function setPaginationInput(array $pagination) : Request
     {
         if (!$this->dynamicsStorage->hasDynamic('PaginationInput')) {
-            throw new FindingApiException('Item filter PaginationInput does not exists. Check FinderSearch::getItemFilterStorage()->addItemFilter() method');
+            throw new FindingApiException('Item filter PaginationInput does not exists. Use FindingAPI::addDynamic() to add it');
         }
 
         $this->dynamicsStorage->updateDynamicValue('PaginationInput', array($pagination));

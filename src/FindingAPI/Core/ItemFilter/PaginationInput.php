@@ -5,7 +5,7 @@ namespace FindingAPI\Core\ItemFilter;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class PaginationInput extends AbstractDynamic implements DynamicInterface
+class PaginationInput extends AbstractDynamic
 {
     /**
      * @return bool

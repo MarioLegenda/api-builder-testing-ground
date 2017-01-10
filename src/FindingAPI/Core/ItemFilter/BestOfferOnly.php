@@ -5,7 +5,7 @@ namespace FindingAPI\Core\ItemFilter;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class BestOfferOnly extends AbstractDynamic implements DynamicInterface
+class BestOfferOnly extends AbstractDynamic
 {
     /**
      * @return bool

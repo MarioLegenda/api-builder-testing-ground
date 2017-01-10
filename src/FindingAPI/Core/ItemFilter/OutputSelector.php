@@ -6,7 +6,7 @@ use FindingAPI\Core\Information\OutputSelectorInformation;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class OutputSelector extends AbstractDynamic implements DynamicInterface
+class OutputSelector extends AbstractDynamic
 {
     /**
      * @return bool

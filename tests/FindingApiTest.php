@@ -294,6 +294,11 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->addDynamic(ItemFilter::CURRENCY, array(CurrencyInformation::AUSTRALIAN))
             ->setResponseFormat('json');
 
+        $dynamics = $findingApi->getRequest()->getDynamicStorage();
+
+        $this->assertTrue($dynamics->isDynamicInRequest(ItemFilter::BEST_OFFER_ONLY), 'BEST_OFFER_ONLY should be set as a dynamic');
+        $this->assertTrue($dynamics->isDynamicInRequest(ItemFilter::CURRENCY), 'CURRENCY should be set as a dynamic');
+
         $response = $findingApi
             ->compile()
             ->send()

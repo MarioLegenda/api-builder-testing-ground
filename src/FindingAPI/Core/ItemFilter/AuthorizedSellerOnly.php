@@ -5,7 +5,7 @@ namespace FindingAPI\Core\ItemFilter;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class AuthorizedSellerOnly extends AbstractDynamic implements DynamicInterface
+class AuthorizedSellerOnly extends AbstractDynamic
 {
     /**
      * @return bool

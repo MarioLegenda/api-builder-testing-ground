@@ -15,6 +15,9 @@ sdk:
             post_send_request:
                 class: FindingAPI\Core\Listener\PostRequestSentListener
                 method: onRequestSent
+            api_after_create:
+                class: FindingAPI\Core\Listener\ApiAfterCreateListener
+                method: onApiCreate
         global_parameters:
             ebay_url:
                 representation: null

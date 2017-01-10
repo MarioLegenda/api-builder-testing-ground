@@ -5,7 +5,7 @@ namespace FindingAPI\Core\ItemFilter;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class MaxBids extends AbstractDynamic implements DynamicInterface
+class MaxBids extends AbstractDynamic
 {
     /**
      * @return bool

@@ -6,7 +6,7 @@ use FindingAPI\Core\Information\ISO3166CountryCodeInformation;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class AvailableTo extends AbstractDynamic implements DynamicInterface
+class AvailableTo extends AbstractDynamic
 {
     /**
      * @return bool

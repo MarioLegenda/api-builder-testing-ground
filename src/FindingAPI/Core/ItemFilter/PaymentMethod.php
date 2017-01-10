@@ -6,7 +6,7 @@ use FindingAPI\Core\Information\PaymentMethodInformation;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class PaymentMethod extends AbstractDynamic implements DynamicInterface
+class PaymentMethod extends AbstractDynamic
 {
     /**
      * @return bool

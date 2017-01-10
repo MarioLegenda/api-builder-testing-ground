@@ -5,7 +5,7 @@ namespace FindingAPI\Core\ItemFilter;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class ExpeditedShippingType extends AbstractDynamic implements DynamicInterface
+class ExpeditedShippingType extends AbstractDynamic
 {
     /**
      * @return bool

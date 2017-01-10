@@ -6,7 +6,7 @@ use FindingAPI\Core\Information\GlobalIdInformation;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class ListedIn extends AbstractDynamic implements DynamicInterface
+class ListedIn extends AbstractDynamic
 {
     /**
      * @return bool

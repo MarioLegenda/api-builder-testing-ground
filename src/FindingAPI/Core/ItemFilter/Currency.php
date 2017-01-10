@@ -6,7 +6,7 @@ use FindingAPI\Core\Information\CurrencyInformation;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class Currency extends AbstractDynamic implements DynamicInterface
+class Currency extends AbstractDynamic
 {
     /**
      * @return bool

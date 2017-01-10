@@ -6,7 +6,7 @@ use FindingAPI\Core\Information\ListingTypeInformation;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class ListingType extends AbstractDynamic implements DynamicInterface
+class ListingType extends AbstractDynamic
 {
     /**
      * @return bool

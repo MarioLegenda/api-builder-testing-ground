@@ -5,7 +5,7 @@ namespace FindingAPI\Core\ItemFilter;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class FeedbackScoreMin extends AbstractDynamic implements DynamicInterface
+class FeedbackScoreMin extends AbstractDynamic
 {
     /**
      * @return bool

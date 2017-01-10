@@ -5,7 +5,7 @@ namespace FindingAPI\Core\ItemFilter;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class ReturnsAcceptedOnly extends AbstractDynamic implements DynamicInterface
+class ReturnsAcceptedOnly extends AbstractDynamic
 {
     /**
      * @return bool

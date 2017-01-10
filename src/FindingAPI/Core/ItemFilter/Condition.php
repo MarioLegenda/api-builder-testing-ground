@@ -5,7 +5,7 @@ namespace FindingAPI\Core\ItemFilter;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class Condition extends AbstractDynamic implements DynamicInterface
+class Condition extends AbstractDynamic
 {
     protected $filter;
     /**

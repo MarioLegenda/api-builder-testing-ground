@@ -5,7 +5,7 @@ namespace FindingAPI\Core\ItemFilter;
 use SDKBuilder\Dynamic\AbstractDynamic;
 use SDKBuilder\Dynamic\DynamicInterface;
 
-class ExcludeAutoPay extends AbstractDynamic implements DynamicInterface
+class ExcludeAutoPay extends AbstractDynamic
 {
     /**
      * @return bool
