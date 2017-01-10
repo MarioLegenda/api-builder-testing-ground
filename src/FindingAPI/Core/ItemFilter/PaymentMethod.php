@@ -3,10 +3,8 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Information\PaymentMethodInformation;
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
 
-class PaymentMethod extends AbstractDynamic
+class PaymentMethod extends BaseFindingDynamic
 {
     /**
      * @return bool

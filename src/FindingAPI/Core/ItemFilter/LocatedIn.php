@@ -3,10 +3,8 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Information\ISO3166CountryCodeInformation;
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
 
-class LocatedIn extends AbstractDynamic
+class LocatedIn extends BaseFindingDynamic
 {
     /**
      * @return bool

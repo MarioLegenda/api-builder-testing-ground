@@ -2,12 +2,9 @@
 
 namespace Test\ItemFilter;
 
-use FindingAPI\Core\ItemFilter\AbstractFilter;
-use FindingAPI\Core\ItemFilter\FilterInterface;
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
+use FindingAPI\Core\ItemFilter\BaseFindingDynamic;
 
-class SingleValueItemFilter extends AbstractDynamic implements DynamicInterface
+class SingleValueItemFilter extends BaseFindingDynamic
 {
     /**
      * @return bool

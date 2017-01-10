@@ -3,10 +3,8 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Helper;
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
 
-class MaxPrice extends AbstractDynamic
+class MaxPrice extends BaseFindingDynamic
 {
     /**
      * @return bool

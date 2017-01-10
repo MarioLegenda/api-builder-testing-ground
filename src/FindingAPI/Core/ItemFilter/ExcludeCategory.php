@@ -2,10 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
-
-class ExcludeCategory extends AbstractDynamic
+class ExcludeCategory extends BaseFindingDynamic
 {
     /**
      * @return bool

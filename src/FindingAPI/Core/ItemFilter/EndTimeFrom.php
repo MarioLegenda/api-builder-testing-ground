@@ -3,10 +3,8 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Exception\ItemFilterException;
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
 
-class EndTimeFrom extends AbstractDynamic
+class EndTimeFrom extends BaseFindingDynamic
 {
     /**
      * @throws ItemFilterException

@@ -2,10 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
-
-class HideDuplicateItems extends AbstractDynamic
+class HideDuplicateItems extends BaseFindingDynamic
 {
     /**
      * @return bool

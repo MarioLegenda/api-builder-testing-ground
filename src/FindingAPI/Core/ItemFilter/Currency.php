@@ -3,10 +3,8 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Information\CurrencyInformation;
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
 
-class Currency extends AbstractDynamic
+class Currency extends BaseFindingDynamic
 {
     /**
      * @return bool

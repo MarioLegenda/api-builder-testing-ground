@@ -2,10 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
-
-class Condition extends AbstractDynamic
+class Condition extends BaseFindingDynamic
 {
     protected $filter;
     /**

@@ -2,10 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
-
-class WorldOfGoodOnly extends AbstractDynamic
+class WorldOfGoodOnly extends BaseFindingDynamic
 {
     /**
      * @return bool

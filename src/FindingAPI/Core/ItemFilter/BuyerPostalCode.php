@@ -2,10 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
-
-class BuyerPostalCode extends AbstractDynamic
+class BuyerPostalCode extends BaseFindingDynamic
 {
     /**
      * @return bool

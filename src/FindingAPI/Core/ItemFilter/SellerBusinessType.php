@@ -3,10 +3,8 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Information\GlobalIdInformation;
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
 
-class SellerBusinessType extends AbstractDynamic
+class SellerBusinessType extends BaseFindingDynamic
 {
     /**
      * @return bool

@@ -2,10 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
-
-class StartTimeFrom extends AbstractDynamic
+class StartTimeFrom extends BaseFindingDynamic
 {
     /**
      * @return bool

@@ -3,10 +3,8 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Information\ListingTypeInformation;
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
 
-class ListingType extends AbstractDynamic
+class ListingType extends BaseFindingDynamic
 {
     /**
      * @return bool

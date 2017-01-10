@@ -2,10 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
-
-class MinBids extends AbstractDynamic
+class MinBids extends BaseFindingDynamic
 {
     /**
      * @return bool

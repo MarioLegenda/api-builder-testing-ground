@@ -2,10 +2,7 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
-
-class MaxDistance extends AbstractDynamic
+class MaxDistance extends BaseFindingDynamic
 {
     /**
      * @return bool

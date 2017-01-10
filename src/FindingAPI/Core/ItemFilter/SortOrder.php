@@ -3,10 +3,8 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Information\SortOrderInformation;
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
 
-class SortOrder extends AbstractDynamic
+class SortOrder extends BaseFindingDynamic
 {
     /**
      * @return bool

@@ -3,10 +3,8 @@
 namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Information\OutputSelectorInformation;
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
 
-class OutputSelector extends AbstractDynamic
+class OutputSelector extends BaseFindingDynamic
 {
     /**
      * @return bool

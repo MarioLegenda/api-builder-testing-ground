@@ -2,10 +2,9 @@
 
 namespace Test\ItemFilter;
 
-use SDKBuilder\Dynamic\AbstractDynamic;
-use SDKBuilder\Dynamic\DynamicInterface;
+use FindingAPI\Core\ItemFilter\BaseFindingDynamic;
 
-class MultipleValueItemFilter extends AbstractDynamic implements DynamicInterface
+class MultipleValueItemFilter extends BaseFindingDynamic
 {
     public function validateDynamic() : bool
     {
