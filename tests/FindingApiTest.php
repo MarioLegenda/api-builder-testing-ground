@@ -156,8 +156,6 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
         $findingApiThirdVersionRawResponse = $versionResponse->getRawResponse();
 
-        $findingApiThird->restoreDefaults();
-
         $findingApiSecond
             ->getHistograms()
             ->setCategoryId(23);
