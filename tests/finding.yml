@@ -100,6 +100,12 @@ sdk:
                 type: [optional]
                 valid: null
 
+        dynamics:
+            configuration_dynamic:
+                name: ConfigurationDynamic
+                object: Test\TestDynamic\ConfigurationDynamic
+                value: null
+
         methods:
             valid_methods: operation_name
             metadata:

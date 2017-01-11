@@ -58,6 +58,8 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
         $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
 
+        $this->assertTrue($findingApi->getRequest()->getDynamicStorage()->hasDynamic('ConfigurationDynamic'), 'ConfigurationDynamic should have been loaded from configuration');
+
         $findingApi
             ->addParameter('special_parameter', $newParameter)
             ->addMethod($method);
