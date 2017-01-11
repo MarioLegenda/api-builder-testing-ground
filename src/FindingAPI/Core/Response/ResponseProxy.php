@@ -2,9 +2,7 @@
 
 namespace FindingAPI\Core\Response;
 
-use FindingAPI\Core\Exception\ResponseException;
 use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 class ResponseProxy implements ResponseInterface, ArrayConvertableInterface, \JsonSerializable
 {

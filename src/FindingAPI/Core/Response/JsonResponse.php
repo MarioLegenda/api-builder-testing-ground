@@ -4,7 +4,6 @@ namespace FindingAPI\Core\Response;
 
 use FindingAPI\Core\Exception\ResponseException;
 use FindingAPI\Core\ResponseParser\ResponseItem\RootItem;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 class JsonResponse implements ResponseInterface, ArrayConvertableInterface
 {
@@ -28,7 +27,7 @@ class JsonResponse implements ResponseInterface, ArrayConvertableInterface
         throw new ResponseException('You cannot use '.ResponseInterface::class.' methods with '.JsonResponse::class.'. You can only convert it to json');
     }
     /**
-     * @param null $default
+     * @param null|mixed $default
      * @throws ResponseException
      */
     public function getAspectHistogramContainer($default = null)

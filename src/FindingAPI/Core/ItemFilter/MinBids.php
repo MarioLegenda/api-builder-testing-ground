@@ -2,18 +2,18 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class MinBids extends AbstractFilter implements FilterInterface
+class MinBids extends BaseFindingDynamic
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter, 1)) {
+        if (!$this->genericValidation($this->dynamicValue, 1)) {
             return false;
         }
 
-        $filter = $this->filter[0];
+        $filter = $this->dynamicValue[0];
 
         if ($filter < 0) {
             $this->exceptionMessages[] = $this->name.' has to be an integer greater than or equal to 0';

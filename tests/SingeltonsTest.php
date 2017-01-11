@@ -5,6 +5,7 @@ namespace Test;
 require __DIR__ . '/../vendor/autoload.php';
 
 use FindingAPI\Core\Information\GlobalIdInformation;
+use FindingAPI\Core\Information\ListingTypeInformation;
 use FindingAPI\Core\Information\OutputSelectorInformation;
 use FindingAPI\Core\Information\ISO3166CountryCodeInformation;
 use FindingAPI\Core\Information\SortOrderInformation;
@@ -287,6 +288,10 @@ class SingeltonsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue(CurrencyInformation::instance()->has('SomeNewCurrency'), 'SomeNewCurrency does not exist in '.get_class(CurrencyInformation::instance()));
 
+        $this->assertTrue(CurrencyInformation::instance()->remove('SomeNewCurrency'), 'SomeNewCurrency could not be removed');
+
+        $this->assertFalse(CurrencyInformation::instance()->has('someNewCurrency'), 'SomeNewCurrency should not exist after removal');
+
         $paymentMethods = array(
             'PayPal',
             'PaisaPal',
@@ -301,5 +306,80 @@ class SingeltonsTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull(PaymentMethodInformation::instance()->add('Visa'), 'Could not add new payment method Visa');
 
         $this->assertTrue(PaymentMethodInformation::instance()->has('Visa'), 'Visa does not exist in '.get_class(PaymentMethodInformation::instance()));
+
+        $this->assertTrue(PaymentMethodInformation::instance()->remove('Visa'), 'Visa could not be removed as payment method');
+
+        $this->assertFalse(PaymentMethodInformation::instance()->has('Visa'), 'Visa should not be a payment method after removal');
+
+        $listingTypes = array(
+            'All',
+            'Auction',
+            'AuctionWithBIN',
+            'Classified',
+            'FixedPrice',
+            'StoreInventory'
+        );
+
+        foreach ($listingTypes as $method) {
+            $this->assertTrue(ListingTypeInformation::instance()->has($method), $method.' does not exist in '.ListingTypeInformation::class);
+        }
+
+        $this->assertNotNull(ListingTypeInformation::instance()->add('Sold'), 'Could not add new listing type Sold');
+
+        $this->assertTrue(ListingTypeInformation::instance()->has('Sold'), 'Sold does not exist in '.ListingTypeInformation::class);
+
+        $this->assertTrue(ListingTypeInformation::instance()->remove('Sold'), 'Sold could not be removed as listing type');
+
+        $this->assertFalse(ListingTypeInformation::instance()->has('Sold'), 'Sold should not be a listing type after removal');
+
+        $outputSelectors = array(
+            'AspectHistogram',
+            'CategoryHistogram',
+            'ConditionHistogram',
+            'GalleryInfo',
+            'PictureURLLarge',
+            'PictureURLSuperSize',
+            'SellerInfo',
+            'StoreInfo',
+            'UnitPriceInfo',
+        );
+
+        foreach ($outputSelectors as $method) {
+            $this->assertTrue(OutputSelectorInformation::instance()->has($method), $method.' does not exist in '.OutputSelectorInformation::class);
+        }
+
+        $this->assertNotNull(OutputSelectorInformation::instance()->add('IsSold'), 'Could not add new output selector IsSold');
+
+        $this->assertTrue(OutputSelectorInformation::instance()->has('IsSold'), 'IsSold does not exist in '.OutputSelectorInformation::class);
+
+        $this->assertTrue(OutputSelectorInformation::instance()->remove('IsSold'), 'IsSold could not be removed as output selector');
+
+        $this->assertFalse(OutputSelectorInformation::instance()->has('IsSold'), 'IsSold should not be a output selector after removal');
+
+        $sortOrders = array(
+            'BestMatch',
+            'BidCountFewest',
+            'BidCountMost',
+            'CountryAscending',
+            'CountryDescending',
+            'CurrentPriceHighest',
+            'DistanceNearest',
+            'EndTimeSoonest',
+            'PricePlusShippingHighest',
+            'PricePlusShippingLowest',
+            'StartTimeNewest',
+        );
+
+        foreach ($sortOrders as $method) {
+            $this->assertTrue(SortOrderInformation::instance()->has($method), $method.' does not exist in '.SortOrderInformation::class);
+        }
+
+        $this->assertNotNull(SortOrderInformation::instance()->add('ByDate'), 'Could not add new sort order ByDate');
+
+        $this->assertTrue(SortOrderInformation::instance()->has('ByDate'), 'ByDate does not exist in '.SortOrderInformation::class);
+
+        $this->assertTrue(SortOrderInformation::instance()->remove('ByDate'), 'ByDate could not be removed as sort order');
+
+        $this->assertFalse(SortOrderInformation::instance()->has('ByDate'), 'ByDate should not be a sort order after removal');
     }
 }

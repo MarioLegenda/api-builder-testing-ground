@@ -2,16 +2,16 @@
 
 namespace FindingAPI\Core\Listener;
 
-use SDKBuilder\Event\PostSendRequestEvent;
+use SDKBuilder\Event\PostSentRequestEvent;
 use FindingAPI\Core\Response\ResponseProxy;
 
 class PostRequestSentListener
 {
     /**
-     * @param PostSendRequestEvent $event
+     * @param PostSentRequestEvent $event
      * @return null
      */
-    public function onRequestSent(PostSendRequestEvent $event)
+    public function onRequestSent(PostSentRequestEvent $event)
     {
         $api = $event->getApi();
         $request = $event->getRequest();

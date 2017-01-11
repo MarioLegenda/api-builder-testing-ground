@@ -2,9 +2,7 @@
 
 namespace FindingAPI\Core\Information;
 
-use FindingAPI\Core\ItemFilter\SortOrder;
-
-class SortOrderInformation
+class SortOrderInformation implements InformationInterface
 {
     const BEST_MATCH = 'BestMatch';
     const BID_COUNT_FEWEST = 'BidCountFewest';
@@ -69,9 +67,25 @@ class SortOrderInformation
         return $this;
     }
     /**
+     * @param string $entry
+     * @return bool
+     */
+    public function remove(string $entry): bool
+    {
+        $position = array_search($entry, $this->sortOrders);
+
+        if (array_key_exists($position, $this->sortOrders)) {
+            unset($this->sortOrders[$position]);
+
+            return true;
+        }
+
+        return false;
+    }
+    /**
      * @return array
      */
-    public function getAll()
+    public function getAll() : array
     {
         return $this->sortOrders;
     }

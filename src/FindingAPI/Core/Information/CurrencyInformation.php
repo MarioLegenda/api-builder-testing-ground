@@ -4,7 +4,7 @@ namespace FindingAPI\Core\Information;
 
 use FindingAPI\Core\Exception\ItemFilterException;
 
-class CurrencyInformation
+class CurrencyInformation implements InformationInterface
 {
     const AUSTRALIAN = 'AUD';
     const CANADIAN = 'CAD';
@@ -62,10 +62,10 @@ class CurrencyInformation
     }
     /**
      * @param $currency
-     * @return CurrencyInformation
+     * @return InformationInterface
      * @throws ItemFilterException
      */
-    public function add(string $currency)
+    public function add(string $currency) : InformationInterface
     {
         if ($this->has($currency)) {
             return null;
@@ -76,9 +76,26 @@ class CurrencyInformation
         return self::$instance;
     }
     /**
+     * @param string $entry
+     * @return bool
+     */
+    public function remove(string $entry): bool
+    {
+        $position = array_search($entry, $this->currencies);
+
+        if (array_key_exists($position, $this->currencies)) {
+            unset($this->currencies[$position]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @return array
      */
-    public function getAll()
+    public function getAll() : array
     {
         return $this->currencies;
     }

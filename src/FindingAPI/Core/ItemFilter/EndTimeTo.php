@@ -4,18 +4,18 @@ namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Exception\ItemFilterException;
 
-class EndTimeTo extends AbstractFilter implements FilterInterface
+class EndTimeTo extends BaseFindingDynamic
 {
     /**
      * @throws ItemFilterException
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter, 1)) {
+        if (!$this->genericValidation($this->dynamicValue, 1)) {
             return false;
         }
 
-        $filter = $this->filter[0];
+        $filter = $this->dynamicValue[0];
 
         if (!$filter instanceof \DateTime) {
             $this->exceptionMessages[] = 'Invalid value supplied for '.$this->name.' Value has to be a DateTime instance in the future';

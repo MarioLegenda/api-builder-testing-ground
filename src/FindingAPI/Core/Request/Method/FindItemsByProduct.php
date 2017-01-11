@@ -3,6 +3,7 @@
 namespace FindingAPI\Core\Request\Method;
 
 use FindingAPI\Core\Request\Request;
+use SDKBuilder\Dynamic\DynamicStorage;
 use SDKBuilder\Request\RequestParameters;
 
 class FindItemsByProduct extends Request
@@ -12,9 +13,13 @@ class FindItemsByProduct extends Request
      * @param RequestParameters $globalParameters
      * @param RequestParameters $specialParameters
      */
-    public function __construct(RequestParameters $globalParameters, RequestParameters $specialParameters)
+    public function __construct(
+        RequestParameters $globalParameters,
+        RequestParameters $specialParameters,
+        DynamicStorage $dynamicStorage
+    )
     {
-        parent::__construct($globalParameters, $specialParameters);
+        parent::__construct($globalParameters, $specialParameters, $dynamicStorage);
 
         $this->getGlobalParameters()->getParameter('operation_name')->setValue('findItemsByProduct');
     }

@@ -4,16 +4,16 @@ namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Information\OutputSelectorInformation;
 
-class OutputSelector extends AbstractFilter implements FilterInterface
+class OutputSelector extends BaseFindingDynamic
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
         $validSelectors = OutputSelectorInformation::instance()->getAll();
 
-        foreach ($this->filter as $filter) {
+        foreach ($this->dynamicValue as $filter) {
             if (in_array($filter, $validSelectors) === false) {
                 $this->exceptionMessages[] = 'Invalid output selector '.$filter.'. Valid outputSelector types are '.implode(', ', $validSelectors);
 
@@ -31,7 +31,7 @@ class OutputSelector extends AbstractFilter implements FilterInterface
     {
         $counter = 0;
         $final = '';
-        foreach ($this->filter as $filter) {
+        foreach ($this->dynamicValue as $filter) {
             $final.='outputSelector('.$counter.')='.$filter.'&';
 
             $counter++;

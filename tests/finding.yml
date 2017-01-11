@@ -1,7 +1,6 @@
 sdk:
     finding:
         request_class: FindingAPI\Core\Request\Request
-        request_validators: [FindingAPI\Core\Request\ItemFiltersValidator]
         api_class: FindingAPI\FindingAPI
         listeners:
             request_pre_process:
@@ -16,6 +15,9 @@ sdk:
             post_send_request:
                 class: FindingAPI\Core\Listener\PostRequestSentListener
                 method: onRequestSent
+            api_after_create:
+                class: FindingAPI\Core\Listener\ApiAfterCreateListener
+                method: onApiCreate
         global_parameters:
             ebay_url:
                 representation: null
@@ -97,6 +99,12 @@ sdk:
                 value: null
                 type: [optional]
                 valid: null
+
+        dynamics:
+            configuration_dynamic:
+                name: ConfigurationDynamic
+                object: Test\TestDynamic\ConfigurationDynamic
+                value: null
 
         methods:
             valid_methods: operation_name

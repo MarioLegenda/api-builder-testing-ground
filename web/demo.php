@@ -38,9 +38,9 @@ $findingApi
         OutputSelectorInformation::STORE_INFO,
         OutputSelectorInformation::UNIT_PRICE_INFO,
     ))
-    ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
-    ->addItemFilter(ItemFilter::LISTING_TYPE, array(ListingTypeInformation::AUCTION_WITH_BIN, ListingTypeInformation::STORE_INVENTORY, ListingTypeInformation::AUCTION))
-    ->addItemFilter(ItemFilter::CURRENCY, array(CurrencyInformation::AUSTRALIAN));
+    ->addDynamic(ItemFilter::BEST_OFFER_ONLY, array(true))
+    ->addDynamic(ItemFilter::LISTING_TYPE, array(ListingTypeInformation::AUCTION_WITH_BIN, ListingTypeInformation::STORE_INVENTORY, ListingTypeInformation::AUCTION))
+    ->addDynamic(ItemFilter::CURRENCY, array(CurrencyInformation::AUSTRALIAN));
 
 $response = $findingApi
                 ->compile()

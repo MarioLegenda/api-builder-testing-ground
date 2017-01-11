@@ -2,17 +2,17 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class CharityOnly extends AbstractFilter implements FilterInterface
+class CharityOnly extends BaseFindingDynamic
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter, 1)) {
+        if (!$this->genericValidation($this->dynamicValue, 1)) {
             return false;
         }
 
-        return parent::checkBoolean($this->filter[0]);
+        return parent::checkBoolean($this->dynamicValue[0]);
     }
 }

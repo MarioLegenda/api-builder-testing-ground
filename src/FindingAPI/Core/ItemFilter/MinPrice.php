@@ -4,18 +4,18 @@ namespace FindingAPI\Core\ItemFilter;
 
 use FindingAPI\Core\Helper;
 
-class MinPrice extends AbstractFilter implements FilterInterface
+class MinPrice extends BaseFindingDynamic
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
-        if (!$this->genericValidation($this->filter, 2)) {
+        if (!$this->genericValidation($this->dynamicValue, 2)) {
             return false;
         }
 
-        $toValidate = $this->filter[0];
+        $toValidate = $this->dynamicValue[0];
 
         if (!is_float($toValidate)) {
             $this->exceptionMessages[] = $this->name.' has to be an decimal greater than or equal to 0.0';

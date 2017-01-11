@@ -2,12 +2,12 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-class BuyerPostalCode extends AbstractFilter implements FilterInterface
+class BuyerPostalCode extends BaseFindingDynamic
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
         return true;
     }

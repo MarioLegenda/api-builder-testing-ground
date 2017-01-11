@@ -56,7 +56,9 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             'error_message' => 'Invalid value for %s and represented as %s',
         ));
 
-        $findingApi = SDKBuilder::inst()->create('finding');
+        $findingApi = SDKBuilder::inst()->create('finding')->switchOfflineMode(true);
+
+        $this->assertTrue($findingApi->getRequest()->getDynamicStorage()->hasDynamic('ConfigurationDynamic'), 'ConfigurationDynamic should have been loaded from configuration');
 
         $findingApi
             ->addParameter('special_parameter', $newParameter)
@@ -73,33 +75,31 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
         $request->addKeywords('constantine');
 
-        $itemFilterStorage = $request->getItemFilterStorage();
+        $itemFilterStorage = $request->getDynamicStorage();
 
         // single value item filter
-        $itemFilterStorage->addItemFilter(array(
-            'SingleValueItemFilter' => array(
-                'object' => 'Test\ItemFilter\SingleValueItemFilter',
-                'value' => null,
-                'multiple_values' => false,
-                'date_time' => false,
-            ),
+        $itemFilterStorage->addDynamic(array(
+            'name' => 'SingleValueItemFilter',
+            'object' => 'Test\ItemFilter\SingleValueItemFilter',
+            'value' => null,
+            'multiple_values' => false,
+            'date_time' => false,
         ));
 
-        $this->assertTrue($itemFilterStorage->hasItemFilter('SingleValueItemFilter'));
+        $this->assertTrue($itemFilterStorage->hasDynamic('SingleValueItemFilter'));
 
-        $itemFilterStorage->removeItemFilter('SingleValueItemFilter');
+        $itemFilterStorage->removeDynamic('SingleValueItemFilter');
 
-        $this->assertFalse($itemFilterStorage->hasItemFilter('SingleValueItemFilter'));
+        $this->assertFalse($itemFilterStorage->hasDynamic('SingleValueItemFilter'));
 
         // multiple value item filter
 
-        $itemFilterStorage->addItemFilter(array(
-            'MultipleValueItemFilter' => array(
-                'object' => 'Test\ItemFilter\MultipleValueItemFilter',
-                'value' => null,
-                'multiple_values' => true,
-                'date_time' => false,
-            ),
+        $itemFilterStorage->addDynamic(array(
+            'name' => 'MultipleValueItemFilter',
+            'object' => 'Test\ItemFilter\MultipleValueItemFilter',
+            'value' => null,
+            'multiple_values' => true,
+            'date_time' => false,
         ));
     }
 
@@ -155,8 +155,6 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
         $this->validateXmlResponse($versionResponse);
 
         $findingApiThirdVersionRawResponse = $versionResponse->getRawResponse();
-
-        $findingApiThird->restoreDefaults();
 
         $findingApiSecond
             ->getHistograms()
@@ -292,9 +290,14 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
             ->setMethod('get')
             ->addKeywords('call of duty')
             ->setOutputSelector(array('SellerInfo', 'StoreInfo', 'CategoryHistogram', 'AspectHistogram'))
-            ->addItemFilter(ItemFilter::BEST_OFFER_ONLY, array(true))
-            ->addItemFilter(ItemFilter::CURRENCY, array(CurrencyInformation::AUSTRALIAN))
+            ->addDynamic(ItemFilter::BEST_OFFER_ONLY, array(true))
+            ->addDynamic(ItemFilter::CURRENCY, array(CurrencyInformation::AUSTRALIAN))
             ->setResponseFormat('json');
+
+        $dynamics = $findingApi->getRequest()->getDynamicStorage();
+
+        $this->assertTrue($dynamics->isDynamicInRequest(ItemFilter::BEST_OFFER_ONLY), 'BEST_OFFER_ONLY should be set as a dynamic');
+        $this->assertTrue($dynamics->isDynamicInRequest(ItemFilter::CURRENCY), 'CURRENCY should be set as a dynamic');
 
         $response = $findingApi
             ->compile()
@@ -334,7 +337,7 @@ class FindingApiTest extends \PHPUnit_Framework_TestCase
 
             if ($filters !== null) {
                 foreach ($filters as $filter) {
-                    $request->addItemFilter($filter[0], $filter[1]);
+                    $request->addDynamic($filter[0], $filter[1]);
                 }
             }
 

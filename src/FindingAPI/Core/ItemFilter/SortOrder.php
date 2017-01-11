@@ -2,14 +2,14 @@
 
 namespace FindingAPI\Core\ItemFilter;
 
-use FindingAPI\Core\Information\SortOrder as InformationSortOrder;
+use FindingAPI\Core\Information\SortOrderInformation;
 
-class SortOrder extends AbstractFilter implements FilterInterface
+class SortOrder extends BaseFindingDynamic
 {
     /**
      * @return bool
      */
-    public function validateFilter() : bool
+    public function validateDynamic() : bool
     {
         if (!empty($this->filter)) {
             if (!$this->genericValidation($this->filter, 1)) {
@@ -18,7 +18,7 @@ class SortOrder extends AbstractFilter implements FilterInterface
 
             $filter = $this->filter[0];
 
-            if (!InformationSortOrder::instance()->has($filter)) {
+            if (!SortOrderInformation::instance()->has($filter)) {
                 $this->exceptionMessages[] = 'Invalid value for sortOrder. Please, refer to http://developer.ebay.com/devzone/finding/CallRef/extra/fndItmsByKywrds.Rqst.srtOrdr.html';
 
                 return false;
@@ -33,6 +33,6 @@ class SortOrder extends AbstractFilter implements FilterInterface
      */
     public function urlify(int $counter): string
     {
-        return 'sortOrder='.$this->filter[0].'&';
+        return 'sortOrder='.$this->dynamicValue[0].'&';
     }
 }

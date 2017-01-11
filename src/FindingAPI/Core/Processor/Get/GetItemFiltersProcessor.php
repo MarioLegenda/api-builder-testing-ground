@@ -4,10 +4,11 @@ namespace FindingAPI\Core\Processor\Get;
 
 use FindingAPI\Core\ItemFilter\ItemFilterStorage;
 
+use SDKBuilder\Dynamic\DynamicStorage;
 use SDKBuilder\Processor\{ AbstractProcessor, ProcessorInterface };
 
-use FindingAPI\Core\Request\Request;
 use SDKBuilder\Processor\UrlifyInterface;
+use SDKBuilder\Request\RequestInterface;
 
 class GetItemFiltersProcessor extends AbstractProcessor implements ProcessorInterface
 {
@@ -21,10 +22,10 @@ class GetItemFiltersProcessor extends AbstractProcessor implements ProcessorInte
     private $itemFilterStorage;
     /**
      * GetItemFiltersProcessor constructor.
-     * @param Request $request
-     * @param ItemFilterStorage $itemFilterStorage
+     * @param RequestInterface $request
+     * @param DynamicStorage $itemFilterStorage
      */
-    public function __construct(Request $request, ItemFilterStorage $itemFilterStorage)
+    public function __construct(RequestInterface $request, DynamicStorage $itemFilterStorage)
     {
         parent::__construct($request);
 
@@ -38,11 +39,11 @@ class GetItemFiltersProcessor extends AbstractProcessor implements ProcessorInte
         $finalProduct = '';
         $count = 0;
 
-        $onlyAdded = $this->itemFilterStorage->filterAddedFilter();
+        $onlyAdded = $this->itemFilterStorage->filterAddedDynamics();
 
         if (!empty($onlyAdded)) {
             foreach ($onlyAdded as $name => $itemFilterItems) {
-                $itemFilter = $this->itemFilterStorage->getItemFilterInstance($name);
+                $itemFilter = $this->itemFilterStorage->getDynamicInstance($name);
 
                 if ($itemFilter instanceof UrlifyInterface) {
                     $finalProduct.=$itemFilter->urlify($count);

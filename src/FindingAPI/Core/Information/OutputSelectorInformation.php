@@ -2,7 +2,7 @@
 
 namespace FindingAPI\Core\Information;
 
-class OutputSelectorInformation
+class OutputSelectorInformation implements InformationInterface
 {
     const ASPECT_HISTOGRAM = 'AspectHistogram';
     const CATEGORY_HISTOGRAM = 'CategoryHistogram';
@@ -64,9 +64,25 @@ class OutputSelectorInformation
         return $this;
     }
     /**
+     * @param string $entry
+     * @return bool
+     */
+    public function remove(string $entry): bool
+    {
+        $position = array_search($entry, $this->outputSelectors);
+
+        if (array_key_exists($position, $this->outputSelectors)) {
+            unset($this->outputSelectors[$position]);
+
+            return true;
+        }
+
+        return false;
+    }
+    /**
      * @return array
      */
-    public function getAll()
+    public function getAll() : array
     {
         return $this->outputSelectors;
     }

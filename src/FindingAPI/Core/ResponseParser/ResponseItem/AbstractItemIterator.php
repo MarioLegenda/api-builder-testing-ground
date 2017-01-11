@@ -2,8 +2,6 @@
 
 namespace FindingAPI\Core\ResponseParser\ResponseItem;
 
-use FindingAPI\Core\ResponseParser\ResponseItem\Child\Item;
-
 class AbstractItemIterator extends AbstractItem implements \IteratorAggregate, \Countable
 {
     /**
