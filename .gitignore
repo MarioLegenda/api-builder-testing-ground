@@ -2,3 +2,4 @@
 vendor
 src/SDKBuilder/log/requests.log
 src/api-builder
+src/ebay-shopping-api
