@@ -13,8 +13,7 @@
     "require": {
         "symfony/yaml": "^3.1",
         "symfony/event-dispatcher": "^3.1",
-        "symfony/config": "^3.2",
-        "mario-legenda/sdk-offline-mode": "dev-master"
+        "symfony/config": "^3.2"
     },
 
     "require-dev": {
@@ -25,7 +24,8 @@
 
     "autoload": {
         "psr-0": {
-            "FindingAPI": "src/",
+            "FindingAPI": "src/ebay-finding-api/src",
+            "ShoppingAPI": "src/ebay-shopping-api/src",
             "SDKBuilder": "src/api-builder/src",
             "Test": "tests/",
             "Demo": "demo/"

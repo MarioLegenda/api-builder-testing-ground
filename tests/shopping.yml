@@ -1,0 +1,86 @@
+sdk:
+    shopping:
+        api_class: ShoppingAPI\ShoppingAPI
+        listeners:
+            request_pre_process:
+                class: ShoppingAPI\Listener\ValidateRequestListener
+                method: onPreProcess
+
+        global_parameters:
+            ebay_url:
+                representation: null
+                value: http://open.api.ebay.com/shopping
+                type: [required, standalone]
+                valid: null
+            app_id:
+                representation: appid
+                value: Mariokrl-testing-PRD-ee6e68035-e73c8a53
+                type: [required]
+                valid: null
+            service_version:
+                representation: version
+                value: 957
+                type: [required, injectable]
+                valid: [515, 957]
+
+        special_parameters:
+            callname:
+                representation: callname
+                value: null
+                type: [optional, injectable]
+                valid: [FindHalfProducts, FindProducts, FindReviewsAndGuides, GetCategoryInfo, GeteBayTime, GetItemStatus, GetMultipleItems, GetShippingCosts, GetSingleItem, GetUserProfile]
+            response_encoding:
+                representation: responseencoding
+                value: xml
+                type: [optional, injectable]
+                valid: [xml, json]
+            keywords:
+                representation: QueryKeywords
+                value: null
+                type: [optional]
+                valid: null
+                encode: true
+            max_entries:
+                representation: MaxEntries
+                value: null
+                type: [optional]
+                valid: null
+            available_items_only:
+                representation: AvailableItemsOnly
+                value: null
+                type: [optional]
+                valid: null
+            page_number:
+                representation: PageNumber
+                value: null
+                type: [optional]
+                valid: null
+            seller_id:
+                representation: SellerID
+                value: null
+                type: [optional]
+                valid: null
+            sort_order:
+                representation: SortOrder
+                value: null
+                type: [optional]
+                valid: null
+            message_id:
+                representation: MessageID
+                value: null
+                type: [optional]
+                valid: null
+
+        dynamics:
+            product_type:
+                name: ProductID
+                object: ShoppingAPI\Dynamic\ProductTypeDynamic
+                value: null
+            domain_name:
+                name: DomainName
+                object: ShoppingAPI\Dynamic\DomainNameDynamic
+                value: null
+            product_sort:
+                name: ProductSort
+                object: ShoppingAPI\Dynamic\ProductSortDynamic
+                value: null

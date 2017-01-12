@@ -1,3 +1,9 @@
 [submodule "src/api-builder"]
 	path = src/api-builder
 	url = https://github.com/MarioLegenda/api-builder
+[submodule "src/ebay-finding-api"]
+	path = src/ebay-finding-api
+	url = https://github.com/MarioLegenda/ebay-finding-api
+[submodule "src/ebay-shopping-api"]
+	path = src/ebay-shopping-api
+	url = https://github.com/MarioLegenda/ebay-shopping-api

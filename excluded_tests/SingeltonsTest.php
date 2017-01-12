@@ -193,7 +193,7 @@ class SingeltonsTest extends \PHPUnit_Framework_TestCase
 
     public function testCountryCode()
     {
-        $countryCodes = Yaml::parse(file_get_contents(__DIR__ . '/../src/FindingAPI/Core/Information/country_codes.yml'))['iso-codes'];
+        $countryCodes = Yaml::parse(file_get_contents(__DIR__ . '/../src/ebay-finding-api/src/FindingAPI/Core/Information/country_codes.yml'))['iso-codes'];
 
         foreach ($countryCodes as $codes) {
             foreach ($codes as $key => $codeInLoop) {
