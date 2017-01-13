@@ -4,6 +4,7 @@ namespace Test;
 
 use SDKBuilder\SDKBuilder;
 use ShoppingAPI\Dynamic\DomainNameDynamic;
+use ShoppingAPI\Information\IncludeSelectorInformation;
 use ShoppingAPI\Information\ProductSortInformation;
 use ShoppingAPI\Information\SortOrderInformation;
 use ShoppingAPI\ShoppingAPI;
@@ -17,7 +18,7 @@ class ShoppingAPITest extends \PHPUnit_Framework_TestCase
     {
         SDKBuilder::inst()->registerApi('shopping', __DIR__.'/shopping.yml');
 
-        $shoppingApi = SDKBuilder::inst()->create('shopping');
+        $shoppingApi = SDKBuilder::inst()->create('shopping')->switchOfflineMode(true);
 
         $this->assertInstanceOf(ShoppingAPI::class, $shoppingApi, 'ShoppingApi should be an instance of '.ShoppingAPI::class);
     }
@@ -45,9 +46,31 @@ class ShoppingAPITest extends \PHPUnit_Framework_TestCase
             ->send()
             ->getResponse();
 
-        var_dump($shoppingApi->getProcessedRequestString());
+        $this->assertInternalType('string', $shoppingApi->getProcessedRequestString(), 'Request string should be constructed');
 
-        var_dump($response);
+        $this->assertInternalType('string', $response, 'Response should be a string');
+    }
+
+    public function testFindHalfProductsMethod()
+    {
+        $shoppingApi = SDKBuilder::inst()->create('shopping');
+
+        $shoppingApi
+            ->FindHalfProducts()
+            ->setResponseEncoding('xml')
+            ->setAvailableItemsOnly(true)
+            ->setPageNumber(2)
+            ->setKeywords('harry potter')
+            ->setSortOrder(SortOrderInformation::ASCENDING)
+            ->addDynamic(ShoppingEnum::PRODUCT_SORT, array(ProductSortInformation::POPULARITY))
+            ->addDynamic(ShoppingEnum::INCLUDE_SELECTOR, array(IncludeSelectorInformation::DOMAIN_HISTOGRAM));
+
+        $response = $shoppingApi
+            ->compile()
+            ->send()
+            ->getResponse();
+
+        $this->assertInternalType('string', $shoppingApi->getProcessedRequestString(), 'Request string should be constructed');
 
         $this->assertInternalType('string', $response, 'Response should be a string');
     }

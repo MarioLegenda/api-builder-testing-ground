@@ -71,6 +71,14 @@ sdk:
                 type: [optional]
                 valid: null
 
+        methods:
+            valid_methods: callname
+            metadata:
+                find_half_products:
+                    name: FindHalfProducts
+                    object: ShoppingAPI\Request\Method\FindHalfProducts
+                    methods: []
+
         dynamics:
             product_type:
                 name: ProductID
@@ -83,4 +91,8 @@ sdk:
             product_sort:
                 name: ProductSort
                 object: ShoppingAPI\Dynamic\ProductSortDynamic
+                value: null
+            include_selector:
+                name: IncludeSelector
+                object: ShoppingAPI\Dynamic\IncludeSelectorDynamic
                 value: null
